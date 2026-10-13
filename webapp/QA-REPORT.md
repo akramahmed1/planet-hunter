@@ -35,3 +35,26 @@ Date: 2026-10-13. Verified locally against the running backend (FastAPI, port 80
 - No live scan trigger: the app serves the verified 2026-10-09 run. Nothing pretends to run a new MAST scan.
 - No database: the CSV file is the data store.
 - The QA run above covers desktop Chromium and one mobile viewport in Chromium. No Safari or Firefox check was done locally.
+
+## Deployment (Railway, 2026-10-13)
+
+- Project "planet-hunter" created in Akram's workspace; services: backend
+  (FastAPI, root dir webapp/backend, Railpack Dockerfile) and frontend
+  (Next.js, root dir webapp/frontend, Railpack Dockerfile).
+- Live URLs: frontend https://frontend-production-db96.up.railway.app,
+  backend https://backend-production-f88f2.up.railway.app.
+- Bugs found during deployment and fixed:
+  1. Railway's vulnerability scanner blocked the first frontend build:
+     next@15.5.4 carried critical CVEs, so it was bumped to ^15.5.27,
+     rebuilt locally, pushed, and redeployed. The build then passed.
+  2. Port mismatch: Railway sets PORT=8080 on both services, but the
+     service domains were first created with targetPort 8000 and 3000,
+     which returned 502. Both domains were recreated with targetPort 8080.
+     The frontend was redeployed with the corrected backend URL baked in.
+- Live verification: the full backend suite (117 checks) and the full
+  frontend E2E suite (100 checks) both pass against the live URLs. The
+  live home page HTML carries the real validation numbers and the honesty
+  banner; the live toi-216 page carries the ambiguous labeling and
+  "NOT a discovery".
+- GitHub main now contains the webapp source, the Dockerfiles, the QA
+  scripts and this report. The repo README links the live site.
