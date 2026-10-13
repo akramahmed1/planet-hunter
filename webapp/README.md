@@ -1,0 +1,83 @@
+# planet-hunter web app (local v1)
+
+A local web app that presents the results of the planet-hunter exoplanet
+transit-detection prototype. Nothing is deployed, nothing is pushed to GitHub,
+and nothing is posted anywhere. This is a local build for Akram's review.
+
+## Honesty rules (apply to every page and every endpoint)
+
+- No discovery is claimed anywhere. Every unexplained signal is labeled
+  "candidate" or "ambiguous" and flagged as needing professional follow-up.
+- TOI 216 and TOI 776 are ambiguous BLS hits, NOT discoveries.
+- The TOI 1338 signal is the host eclipsing binary, not a planet.
+- All copy avoids em dashes and en dashes.
+
+## What is real vs static
+
+- Real data: `GET /api/candidates` reads `candidate_shortlist.csv` from the
+  project root (with a bundled copy in `backend/` as fallback). The 8 rows
+  served are the actual 2026-10-09 batch-scan output.
+- Real data: the folded plot PNGs are the actual plots produced by the
+  pipeline runs, served from the project root by `GET /api/plots/{file}`.
+- Static documented facts: validation numbers (16.0509 d vs 16.051 d,
+  0.001 percent error, 4 sectors, 62,074 cadences, depth 2356 ppm) and the
+  method / limitations / roadmap text come from SUMMARY.md, hardcoded in
+  `backend/app.py`. They describe the verified run, not a live computation.
+- No database. v1 has no persistence; the CSV file is the data store.
+- No scan trigger endpoint. Live MAST runs are long and flaky, so triggering
+  a scan from the web app is out of scope. No placeholder pretends to run one.
+
+## Architecture
+
+```
+webapp/
+  backend/      FastAPI API, port 8000
+    app.py
+    requirements.txt
+    candidate_shortlist.csv   (bundled fallback copy of the real CSV)
+  frontend/     Next.js App Router, port 3000
+    ...fetches the API at http://127.0.0.1:8000 at request time
+```
+
+API endpoints (all GET, verified 2026-10-13):
+
+- `/api/health` -> service status
+- `/api/validation` -> TOI 700 c validation result (from SUMMARY.md)
+- `/api/candidates` -> all 8 batch-scan rows (from the CSV)
+- `/api/candidates/{slug}` -> one row, e.g. `toi-216`; 404 on unknown slug
+- `/api/method` -> method steps, limitations, roadmap (from SUMMARY.md)
+- `/api/plots/{file}` -> folded plot PNGs (from the project root); 404 on unknown file
+
+CORS allows `http://localhost:3000` and `http://127.0.0.1:3000`.
+
+## Run locally
+
+Backend (needs Python 3 with fastapi and uvicorn):
+
+```
+cd webapp/backend
+pip install -r requirements.txt
+python3 -m uvicorn app:app --host 127.0.0.1 --port 8000
+```
+
+Frontend (needs Node 18+):
+
+```
+cd webapp/frontend
+npm install
+npm run dev        # dev server on http://localhost:3000
+# or
+npm run build && npm start
+```
+
+The frontend fetches the API at request time from `NEXT_PUBLIC_API_BASE`
+(default `http://127.0.0.1:8000`), so the backend must be running first.
+
+## Pages
+
+- `/` Overview: TOI 700 c validation as the hero proof, key stats,
+  candidate-not-discovery banner, links to Candidates and Method.
+- `/candidates`: all 8 signals, sortable table, filter by classification.
+- `/candidates/[slug]`: detail view with numbers, readout, folded plot
+  where one exists.
+- `/method`: plain-words method, limitations, ExoMiner++ note, v2 roadmap.
