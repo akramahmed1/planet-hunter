@@ -4,6 +4,16 @@ Hunting exoplanet transits in NASA's public TESS telescope data.
 
 All TESS and Kepler data is public on the MAST archive. This pipeline downloads light curves, detrends them, and runs a Box Least Squares search for the telltale dip of a planet crossing its star.
 
+
+## Web app
+
+The results are also live as a web app, with a FastAPI backend and a Next.js frontend, deployed on Railway:
+
+- Live site: https://frontend-production-db96.up.railway.app
+- API: https://backend-production-f88f2.up.railway.app
+
+Source: `webapp/` in this repo. See `webapp/QA-REPORT.md` for the QA results.
+
 ## Validation
 
 Before hunting anything unknown, the pipeline proved itself on a known planet: it recovered TOI 700 c at P = 16.0509 days versus the published 16.051 days. Error: 0.001%, across 4 sectors and 62,074 cadences. See `toi700_validation_fold.png`.
