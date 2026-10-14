@@ -1,11 +1,13 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import ApiError from "@/components/ApiError";
 import ClassificationBadge from "@/components/ClassificationBadge";
 import {
   apiGet,
   labelFor,
   plotImageUrl,
   type Candidate,
+  type HealthResponse,
 } from "@/lib/api";
 
 export const dynamic = "force-dynamic";
@@ -16,13 +18,25 @@ export default async function CandidateDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const candidate = await apiGet<Candidate>(
-    `/api/candidates/${encodeURIComponent(slug)}`
-  );
+  const [res, health] = await Promise.all([
+    apiGet<Candidate>(`/api/candidates/${encodeURIComponent(slug)}`),
+    apiGet<HealthResponse>("/api/health"),
+  ]);
 
-  if (!candidate) {
-    notFound();
+  if (!res.ok) {
+    if (res.status === 404) notFound();
+    return (
+      <div>
+        <p className="muted">
+          <Link href="/candidates">← Back to all candidates</Link>
+        </p>
+        <ApiError what="This candidate" error={res.error} />
+      </div>
+    );
   }
+
+  const candidate = res.data;
+  const total = health.ok ? health.data.candidate_count : null;
 
   const plotSrc = plotImageUrl(candidate.plot_url);
 
@@ -50,7 +64,10 @@ export default async function CandidateDetailPage({
           <h2>Measured numbers</h2>
           <dl className="kv">
             <dt>Rank</dt>
-            <dd>#{candidate.rank} of 8</dd>
+            <dd>
+              #{candidate.rank}
+              {total ? ` of ${total}` : ""}
+            </dd>
             <dt>Period</dt>
             <dd className="num">{candidate.period_d.toFixed(4)} days</dd>
             <dt>Transit duration</dt>
@@ -90,8 +107,7 @@ export default async function CandidateDetailPage({
         ) : (
           <div className="panel">
             <p className="muted" style={{ margin: 0 }}>
-              No folded plot for this target. Plots were only rendered for the
-              TOI 700 validation and the top three batch signals.
+              No folded plot was rendered for this target in this scan run.
             </p>
           </div>
         )}

@@ -7,6 +7,7 @@ const CLASS_TO_BADGE: Record<Classification, string> = {
   ambiguous: "badge badge-ambiguous",
   marginal: "badge badge-marginal",
   "likely-noise": "badge badge-noise",
+  unreviewed: "badge badge-unreviewed",
 };
 
 export default function ClassificationBadge({

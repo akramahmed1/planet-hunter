@@ -1,38 +1,41 @@
+import ApiError from "@/components/ApiError";
 import CandidatesTable from "@/components/CandidatesTable";
-import { apiGet, type CandidatesResponse } from "@/lib/api";
+import {
+  apiGet,
+  numberWord,
+  scanSummarySentence,
+  type CandidatesResponse,
+} from "@/lib/api";
 
 export const dynamic = "force-dynamic";
 
 export default async function CandidatesPage() {
-  const data = await apiGet<CandidatesResponse>("/api/candidates");
+  const res = await apiGet<CandidatesResponse>("/api/candidates");
+
+  if (!res.ok) {
+    return (
+      <div>
+        <h1>Candidate signals</h1>
+        <ApiError what="The candidate list" error={res.error} />
+      </div>
+    );
+  }
+
+  const { run, summary, candidates, honesty } = res.data;
 
   return (
     <div>
       <h1>Candidate signals</h1>
       <p className="lede">
-        Eight targets, one strongest signal each. Three matched known planets
-        cleanly. One is an eclipsing binary, not a planet. Two are ambiguous
-        and stay unexplained on purpose. The rest were weak or likely noise.
-        Click any target for the full readout.
+        {numberWord(summary.count, true)} targets, one strongest signal each.{" "}
+        {scanSummarySentence(summary)} Click any target for the full readout.
       </p>
-
-      {data ? (
-        <>
-          <p className="muted">
-            Scan run: {data.run_date}. {data.sectors_per_target} sectors per
-            target. Count: {data.count}.
-          </p>
-          <CandidatesTable candidates={data.candidates} />
-        </>
-      ) : (
-        <div className="error-box">
-          <p>
-            The candidate list could not be loaded. The backend API may be
-            offline. Expected at http://127.0.0.1:8000 unless
-            NEXT_PUBLIC_API_BASE is set.
-          </p>
-        </div>
-      )}
+      <p className="muted">
+        Scan run: {run.run_date}. {run.sectors_per_target} sectors per target.
+        Periods searched: {run.search_period_min_d} to {run.search_period_max_d}{" "}
+        days. {honesty}
+      </p>
+      <CandidatesTable candidates={candidates} />
     </div>
   );
 }

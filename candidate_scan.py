@@ -196,6 +196,10 @@ def main():
         print(f"  #{i} {r['target']}: P={r['period_d']:.4f} d, "
               f"depth={r['depth_ppm']:.0f} ppm, SNR={r['snr']:.1f}")
 
+    print("\nNext: review new targets in results/annotations.json (unannotated "
+          "targets publish as 'unreviewed'), then run "
+          "`python scripts/build_results.py` to update the web app data.")
+
 
 if __name__ == "__main__":
     main()

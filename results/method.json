@@ -1,0 +1,44 @@
+{
+  "data_source": {
+    "mission": "NASA TESS (Transiting Exoplanet Survey Satellite)",
+    "curves": "2-minute cadence PDCSAP light curves",
+    "archive": "MAST archive, free, no key required",
+    "stack": "Python 3.12, lightkurve 2.6.0, astropy 8.0.1 (Box Least Squares)"
+  },
+  "steps": [
+    {
+      "title": "Download",
+      "body": "Pull light curves for a target from the MAST archive with the lightkurve package. The validation used 4 TESS sectors of TOI 700 (62,074 cadences). The batch scan used 2 sectors per target."
+    },
+    {
+      "title": "Detrend",
+      "body": "Remove the slow drift in a star's brightness with a Savitzky-Golay filter and drop outlier points. This leaves the short, sharp dips that a transiting planet would cause."
+    },
+    {
+      "title": "Search with Box Least Squares",
+      "body": "Box Least Squares (BLS) in astropy tests thousands of candidate periods and looks for a repeating box-shaped dip. The validation searched 1 to 40 days; the batch scan searched 0.5 to 30 days. The strongest periodogram spike is the reported signal."
+    },
+    {
+      "title": "Fold and plot",
+      "body": "Fold the light curve on the best period so all the dips stack on top of each other at phase zero, and plot it. A real transit shows up as a clear dip; noise does not."
+    }
+  ],
+  "limitations": [
+    "False positives dominate. BLS cannot tell a planet from an eclipsing binary, a background blended binary, starspot modulation, or instrument systematics. TOI 1338 is the textbook case: the strongest signal is the host stars eclipsing each other.",
+    "Only the strongest signal per target is reported. Real systems are multi-planet; this pipeline is blind to everything after the first hit.",
+    "Only 2 sectors per target were scanned (the validation used 4). Longer baselines find longer periods and beat down noise.",
+    "No vetting tests were done: no odd/even transit depth comparison, no secondary eclipse search, no centroid shift check, no transit shape fitting.",
+    "BLS is a box model. Real transits are limb-darkened U shapes; the Transit Least Squares (TLS) algorithm is more sensitive, especially for small planets.",
+    "This does not beat NASA's ExoMiner++. ExoMiner++ is a deep-learning classifier trained on Kepler plus TESS data that identified about 7,000 TESS candidates (NASA Ames, January 2026), with false-positive rejection built in. This pipeline is a single classical algorithm with no learned vetting. Its value is as an independent, explainable check, not as a competitor.",
+    "The batch scan searched periods up to 30 days only, so longer-period planets (such as TOI 1338 b at about 95 days) cannot be found by it."
+  ],
+  "roadmap": [
+    "Cross-match every signal against the NASA Exoplanet Archive and the ExoMiner++ candidate list before calling anything interesting.",
+    "Add vetting: odd/even depth test, secondary eclipse search, transit shape (V vs U), centroid offsets, and a check against known eclipsing-binary catalogs.",
+    "Swap BLS for TLS for small-planet sensitivity.",
+    "Stitch all available sectors per target instead of 2.",
+    "Cross-check ambiguous signals on Planet Hunters TESS, where human eyes still beat algorithms on long-period and odd-shaped transits.",
+    "Submit interesting survivors to ExoFOP (the community follow-up portal), never announced as discoveries."
+  ],
+  "exominer_note": "NASA's ExoMiner++ is an open-source deep-learning classifier trained on Kepler and TESS data. In January 2026 NASA Ames reported it identified about 7,000 TESS planet candidates, with false-positive rejection built in. It sets the bar. This project is not a competitor: it is a transparent, classical pipeline whose every result anyone can reproduce and inspect."
+}

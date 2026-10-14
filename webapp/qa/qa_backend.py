@@ -8,7 +8,8 @@ import sys
 import urllib.request
 
 BASE = sys.argv[1] if len(sys.argv) > 1 else "http://127.0.0.1:8000"
-PROJECT = "/home/hatch/workspace/reverse-engineering/exoplanet-hunt"
+import os
+PROJECT = os.environ.get("PROJECT_ROOT", os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 FAILURES = []
 PASSES = []
 
@@ -53,7 +54,7 @@ s, ct, b = get("/api/candidates")
 c = json.loads(b)
 rows = c["candidates"]
 check("candidates/200", s == 200)
-check("candidates/count-8", c["count"] == 8 and len(rows) == 8, c.get("count"))
+check("candidates/count-8", c["summary"]["count"] == 8 and len(rows) == 8, c.get("summary"))
 with open(PROJECT + "/candidate_shortlist.csv", newline="") as f:
     src = {r["target"]: r for r in csv.DictReader(f)}
 check("candidates/match-csv-targets", set(src) == {r["target"] for r in rows})
