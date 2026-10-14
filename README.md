@@ -14,6 +14,14 @@ The results are also live as a web app, with a FastAPI backend and a Next.js fro
 
 Source: `webapp/` in this repo. See `webapp/QA-REPORT.md` for the QA results.
 
+## How results reach the web app
+
+`candidate_scan.py` writes `candidate_shortlist.csv`. A human reviews each target in
+`results/annotations.json`, then `python scripts/build_results.py` publishes
+`webapp/backend/data/results.json`, the only thing the API serves. CI fails if the
+published data is stale or if the frontend types drift from the API contract.
+Targets nobody has reviewed yet show as "Unreviewed". See `docs/PRODUCTION_PLAN.md`.
+
 ## Validation
 
 Before hunting anything unknown, the pipeline proved itself on a known planet: it recovered TOI 700 c at P = 16.0509 days versus the published 16.051 days. Error: 0.001%, across 4 sectors and 62,074 cadences. See `toi700_validation_fold.png`.

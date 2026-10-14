@@ -1,5 +1,12 @@
 import Link from "next/link";
-import { apiGet, plotImageUrl, type ValidationResponse } from "@/lib/api";
+import ApiError from "@/components/ApiError";
+import {
+  apiGet,
+  numberWord,
+  plotImageUrl,
+  scanSummarySentence,
+  type OverviewResponse,
+} from "@/lib/api";
 
 export const dynamic = "force-dynamic";
 
@@ -8,7 +15,10 @@ function formatInt(n: number): string {
 }
 
 export default async function Home() {
-  const validation = await apiGet<ValidationResponse>("/api/validation");
+  const res = await apiGet<OverviewResponse>("/api/overview");
+  const overview = res.ok ? res.data : null;
+  const validation = overview?.validation ?? null;
+  const summary = overview?.summary ?? null;
   const plotSrc = plotImageUrl(validation?.plot_url ?? null);
 
   return (
@@ -88,13 +98,7 @@ export default async function Home() {
             </div>
           </div>
         ) : (
-          <div className="error-box">
-            <p>
-              The validation data could not be loaded. The backend API may be
-              offline. Expected at http://127.0.0.1:8000 unless
-              NEXT_PUBLIC_API_BASE is set.
-            </p>
-          </div>
+          <ApiError what="The validation result" error={res.ok ? "" : res.error} />
         )}
       </section>
 
@@ -102,30 +106,37 @@ export default async function Home() {
         <h2 id="stats-heading" className="section-title">
           What the scan found
         </h2>
-        <div className="stat-grid">
-          <div className="stat-card">
-            <div className="stat-num">4</div>
-            <div className="stat-label">validation sectors</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-num">8</div>
-            <div className="stat-label">targets scanned</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-num">3</div>
-            <div className="stat-label">clean recoveries</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-num">2</div>
-            <div className="stat-label">ambiguous signals</div>
-          </div>
-        </div>
-        <p className="muted">
-          Three of the eight targets matched known planets cleanly. Two gave
-          signals nobody can explain yet, so they stay labeled ambiguous. One
-          turned out to be an eclipsing binary, not a planet. The rest were
-          weak or likely noise. See the full list on the candidates page.
-        </p>
+        {overview && summary && validation ? (
+          <>
+            <div className="stat-grid">
+              <div className="stat-card">
+                <div className="stat-num">{validation.sectors}</div>
+                <div className="stat-label">validation sectors</div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-num">{summary.count}</div>
+                <div className="stat-label">targets scanned</div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-num">
+                  {summary.by_classification["clean-recovery"]}
+                </div>
+                <div className="stat-label">clean recoveries</div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-num">{summary.by_classification.ambiguous}</div>
+                <div className="stat-label">ambiguous signals</div>
+              </div>
+            </div>
+            <p className="muted">
+              Scan of {numberWord(summary.count)} targets on {overview.run.run_date}.{" "}
+              {scanSummarySentence(summary)} See the full list on the candidates
+              page.
+            </p>
+          </>
+        ) : (
+          <ApiError what="The scan summary" error={res.ok ? "" : res.error} />
+        )}
       </section>
 
       <section aria-labelledby="what-heading">
@@ -149,15 +160,14 @@ export default async function Home() {
         </div>
         <div className="banner banner-honest" role="note">
           <p>
-            <strong>Honesty first.</strong> Two of the signals are unexplained
-            and could be false positives. They are labeled ambiguous on
-            purpose. Astronomy is full of almost-planets that turned out to be
-            something else.
+            <strong>Honesty first.</strong> Unexplained signals could be false
+            positives, so they are labeled ambiguous on purpose. Astronomy is
+            full of almost-planets that turned out to be something else.
           </p>
         </div>
         <div className="link-row">
           <Link href="/candidates" className="btn">
-            See all 8 candidates
+            {summary ? `See all ${summary.count} candidates` : "See the candidates"}
           </Link>
           <Link href="/method" className="btn btn-ghost">
             How it works

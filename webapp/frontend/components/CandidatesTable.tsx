@@ -3,17 +3,22 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import ClassificationBadge from "@/components/ClassificationBadge";
-import { labelFor, type Candidate, type Classification } from "@/lib/api";
+import {
+  CLASSIFICATION_LABELS,
+  labelFor,
+  type Candidate,
+  type Classification,
+} from "@/lib/api";
 
 type SortKey = "rank" | "period_d" | "depth_ppm" | "snr";
 
-const FILTERS: { value: Classification | "all"; label: string }[] = [
-  { value: "all", label: "All" },
-  { value: "clean-recovery", label: "Clean recovery" },
-  { value: "eclipsing-binary", label: "Eclipsing binary" },
-  { value: "ambiguous", label: "Ambiguous" },
-  { value: "marginal", label: "Marginal" },
-  { value: "likely-noise", label: "Likely noise" },
+const FILTER_ORDER: Classification[] = [
+  "clean-recovery",
+  "eclipsing-binary",
+  "ambiguous",
+  "marginal",
+  "likely-noise",
+  "unreviewed",
 ];
 
 const HEADERS: { key: SortKey; label: string }[] = [
@@ -31,6 +36,18 @@ export default function CandidatesTable({
   const [sortKey, setSortKey] = useState<SortKey>("rank");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
   const [filter, setFilter] = useState<Classification | "all">("all");
+
+  // Only offer filters for classifications that exist in this run.
+  const FILTERS = useMemo(() => {
+    const present = new Set(candidates.map((c) => c.classification));
+    return [
+      { value: "all" as const, label: "All" },
+      ...FILTER_ORDER.filter((c) => present.has(c)).map((c) => ({
+        value: c,
+        label: CLASSIFICATION_LABELS[c],
+      })),
+    ];
+  }, [candidates]);
 
   const rows = useMemo(() => {
     const filtered =

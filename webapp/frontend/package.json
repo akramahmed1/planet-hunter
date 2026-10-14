@@ -1,1 +1,22 @@
-{"dependencies":{"next":"^15.5.27","react":"19.1.1","react-dom":"19.1.1"},"devDependencies":{"@types/node":"^22.10.2","@types/react":"^19.1.1","@types/react-dom":"^19.1.1","typescript":"^5.9.2"},"name":"planet-hunter-frontend","private":true,"scripts":{"build":"next build","dev":"next dev","start":"next start"},"version":"1.0.0"}
+{
+  "dependencies": {
+    "next": "^15.5.27",
+    "react": "19.1.1",
+    "react-dom": "19.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/react": "^19.1.1",
+    "@types/react-dom": "^19.1.1",
+    "typescript": "^5.9.2"
+  },
+  "name": "planet-hunter-frontend",
+  "private": true,
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev",
+    "start": "next start",
+    "typecheck": "tsc --noEmit"
+  },
+  "version": "1.0.0"
+}
