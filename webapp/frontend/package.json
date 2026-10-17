@@ -20,7 +20,9 @@
     "dev": "next dev",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "test:unit": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test \"lib/**/*.test.ts\""
+    "test:unit": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test \"lib/**/*.test.ts\"",
+    "gen:types": "node scripts/gen-types.mjs",
+    "test:e2e": "playwright test"
   },
   "version": "1.0.0"
 }
