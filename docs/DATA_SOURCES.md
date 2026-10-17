@@ -35,9 +35,9 @@ Status values: `verified`, `flagged for Akram`.
 
 1. **DONKI space weather is down for us.** `api.nasa.gov/DONKI/notifications`
    returned HTTP 503 ("upstream connect error … remote connection failure") on
-   all five runs (07:49–07:56 UTC, 2026-10-17). DONKI's own host,
+   all six runs (07:49–07:58 UTC, 2026-10-17). DONKI's own host,
    `kauai.ccmc.gsfc.nasa.gov`, was unreachable from GitHub's runners
-   ("Network is unreachable", three tries). Options: (a) retry in Phase 2 and ship the tile
+   ("Network is unreachable", four tries). Options: (a) retry in Phase 2 and ship the tile
    with its stale/unavailable state, (b) use NOAA SWPC instead, which would be
    a new source to verify, or (c) drop the space-weather tile. Recommended: (a).
 2. **Aladin Lite is GPL-3.0.** Its docs say: "Aladin Lite source code is
@@ -144,7 +144,7 @@ Status values: `verified`, `flagged for Akram`.
 ### api.nasa.gov APOD
 - URL: `https://api.nasa.gov/planetary/apod?api_key=…` · HTTPS · key in
   `NASA_API_KEY` (Railway variable, never in git).
-- Reliability: across 5 runs with DEMO_KEY, 2 returned 200 and 3 returned HTTP
+- Reliability: across 6 runs with DEMO_KEY, 2 returned 200 and 4 returned HTTP
   500 (`{"code":500,"msg":"Internal Service Error"}`). This confirms the
   plan's serve-last-good-copy cache is needed.
 - Shape: `{date, explanation, hdurl, media_type, service_version, title, url}`.
