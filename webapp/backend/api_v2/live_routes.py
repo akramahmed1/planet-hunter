@@ -13,6 +13,13 @@ from live import cache, clock, physics, positions, reference, sources
 
 router = APIRouter(prefix="/api/v2", tags=["v2"])
 
+# Explicit descriptions: FastAPI's defaults come from Python's HTTP status phrases, which
+# changed between versions (422 "Unprocessable Entity" became "Unprocessable Content"), and
+# the generated frontend types must be identical on every Python version.
+UNAVAILABLE = {503: {"model": s.Unavailable, "description": "The upstream source is down and nothing is cached"}}
+NOT_FOUND = {404: {"description": "No confirmed planets for this host"}}
+BAD_NAME = {422: {"description": "Invalid host name"}}
+
 KM_PER_AU = 149_597_870.7
 KM_PER_MILE = 1.609344
 C_KM_S = 299_792.458
@@ -181,7 +188,7 @@ def get_distance(
 
 # ---------- ISS, APOD, space weather ----------
 
-@router.get("/iss", response_model=s.IssResponse, responses={503: {"model": s.Unavailable}})
+@router.get("/iss", response_model=s.IssResponse, responses=UNAVAILABLE)
 def get_iss(response: Response):
     """Current ISS position, cached 5 seconds (the provider allows about one request per second)."""
     try:
@@ -196,7 +203,7 @@ def get_iss(response: Response):
                          fetched_at=hit.fetched_at, stale=hit.stale)
 
 
-@router.get("/apod", response_model=s.ApodResponse, responses={503: {"model": s.Unavailable}})
+@router.get("/apod", response_model=s.ApodResponse, responses=UNAVAILABLE)
 def get_apod(response: Response):
     """NASA's Astronomy Picture of the Day. `copyright` names the owner when the image isn't NASA's."""
     try:
@@ -211,7 +218,7 @@ def get_apod(response: Response):
                           source=s.SourceRef(**sources.SRC_APOD), fetched_at=hit.fetched_at, stale=hit.stale)
 
 
-@router.get("/space-weather", response_model=s.SpaceWeatherResponse, responses={503: {"model": s.Unavailable}})
+@router.get("/space-weather", response_model=s.SpaceWeatherResponse, responses=UNAVAILABLE)
 def get_space_weather(response: Response):
     """Space weather notifications from NASA DONKI for the last 7 days."""
     today = clock.today()
@@ -248,7 +255,7 @@ def _eq_temp(row: dict) -> s.Quantity | None:
 
 
 @router.get("/exoplanets/latest", response_model=s.ExoplanetsLatestResponse,
-            responses={503: {"model": s.Unavailable}})
+            responses=UNAVAILABLE)
 def exoplanets_latest(response: Response):
     """Confirmed planet count and planets published in the last 60 days."""
     today = clock.today()
@@ -273,7 +280,7 @@ def exoplanets_latest(response: Response):
 
 
 @router.get("/exoplanets/{name}", response_model=s.ExoplanetSystemResponse,
-            responses={404: {}, 422: {}, 503: {"model": s.Unavailable}})
+            responses={**NOT_FOUND, **BAD_NAME, **UNAVAILABLE})
 def exoplanet_system(response: Response, name: str = Path(..., description="host star name, e.g. TOI-700")):
     """One planetary system: the host star and its planets."""
     if not sources.HOST_NAME.match(name):

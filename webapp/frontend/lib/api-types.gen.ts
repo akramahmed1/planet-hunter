@@ -993,7 +993,7 @@ export interface operations {
                     "application/json": components["schemas"]["ApodResponse"];
                 };
             };
-            /** @description Service Unavailable */
+            /** @description The upstream source is down and nothing is cached */
             503: {
                 headers: {
                     [name: string]: unknown;
@@ -1078,7 +1078,7 @@ export interface operations {
                     "application/json": components["schemas"]["ExoplanetsLatestResponse"];
                 };
             };
-            /** @description Service Unavailable */
+            /** @description The upstream source is down and nothing is cached */
             503: {
                 headers: {
                     [name: string]: unknown;
@@ -1110,21 +1110,21 @@ export interface operations {
                     "application/json": components["schemas"]["ExoplanetSystemResponse"];
                 };
             };
-            /** @description Not Found */
+            /** @description No confirmed planets for this host */
             404: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content?: never;
             };
-            /** @description Unprocessable Content */
+            /** @description Invalid host name */
             422: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content?: never;
             };
-            /** @description Service Unavailable */
+            /** @description The upstream source is down and nothing is cached */
             503: {
                 headers: {
                     [name: string]: unknown;
@@ -1173,7 +1173,7 @@ export interface operations {
                     "application/json": components["schemas"]["IssResponse"];
                 };
             };
-            /** @description Service Unavailable */
+            /** @description The upstream source is down and nothing is cached */
             503: {
                 headers: {
                     [name: string]: unknown;
@@ -1234,7 +1234,7 @@ export interface operations {
                     "application/json": components["schemas"]["SpaceWeatherResponse"];
                 };
             };
-            /** @description Service Unavailable */
+            /** @description The upstream source is down and nothing is cached */
             503: {
                 headers: {
                     [name: string]: unknown;
