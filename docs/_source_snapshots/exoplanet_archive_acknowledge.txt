@@ -9,7 +9,7 @@
   },
   "bytes": 27020,
   "truncated": false,
-  "fetched_at": "2026-10-17T07:54:03+00:00"
+  "fetched_at": "2026-10-17T07:55:07+00:00"
 }
 
 Acknowledging the NASA Exoplanet Archive 

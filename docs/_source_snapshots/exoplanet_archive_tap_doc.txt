@@ -9,7 +9,7 @@
   },
   "bytes": 47505,
   "truncated": false,
-  "fetched_at": "2026-10-17T07:54:02+00:00"
+  "fetched_at": "2026-10-17T07:55:07+00:00"
 }
 
 Retrieving Exoplanet Archive Data With Table Access Protocol 
