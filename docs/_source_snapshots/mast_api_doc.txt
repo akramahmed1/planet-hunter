@@ -1,0 +1,72 @@
+{
+  "url": "https://mast.stsci.edu/api/v0/",
+  "final_url": "https://mast.stsci.edu/api/v0/",
+  "status": 200,
+  "https": true,
+  "headers": {
+    "server": "nginx/1.22.1",
+    "content-type": "text/html",
+    "last-modified": "Fri, 14 Aug 2026 14:57:08 GMT",
+    "etag": "\"24d902efd2bdd1:0\"",
+    "access-control-allow-origin": "*"
+  },
+  "bytes": 8276,
+  "truncated": false,
+  "fetched_at": "2026-10-17T07:58:39+00:00"
+}
+
+MAST API: MAST API Documentation 
+
+ MAST API
+
+ Tools for programmatically querying the MAST Portal. 
+
+ Toggle main menu visibility 
+
+ [link: javascript:searchBox.CloseResultsWindow()] 
+
+ Loading... 
+ Searching... 
+ No Matches 
+
+ MAST API Documentation 
+
+ The MAST API allows for queries to be performed programmatically rather than through the [link: https://mast.stsci.edu] Discovery Portal . This documentation describes how to create a valid MAST Query, as well as the MAST Services of interest to an API user. 
+ Questions/Comments/Feedback: contact [link: #] archi .nosp@m. ve@s .nosp@m. tsci. .nosp@m. edu 
+
+Documentation Organization 
+ The [link: class_mashup_1_1_mashup_request.html] MashupRequest class documentation provides information for properly formatting a MAST request to the mast servers. 
+ The [link: _services.html] Services documentation provides information about specific services that may be used. 
+ The [link: md_result_formats.html] Result Dataset Formats page documents possible return types. 
+ The [link: pyex.html] Examples page contains working code for various MAST Queries in Python. 
+ There is also a [link: MastApiTutorial.html] Tutorial that goes through a basic workflow from initial query to data download. 
+
+The MAST Request Url 
+ The MAST Request Url is https://mast.stsci.edu/api/v0/invoke?request=(MAST Request Object). 
+The MAST service takes a single request argument, ?request=(MAST Request Object), a json object. 
+The MAST service supports both HTTP GET and HTTP POST request types. 
+
+The MAST Request Object 
+ This is an example of the MAST Request Object, which is a MashupRequest Class json object. Each property is described in detail in the [link: class_mashup_1_1_mashup_request.html] MashupRequest section. {'service':'Mast.Caom.Cone',
+ 'params':{'ra':254.28746,
+ 'dec':-4.09933,
+ 'radius':0.2},
+ 'format':'json',
+ 'pagesize':2000,
+ 'removenullcolumns':True,
+ 'timeout':30,
+ 'cachebreaker': '2020-02-12T0749'}
+
+A note about large queries 
+ The maximum result size for a MAST Query is roughly 500,000 records (rows) due to server memory limits. If a query results in a larger response, it will raise a memory error. From a user perspective, the query errors out with the message "[Errno 54] Connection reset by peer." If this happens the query should be constrained (decrease the search radius, add more filtering) such that fewer records will be returned. 
+
+Long Polling 
+ MAST is a long polling service, whereby the client reissues the same request to get current job status. A note about polling is that you need to exactly replicate the original request parameters, including the cachebreaker if it is included. The purpose of the cachebreaker parameter is to compel a query to be executed freshly if new, but to also use the cache for an executing query while being polled. 
+
+ [link: https://www.stsci.edu/privacy] Privacy Policy . 
+
+ [link: doxygen_crawl.html] 
+
+Generated on for MAST API by  [link: http://www.doxygen.org/index.html] 
+
+ 1.17.0

@@ -1,0 +1,634 @@
+{
+  "url": "https://exoplanetarchive.ipac.caltech.edu/docs/TAP/usingTAP.html",
+  "final_url": "https://exoplanetarchive.ipac.caltech.edu/docs/TAP/usingTAP.html",
+  "status": 200,
+  "https": true,
+  "headers": {
+    "content-type": "text/html; charset=UTF-8",
+    "server": "cloudflare"
+  },
+  "bytes": 47505,
+  "truncated": false,
+  "fetched_at": "2026-10-17T07:58:39+00:00"
+}
+
+Retrieving Exoplanet Archive Data With Table Access Protocol 
+
+ [link: /index.html] 
+
+ [link: /index.html] Home 
+
+ About Us 
+
+ [link: /docs/intro.html] 
+
+ Overview 
+ [link: /docs/holdings.html] 
+
+ Holdings 
+ [link: /docs/counts_detail.html] 
+
+ Exoplanet Counts 
+ [link: /docs/users_group.html] 
+
+ User Panel 
+
+ [link: /docs/faq.html] 
+
+ FAQ 
+ [link: /docs/acknowledge.html] 
+
+ Acknowledgements 
+ [link: /docs/privacy.html] 
+
+ Privacy Notice 
+
+ Data 
+
+ Planetary Systems 
+
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=PS] 
+
+ Planetary Systems 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=PSCompPars] 
+
+ Planetary Systems Composite Data 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=STELLARHOSTS] 
+
+ Stellar Hosts 
+ [link: /cgi-bin/atmospheres/nph-firefly?atmospheres] 
+
+ Atmospheric Spectroscopy 
+ [link: /cgi-bin/observations/nph-firefly?data] 
+
+ NExoList 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=ML] 
+
+ Microlensing Planets 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=directimaging&constraint=immodeldef=1] 
+
+ Direct Imaging Planets 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=TD] 
+
+ Transiting Planets 
+
+ Kepler 
+
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=cumulative] 
+
+ KOI (Cumulative List) 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=koi] 
+
+ KOI (All Lists) 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=koiapp&constraint=pp_host_prob_score>0.3] 
+
+ Positional Probabilities 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=koifpp] 
+
+ False Positive Probabilities 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=fpwg] 
+
+ Certified False Positives 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=tce] 
+
+ Threshold-Crossing Events 
+ [link: /docs/Kepler_completeness_reliability.html] 
+
+ Completeness and Reliability 
+ [link: /docs/KeplerSimulated.html] 
+
+ Simulated Data 
+ [link: /cgi-bin/TblSearch/nph-tblSearchInit?app=ExoTbls&config=keplerstellar] 
+
+ Kepler Stellar 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=kep_conf_names] 
+
+ Kepler Confirmed Names 
+
+ Transit Surveys 
+
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=TOI] 
+
+ TESS Project Candidates 
+ [link: /cgi-bin/TblSearch/nph-tblSearchInit?app=ExoTbls&config=k2targets] 
+
+ K2 Targets 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=k2pandc] 
+
+ K2 Planets and Candidates 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=k2_conf_names] 
+
+ K2 Confirmed Names 
+ [link: /applications/ETSS/CoRoT_astero_index.html] 
+
+ CoRot Astero-Seismology 
+ [link: /applications/ETSS/CoRoT_exo_index.html] 
+
+ CoRoT Exoplanet 
+ [link: /cgi-bin/TblSearch/nph-tblSearchInit?app=ExoTbls&config=superwasptimeseries] 
+
+ SuperWASP Light Curves 
+ [link: /cgi-bin/TblSearch/nph-tblSearchInit?app=ExoTbls&config=kelttimeseries] 
+
+ KELT Light Curves 
+ [link: /cgi-bin/TblView/nph-tblView?app=ETSSView&config=conf/KELTP] 
+
+ KELT Praesepe 
+ [link: /cgi-bin/TblView/nph-tblView?app=ETSSView&config=conf/XO] 
+
+ XO 
+ [link: /applications/ETSS/HATNet_index.html] 
+
+ HATNet 
+ [link: /cgi-bin/TblView/nph-tblView?app=ETSSView&config=conf/Cluster] 
+
+ Cluster 
+ [link: /cgi-bin/TblView/nph-tblView?app=ETSSView&config=conf/TrES] 
+
+ TrES 
+
+ Other 
+
+ [link: /cgi-bin/observations/nph-firefly?datta] 
+
+ JWST Observations 
+ [link: /cgi-bin/TblSearch/nph-tblSearchInit?app=ExoTbls&config=ukirttimeseries] 
+
+ UKIRT Microlensing Survey 
+ [link: /cgi-bin/MOA/nph-firefly?MOA] 
+
+ MOA Microlensing Survey 
+ [link: /cgi-bin/ROME/nph-firefly?data&filter=True] 
+
+ ROME/REA Microlensing Survey 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=gjstars] 
+
+ Gliese-Jahreiss Stars 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=DI_STARS_EXEP] 
+
+ HWO ExEP Precursor Science Stars 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=missionstars] 
+
+ Mission Stars 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=mission_exocat] 
+
+ Mission Stars+ExoCat 
+ [link: /cgi-bin/FDL/nph-fdl] 
+
+ Frontier Development Lab Datasets 
+ [link: /cgi-bin/CUBESAT/nph-cubesat?cute] 
+
+ CUTE Mission 
+ [link: /docs/ASTERIAMission.html] 
+
+ ASTERIA Mission 
+ [link: /docs/contributed_data.html] 
+
+ Contributed Data Sets 
+ [link: /applications/ExoTbls/upload.html] 
+
+ Interactive Tables Search and File Upload 
+
+      Full table display 
+          Database search 
+
+ Tools 
+
+ [link: /applications/Inventory/search.html] 
+
+ Explore the Archive 
+ [link: /applications/ExoTbls/upload.html] 
+
+ Interactive Table Search and File Upload 
+ [link: /cgi-bin/TransitView/nph-visibletbls?dataset=transits] 
+
+ Transit and Ephemeris Service 
+ [link: /cgi-bin/CalcQty/nph-calcqty] 
+
+ Predicted Observables for Exoplanets (POE) 
+ [link: /cgi-bin/Pgram/nph-pgram] 
+
+ Periodogram 
+ [link: /ScatterPlot/?config=scatter&table=PS_output.csv&columns=PS_columns.tbl&theme=pres&x=pl_orbper&y=pl_bmassj&symbol-color=discoverymethod&symbol-size-min=8&legendpos=bottomright&link=1] 
+
+ Confirmed Planets Plotting Tool 
+ [link: /cgi-bin/ExoFAST/nph-exofast] 
+
+ EXOFAST: Transit and RV Fitting 
+
+ [link: https://astrofetch.ipac.caltech.edu] 
+
+ AstroFetch AI 
+ [link: /docs/TAP/usingTAP.html] 
+
+ Table Access Protocol (TAP) Interface 
+ [link: /docs/program_interfaces.html] 
+
+ Application Programming Interface (API) 
+ [link: /bulk_data_download] 
+
+ Bulk Data Download 
+ [link: https://exofop.ipac.caltech.edu/] 
+
+ ExoFOP 
+ [link: /exoplanetplots/] 
+
+ Pre-generated Plots 
+ [link: /support/upload_param/] 
+
+ Published Data Upload 
+
+ Support 
+
+ [link: /applications/DocSet/index.html?doctree=/docs/docmenu.xml&startdoc=item_1_01] 
+
+ Documentation Index 
+ [link: /docs/KeplerMission.html] 
+
+ Kepler Documentation 
+
+ [link: /docs/connect.html] 
+
+ Social Media and Newsletter 
+ [link: /applications/Helpdesk] 
+
+ Contact Us 
+
+ - 
+
+ Retrieving Exoplanet Archive Data With Table Access Protocol 
+
+ Skip to: 
+ [link: #sync-async] Synchronous and Asynchronous Queries 
+ [link: #sync-query] Constructing Synchronous TAP Queries 
+ [link: #spatial] Using Spatial Constraints in Queries 
+ [link: #schema] Retrieving Table Schema 
+ [link: #bp] Best Practices 
+ [link: #examples] More Examples 
+
+ The NASA Exoplanet Archive's TAP service allows users to programmatically access and retrieve data from some of its data tables as an alternative to the [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=PS] interactive web interface . 
+ If you use any of the following data sets for your research, please cite the archive's [link: /docs/doi.html] DOI for the data . 
+ The Exoplanet Archive's TAP service is connected to the following tables: 
+
+ Table Name Table Database Name Data Column Documentation 
+
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=PS] Planetary Systems 
+ ps 
+ [link: /docs/API_PS_columns.html] Definitions 
+
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=PSCompPars] Planetary Systems Composite Parameters 
+ pscomppars 
+ [link: /docs/API_PS_columns.html] Definitions 
+
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=TOI] TESS Project Candidates 
+ toi 
+ [link: /docs/API_TOI_columns.html] Definitions 
+
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=ML] Microlensing 
+ ml 
+ [link: /docs/API_ML.html] Definitions 
+
+ [link: /docs/microlensing-column-mapping.pdf] Column names mapping document between old microlensing and new ML tables (for queries created before April 2021) 
+
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=STELLARHOSTS] Stellar Hosts 
+ stellarhosts 
+ [link: /docs/API_STELLARHOSTS_columns.html] Definitions 
+
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=kep_conf_names] Kepler Confirmed Names 
+ keplernames 
+ [link: /docs/API_keplernames_columns.html] Definitions 
+
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=k2_conf_names] K2 Confirmed Names 
+ k2names 
+ [link: /docs/API_k2names_columns.html] Definitions 
+
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=k2pandc] K2 Planets and Candidates 
+ k2pandc 
+ [link: /docs/API_k2pandc_columns.html] Definitions 
+
+ Column names mapping document ( [link: /docs/k2pandc_k2candidate_mapping.pdf] PDF ) ( [link: /docs/k2pandc_k2candidate_mapping.csv] CSV ) between the new k2pandc and old k2candidates tables 
+
+ [link: /cgi-bin/atmospheres/nph-firefly?atmospheres] Atmospheric Spectroscopy 
+ spectra 
+ Note: This table replaced the Emission and Transmission Spectroscopy tables that were retired in July 2023. Currently, only the spectra data columns in panel 1 of the table are retrievable through TAP. 
+ [link: /docs/atmospheres/atmospheres_columns.html#spectra] Spectra Data Column Definitions 
+
+ [link: /cgi-bin/TblSearch/nph-tblSearchInit?app=ExoTbls&config=ukirttimeseries] UKIRT 
+ ukirttimeseries 
+ [link: /docs/API_ukirttimeseries_columns.html] Definitions 
+
+ [link: /cgi-bin/TblSearch/nph-tblSearchInit?app=ExoTbls&config=kelttimeseries] KELT Time Series 
+ kelttimeseries 
+ [link: /docs/API_kelt_columns.html] Definitions 
+
+ [link: /cgi-bin/TblSearch/nph-tblSearchInit?app=ExoTbls&config=superwasptimeseries] SuperWASP Time Series 
+ superwasptimeseries 
+ [link: /docs/API_superwasptimeseries_columns.html] Definitions 
+
+ [link: /docs/sysaliases.html] System Aliases Lookup Service 
+ This is not a TAP service, but it replaces the object_aliases table by providing a complete list of all names associated with a specific object that the archive recognizes. The output is a structured JSON table ( [link: /cgi-bin/Lookup/nph-aliaslookup.py?objname=Kepler-22] example ). 
+ This [link: /docs/sysaliases.html] help document describes how to use the service. 
+
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=DI_STARS_EXEP] HWO ExEP Precursor Science Stars 
+ di_stars_exep 
+ [link: /docs/API_mission_stars.html] Definitions 
+
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=TD] Transiting Planets 
+ TD 
+ [link: /docs/API_transit_detection.html] Definitions 
+
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=cumulative] KOI Cumulative Delivery 
+ cumulative 
+ [link: /docs/API_kepcandidate_columns.html] Definitions 
+
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=koi] KOI Q1-Q6 Delivery 
+ q1_q6_koi 
+ [link: /docs/API_kepcandidate_columns.html] Definitions 
+
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=koi] KOI Q1-Q8 Delivery 
+ q1_q8_koi 
+ [link: /docs/API_kepcandidate_columns.html] Definitions 
+
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=koi] KOI Q1-Q12 Delivery 
+ q1_q12_koi 
+ [link: /docs/API_kepcandidate_columns.html] Definitions 
+
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=koi] KOI Q1-Q16 Delivery 
+ q1_q16_koi 
+ [link: /docs/API_kepcandidate_columns.html] Definitions 
+
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=koi] KOI Q1-Q17 DR24 Delivery 
+ q1_q17_dr24_koi 
+ [link: /docs/API_kepcandidate_columns.html] Definitions 
+
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=koi] KOI Q1-Q17 DR25 Delivery 
+ q1_q17_dr25_koi 
+ [link: /docs/API_kepcandidate_columns.html] Definitions 
+
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=koi] KOI Q1-Q17 DR25 Supplemental Delivery 
+ q1_q17_dr25_sup_koi 
+ [link: /docs/API_kepcandidate_columns.html] Definitions 
+
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=tce] TCE Q1-Q12 Delivery 
+ q1_q12_tce 
+ [link: /docs/API_tce_columns.html] Definitions 
+
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=tce] TCE Q1-Q16 Delivery 
+ q1_q16_tce 
+ [link: /docs/API_tce_columns.html] Definitions 
+
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=tce] TCE Q1-Q17 DR24 Delivery 
+ q1_q17_dr24_tce 
+ [link: /docs/API_tce_columns.html] Definitions 
+
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=tce] TCE Q1-Q17 DR25 Delivery 
+ q1_q17_dr25_tce 
+ [link: /docs/API_tce_columns.html] Definitions 
+
+ [link: /cgi-bin/TblSearch/nph-tblSearchInit?app=ExoTbls&config=keplerstellar] Kepler Stellar 
+ keplerstellar 
+ [link: /docs/API_keplerstellar_columns.html] Definitions 
+
+ [link: /cgi-bin/TblSearch/nph-tblSearchInit?app=ExoTbls&config=keplerstellar] Kepler Stellar Q1-Q12 Delivery 
+ q1_q12_ks 
+ [link: /docs/API_keplerstellar_columns.html] Definitions 
+
+ [link: /cgi-bin/TblSearch/nph-tblSearchInit?app=ExoTbls&config=keplerstellar] Kepler Stellar Q1-Q16 Delivery 
+ q1_q16_ks 
+ [link: /docs/API_keplerstellar_columns.html] Definitions 
+
+ [link: /cgi-bin/TblSearch/nph-tblSearchInit?app=ExoTbls&config=keplerstellar] Kepler Stellar Q1-Q17 DR24 Delivery 
+ q1_q17_dr24_ks 
+ [link: /docs/API_keplerstellar_columns.html] Definitions 
+
+ [link: /cgi-bin/TblSearch/nph-tblSearchInit?app=ExoTbls&config=keplerstellar] Kepler Stellar Q1-Q17 DR25 Delivery 
+ q1_q17_dr25_ks 
+ [link: /docs/API_keplerstellar_columns.html] Definitions 
+
+ [link: /cgi-bin/TblSearch/nph-tblSearchInit?app=ExoTbls&config=keplerstellar] Kepler Stellar DR25 Supplemental Delivery 
+ q1_q17_dr25_sup_ks 
+ [link: /docs/API_keplerstellar_columns.html] Definitions 
+
+ Kepler Time Series 
+ keplertimeseries 
+ [link: /docs/API_keplertimeseries_columns.html] Definitions 
+
+ [link: /cgi-bin/TblSearch/nph-tblSearchInit?app=ExoTbls&config=k2targets] K2 Stellar Targets 
+ k2targets 
+ [link: /docs/API_k2_columns.html] Definitions 
+
+ More archive tables will be transitioned to TAP in the coming months. To programmatically retrieve data from archive tables not currently supported by TAP, such as the [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=missionstars] Mission Stars table, please use the archive's existing [link: /docs/program_interfaces.html] application programming interface (API) . 
+ About Table Access Protocol 
+
+ Table Access Protocol (TAP) is a recommended standard developed by the Virtual Astronomy community and now maintained by the International Virtual Observatory Alliance (IVOA). The TAP technical specification is on the IVOA website ( [link: http://www.ivoa.net/documents/TAP] http://www.ivoa.net/documents/TAP ). 
+
+ The archive's TAP service uses Structured Query Language (SQL), and the output can be formatted in [link: http://www.ivoa.net/documents/VOTable/] VOTable (votable), [link: https://en.wikipedia.org/wiki/Comma-separated_values] comma-separated values (csv), [link: https://en.wikipedia.org/wiki/Tab-separated_values] tab-separated values (tsv), or [link: https://www.json.org/json-en.html] JavaScript Object Notation (JSON). You may also select output columns and perform functions on the results. 
+
+ [link: #] Top 
+
+ Synchronous and Asynchronous Queries 
+ In a nutshell, a synchronous query runs until it completes, and then streams the results back. An asynchronous query runs in the background and gives you a place to check whether your job is done, rather than streaming results back directly. 
+ The archive's TAP service supports both synchronous and asynchronous queries, but most of the tables currently supported are small enough so synchronous queries should be adequate. However, we do recommend using a TAP client when downloading large data sets (e.g., the entire Planetary Systems tables, SuperWASP, and the KOI Cumulative Delivery) in the default VOTable format because some web browsers may struggle to display all of the data. 
+
+ [link: #] Top 
+
+ Constructing Synchronous TAP Queries 
+ TAP is a URL-based HTTP web service, so the query can be entered directly into a web browser. TAP-compatible clients and software like [link: http://www.star.bris.ac.uk/~mbt/topcat/] TOPCAT and [link: https://pypi.org/project/pyvo/] PyVO , and [link: https://astroquery.readthedocs.io/en/latest/utils/tap.html] TAP+ all work with the Exoplanet Archive TAP service. A [link: #examples] list of valid queries are given at the end of this document. 
+
+ Regardless of TAP client, all queries must have valid ADQL, which takes the form: SELECT <column list> FROM <table> WHERE <constraints> 
+
+ To construct a synchronous TAP query: 
+
+ (Required) Step 1: Start with the base service URL. 
+
+ For web browsers: https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query= 
+ For clients such as TOPCAT and pyVO: https://exoplanetarchive.ipac.caltech.edu/TAP 
+
+ (Required) Step 2: Next, add the query argument using the required select and from ADQL statements (in this order). 
+
+ select specifies which columns to return. An asterisk (*) tells the system to return all columns. 
+ from specifies the database table. 
+
+ In the following example, the entire Planetary Systems table is returned in VOTable format: 
+
+ https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query= select+*+from+ps 
+ Alternatively, you can name specific columns (separated with commas, no spaces) to return if you don't want the entire table. Here is a revised example that returns only data in the Planet Name ( pl_name ), Planet Mass ( pl_masse ), Right Ascension ( ra ) and Declination ( dec ) columns:. 
+
+ https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query= select+pl_name,pl_masse,ra,dec+from+ps 
+ Note that for encoding purposes, all spaces in the SQL should be replaced with a plus (+) symbol. 
+
+ (Optional) Step 3 : Add more constraints using the where clause. 
+
+ The where clause, though optional, allows you to include more complex constraints in your query by using AND, OR, and parentheses.
+Here are some examples: 
+
+ Enter this... To specify this... 
+
+ dec > 0. 
+ Planets that have a declination greater than 0 degrees 
+
+ pl_masse between 0.5 and 2.0 
+ Planets that have a mass between 0.5 and 2.0 Earth masses 
+
+ discoverymethod = 'Radial Velocity' 
+ Planets that were discovered by the radial velocity method 
+
+ lower(soltype) like '%25conf%25' 
+ upper(soltype) like '%25CONF%25' 
+ All planets listed as confirmed in lower-case in the soltype column of the database table 
+ All planets listed as confirmed in upper-case in the soltype column of the database table 
+
+ default_flag=1 
+ Show only the default solution 
+
+ pl_rade < = 2 
+ Planets with Earth radii less than or equal to 2 Rearth 
+
+ pl_orbper > = 1000 
+ Planets with orbital periods greater than or equal to 1000 days 
+
+ So, our example query that returns the planet names, masses, and coordinates for all
+confirmed planets of about Earth size would read: 
+
+ https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query= 
+select+pl_name,pl_masse,ra,dec+from+ps +where+upper(soltype)+like+'%25CONF%25'+and+pl_masse+between+0.5+and+2.0 
+
+ (Optional) Step 4 : Specify the output file format. 
+ Unless otherwise specified, query results are automatically returned as a [link: http://www.ivoa.net/documents/VOTable/] VOTable . Other supported formats: 
+
+ Format Name 
+ Parameter 
+
+ [link: http://www.ivoa.net/documents/VOTable/] VOTable (default) 
+ votable 
+
+ [link: https://irsa.ipac.caltech.edu/applications/DDGEN/Doc/ipac_tbl.html] IPAC Table 
+ ipac 
+
+ [link: https://www.json.org/json-en.html] JSON 
+ json 
+
+ [link: https://en.wikipedia.org/wiki/Tab-separated_values] TSV 
+ tsv 
+
+ [link: https://en.wikipedia.org/wiki/Comma-separated_values] CSV 
+ csv 
+
+ So, returning to our example from Step 3, we append the query to specify CSV format: 
+ https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name,pl_masse,ra,dec+from+ps 
+ +where+upper(soltype)+like+'%25CONF%25'+and+pl_masse+between+0.5+and+2.0 &format=csv 
+
+ [link: #] Top 
+
+ Using Spatial Constraints In Queries 
+
+ TAP also allows you to include ADQL-style spatial constraints using custom 
+functions in the WHERE clause to define a circle, box, or polygon region. 
+ In the following example, the query directs TAP to find and return all records in the Planetary Systems table where the point defined by the ra and dec columns in the database table for a circle, box, and polygon area based on the coordinates of Proxima Centauri (217.42896,-62.67947). 
+
+ For this shape... 
+ Define the area as... 
+ Using this query... 
+
+ Circle 
+ Inside a 0.1-degree circle 
+ https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+*+from+ps +where+contains(point('icrs',ra,dec),circle('icrs',217.42896,-62.67947,0.1))=1 
+
+ Box 
+ Same center as a circle, and a size of 0.1 x 0.1 degrees 
+
+https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name,ra,dec+from+ps +where+contains(point('icrs',ra,dec),box('icrs',217.42896,-62.67947,0.1,0.1))=1 
+
+ Polygon 
+ Give the coordinates of four corners, rather than the center 
+
+https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name,ra,dec+from+ps +where+contains(point('icrs',ra,dec),polygon('icrs',217.,-62.,218.,-62.,218.,-63.,217.,-63))=1 
+
+ The spatial constraints act like any other other constraint (e.g., 
+ dec > 0. ) in that they can appear mixed in with the regular relational
+ constraints and inside AND/OR and parenthesis constructs. For more information about ADQL geometric constraints, see the [link: http://www.ivoa.net/documents/ADQL/20180112/PR-ADQL-2.1-20180112.html#tth_sEc4.2] IVOA document . 
+
+ [link: #] Top 
+
+ Retrieving Table Schema 
+ The TAP service provides information about the tables being served, including table names, column names, and data types. To compose a query, you need to know the table names, column
+names, and types. The TAP_SCHEMA can be queried like the other tables in order to return information about the data tables. 
+ Some examples: 
+
+ Use This Query... 
+ To Return This... 
+
+ [link: /TAP/tables] https://exoplanetarchive.ipac.caltech.edu/TAP/tables 
+ A comprehensive XML document of all tables, column names, and metadata available through the archive's TAP service. 
+
+ https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=
+select+schema_name+from+TAP_SCHEMA.schemas 
+ Lists of available schemas (sets of tables) through TAP 
+
+ https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=
+select+schema_name,table_name+from+TAP_SCHEMA.tables 
+ A list of available tables 
+
+ https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=
+select+*+from+TAP_SCHEMA.columns+%20where+table_name+like+
+%27ps%27 
+ Returns basic information on the Planetary Systems table, such as column names, column type, width, format, etc.
+ Note: The [link: /docs/API_PS_columns.html] PS and PSCompPars Table Data Column Definitions Document also provides this information. 
+
+ More information about the TAP_SCHEMA specification is in this [link: http://www.ivoa.net/documents/TAP/20190927/REC-TAP-1.1.html#tth_sEc4] IVOA document .
+
+ [link: #] Top 
+
+ Best Practices 
+
+ Always specify a table, i.e., select+*+from+ps or select+*+from+pscomppars 
+
+ Encode special characters in web queries, including plus signs (+) as %2B , %27 for a single quotation mark ( ' ), %20 for a space, and %25 for letters (especially if the first two letters are A-F, which are used for different unicode characters). Note that most web browsers will automatically encode queries entered into their search field and some utility programs, such as wget (but not curl), will do so as well. 
+
+ Queries must be on a single line . Line breaks in the examples given in this document are for display purposes only. 
+
+ Be aware of case-sensitivity: ADQL and Oracle table and column names are not case-sensitive. However, values like CONFIRMED or CANDIDATE are case-sensitive, as well as object names (e.g., "eps CrB b"). Query the TAP schema to verify capitalization, or use the upper() and lower() functions and wildcards ( %25 ) if you're unsure about capitalization. 
+
+ Use a TAP client when returning large data sets. If you're downloading the entire PS or PSCompPars tables in VOTable format, your web browser may struggle to display all of the results. Try using a client like TOPCAT, pyVO, or TAP+. 
+
+ [link: #] Top 
+
+ More Examples 
+
+ Count the total number of confirmed planets, from PS table 
+
+ https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+count(pl_name)+from+ps+where+default_flag=1&format=csv 
+ All confirmed planets found by TESS, from PS Table: 
+
+ https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+*+from+ps+where+disc_facility+=+'Transiting Exoplanet Survey Satellite (TESS)' 
+
+ Confirmed planets, listed alphabetically, that have been detected by transit method, from PS Table: 
+
+https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+distinct(pl_name)+from+ps+where+tran_flag+=+1+order+by+pl_name+desc+&format=csv 
+
+ All Earth-sized planets (R<=1.8 Rearth) that have a mass measurement (pl_masse > 0.) from PS Table: 
+
+ https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+hostname,pl_name,pl_rade,pl_masse+from+ps+where+pl_rade+ +0 
+
+ All confirmed planets with the best mass (as identified by the archive) and their reference, and with an orbital period with semi-major axis and their references, and with more than one star in the system, and the best planet mass is less than or equal to 13, listed in order of best mass in descending order, from PSCompPars Table: 
+ https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name,pl_bmassj,pl_bmassj_reflink,pl_orbsmax,pl_orbsmax_reflink,sy_snum +from+pscomppars+where+sy_snum+>+1+and+pl_bmassj+ 
+
+ Last updated: 24 July 2026 
+
+ [link: http://www.nasa.gov] 
+
+ [link: http://www.ipac.caltech.edu] 
+
+ [link: http://nexsci.caltech.edu] 
+
+ [link: http://www.caltech.edu] 
+
+ [link: /index.html] Home 
+
+ [link: /docs/about.html] About Us 
+
+ [link: /docs/data.html] Data 
+
+ [link: /docs/tools.html] Tools 
+
+ [link: /docs/help.html] Support

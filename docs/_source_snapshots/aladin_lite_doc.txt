@@ -1,0 +1,243 @@
+{
+  "url": "https://aladin.cds.unistra.fr/AladinLite/doc/",
+  "final_url": "https://aladin.cds.unistra.fr/AladinLite/doc/",
+  "status": 200,
+  "https": true,
+  "headers": {
+    "server": "Apache/2.4.58 (Ubuntu)",
+    "last-modified": "Fri, 06 Mar 2026 10:38:10 GMT",
+    "etag": "\"5f0c-64c58a63e60da\"",
+    "access-control-allow-origin": "*",
+    "content-type": "text/html"
+  },
+  "bytes": 29688,
+  "truncated": false,
+  "fetched_at": "2026-10-17T07:58:40+00:00"
+}
+
+Aladin Lite documentation 
+
+ [link: https://cds.unistra.fr] 
+
+ Services 
+
+ [link: https://portal.cds.unistra.fr] 
+ [link: http://simbad.cds.unistra.fr/simbad] 
+ [link: http://vizier.cds.unistra.fr/viz-bin/VizieR] 
+ [link: http://aladin.cds.unistra.fr/aladin.gml] 
+ [link: http://cdsxmatch.u-strasbg.fr] 
+
+ Others 
+
+ [link: https://cds.unistra.fr/cgi-bin/Sesame] Sesame name resolver 
+ [link: https://cds.unistra.fr/cgi-bin/Dic-Simbad] Dictionary of nomenclature 
+
+ [link: mailto:cds-question@unistra.fr] Contact us 
+
+ [link: https://cds.unistra.fr/help] Help 
+
+ Aladin Lite 
+ A lightweight sky atlas running in the browser 
+
+ [link: ../] Aladin Lite / 
+ Documentation 
+
+ [link: #overview] Overview 
+ [link: #embedding] Embedding in a web page 
+ [link: #v3-new-features] New features in v3 
+ [link: #migration] Migration guide 
+ [link: #API] Javascript API 
+ [link: #features] Features 
+ [link: #usage] Usage 
+ [link: #source-code] Source code 
+ [link: #self-hosting] Self-hosting Aladin Lite v3 files 
+ [link: #ipyaladin] ipyaladin: Aladin Lite in notebooks 
+ [link: #mobile-apps] Integration in mobile apps 
+ [link: #showcase] Showcase 
+ [link: #plugins] Plugins 
+ [link: #release-notes] Release page 
+ [link: #v2-links] Aladin Lite v2 still available 
+ [link: #support] Support 
+ [link: #contact] Contact 
+
+ Overview 
+
+ Aladin Lite is a lightweight version of the [link: http://aladin.cds.unistra.fr/aladin.gml] Aladin Sky Atlas , running in the browser and geared towards simple visualization of a sky region.
+
+ It allows one to visualize image surveys (JPEG multi-resolution HEALPix all-sky surveys)
+ and superimpose tabular (VOTable) and footprints (STC-S) data. 
+ Aladin Lite is powered by the WebGL, supported by all modern browsers 
+ Aladin Lite is [link: #embedding] easily embeddable on any web page and can also be
+ controlled through a [link: #API] Javacript API . 
+ Aladin Lite's core is written in Rust 🦀 and compiled to WebAssembly thanks to the [link: https://crates.io/crates/wasm-bindgen] wasm-bindgen crate. 
+ It benefits from specific astronomical crates such as: 
+ [link: https://github.com/cds-astro/cds-healpix-rust] cdshealpix - for HEALPix projection and unprojection to/from sky coordinates 
+ [link: https://github.com/cds-astro/cds-mapproj-rust] mapproj - for computing (un)projections described by a WCS 
+ [link: https://github.com/cds-astro/fitsrs] fitsrs - for reading and parsing FITS images 
+ [link: https://github.com/cds-astro/cds-moc-rust] moc - for parsing, manipulating, and serializing multi-order HEALPix coverage maps 
+
+ It is dedicated to replace the Aladin Java applet technology in the medium term. 
+
+ The panel on the right hand is not a regular image. It is actually Aladin Lite running as an embedded widget.
+ You might try to zoom in and out using your mouse wheel, or pan the view to move around. 
+
+ Embedding in a web page 
+
+ Terms of use: you are welcome to integrate Aladin Lite in your web pages and to customize its GUI to your needs, but please leave the Aladin logo and link intact at the bottom right of the view. 
+
+ For more details and options, have a look at the tutorial [link: tutorials/interactive-finding-chart/] Build an interactive sky map with Aladin Lite , initially developed for [link: https://sites.google.com/a/dotastronomy.com/wiki/dotastro7] dotAstronomy7 . Developers might also be interested in this tutorial, which shows step by step how to create an interactive sky map with Aladin Lite. 
+
+ New features coming with v3 
+
+ Aladin Lite v3 is out and comes with the following features:
+
+ WebGL2 new graphical engine 
+ FITS HiPS tiles support and dynamic client-side cutouts changes 
+ All-sky projections support: Aitoff, Mollweide, Azimuthal, Gnomonic, Mercator and many more 
+ Multiple image survey overlays 
+ Better MOC support 
+ Can display MOCs up to max HEALPix order 29 (~0.4 milli-arcsecond HEALPix cells) 
+ use of performant Rust librairies cds-moc and cds-healpix 
+
+ New coordinate grid overlay - more customisations to come! 
+ Smartphones/tablets enhanced experience: pinched rotation and zoom, move with inertia 
+ Still lightweight (half a megabyte) 
+
+The code source is available on our [link: https://github.com/cds-astro/aladin-lite] repository at this link .
+This also provides a little snippet of code for you to have a minimal Aladin Lite v3 running into your webpages.
+
+Please send us your feedback, comments, feature requests and bug reports to [link: mailto:cds-question@unistra.fr?Subject=Aladin%20Lite] cds-question@unistra.fr , they are very welcome. 
+
+ Migration notes 
+
+ A migration page intended to help users switching from the v2 to the v3 is available [link: https://aladin.cds.unistra.fr/AladinLite/doc/migration-guide/] at this link 
+
+ Javascript API 
+
+ Aladin Lite comes with a new [link: https://cds-astro.github.io/aladin-lite/] full-featured API allowing one to customize its interface, control the view, change the image survey to display, create catalogues and overlay layers,
+ develop powerful interactions between a web page and Aladin Lite.
+
+ The Aladin Lite API is also briefly described on a [link: API/] dedicated page .
+
+ Developers might also be interested in [link: tutorials/interactive-finding-chart/] this tutorial , which shows step by step how to create an interactive sky map with Aladin Lite.
+
+ Features 
+
+ To give you an overview of how Aladin Lite can be used, have a look at the [link: API/examples/] list of examples .
+
+ Aladin Lite usage 
+
+ Aladin Lite has been integrated in the main CDS services:
+
+ On the SIMBAD page for an individual object, it provides an interactive preview image (see [link: http://simbad.u-strasbg.fr/simbad/sim-id?Ident=M1] example for Messier 1 ). 
+ The VizieR results page features a start Aladin Lite button to visualize the positions of listed sources (see [link: http://vizier.u-strasbg.fr/viz-bin/VizieR-4?-source=I/259/tyc2&-c=M45&-c.rm=30] example ) 
+
+ Outside CDS, Aladin Lite is used in several projects:
+
+ [link: http://archive.eso.org/scienceportal/home] ESO Archive Science Portal 
+ [link: http://sky.esa.int/] ESA Sky allows for discovery and access of data observed by ESA space missions 
+ [link: http://almascience.org/aq] ALMA Science Archive 
+ The [link: https://lasair.roe.ac.uk] Lasair alerts broker uses Aladin Lite on its [link: https://lasair.roe.ac.uk/object/ZTF19aafmidf/] object details page. 
+ [link: https://virgo.pg.infn.it/index.html] Gravitational waves interactive viewer displays the localisation on the sky of the gravitational wave events. 
+ [link: https://heasarc.gsfc.nasa.gov/xamin/] HEASARC Xamin system for discovery and data retrieval 
+ [link: https://losc.ligo.org/s/skymapViewer/aladin/index.html#GW150914:LALI] Skymap Viewer shows probability contours for gravitational wave events from LIGO/Virgo 
+ [link: http://jvo.nao.ac.jp/portal/v2/] JVO Portal v2 
+ [link: http://gamma-sky.net/] Gamma Sky , a portal to gamma-ray sky (developed by C. Deil and A. Voruganti) 
+ [link: http://archive.cefca.es/catalogues/jplus-dr1] J-PLUS DR1 , a portal to access data of the First Data Release of the Javalambre-Photometric Local Universe Survey ( [link: http://www.j-plus.es/] J-PLUS ) 
+ NOIRLab [link: https://datalab.noirlab.edu/discovery.php] Astro Data Lab discovery tool 
+ [link: https://toltec.lmtgtm.org/toltec_obs_planner] TolTEC Observation Planner 
+ CEFCA [link: http://www.cefca.es/outreach/images_navigator] images navigator and [link: http://www.cefca.es/divulgacion/tours_imagenes] images tours 
+ [link: http://saada.unistra.fr/ArchesWalker/] ARCHES Walker , an Outreach tool showcasing astronomical objects in different wavelengths ( [link: http://www.arches-fp7.eu/] ARCHES project ) 
+ [link: http://hologhost.altervista.org/pointing/mopra.html] MOPRA Radio Telescope Pointing and Status 
+ [link: http://darts.isas.jaxa.jp/astro/judo2/] JUDO2 (JAXA Universe Data Oriented) 
+ [link: http://darts.isas.jaxa.jp/astro/akari/cas/tools/explore/obj.php] Akari explore tool 
+ [link: http://cassis.sirtf.com/atlas/] CASSIS atlas of Spitzer Infrared Spectra 
+ [link: https://www.spitzer.caltech.edu/zoomable/glimpse-aladin] GLIMPSE 360 
+ [link: http://cade.irap.omp.eu/] CADE ( Centre d'Analyse de Données Etendues ) uses Aladin Lite to provide previews of the HEALPix maps they publish ( [link: http://cade.irap.omp.eu/dokuwiki/doku.php?id=cgps] Example for CGPS data ) 
+ [link: http://www.adsass.org/aladin/] ADS All-Sky Survey makes use of Aladin Lite to display heatmaps of SIMBAD objects cited in the literature. 
+
+ We maintain an [link: sites-using-aladin-lite/] exhaustive list of websites and tools integrating Aladin Lite , split into categories (professional astrophysics/astronomy, amateur astronomy, pro/am collaboration, Education and Public Outreach). 
+ If your project is using Aladin Lite, we would be happy to have it listed here. [link: mailto:cds-question@unistra.fr] Drop us a line! 
+
+ Source code 
+
+ Aladin Lite source code is available under GPL3 license
+ and can be browsed from the [link: https://github.com/cds-astro/aladin-lite] CDS github repository 
+ If you think this license might prevent you from using Aladin Lite in your pages/application/portal, please [link: mailto:cds-question@unistra.fr?Subject=Aladin%20Lite] contact us . 
+
+ Self-hosting Aladin Lite v3 files 
+
+ For developers willing to self-host Aladin Lite on their own server, you can [link: //aladin.cds.unistra.fr/AladinLite/api/v3/latest/AladinLiteAssets.tar.gz] download all assets at this link .
+
+ ipyaladin - Aladin Lite in Python notebooks 
+
+ Aladin Lite can be controlled from Jupyter notebooks, using [link: ../ipyaladin/] ipyaladin . ipyaladin is a Jupyter notebook widget, developed at CDS, and allowing for easy embedding and control of
+ Aladin Lite from an IPython notebook.
+
+ Integration in mobile applications 
+
+ Android 
+ Ladislav Heller ( ladislav.heller at gmail.com ) has integrated Aladin Lite in an Android application using the Xamarin framework. 
+ His development is available in his github repository: [link: https://github.com/laheller/CDS_Aladin] github.com/laheller/CDS_Aladin 
+
+ iPhone 
+ If you have integrated Aladin Lite in an iPhone application, please [link: mailto:cds-question@unistra.fr] let us know .
+
+ Showcase 
+
+ [link: ../showcase/] This page features some experimental, original usages of Aladin Lite.
+
+ Plugins 
+
+ ALiX 
+
+ [link: https://github.com/lmichel/alix/] ALiX is a flexible catalog portal based on Aladin Lite. It it designed to use an interactive sky view as a primary selection tool. The ALiX view is constantly updated with data queried in the host database. It offers advanced functionalities allowing to mix local data with VO data. Users can plot by hand areas of interest and manage an historic of the views. 
+ ALiX has no dependency with any specific data source; it can be integrated in any existing portal. 
+
+ [link: https://github.com/lmichel/alix/] 
+
+ Region editor 
+
+ The region editor is an Aladin Lite extension allowing users to plot polygons over the current sky view, and retrieve the coordinations of the vertices. 
+ It has been designed to be used as an interface for searches by region or for cutout services. 
+ This development has been funded by the SSC XXM-Newton. 
+ Documentation, installation instructions can be found [link: http://saada.unistra.fr/jsresources/region.html] on this page . 
+
+ [link: http://saada.unistra.fr/jsresources/region.html] 
+
+ Tour navigator library 
+
+ The tour navigator is an Aladin Lite extension that allows to implement easily virtual tours of objects of interest.
+ It has been designed to be used as interface for navigating through the sky from object to object. Allowing users to learn about each object they visit in the tour.
+ The tour navigator plugin has been developed and designed at [link: http://www.cefca.es] CEFCA (Centro de Estudios de Física del Cosmos de Aragón) by Tamara Civera.
+ Documentation, source code and installation instructions can be found [link: http://www.cefca.es/cefca_en/tour_navigator_library] on this page . 
+
+ Release page 
+
+ A release page including all the versions deployed to help users switching between versions is available [link: https://aladin.cds.unistra.fr/AladinLite/doc/release/] here 
+
+ Aladin Lite v2 is still available 
+
+ Users can still use it but no more development will be done on it. The Aladin Lite v2 documentation can be found [link: https://aladin.cds.unistra.fr/AladinLite/v2-doc/] at this link as well as its code source [link: https://github.com/cds-astro/aladin-lite/tree/v2] here 
+
+ Support 
+
+ Aladin Lite v3 is in part supported by the ESCAPE project (the European Science Cluster of Astronomy & Particle Physics ESFRI Research Infrastructures) that has received funding from the European Union's Horizon 2020 research and innovation programme under the Grant Agreement n. 824064. Aladin Lite v3 has also been supported by the Europlanet 2024 RI project that has received funding from the European Union's Horizon 2020 research and innovation programme under grant agreement No 871149. 
+
+ Authors 
+
+ Aladin Lite is developed and maintained by Thomas Boch and Matthieu Baumann 
+ Send your feedback, comments, feature requests and bug reports [link: mailto:cds-question@unistra.fr?Subject=Aladin%20Lite] to this email address . 
+
+ [link: https://cds.unistra.fr] 
+
+ [link: mailto:cds-question@unistra.fr?Subject=Aladin%20Lite] 
+ [link: https://cds.unistra.fr/news/rss.php] 
+ [link: https://bsky.app/profile/cdsportal.bsky.social] 
+ [link: https://www.facebook.com/CDSportal/] 
+ [link: https://www.youtube.com/@CDSportal] 
+ [link: https://github.com/cds-astro] 
+
+→ Thanks for [link: /aladin.gml#Acknowledgement] acknowledging Aladin Sky Atlas 
+
+ [link: https://cds.unistra.fr/about/contact/] Contact - [link: https://cds.unistra.fr/legals/] Legals

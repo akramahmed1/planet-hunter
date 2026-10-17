@@ -1,0 +1,188 @@
+{
+  "url": "https://cds.unistra.fr/vizier-org/licences_vizier.html",
+  "final_url": "https://cds.unistra.fr/vizier-org/licences_vizier.html",
+  "status": 200,
+  "https": true,
+  "headers": {
+    "server": "Apache/2.4.41 (Ubuntu) OpenSSL/1.1.1f mod_wsgi/4.6.8 Python/2.7",
+    "last-modified": "Thu, 21 Mar 2024 16:26:23 GMT",
+    "etag": "\"24d4-6142e2b048e5a\"",
+    "access-control-allow-origin": "*",
+    "content-type": "text/html"
+  },
+  "bytes": 9428,
+  "truncated": false,
+  "fetched_at": "2026-10-17T07:58:41+00:00"
+}
+
+Rules of usage of VizieR data 
+
+ Since march 2019, you can acknowledge or link the VizieR service using the D(igital) O(bject) I(dentifier) 
+ VizieR service DOI: 10.26093/cds/vizier 
+
+ Licence 
+
+The VizieR Information System provides a standardized description of
+astronomical catalogues, and generally a free access to the data contained
+therein, essentially dedicated to a scientific usage. The data retrieved with
+VizieR are free of usage in a scientific context ; however, as it is the usage
+in scientific publication, the original authors and publication references 
+including the publisher have to be explicitely cited (see section Code of 
+conduct of scientific research ).
+
+An acknowledgment of the usage of VizieR, as described below , would be 
+appreciated.
+
+The commercial usage of the data is subject to rules depending of the origin
+(see section How to search Copyright information ).
+
+The Information system including the metadata is private and reserved to the
+CDS.
+
+ Code of conduct of scientific research 
+
+(From the ethics statement available in the AAS web page: 
+ http://aas.org/about/policies/aas-ethics-statement ).-->
+ https://aas.org/policies/ethics#publication ).
+
+Proper acknowledgement of the work of others should always be given, and 
+complete referencing is an essential part of any astronomical research 
+publication. Authors have an obligation to their colleagues and the scientific
+community to include a set of references that communicates the precedents, 
+sources, and context of the reported work. Deliberate omission of a pertinent 
+author or reference is unacceptable. Data provided by others must be cited 
+appropriately, even if obtained from a public database.
+
+All authors are responsible for providing prompt corrections or retractions if 
+errors are found in published works with the first author bearing primary 
+responsibility.
+
+Plagiarism is the presentation of others' words, ideas or scientific results as 
+if they were one's own. Citations to others' work must be clear, complete, and 
+correct. Plagiarism is unethical behavior and is never acceptable.
+
+These statements apply not only to scholarly journals but to all forms of 
+scientific communication including but not limited to press releases, 
+proposals, websites, popular books, and podcasts.
+
+ How to search Copyright information 
+
+ The copyrights of a catalogue depend on the data origin. 
+
+ Data coming from AAS journals 
+Tabular data, spectra or images coming from AAS journals (J/ApJ, J/ApJS, J/AJ) are under
+CC-BY-NC licence (http://creativecommons.org/licenses/by-nc-nd/). 
+See policy page: http://aas.org/publications/aas-copyright-policy 
+-->
+ Data coming from A&A 
+Tabular data, spectra or images coming from A&A (J/A+A) are free for a 
+scientific usage. 
+See policy page: 
+ http://www.aanda.org/copyright 
+ http://www.aanda.org/index.php?option=com_content&view=article&id=863&Itemid=295 
+
+ Data coming from another producer 
+-->
+
+Please refer to the ReadMe file associated to the catalogue to verify if a 
+"copyright" exists. Else, see the policy section of the journals.
+
+The author and the publisher are available in the ReadMe file of the catalogue.
+Original articles are linked with the bibcode in the first section of the ReadMe file.
+
+ Catalogues coming from AAS (J/AJ, J/ApJ, J/ApJS): 
+ http://journals.aas.org/authors/apc.html#Copyright 
+ (in particular, see section "Reproduction of copyrighted materials" applied for tables) 
+
+ Catalogues coming from A&A (J/A+A): 
+
+ policy page: https://www.aanda.org/about-aa/open-access-policy 
+ copyright: https://www.aanda.org/about-aa/copyright 
+ agreement: https://www.aanda.org/doc_journal/librarian/agreement.pdf 
+
+ Catalogues coming from MNRAS (J/MNRAS): 
+
+ https://academic.oup.com/mnras/pages/General_Instructions#2.6%20Copyright%20and%20plagiarism 
+ material : https://academic.oup.com/mnras/pages/General_Instructions#2.7%20Catalogues%20and%20online-only%20material 
+
+ How to acknowledge 
+
+The usual rule is to cite the authors, the producer and the publisher of the 
+catalogue; details can be found in the associated ReadMe file.
+
+Note: In addition to the citation, some catalogues contain an "Acknowledging" section in
+the ReadMe file describing the catalogue (see https://cdsarc.cds.unistra.fr/vizier/catstd/catstd-3.1.htx )
+
+ Cite VizieR service 
+If the access to catalogues with VizieR was helpful for your research work,
+the following acknowledgment would be appreciated:
+
+"This research has made use of the VizieR catalogue access tool, CDS,
+ Strasbourg, France (DOI : 10.26093/cds/vizier). The original description 
+ of the VizieR service was published in 2000, A&AS 143, 23"
+
+LaTeX usage: use bibtex ( vizier.bib )
+
+"This research has made use of the VizieR catalogue access tool, CDS,
+Strasbourg, France \citep{10.26093/cds/vizier}. The original description 
+of the VizieR service was published in \citet{vizier2000}."
+
+Bibtex:
+
+@MISC{vizier,
+author = { Ochsenbein F. et. al}
+title = "{ The VizieR database of astronomical catalogues }"
+doi = {10.26093/cds/vizier}, 
+}
+
+ Cite VizieR catalogue: authors, data and service 
+
+A VizieR catalogue can be directly referred to as "VizieR Catalogue" followed by the VizieR unique identifying code, for example "VizieR Catalogue J/A+AS/124/75" or "VizieR Catalogue II/246". 
+
+e.g:
+
+Cutri R. M. et al, 2003, VizieR Catalog: II/246 . CDS, Strasbourg, France
+
+-->
+
+ A VizieR catalogue can be directly referred to as "VizieR Catalogue" - see the landing page of the catalogue 
+(e.g.: https://vizier.cds.unistra.fr/viz-bin/cat/J/A+A/610/A20).
+The landing page is available in the VizieR catalog service with the link ReadMe+ftp .
+
+Journal references for VizieR catalogues formatted for various Journals can be generated using the ADS interface.
+
+ Cite article 
+The article DOI displayed in the VizieR landing page can be used to cite the article. 
+The ADS interface can generate the bibtex.
+
+ VizieR DOI (Digital Object Identifier) 
+VizieR is able to generate DOI for its catalogues. When generated, the DOI is displayed in the VizieR landing page 
+(e.g.: https://vizier.cds.unistra.fr/viz-bin/cat/J/A+A/610/A20).
+
+A VizieR DOI is assigned to one VizieR catalogue made of tables and associated data (spectra, images, ..), carefully preserved by the CDS and related to an article coming from trusted scientific journals. The dataset is available in open-access through CDS services. 
+The DOI identifies the data with meta-data assigned by CDS and authors and the services to access the dataset.
+
+ The VizieR DOI includes the reference article in its meta-data. 
+
+ For AAS journals:
+
+\bibitem[Cutri, \& et al.(2014)]{2014yCat.2328....0C} Cutri, R.~M., \& et al.\ 2014, VizieR Online Data Catalog , II/328.
+
+ For MNRAS:
+
+\bibitem[\protect\citeauthoryear{Cutri \& et al.}{2014}]{2014yCat.2328....0C} Cutri R.~M., et al., 2014, yCat, II/328
+
+ Generic BibTeX
+
+@ARTICLE{2014yCat.2328....0C,
+ author = {{Cutri}, R.~M. and {et al.}},
+ title = "{VizieR Online Data Catalog: AllWISE Data Release (Cutri+ 2013)}",
+ journal = {VizieR Online Data Catalog},
+ keywords = {WISE},
+ year = 2014,
+ month = Jan,
+ eid = {II/328},
+ pages = {II/328},
+ adsurl = {https://ui.adsabs.harvard.edu/#abs/2014yCat.2328....0C},
+ adsnote = {Provided by the SAO/NASA Astrophysics Data System}
+}

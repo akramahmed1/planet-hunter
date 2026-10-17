@@ -1,0 +1,268 @@
+{
+  "url": "https://wheretheiss.at/w/developer",
+  "final_url": "https://wheretheiss.at/w/developer",
+  "status": 200,
+  "https": true,
+  "headers": {
+    "server": "Apache/2.2.22 (Ubuntu)",
+    "cache-control": "max-age=0, no-cache",
+    "content-type": "text/html"
+  },
+  "bytes": 18895,
+  "truncated": false,
+  "fetched_at": "2026-10-17T07:58:40+00:00"
+}
+
+Where the ISS at? 
+
+ -->
+
+ [link: /] 
+ beta 
+
+ [link: /] Home 
+
+ [link: /w/login/prepare?ezrpd=twitter] 
+
+ [link: /] Home / 
+ Developer 
+
+ "Where the ISS at?" REST API Documentation 
+
+ Overview 
+ Welcome to the WTIA REST API! Using this service, you can get current, past, or future position of the ISS, get timezone information about a set of coordinates, and also get TLE data on the ISS. 
+ Authentication 
+ Currently there is no authentication required for accessing the WTIA REST API, but some endpoints likely will allow for authentication in the future. In the meantime, please note the rate limits below. 
+ Rate Limiting 
+ Currently requests are limited to roughly 1 per second. You can keep track of your usage by looking at the X-Rate-Limit headers returned in each response. 
+ Responses 
+ Some notes on responses from this API: 
+
+ All responses default to JSON format, and only some endpoints will support other formats. 
+ If you want to easily visualize a json response in a browser, you can use the parameter indent=4 to indent responses with 4 spaces. 
+ All successful requests will have a 2XX response code. Error responses will have the appropriate HTTP code (something other than 2XX), along with error and status properties in the object. 
+ If you need to suppress non-2XX response codes, you can include the optional parameter suppress_response_codes=true . This will tell the API to always return a 200 response, and you can inspect the response for an error property.
+
+ Support 
+ Please feel free to use the "feedback" button on this site to communicate any questions, concerns, or requests you may have about using this API, and we'll try to respond promptly. 
+ Endpoints 
+
+ satellites 
+
+ This endpoint returns a list of satellites that this API has information about, inluding a common name and NORAD catalog id. Currently, there is only one, the International Space Station. But in the future, we plan to provide more. 
+ Example Resource URL 
+ https://api.wheretheiss.at/v1/satellites 
+ Example Response 
+
+[
+ {
+ "name": "iss",
+ "id": 25544
+ }
+] 
+
+ Parameters 
+ None 
+
+ Resource Information 
+
+ API Version 
+ 1 
+
+ Response Format json 
+
+ Rate Limited? Yes 
+
+ satellites/[id] 
+
+ Returns position, velocity, and other related information about a satellite for a given point in time. [id] is required and should be the NORAD catalog id. For the ISS, that id is 25544. 
+ Example Resource URL 
+ https://api.wheretheiss.at/v1/satellites/25544 
+ Example Response 
+
+{
+ "name": "iss",
+ "id": 25544,
+ "latitude": 50.11496269845,
+ "longitude": 118.07900427317,
+ "altitude": 408.05526028199,
+ "velocity": 27635.971970874,
+ "visibility": "daylight",
+ "footprint": 4446.1877699772,
+ "timestamp": 1364069476,
+ "daynum": 2456375.3411574,
+ "solar_lat": 1.3327003598631,
+ "solar_lon": 238.78610691196,
+ "units": "kilometers"
+} 
+
+ Parameters 
+
+ Name 
+ Description 
+ Required 
+ Default 
+
+ units 
+ Whether to use miles or kilometers 
+ no 
+ kilometers 
+
+ timestamp 
+ Optionally specify a timestamp for orbital position 
+ no 
+ current timestamp 
+
+ Resource Information 
+
+ API Version 
+ 1 
+
+ Response Format json 
+
+ Rate Limited? Yes 
+
+ satellites/[id]/positions 
+
+ Returns a list in which each entry contains position, velocity, and other related information about a satellite for a comma delimited list of timestamps (up to 10). [id] is required and should be the NORAD catalog id. For the ISS, that id is 25544. 
+ Example Resource URL 
+ https://api.wheretheiss.at/v1/satellites/25544/positions?timestamps=1436029892,1436029902&units=miles 
+ Example Response 
+
+[
+ {
+ "name": "iss",
+ "id": 25544,
+ "latitude": -24.872011788413,
+ "longitude": 17.600256937812,
+ "altitude": 253.3204968444,
+ "velocity": 17148.926453151,
+ "visibility": "daylight",
+ "footprint": 2761.5254566356,
+ "timestamp": 1436029892,
+ "daynum": 2457208.2163426,
+ "solar_lat": 22.85465108118,
+ "solar_lon": 283.22043315343,
+ "units": "miles"
+ },
+ {
+ "name": "iss",
+ "id": 25544,
+ "latitude": -25.346134802867,
+ "longitude": 18.047422455202,
+ "altitude": 253.44244641825,
+ "velocity": 17148.616662804,
+ "visibility": "daylight",
+ "footprint": 2762.1565371697,
+ "timestamp": 1436029902,
+ "daynum": 2457208.2164583,
+ "solar_lat": 22.854640837166,
+ "solar_lon": 283.17877169756,
+ "units": "miles"
+ }
+]
+
+ Parameters 
+
+ Name 
+ Description 
+ Required 
+ Default 
+
+ timestamps 
+ Specify a comma delimited list of timestamps for orbital positions, limit 10 per request 
+ yes 
+ none 
+
+ units 
+ Whether to use miles or kilometers 
+ no 
+ kilometers 
+
+ Resource Information 
+
+ API Version 
+ 1 
+
+ Response Format json 
+
+ Rate Limited? Yes 
+
+ satellites/[id]/tles 
+
+ Returns the TLE data for a given satellite in either json or text format 
+ Example Resource URL (json) 
+ https://api.wheretheiss.at/v1/satellites/25544/tles 
+ Example Response 
+
+{
+ "requested_timestamp": 1364084064,
+ "tle_timestamp": 1363892433,
+ "id": "25544",
+ "name": "iss",
+ "header": "ISS (ZARYA)",
+ "line1": "1 25544U 98067A 13080.79204657 .00024647 00000-0 40606-3 0 4540",
+ "line2": "2 25544 51.6478 182.2316 0011718 59.7125 80.2831 15.52100765821132"
+} 
+ Example Resource URL (text) 
+ https://api.wheretheiss.at/v1/satellites/25544/tles?format=text 
+
+ Example Response 
+
+ISS (ZARYA)
+1 25544U 98067A 13080.79204657 .00024647 00000-0 40606-3 0 4540
+2 25544 51.6478 182.2316 0011718 59.7125 80.2831 15.52100765821132 
+
+ Parameters 
+
+ Name 
+ Description 
+ Required 
+ Default 
+
+ format 
+ response format, can be json or text 
+ no 
+ json 
+
+ Resource Information 
+
+ API Version 
+ 1 
+
+ Response Format json or text 
+
+ Rate Limited? Yes 
+
+ coordinates/[lat,lon] 
+
+ Returns position, current time offset, country code, and timezone id for a given set of coordinates in the format of longitude,latitude 
+ Example Resource URL 
+ https://api.wheretheiss.at/v1/coordinates/37.795517,-122.393693 
+ Example Response 
+
+{
+ "latitude": "37.795517",
+ "longitude": "-122.393693",
+ "timezone_id": "America/Los_Angeles",
+ "offset": -7,
+ "country_code": "US",
+ "map_url": "https://maps.google.com/maps?q=37.795517,-122.393693&z=4"
+} 
+
+ Parameters 
+ None 
+
+ Resource Information 
+
+ API Version 
+ 1 
+
+ Response Format json 
+
+ Rate Limited? Yes 
+
+ [link: /w/about] About 
+ [link: http://blog.wheretheiss.at/] Blog 
+ [link: /w/developer] API 
+ © 2013 Linzig, LLC
