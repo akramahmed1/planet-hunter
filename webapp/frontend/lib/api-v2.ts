@@ -39,3 +39,9 @@ export async function apiV2Get<T>(path: `/api/v2/${string}`, init?: RequestInit)
     return { ok: false, status: null, error: e instanceof Error ? e.message : String(e) };
   }
 }
+export type Body = Schemas["Body"];
+export type BodiesResponse = Schemas["BodiesResponse"];
+export type Position = Schemas["Position"];
+export type PositionsResponse = Schemas["PositionsResponse"];
+export type OrbitsResponse = Schemas["OrbitsResponse"];
+export type TemperatureStatement = Schemas["TemperatureStatement"];
