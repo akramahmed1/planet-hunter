@@ -74,8 +74,11 @@ FIXTURE_REQUESTS = [
     ("jpl_approx_pos_elements", "https://ssd.jpl.nasa.gov/planets/approx_pos.html", "html"),
     ("exoplanet_archive_latest",
      TAP + q({"query": "select top 5 pl_name,hostname,st_teff,st_lum,pl_orbsmax,pl_eqt,"
-                       "disc_year,releasedate from pscomppars order by releasedate desc",
+                       "disc_year from pscomppars order by disc_year desc",
               "format": "json"}), "json"),
+    ("exoplanet_archive_pscomppars_columns",
+     TAP + q({"query": "select column_name,description,unit from TAP_SCHEMA.columns "
+                       "where table_name like 'pscomppars'", "format": "json"}), "json"),
     ("exoplanet_archive_count",
      TAP + q({"query": "select count(*) as n from pscomppars", "format": "json"}), "json"),
     ("mast_tic_coords",
