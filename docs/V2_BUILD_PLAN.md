@@ -72,7 +72,10 @@ assignments on top of it.
 
 - **Phase 0:** whether to use a custom domain; confirm Railway plan limits for an extra worker and cron service.
   - 2026-10-17, Akram: keep the Railway URLs for now; revisit a custom domain at the end (Phase 10).
-  - Railway plan limits: still to confirm.
+  - 2026-10-17, Akram: Railway **Hobby** plan. Per https://docs.railway.com/pricing/plans (read 2026-10-17):
+    $5/month including $5 of usage, usage above that billed (RAM $10/GB/month, CPU $20/vCPU/month);
+    per-service caps 48 GB RAM, 48 vCPU, 6 replicas; volumes up to 5 GB. A worker and a cron service fit
+    within these caps; the cost to watch is usage above $5, since staging doubles the running services.
 - **Phase 8:** teacher sign-in method. Recommended: Auth.js with Google plus email magic link through Resend. Students join with a class code, a nickname and a PIN, with no email.
 - **Phase 9:** AI provider and model for the explainer (recommended: Anthropic API with the model set in an env var); Stripe pricing for the classroom plan.
 
