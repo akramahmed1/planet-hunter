@@ -9,6 +9,7 @@ they can be read when filling in docs/DATA_SOURCES.md.
 Stdlib only, so it runs anywhere (CI included). Usage:
     python scripts/fetch_external_fixtures.py        # Phase 0 set
     python scripts/fetch_external_fixtures.py p2     # Phase 2 set only
+    python scripts/fetch_external_fixtures.py p3     # Phase 3 set only
 API keys are never written to disk: the api.nasa.gov key comes from the
 NASA_API_KEY env var (DEMO_KEY if unset) and is redacted from saved URLs.
 """
@@ -126,6 +127,22 @@ P2_REQUESTS = (
         "json")]
 )
 
+# Phase 3 set: JPL's own Earth-to-body distances and light times (geocentric
+# vectors with LT and RG columns) plus heliocentric vectors for the same date, so
+# the solar-system page's distance math can be checked against JPL. Also NASA's
+# page for the cosmic microwave background temperature (deep-space card).
+P3_BODIES = {"sun": "10", "venus": "299", "mars": "499", "jupiter": "599", "neptune": "899"}
+P3_REQUESTS = (
+    [(f"horizons_{b}_vectors_geo_p3",
+      horizons(i, EPHEM_TYPE="VECTORS", CENTER="500@399", OUT_UNITS="KM-S", VEC_TABLE="3", CSV_FORMAT="YES"),
+      "json") for b, i in P3_BODIES.items()]
+    + [(f"horizons_{b}_vectors_helio_p3",
+        horizons(i, EPHEM_TYPE="VECTORS", CENTER="500@10", OUT_UNITS="KM-S", VEC_TABLE="3", CSV_FORMAT="YES"),
+        "json") for b, i in {"earth": "399", **P3_BODIES}.items() if b != "sun"]
+    + [("nasa_wmap_cmb_tests", "https://map.gsfc.nasa.gov/universe/bb_tests_cmb.html", "html"),
+       ("nasa_wmap_cmb_faq", "https://map.gsfc.nasa.gov/site/faq.html", "html")]
+)
+
 # Only status and size are recorded for these (large client-side assets).
 PROBE_REQUESTS = [
     ("aladin_lite_v3_js", "https://aladin.cds.unistra.fr/AladinLite/api/v3/latest/aladin.js"),
@@ -197,12 +214,12 @@ def save_meta(path: Path, result: dict) -> None:
 
 
 def main() -> int:
-    # `p2` fetches only the Phase 2 set, so the reviewed Phase 0 samples stay as they are.
+    # `p2`/`p3` fetch only that phase's set, so the reviewed Phase 0 samples stay as they are.
     phase = sys.argv[1] if len(sys.argv) > 1 else "p0"
     FIXTURES.mkdir(parents=True, exist_ok=True)
     SNAPSHOTS.mkdir(parents=True, exist_ok=True)
     summary = []
-    requests = P2_REQUESTS if phase == "p2" else FIXTURE_REQUESTS
+    requests = {"p2": P2_REQUESTS, "p3": P3_REQUESTS}.get(phase, FIXTURE_REQUESTS)
 
     for name, url, ext in requests:
         r = fetch(url, max_bytes=3_000_000 if "1800_2050" in name else MAX_BYTES)
