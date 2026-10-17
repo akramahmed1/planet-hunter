@@ -40,6 +40,39 @@ jobs:
         run: |
           curl -sf "$BACKEND/api/v2/health" | tee /tmp/health.json
           python3 -c "import json;d=json.load(open('/tmp/health.json'));assert d['database']['status']=='connected', d"
+      - name: Live smoke test, one request per source (Phase 2)
+        # Each endpoint must answer from its real upstream. Space weather may be an explicit
+        # "unavailable" 503 while NASA DONKI is down (docs/DATA_SOURCES.md), never a bare error.
+        run: |
+          fail=0
+          check() {
+            path=$1; allow_unavailable=${2:-no}
+            code=$(curl -s -o /tmp/body.json -w '%{http_code}' "$BACKEND$path")
+            if [ "$code" = 200 ] && python3 -c "import json,sys;d=json.load(open('/tmp/body.json'));sys.exit(0 if not d.get('stale') else 1)"; then
+              echo "ok      $path"
+            elif [ "$code" = 503 ] && [ "$allow_unavailable" = yes ] && grep -q '"status":"unavailable"' /tmp/body.json; then
+              echo "WARN    $path explicitly unavailable: $(cat /tmp/body.json)"
+            else
+              echo "::error::$path returned $code: $(head -c 300 /tmp/body.json)"; fail=1
+            fi
+          }
+          check /api/v2/bodies
+          check /api/v2/positions
+          check "/api/v2/positions?date=1969-07-20"
+          check "/api/v2/distances?from=earth&to=mars"
+          check /api/v2/iss
+          check /api/v2/apod
+          check /api/v2/exoplanets/latest
+          check /api/v2/exoplanets/TOI-700
+          check /api/v2/space-weather yes
+          python3 -c "
+          import json,urllib.request
+          d=json.load(urllib.request.urlopen('$BACKEND/api/v2/positions'))
+          kinds={p['id']:p['kind'] for p in d['bodies']}
+          print('today positions:', kinds)
+          assert all(k=='measured' for b,k in kinds.items() if b!='sun'), 'Horizons positions not live'
+          " || fail=1
+          exit $fail
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"

@@ -1044,6 +1044,126 @@ img {
   background: #fff;
 }
 
+/* ---------- live tiles ---------- */
+
+.tile-grid {
+  display: grid;
+  gap: var(--sp-3);
+  margin: var(--sp-4) 0;
+}
+
+.tile {
+  min-width: 0;
+  padding: var(--sp-4);
+  border-radius: var(--r-md);
+  border: 1px solid var(--line);
+  background: var(--space-850);
+}
+
+.tile--down {
+  border-style: dashed;
+}
+
+.tile .eyebrow {
+  display: flex;
+  margin-bottom: var(--sp-2);
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.tile-value {
+  font-size: var(--step-2);
+  line-height: 1.2;
+  color: var(--ink);
+}
+
+.tile-value--text {
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-weight: 600;
+}
+
+.tile-sub {
+  margin: var(--sp-2) 0 0;
+  color: var(--ink-dim);
+  font-size: var(--step--1);
+}
+
+.tile-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+  margin: var(--sp-2) 0 0;
+  color: var(--ink-faint);
+  font-size: var(--step--2);
+}
+
+.tile-img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--r-sm);
+  margin-bottom: var(--sp-3);
+  background: var(--space-800);
+}
+
+.stale-tag {
+  padding: 0 0.5em;
+  border-radius: var(--r-pill);
+  border: 1px solid rgba(255, 181, 71, 0.6);
+  color: var(--flare);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+}
+
+/* A value that opens its source. Looks like data, behaves like a button. */
+.source-btn {
+  all: unset;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--sp-2);
+  max-width: 100%;
+  cursor: pointer;
+  border-radius: var(--r-sm);
+  overflow-wrap: anywhere;
+}
+
+.source-btn:hover .source-btn-icon {
+  border-color: var(--ion);
+  color: var(--ion);
+}
+
+.source-btn:focus-visible {
+  outline: 2px solid var(--ion);
+  outline-offset: 3px;
+}
+
+.source-btn-icon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  color: var(--ink-faint);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-style: italic;
+  transform: translateY(-2px);
+}
+
+.source-kv dd {
+  overflow-wrap: anywhere;
+}
+
 /* ---------- candidates ---------- */
 
 .filter-row {
@@ -1437,6 +1557,10 @@ table.data-table {
 
   .stat-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .tile-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .proof-grid {

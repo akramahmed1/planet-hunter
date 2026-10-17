@@ -1,0 +1,356 @@
+{
+ "dataset": "bodies",
+ "version": 1,
+ "bodies": [
+  {
+   "id": "sun",
+   "name": "Sun",
+   "type": "star",
+   "source": {
+    "name": "NASA NSSDCA Sun Fact Sheet",
+    "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/sunfact.html",
+    "fetched_at": "2026-10-17T09:22:29+00:00"
+   },
+   "facts": {
+    "mass_1e24_kg": 1988400.0,
+    "mean_radius_km": 695700.0,
+    "semimajor_axis_1e6_km": null,
+    "orbit_period_days": null,
+    "day_length_hours": null,
+    "blackbody_temperature_k": null
+   },
+   "temperatures": [
+    {
+     "label": "Central temperature",
+     "quote": "Central temperature: 1.571 x 10 7 K",
+     "approximate": false,
+     "kelvin": 15710000.0
+    },
+    {
+     "label": "Effective temperature",
+     "quote": "Effective temperature: 5772 K",
+     "approximate": false,
+     "kelvin": 5772.0
+    },
+    {
+     "label": "Temperature at top of photosphere",
+     "quote": "Temperature at top of photosphere: 4400 K",
+     "approximate": false,
+     "kelvin": 4400.0
+    },
+    {
+     "label": "Temperature at bottom of photosphere",
+     "quote": "Temperature at bottom of photosphere: 6600 K",
+     "approximate": false,
+     "kelvin": 6600.0
+    },
+    {
+     "label": "Temperature at top of chromosphere",
+     "quote": "Temperature at top of chromosphere: ~30,000 K",
+     "approximate": true,
+     "kelvin": 30000.0
+    }
+   ]
+  },
+  {
+   "id": "mercury",
+   "name": "Mercury",
+   "type": "planet",
+   "source": {
+    "name": "NASA NSSDCA Mercury Fact Sheet",
+    "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/mercuryfact.html",
+    "fetched_at": "2026-10-17T09:22:30+00:00"
+   },
+   "facts": {
+    "mass_1e24_kg": 0.3301,
+    "mean_radius_km": 2439.7,
+    "semimajor_axis_1e6_km": 57.909,
+    "orbit_period_days": 87.969,
+    "day_length_hours": 4222.6,
+    "blackbody_temperature_k": 439.6
+   },
+   "temperatures": [
+    {
+     "label": "Average temperature",
+     "quote": "Average temperature: 440 K (167 C) (590-725 K, sunward side)",
+     "approximate": false,
+     "kelvin": 440.0
+    }
+   ]
+  },
+  {
+   "id": "venus",
+   "name": "Venus",
+   "type": "planet",
+   "source": {
+    "name": "NASA NSSDCA Venus Fact Sheet",
+    "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/venusfact.html",
+    "fetched_at": "2026-10-17T09:22:30+00:00"
+   },
+   "facts": {
+    "mass_1e24_kg": 4.8673,
+    "mean_radius_km": 6051.8,
+    "semimajor_axis_1e6_km": 108.21,
+    "orbit_period_days": 224.701,
+    "day_length_hours": 2802.0,
+    "blackbody_temperature_k": 226.6
+   },
+   "temperatures": [
+    {
+     "label": "Average temperature",
+     "quote": "Average temperature: 737 K (464 C)",
+     "approximate": false,
+     "kelvin": 737.0
+    }
+   ]
+  },
+  {
+   "id": "earth",
+   "name": "Earth",
+   "type": "planet",
+   "source": {
+    "name": "NASA NSSDCA Earth Fact Sheet",
+    "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/earthfact.html",
+    "fetched_at": "2026-10-17T09:22:30+00:00"
+   },
+   "facts": {
+    "mass_1e24_kg": 5.9722,
+    "mean_radius_km": 6371.0,
+    "semimajor_axis_1e6_km": 149.598,
+    "orbit_period_days": 365.256,
+    "day_length_hours": 24.0,
+    "blackbody_temperature_k": 254.0
+   },
+   "temperatures": [
+    {
+     "label": "Average temperature",
+     "quote": "Average temperature: 288 K (15 C)",
+     "approximate": false,
+     "kelvin": 288.0
+    },
+    {
+     "label": "Diurnal temperature range",
+     "quote": "Diurnal temperature range: 283 K to 293 K (10 to 20 C)",
+     "approximate": false,
+     "low_k": 283.0,
+     "high_k": 293.0
+    }
+   ]
+  },
+  {
+   "id": "moon",
+   "name": "Moon",
+   "type": "moon",
+   "source": {
+    "name": "NASA NSSDCA Moon Fact Sheet",
+    "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/moonfact.html",
+    "fetched_at": "2026-10-17T09:22:31+00:00"
+   },
+   "facts": {
+    "mass_1e24_kg": 0.07346,
+    "mean_radius_km": 1737.4,
+    "semimajor_axis_1e6_km": 0.3844,
+    "orbit_period_days": null,
+    "day_length_hours": null,
+    "blackbody_temperature_k": 270.4
+   },
+   "temperatures": [
+    {
+     "label": "Diurnal temperature range (equator)",
+     "quote": "Diurnal temperature range (equator): 95 K to 390 K (~ -290 F to +240 F)",
+     "approximate": false,
+     "low_k": 95.0,
+     "high_k": 390.0
+    }
+   ]
+  },
+  {
+   "id": "mars",
+   "name": "Mars",
+   "type": "planet",
+   "source": {
+    "name": "NASA NSSDCA Mars Fact Sheet",
+    "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/marsfact.html",
+    "fetched_at": "2026-10-17T09:22:31+00:00"
+   },
+   "facts": {
+    "mass_1e24_kg": 0.64169,
+    "mean_radius_km": 3389.5,
+    "semimajor_axis_1e6_km": 227.956,
+    "orbit_period_days": 686.98,
+    "day_length_hours": 24.6597,
+    "blackbody_temperature_k": 209.8
+   },
+   "temperatures": [
+    {
+     "label": "Average temperature",
+     "quote": "Average temperature: ~214 K (-59 C)",
+     "approximate": true,
+     "kelvin": 214.0
+    },
+    {
+     "label": "Diurnal temperature range",
+     "quote": "Diurnal temperature range: 184 K to 242 K (-89 to -31 C) (Viking 1 Lander site)",
+     "approximate": false,
+     "low_k": 184.0,
+     "high_k": 242.0
+    }
+   ]
+  },
+  {
+   "id": "jupiter",
+   "name": "Jupiter",
+   "type": "planet",
+   "source": {
+    "name": "NASA NSSDCA Jupiter Fact Sheet",
+    "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/jupiterfact.html",
+    "fetched_at": "2026-10-17T09:22:31+00:00"
+   },
+   "facts": {
+    "mass_1e24_kg": 1898.13,
+    "mean_radius_km": 69911.0,
+    "semimajor_axis_1e6_km": 778.479,
+    "orbit_period_days": 4332.589,
+    "day_length_hours": 9.9259,
+    "blackbody_temperature_k": 109.9
+   },
+   "temperatures": [
+    {
+     "label": "Temperature at 1 bar",
+     "quote": "Temperature at 1 bar: 165 K (-108 C)",
+     "approximate": false,
+     "kelvin": 165.0
+    },
+    {
+     "label": "Temperature at 0.1 bar",
+     "quote": "Temperature at 0.1 bar: 112 K (-161 C)",
+     "approximate": false,
+     "kelvin": 112.0
+    }
+   ]
+  },
+  {
+   "id": "saturn",
+   "name": "Saturn",
+   "type": "planet",
+   "source": {
+    "name": "NASA NSSDCA Saturn Fact Sheet",
+    "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/saturnfact.html",
+    "fetched_at": "2026-10-17T09:22:31+00:00"
+   },
+   "facts": {
+    "mass_1e24_kg": 568.32,
+    "mean_radius_km": 58232.0,
+    "semimajor_axis_1e6_km": 1432.041,
+    "orbit_period_days": 10755.699,
+    "day_length_hours": 10.656,
+    "blackbody_temperature_k": 81.0
+   },
+   "temperatures": [
+    {
+     "label": "Temperature at 1 bar",
+     "quote": "Temperature at 1 bar: 134 K (-139 C)",
+     "approximate": false,
+     "kelvin": 134.0
+    },
+    {
+     "label": "Temperature at 0.1 bar",
+     "quote": "Temperature at 0.1 bar: 84 K (-189 C)",
+     "approximate": false,
+     "kelvin": 84.0
+    }
+   ]
+  },
+  {
+   "id": "uranus",
+   "name": "Uranus",
+   "type": "planet",
+   "source": {
+    "name": "NASA NSSDCA Uranus Fact Sheet",
+    "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/uranusfact.html",
+    "fetched_at": "2026-10-17T09:22:32+00:00"
+   },
+   "facts": {
+    "mass_1e24_kg": 86.811,
+    "mean_radius_km": 25362.0,
+    "semimajor_axis_1e6_km": 2867.043,
+    "orbit_period_days": 30685.4,
+    "day_length_hours": 17.24,
+    "blackbody_temperature_k": 58.1
+   },
+   "temperatures": [
+    {
+     "label": "Temperature at 1 bar",
+     "quote": "Temperature at 1 bar: 76 K (-197 C)",
+     "approximate": false,
+     "kelvin": 76.0
+    },
+    {
+     "label": "Temperature at 0.1 bar",
+     "quote": "Temperature at 0.1 bar: 53 K (-220 C)",
+     "approximate": false,
+     "kelvin": 53.0
+    }
+   ]
+  },
+  {
+   "id": "neptune",
+   "name": "Neptune",
+   "type": "planet",
+   "source": {
+    "name": "NASA NSSDCA Neptune Fact Sheet",
+    "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/neptunefact.html",
+    "fetched_at": "2026-10-17T09:22:32+00:00"
+   },
+   "facts": {
+    "mass_1e24_kg": 102.409,
+    "mean_radius_km": 24622.0,
+    "semimajor_axis_1e6_km": 4514.953,
+    "orbit_period_days": 60189.018,
+    "day_length_hours": 16.11,
+    "blackbody_temperature_k": 46.6
+   },
+   "temperatures": [
+    {
+     "label": "Temperature at 1 bar",
+     "quote": "Temperature at 1 bar: 72 K (-201 C)",
+     "approximate": false,
+     "kelvin": 72.0
+    },
+    {
+     "label": "Temperature at 0.1 bar",
+     "quote": "Temperature at 0.1 bar: 55 K (-218 C)",
+     "approximate": false,
+     "kelvin": 55.0
+    }
+   ]
+  },
+  {
+   "id": "pluto",
+   "name": "Pluto",
+   "type": "dwarf_planet",
+   "source": {
+    "name": "NASA NSSDCA Pluto Fact Sheet",
+    "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/plutofact.html",
+    "fetched_at": "2026-10-17T09:22:32+00:00"
+   },
+   "facts": {
+    "mass_1e24_kg": 0.01303,
+    "mean_radius_km": 1188.0,
+    "semimajor_axis_1e6_km": 5869.656,
+    "orbit_period_days": 90560.0,
+    "day_length_hours": 153.282,
+    "blackbody_temperature_k": 37.5
+   },
+   "temperatures": [
+    {
+     "label": "Surface temperature",
+     "quote": "Surface temperature: 24 - 38 K (-247 - -233 C)",
+     "approximate": false,
+     "low_k": 24.0,
+     "high_k": 38.0
+    }
+   ]
+  }
+ ]
+}

@@ -76,6 +76,9 @@ assignments on top of it.
     $5/month including $5 of usage, usage above that billed (RAM $10/GB/month, CPU $20/vCPU/month);
     per-service caps 48 GB RAM, 48 vCPU, 6 replicas; volumes up to 5 GB. A worker and a cron service fit
     within these caps; the cost to watch is usage above $5, since staging doubles the running services.
+- **Phase 2** (2026-10-17, Akram said "go" without answers, so the recommended options apply):
+  Pluto on other dates uses interpolated Horizons positions; the space-weather tile stays with an
+  "unavailable" state; missing exoplanet equilibrium temperatures are estimated and labeled.
 - **Phase 8:** teacher sign-in method. Recommended: Auth.js with Google plus email magic link through Resend. Students join with a class code, a nickname and a PIN, with no email.
 - **Phase 9:** AI provider and model for the explainer (recommended: Anthropic API with the model set in an env var); Stripe pricing for the classroom plan.
 
@@ -169,7 +172,7 @@ Status values: `todo`, `in-progress`, `staging-verified`, `merged-to-v2`, `live`
 |---|---|---|
 | 0 | Prep and verification | merged-to-v2 |
 | 1 | Foundations and design system | merged-to-v2 |
-| 2 | Live data layer | todo |
+| 2 | Live data layer | in-progress |
 | 3 | 3D solar system | todo |
 | 4 | Exoplanet systems, sky map, TESS explainer, mission tracker | todo |
 | 5 | Hunt lab (interactive light curves) | todo |
