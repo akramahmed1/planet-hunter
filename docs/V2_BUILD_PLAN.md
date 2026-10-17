@@ -168,7 +168,7 @@ Status values: `todo`, `in-progress`, `staging-verified`, `merged-to-v2`, `live`
 | # | Phase | Status |
 |---|---|---|
 | 0 | Prep and verification | merged-to-v2 |
-| 1 | Foundations and design system | in-progress |
+| 1 | Foundations and design system | merged-to-v2 |
 | 2 | Live data layer | todo |
 | 3 | 3D solar system | todo |
 | 4 | Exoplanet systems, sky map, TESS explainer, mission tracker | todo |
