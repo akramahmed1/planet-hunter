@@ -73,8 +73,8 @@ FIXTURE_REQUESTS = [
      horizons("-31", EPHEM_TYPE="OBSERVER", CENTER="500@399", QUANTITIES="19,20"), "json"),
     ("jpl_approx_pos_elements", "https://ssd.jpl.nasa.gov/planets/approx_pos.html", "html"),
     ("exoplanet_archive_latest",
-     TAP + q({"query": "select top 5 pl_name,hostname,st_teff,st_lum,pl_orbsmax,pl_eqt,"
-                       "disc_year from pscomppars order by disc_year desc",
+     TAP + q({"query": "select pl_name,hostname,st_teff,st_lum,pl_orbsmax,pl_eqt,"
+                       f"disc_year,disc_pubdate from pscomppars where disc_pubdate >= '{(TODAY - timedelta(days=60)):%Y-%m}' order by disc_pubdate desc",
               "format": "json"}), "json"),
     ("exoplanet_archive_pscomppars_columns",
      TAP + q({"query": "select column_name,description,unit from TAP_SCHEMA.columns "
