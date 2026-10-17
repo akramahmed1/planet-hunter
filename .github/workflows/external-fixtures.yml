@@ -4,6 +4,8 @@ name: External fixtures
 # suites against staging), then commits the results back to the branch.
 # Runs on GitHub's machines because the build sessions have no outbound access
 # to these hosts. Pushes made with GITHUB_TOKEN don't re-trigger workflows.
+# docs/_source_snapshots/ (provider docs as text) is for reading on the branch
+# only; delete it before merging.
 on:
   workflow_dispatch:
   push:

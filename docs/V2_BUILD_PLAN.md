@@ -167,7 +167,7 @@ Status values: `todo`, `in-progress`, `staging-verified`, `merged-to-v2`, `live`
 
 | # | Phase | Status |
 |---|---|---|
-| 0 | Prep and verification | in-progress |
+| 0 | Prep and verification | staging-verified |
 | 1 | Foundations and design system | todo |
 | 2 | Live data layer | todo |
 | 3 | 3D solar system | todo |

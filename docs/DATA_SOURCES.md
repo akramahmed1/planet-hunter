@@ -1,98 +1,185 @@
 # External data sources
 
-Every outside source v2 depends on, verified with a real request before any
-code uses it (plan section 5, Phase 0 task 3). A trimmed sample response for
-each source is committed under `webapp/backend/tests/fixtures/external/`.
+Every outside source v2 depends on, checked with a real request before any
+code uses it (plan section 5, Phase 0 task 3). Nothing here is filled in from
+memory: each fact comes from a real response or from the provider's own page,
+fetched on 2026-10-17.
 
-Nothing in this file is filled in from memory. A field stays `?` until a real
-request or the provider's own terms page confirms it.
+**How the samples were fetched.** The build session can't reach these hosts,
+so `scripts/fetch_external_fixtures.py` runs in the **External fixtures**
+GitHub Actions workflow and commits the results back. Each sample in
+`webapp/backend/tests/fixtures/external/` has a `<name>.meta.json` beside it
+with the request URL (keys redacted), HTTP status, kept response headers, size
+and fetch time. Re-run the workflow to refresh them.
 
-Status values: `not verified`, `verified`, `flagged for Akram`.
+Status values: `verified`, `flagged for Akram`.
 
 ## Summary
 
-| Source | Used for | Status | Fixture |
+| Source | Used for | Status | Sample |
 |---|---|---|---|
-| NASA Planetary Fact Sheet (NSSDCA) | Planet temperatures, sizes, orbital distances | not verified | — |
-| JPL Horizons API | Today's planet and spacecraft positions, Earth distances | not verified | — |
-| JPL Keplerian elements (approximate positions) | Date slider between refreshes (`computed`) | not verified | — |
-| NASA Exoplanet Archive TAP | Exoplanets, host stars, equilibrium temperatures, new confirmations | not verified | — |
-| MAST | RA/Dec for TIC targets | not verified | — |
-| ISS position API | Live ISS position | not verified | — |
-| api.nasa.gov: APOD | Picture of the day | not verified | — |
-| api.nasa.gov: DONKI | Space weather | not verified | — |
-| CDS Aladin Lite / HiPS | Sky map imagery | not verified | — |
-| NASA 3D Resources | TESS and spacecraft models | not verified | — |
+| NASA Planetary Fact Sheet (NSSDCA) | Planet temperatures, sizes, distances | verified (gap noted) | `nssdca_factsheet.html` |
+| JPL Horizons API | Today's planet and spacecraft positions, Earth distances | verified | `horizons_mars_vectors_helio.json`, `horizons_voyager1_observer_earth.json` |
+| JPL Keplerian elements | Date slider between refreshes (`computed`) | verified (Pluto gap flagged) | `jpl_approx_pos_elements.html` |
+| NASA Exoplanet Archive TAP | Exoplanets, host stars, equilibrium temperatures | verified | `exoplanet_archive_latest.json`, `exoplanet_archive_count.json`, `exoplanet_archive_pscomppars_columns.json` |
+| MAST | RA/Dec for TIC targets | verified | `mast_tic_coords.json` |
+| ISS position: wheretheiss.at | Live ISS position | verified (chosen) | `iss_wheretheiss.json` |
+| ISS position: open-notify | (alternative) | rejected: no HTTPS | `iss_open_notify_https.meta.json` |
+| api.nasa.gov APOD | Picture of the day | verified, with a reliability note | `nasa_apod.json` |
+| api.nasa.gov DONKI | Space weather | **flagged for Akram** | `nasa_donki_notifications.meta.json`, `donki_ccmc_notifications.meta.json` |
+| CDS Aladin Lite v3 | Sky map viewer | verified (**license flagged**) | `aladin_lite_v3_js.meta.json` |
+| CDS HiPS (DSS colored) | Sky imagery | verified (**commercial terms flagged**) | `hips_dss_color_properties.txt` |
+| NASA 3D Resources | TESS model | verified | (model not committed yet; see below) |
 
-## Blocker (2026-10-17)
+## Flagged for Akram
 
-The build session's network policy refuses connections to every host below,
-so no request has been made yet. Once the hosts are allowed, each section is
-filled in from a real response.
+1. **DONKI space weather is down for us.** `api.nasa.gov/DONKI/notifications`
+   returned HTTP 503 ("upstream connect error … remote connection failure") on
+   all five runs (07:49–07:56 UTC, 2026-10-17). DONKI's own host,
+   `kauai.ccmc.gsfc.nasa.gov`, was unreachable from GitHub's runners
+   ("Network is unreachable", three tries). Options: (a) retry in Phase 2 and ship the tile
+   with its stale/unavailable state, (b) use NOAA SWPC instead, which would be
+   a new source to verify, or (c) drop the space-weather tile. Recommended: (a).
+2. **Aladin Lite is GPL-3.0.** Its docs say: "Aladin Lite source code is
+   available under GPL3 license … If you think this license might prevent you
+   from using Aladin Lite … please contact us." Loading it from the CDS server
+   on a free page is common; with a paid classroom plan (Phase 9), this should
+   go to the attorney review, or we ask CDS. A non-GPL fallback would be a
+   static sky cut-out image.
+3. **DSS sky imagery has its own copyright.** The HiPS `properties` file says
+   `obs_copyright = Digitized Sky Survey - STScI/NASA, Colored & Healpixed by CDS`
+   with `obs_copyright_url = http://archive.stsci.edu/dss/copyright.html`. CDS's
+   terms say commercial use "is subject to rules depending of the origin". That
+   STScI page hasn't been read yet; it goes into the same attorney review before
+   charging schools.
+4. **The personal api.nasa.gov key limit isn't confirmed.** The signup page
+   loads its content with JavaScript, so its text couldn't be read. The DEMO_KEY
+   response carried `x-ratelimit-limit: 10`. Phase 2 reads the rate-limit headers
+   that come back with your key (set in staging) and records the limit.
 
 ## Per-source details
 
-Each section records: endpoint URL, HTTPS support, auth, rate limit, terms
-and attribution, response shape, and the fixture file.
-
 ### NASA Planetary Fact Sheet (NSSDCA)
-- Host: `nssdc.gsfc.nasa.gov`
-- Endpoint: ?
-- HTTPS: ? · Auth: ? · Rate limit: ? · Terms/attribution: ?
-- Response shape: ?
-- Fixture: —
+- URL: `https://nssdc.gsfc.nasa.gov/planetary/factsheet/` · HTTP 200 · HTTPS · no auth.
+- Shape: one HTML table. Rows include Mass (10^24 kg), Diameter (km), Length
+  of Day (hours), Distance from Sun (10^6 km), Orbital Period (days) and
+  **Mean Temperature (C)**.
+- Gap: this page has **mean temperature only**, with no min/max, and no Sun
+  column. Phase 2 must fetch the per-body fact sheets for min/max and the Sun,
+  and verify them the same way.
+- Terms: NASA content guidelines (see NASA 3D Resources below): generally not
+  copyrighted; acknowledge NASA as the source; don't imply endorsement.
 
 ### JPL Horizons API
-- Host: `ssd.jpl.nasa.gov`
-- Endpoint: ?
-- HTTPS: ? · Auth: ? · Rate limit: ? · Terms/attribution: ?
-- Response shape: ?
-- Fixture: —
+- URL: `https://ssd.jpl.nasa.gov/api/horizons.api` · HTTP 200 · HTTPS · no auth.
+- Docs: `https://ssd-api.jpl.nasa.gov/doc/horizons.html` (doc version "1.3 (2025 June)").
+- Observed `signature.version` in responses: **"1.2"**. The docs say to check
+  this field; our parser should assert the version it was built against.
+- Shape: JSON `{signature, result}`; `result` is text, and data sits between
+  `$$SOE` and `$$EOE`.
+  - `EPHEM_TYPE=VECTORS, CENTER=500@10, OUT_UNITS=AU-D` (Mars, heliocentric,
+    ecliptic J2000): X/Y/Z, VX/VY/VZ, LT, RG, RR. Sample on 2026-10-17:
+    RG = 1.5775 au.
+  - `EPHEM_TYPE=OBSERVER, CENTER=500@399, QUANTITIES=19,20` (Voyager 1, `-31`):
+    `r` (Sun distance) and `delta` (Earth distance) in au. Sample on 2026-10-17:
+    r = 172.063 au, delta = 172.550 au.
+- Constants stated in the output: 1 au = 149597870.700 km, c = 299792.458 km/s.
+- Rate limit: none stated on the API doc page. We'll keep to a daily cron with
+  a handful of requests.
 
-### JPL Keplerian elements for approximate positions
-- Host: `ssd.jpl.nasa.gov`
-- Document: ?
-- Validity range and stated accuracy: ?
-- Terms/attribution: ?
-- Fixture: —
+### JPL Keplerian elements (approximate positions)
+- URL: `https://ssd.jpl.nasa.gov/planets/approx_pos.html` · HTTP 200 · HTTPS.
+  (The old `txt/p_elem_t1.txt` path returns 404; the tables are on this page.)
+- Table 1: elements and rates for Mercury–Neptune plus the Earth-Moon
+  barycenter, J2000 ecliptic, **valid 1800 AD – 2050 AD**. The page says the
+  elements "are not valid outside the given time-interval".
+- Stated nominal errors for 1800–2050 (λ arcsec, φ arcsec, ρ 1000 km): Mercury
+  15/1/1, Venus 20/1/4, EM Bary 20/8/6, Mars 40/2/25, Jupiter 400/10/600,
+  Saturn 600/25/1500, Uranus 50/2/1000, Neptune 10/1/200. Phase 3 tolerances
+  come from this table.
+- **Gap: no Pluto.** For other dates, Pluto needs another approach. One
+  option: cache Horizons positions for Pluto over a date range and interpolate,
+  labeled `computed`. Decide in Phase 2.
 
 ### NASA Exoplanet Archive TAP
-- Host: `exoplanetarchive.ipac.caltech.edu`
-- Endpoint and tables: ?
-- HTTPS: ? · Auth: ? · Rate limit: ? · Terms/attribution: ?
-- Response shape: ?
-- Fixture: —
+- URL: `https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=…&format=json` · HTTP 200 · HTTPS · no auth.
+- Table **`pscomppars`** (Planetary Systems Composite Parameters). `pscomp` does
+  not exist. Row count on 2026-10-17: **6451**.
+- Column facts from `TAP_SCHEMA.columns`: `st_teff` (K), `pl_eqt` (K),
+  `pl_orbsmax` (au), `ra`/`dec` (deg), and **`st_lum` is log10(L/L☉)**.
+  `rowupdate` and `releasedate` aren't in this table; `disc_pubdate` (YYYY-MM)
+  is.
+- Gotcha: `select top 5 … order by disc_year desc` returned rows out of
+  order. Filter with `where disc_pubdate >= …` and sort on our side.
+- Many new planets have null `pl_orbsmax`/`pl_eqt` (for example
+  `TIC 237254473 b`), so the `estimate` path in Phase 2 is needed, not optional.
+- Terms: please include the acknowledgment "This research has made use of the
+  NASA Exoplanet Archive, which is operated by the California Institute of
+  Technology, under contract with the National Aeronautics and Space
+  Administration under the Exoplanet Exploration Program." and cite
+  Christiansen et al. (2025), per `docs/acknowledge.html`.
 
 ### MAST
-- Host: `mast.stsci.edu`
-- Endpoint: ?
-- HTTPS: ? · Auth: ? · Rate limit: ? · Terms/attribution: ?
-- Response shape: ?
-- Fixture: —
+- URL: `https://mast.stsci.edu/api/v0/invoke?request=<json>` · HTTP 200 · HTTPS · no auth.
+- Service `Mast.Catalogs.Filtered.Tic`, filter on `ID`. Response
+  `{status: "COMPLETE", msg, data, fields, paging}`.
+- Sample: TIC 150428135 → RA 97.09679°, Dec −65.57931°; TIC 260128333 → RA
+  92.13320°, Dec −59.54113°.
+- Rate limit: none stated on the fetched API landing page. This is a one-time
+  lookup per target, committed to `results.json` (Phase 4).
 
-### ISS position API
-- Candidate host: `api.wheretheiss.at` (must serve HTTPS; pick another if not)
-- Endpoint: ?
-- HTTPS: ? · Auth: ? · Rate limit: ? · Terms/attribution: ?
-- Response shape: ?
-- Fixture: —
+### ISS position: wheretheiss.at (chosen)
+- URL: `https://api.wheretheiss.at/v1/satellites/25544` · HTTP 200 · HTTPS · no auth.
+- Developer page: "Currently requests are limited to roughly 1 per second."
+  The backend caches for 5 s (plan Phase 2), so one upstream call serves every
+  user.
+- Shape: `{name, id, latitude, longitude, altitude, velocity, visibility,
+  footprint, timestamp, daynum, solar_lat, solar_lon, units}`, in kilometers by
+  default (a `units=miles` parameter is documented).
+- `satellites/25544/positions?timestamps=…` (up to 10 timestamps) can draw the
+  ground track.
+- open-notify was rejected: `https://api.open-notify.org/iss-now.json` refused
+  the connection (no HTTPS).
 
-### api.nasa.gov: APOD and DONKI
-- Host: `api.nasa.gov`
-- Endpoints: ?
-- HTTPS: ? · Auth: API key in `NASA_API_KEY` (Railway variable, never in git) · Rate limit: ? · Terms/attribution: ?
-- Response shape: ?
-- Fixtures: —
+### api.nasa.gov APOD
+- URL: `https://api.nasa.gov/planetary/apod?api_key=…` · HTTPS · key in
+  `NASA_API_KEY` (Railway variable, never in git).
+- Reliability: across 5 runs with DEMO_KEY, 2 returned 200 and 3 returned HTTP
+  500 (`{"code":500,"msg":"Internal Service Error"}`). This confirms the
+  plan's serve-last-good-copy cache is needed.
+- Shape: `{date, explanation, hdurl, media_type, service_version, title, url}`.
+  Some days the image belongs to a third party and a `copyright` field
+  appears; show that credit when present.
+- DEMO_KEY headers: `x-ratelimit-limit: 10`.
 
-### CDS Aladin Lite / HiPS
-- Hosts: `aladin.cds.unistra.fr`, `alasky.cds.unistra.fr`
-- Script/CSS URL and version: ?
-- Survey(s) used: ?
-- Terms/attribution: ?
-- Fixture: — (client-side library; record the version and a HiPS `properties` file instead)
+### api.nasa.gov DONKI
+- See flag 1. No good sample yet; only the failure metadata is committed.
+
+### CDS Aladin Lite v3
+- Script: `https://aladin.cds.unistra.fr/AladinLite/api/v3/latest/aladin.js` · HTTP 200 · HTTPS ·
+  `last-modified: Fri, 06 Mar 2026`. For production we pin a specific
+  version from the release page rather than `latest`.
+- License: GPL-3.0 (see flag 2). The docs ask users to acknowledge Aladin Sky Atlas.
+
+### CDS HiPS: DSS colored
+- `https://alasky.cds.unistra.fr/DSS/DSSColor/properties` · HTTP 200 · HTTPS.
+- `hips_doi = 10.26093/cds/aladin/ht9n-7r`; copyright as in flag 3.
 
 ### NASA 3D Resources
-- Host: `science.nasa.gov`
-- TESS model URL and format: ?
-- License: ?
-- Decision: use the NASA model, or a procedural model if the license or format doesn't fit.
+- Hub: `https://science.nasa.gov/3d-resources/` says the assets "are free to
+  download and use" and are mirrored on GitHub (`nasa/NASA-3D-Resources`). The
+  repo README says the assets "are free and without copyright".
+- TESS models in that repo (commit `11ebb4e`):
+  - `3D Models/Transiting Exoplanet Survey Satellite (TESS) (A)/…(A).glb`, 206,576 bytes.
+  - `3D Models/Transiting Exoplanet Survey Satellite (TESS) (B)/…(B).glb`, 1,693,644 bytes.
+  - Model A is small enough for mobile, so Phase 4 uses it, with a procedural
+    fallback if it fails to load.
+- Usage guidelines (`nasa.gov/nasa-brand-center/images-and-media/`):
+  - Acknowledge NASA as the source.
+  - Don't imply NASA endorsement.
+  - The NASA insignia and logotype are **not** public domain, so v2 won't use
+    the NASA logo.
+  - For AI: "attribution of the information directly to NASA is not permitted"
+    for LLM output, and the insignia may not appear with AI-generated imagery.
+    This matters for the Phase 9 explainer: label its answers as AI-generated,
+    never as NASA's.
