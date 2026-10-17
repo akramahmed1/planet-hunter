@@ -72,6 +72,8 @@ jobs:
       - run: npm run test:unit
       - run: npm run typecheck
       - run: npm run build
+      - name: First-load budget for /solar-system (three.js loads later)
+        run: npm run check:budget
         env:
           NEXT_PUBLIC_API_BASE: http://127.0.0.1:8000
 

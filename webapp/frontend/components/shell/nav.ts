@@ -12,7 +12,7 @@ export type NavItem = {
 
 export const NAV: NavItem[] = [
   { href: "/", label: "Explore", icon: "explore" },
-  { href: "/solar-system", label: "Solar System", icon: "solar", soon: true },
+  { href: "/solar-system", label: "Solar System", icon: "solar" },
   { href: "/exoplanets", label: "Exoplanets", icon: "exoplanets", soon: true },
   { href: "/candidates", label: "Hunt", icon: "hunt", match: ["/candidates"] },
   { href: "/missions", label: "Missions", icon: "missions", soon: true },

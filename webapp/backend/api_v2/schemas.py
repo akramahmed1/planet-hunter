@@ -119,6 +119,22 @@ class PositionsResponse(_Strict):
     notes: list[str]
 
 
+class Orbit(_Strict):
+    id: str
+    period_days: float
+    # [x, y, z] in au, heliocentric ecliptic of J2000, evenly spaced in time over one period.
+    points: list[list[float]]
+    kind: Kind
+    source: SourceRef
+    note: str
+
+
+class OrbitsResponse(_Strict):
+    frame: str
+    period_source: SourceRef
+    orbits: list[Orbit]
+
+
 class Distance(_Strict):
     km: float
     mi: float

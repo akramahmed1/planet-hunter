@@ -402,3 +402,33 @@ def test_cache_round_trips_through_postgres(frozen, monkeypatch):
             assert conn.execute(text("select source->>'name' from external_cache where key='t:key'")).scalar() == "test"
     finally:
         command.downgrade(cfg, "base")
+
+
+# ---------- orbits (Phase 3) ----------
+
+def test_orbits_pass_through_the_computed_positions(client):
+    body = client.get("/api/v2/orbits").json()
+    orbits = {o["id"]: o for o in body["orbits"]}
+    assert list(orbits) == live_routes.ORBIT_BODIES
+    for body_id, o in orbits.items():
+        assert len(o["points"]) == 180 and o["kind"] == "computed"
+        # Every computed position for a date should lie on (close to) the drawn path.
+        pos = positions.computed_position(body_id, SAMPLE_TIME.date())
+        r = math.hypot(*pos)
+        nearest = min(math.dist(pos, p) for p in o["points"])
+        # 180 samples: the chord gap is at most about pi * r / 180 for a near-circular orbit.
+        assert nearest < 2 * math.pi * r / 180, body_id
+
+
+def test_orbit_periods_come_from_nssdca(client):
+    facts = {b["id"]: b for b in client.get("/api/v2/bodies").json()["bodies"]}
+    for o in client.get("/api/v2/orbits").json()["orbits"]:
+        assert o["period_days"] == facts[o["id"]]["orbit_period"]["value"]
+
+
+def test_orbit_windows_stay_inside_the_valid_range():
+    lo, hi = positions.valid_range()
+    with pytest.raises(ValueError):
+        positions.orbit_path("pluto", (hi - lo).days + 1)
+    # Pluto's 248-year orbit only just fits in 1800-2050; it must not raise.
+    assert len(positions.orbit_path("pluto", 90_560.0)) == 180
