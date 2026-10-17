@@ -1,0 +1,8 @@
+## qa_backend.py
+
+117 passed, 0 failed
+ALL BACKEND QA CHECKS PASSED
+## qa_frontend.py
+
+100 passed, 0 failed
+ALL FRONTEND E2E CHECKS PASSED

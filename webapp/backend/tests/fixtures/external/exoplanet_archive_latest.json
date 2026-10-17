@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VOTABLE version="1.4" xmlns="http://www.ivoa.net/xml/VOTable/v1.3">
+<RESOURCE type="results">
+<INFO name="QUERY_STATUS" value="ERROR">
+Table 'pscomp' is not available for querying. Use TAP_SCHEMA.tables to see available tables.
+</INFO>
+</RESOURCE>
+</VOTABLE>

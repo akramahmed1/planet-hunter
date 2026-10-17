@@ -1,0 +1,349 @@
+{
+  "url": "https://exoplanetarchive.ipac.caltech.edu/docs/acknowledge.html",
+  "final_url": "https://exoplanetarchive.ipac.caltech.edu/docs/acknowledge.html",
+  "status": 200,
+  "https": true,
+  "headers": {
+    "content-type": "text/html; charset=UTF-8",
+    "server": "cloudflare"
+  },
+  "bytes": 27020,
+  "truncated": false,
+  "fetched_at": "2026-10-17T07:49:48+00:00"
+}
+
+Acknowledging the NASA Exoplanet Archive 
+
+ [link: /index.html] 
+
+ [link: /index.html] Home 
+
+ About Us 
+
+ [link: /docs/intro.html] 
+
+ Overview 
+ [link: /docs/holdings.html] 
+
+ Holdings 
+ [link: /docs/counts_detail.html] 
+
+ Exoplanet Counts 
+ [link: /docs/users_group.html] 
+
+ User Panel 
+
+ [link: /docs/faq.html] 
+
+ FAQ 
+ [link: /docs/acknowledge.html] 
+
+ Acknowledgements 
+ [link: /docs/privacy.html] 
+
+ Privacy Notice 
+
+ Data 
+
+ Planetary Systems 
+
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=PS] 
+
+ Planetary Systems 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=PSCompPars] 
+
+ Planetary Systems Composite Data 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=STELLARHOSTS] 
+
+ Stellar Hosts 
+ [link: /cgi-bin/atmospheres/nph-firefly?atmospheres] 
+
+ Atmospheric Spectroscopy 
+ [link: /cgi-bin/observations/nph-firefly?data] 
+
+ NExoList 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=ML] 
+
+ Microlensing Planets 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=directimaging&constraint=immodeldef=1] 
+
+ Direct Imaging Planets 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=TD] 
+
+ Transiting Planets 
+
+ Kepler 
+
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=cumulative] 
+
+ KOI (Cumulative List) 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=koi] 
+
+ KOI (All Lists) 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=koiapp&constraint=pp_host_prob_score>0.3] 
+
+ Positional Probabilities 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=koifpp] 
+
+ False Positive Probabilities 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=fpwg] 
+
+ Certified False Positives 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=tce] 
+
+ Threshold-Crossing Events 
+ [link: /docs/Kepler_completeness_reliability.html] 
+
+ Completeness and Reliability 
+ [link: /docs/KeplerSimulated.html] 
+
+ Simulated Data 
+ [link: /cgi-bin/TblSearch/nph-tblSearchInit?app=ExoTbls&config=keplerstellar] 
+
+ Kepler Stellar 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=kep_conf_names] 
+
+ Kepler Confirmed Names 
+
+ Transit Surveys 
+
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=TOI] 
+
+ TESS Project Candidates 
+ [link: /cgi-bin/TblSearch/nph-tblSearchInit?app=ExoTbls&config=k2targets] 
+
+ K2 Targets 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=k2pandc] 
+
+ K2 Planets and Candidates 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=k2_conf_names] 
+
+ K2 Confirmed Names 
+ [link: /applications/ETSS/CoRoT_astero_index.html] 
+
+ CoRot Astero-Seismology 
+ [link: /applications/ETSS/CoRoT_exo_index.html] 
+
+ CoRoT Exoplanet 
+ [link: /cgi-bin/TblSearch/nph-tblSearchInit?app=ExoTbls&config=superwasptimeseries] 
+
+ SuperWASP Light Curves 
+ [link: /cgi-bin/TblSearch/nph-tblSearchInit?app=ExoTbls&config=kelttimeseries] 
+
+ KELT Light Curves 
+ [link: /cgi-bin/TblView/nph-tblView?app=ETSSView&config=conf/KELTP] 
+
+ KELT Praesepe 
+ [link: /cgi-bin/TblView/nph-tblView?app=ETSSView&config=conf/XO] 
+
+ XO 
+ [link: /applications/ETSS/HATNet_index.html] 
+
+ HATNet 
+ [link: /cgi-bin/TblView/nph-tblView?app=ETSSView&config=conf/Cluster] 
+
+ Cluster 
+ [link: /cgi-bin/TblView/nph-tblView?app=ETSSView&config=conf/TrES] 
+
+ TrES 
+
+ Other 
+
+ [link: /cgi-bin/observations/nph-firefly?datta] 
+
+ JWST Observations 
+ [link: /cgi-bin/TblSearch/nph-tblSearchInit?app=ExoTbls&config=ukirttimeseries] 
+
+ UKIRT Microlensing Survey 
+ [link: /cgi-bin/MOA/nph-firefly?MOA] 
+
+ MOA Microlensing Survey 
+ [link: /cgi-bin/ROME/nph-firefly?data&filter=True] 
+
+ ROME/REA Microlensing Survey 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=gjstars] 
+
+ Gliese-Jahreiss Stars 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=DI_STARS_EXEP] 
+
+ HWO ExEP Precursor Science Stars 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=missionstars] 
+
+ Mission Stars 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=mission_exocat] 
+
+ Mission Stars+ExoCat 
+ [link: /cgi-bin/FDL/nph-fdl] 
+
+ Frontier Development Lab Datasets 
+ [link: /cgi-bin/CUBESAT/nph-cubesat?cute] 
+
+ CUTE Mission 
+ [link: /docs/ASTERIAMission.html] 
+
+ ASTERIA Mission 
+ [link: /docs/contributed_data.html] 
+
+ Contributed Data Sets 
+ [link: /applications/ExoTbls/upload.html] 
+
+ Interactive Tables Search and File Upload 
+
+      Full table display 
+          Database search 
+
+ Tools 
+
+ [link: /applications/Inventory/search.html] 
+
+ Explore the Archive 
+ [link: /applications/ExoTbls/upload.html] 
+
+ Interactive Table Search and File Upload 
+ [link: /cgi-bin/TransitView/nph-visibletbls?dataset=transits] 
+
+ Transit and Ephemeris Service 
+ [link: /cgi-bin/CalcQty/nph-calcqty] 
+
+ Predicted Observables for Exoplanets (POE) 
+ [link: /cgi-bin/Pgram/nph-pgram] 
+
+ Periodogram 
+ [link: /ScatterPlot/?config=scatter&table=PS_output.csv&columns=PS_columns.tbl&theme=pres&x=pl_orbper&y=pl_bmassj&symbol-color=discoverymethod&symbol-size-min=8&legendpos=bottomright&link=1] 
+
+ Confirmed Planets Plotting Tool 
+ [link: /cgi-bin/ExoFAST/nph-exofast] 
+
+ EXOFAST: Transit and RV Fitting 
+
+ [link: https://astrofetch.ipac.caltech.edu] 
+
+ AstroFetch AI 
+ [link: /docs/TAP/usingTAP.html] 
+
+ Table Access Protocol (TAP) Interface 
+ [link: /docs/program_interfaces.html] 
+
+ Application Programming Interface (API) 
+ [link: /bulk_data_download] 
+
+ Bulk Data Download 
+ [link: https://exofop.ipac.caltech.edu/] 
+
+ ExoFOP 
+ [link: /exoplanetplots/] 
+
+ Pre-generated Plots 
+ [link: /support/upload_param/] 
+
+ Published Data Upload 
+
+ Support 
+
+ [link: /applications/DocSet/index.html?doctree=/docs/docmenu.xml&startdoc=item_1_01] 
+
+ Documentation Index 
+ [link: /docs/KeplerMission.html] 
+
+ Kepler Documentation 
+
+ [link: /docs/connect.html] 
+
+ Social Media and Newsletter 
+ [link: /applications/Helpdesk] 
+
+ Contact Us 
+
+ - 
+
+ Acknowledging the NASA Exoplanet Archive in Publications 
+
+ Acknowledgment Text 
+
+ Please include the following standard acknowledgment in any published material that makes use of the NASA Exoplanet Archive's services. 
+
+ This research has made use of the NASA Exoplanet Archive, which is operated by the California Institute of Technology, under contract with the National Aeronautics and Space Administration under the Exoplanet Exploration Program. 
+
+ In addition, if you use data from a specific literature reference, please acknowledge that reference directly. 
+
+ Citing the Archive as a Published Reference 
+
+ Please cite [link: https://iopscience.iop.org/article/10.3847/PSJ/ade3c2] Christiansen et al. (2025) , the NASA Exoplanet Archive's published paper accepted by the Planetary Science Journal that provides an extensive overview of the archive's data, services and tools. Christiansen et al. (2025) replaces Akeson et al. (2013), our earlier publication. 
+
+ Using AAS Facility Keywords 
+
+ The American Astronomical Society (AAS) has a standardized list of facility keywords that include the NASA Exoplanet Archive and ExoFOP: 
+
+ When preparing a LaTeX manuscript for submission, use \facility{Exoplanet Archive} . 
+ For the Exoplanet Follow-up Observing Program (ExoFOP), use \facility{ExoFOP} . 
+
+ For more usage tips and the full list of standardized facility names, see the [link: http://journals.aas.org/authors/aastex/facility.html] AAS web site . 
+
+ Using Digital Object Identifiers (DOI) 
+
+ If you use DOIs to cite and link to archive data and services in your published work, consult the list of all active and retired Exoplanet Archive DOIs on our [link: /docs/doi.html] Citing the Archive With Digial Object Identifiers (DOI) page. 
+
+ To request a new DOI for an archive data set or service, please submit a [link: /cgi-bin/Helpdesk/nph-genTicketForm] Helpdesk ticket. 
+
+ Acknowledging Specific Datasets 
+
+ WASP Data 
+ If you make use of WASP data from the NASA Exoplanet Archive, please include the following acknowledgment: 
+
+ This paper makes use of data from the first public release of the WASP data (Butters et al. 2010) as provided by the WASP consortium and services at the NASA Exoplanet Archive, which is operated by the California Institute of Technology, under contract with the National Aeronautics and Space Administration under the Exoplanet Exploration Program. 
+ UKIRT Data 
+ Requested data acknowledgments for UKIRT Microlensing Survey data served through the NASA Exoplanet Archive are described on the [link: /docs/UKIRTMission.html#ack] UKIRT Mission Summary page. 
+
+ KELT Data 
+
+ Early work on KELT-North was supported by NASA Grant NNG04GO70G. 
+ Work on KELT-North was partially supported by NSF CAREER Grant AST-1056524 to S. Gaudi. 
+ Work on KELT-North received support from the Vanderbilt Office of the Provost through the Vanderbilt Initiative in Data-intensive Astrophysics. 
+
+ If you make use of data from the NASA Exoplanet Archive, please include the following acknowledgement: 
+
+ "These data are made available to the community through the Exoplanet Archive on behalf of the KELT project team." 
+
+ Frontier Development Lab (FDL) INARA Data 
+
+ If you make use of the FDL INARA dataset from the NASA Exoplanet Archive, please include the following acknowledgement: 
+
+ This research makes use of data generated via the INARA framework, funded by the Frontier Development Lab and supported by the NASA Goddard Space Flight Center and Google Cloud. 
+
+ MOA Data 
+
+ The project's requested data acknowledgment for MOA data served through the NASA Exoplanet Archive is described on the [link: /docs/MOAMission.html#ack] MOA summary page . 
+
+ CUTE Mission Data 
+ If you make use of the Colorado Ultraviolet Transit Experiment (CUTE) dataset from the NASA Exoplanet Archive, please include the following acknowledgement: 
+
+ This research makes use of data from the Colorado Ultraviolet Transit Experiment, which is managed by the University of Colorado Boulder under a research grant from NASA. 
+
+ ROME/REA 
+
+When using ROME/REA data, please cite the papers describing the original survey design, [link: https://ui.adsabs.harvard.edu/link_gateway/2019PASP..131l4401T/PUB_PDF] Tsapras et al. (2019), PASP, 131, pp. 124401 , and the survey and data reduction, [link: https://iopscience.iop.org/article/10.1088/1538-3873/ad4e69/pdf] Street et al. (2024), PASP, 136, id.064501M , and include an acknowledgment to the project. 
+
+ The following digital object identifiers (DOI) are assigned to the dataset and archive service: 
+
+ Street et al. 2024: 10.1088/1538-3873/ad4e69 
+ Exoplanet Archive service: 10.26133/NEA45 
+
+ Last updated: 13 August 2025 
+
+ [link: http://www.nasa.gov] 
+
+ [link: http://www.ipac.caltech.edu] 
+
+ [link: http://nexsci.caltech.edu] 
+
+ [link: http://www.caltech.edu] 
+
+ [link: /index.html] Home 
+
+ [link: /docs/about.html] About Us 
+
+ [link: /docs/data.html] Data 
+
+ [link: /docs/tools.html] Tools 
+
+ [link: /docs/help.html] Support

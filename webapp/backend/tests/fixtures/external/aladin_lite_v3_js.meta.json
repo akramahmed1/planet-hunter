@@ -1,0 +1,16 @@
+{
+  "url": "https://aladin.cds.unistra.fr/AladinLite/api/v3/latest/aladin.js",
+  "final_url": "https://aladin.cds.unistra.fr/AladinLite/api/v3/latest/aladin.js",
+  "status": 200,
+  "https": true,
+  "headers": {
+    "server": "Apache/2.4.58 (Ubuntu)",
+    "last-modified": "Fri, 06 Mar 2026 16:10:22 GMT",
+    "access-control-allow-origin": "*",
+    "cache-control": "max-age=0, no-store, no-cache, must-revalidate",
+    "content-type": "text/javascript"
+  },
+  "bytes": 300001,
+  "truncated": true,
+  "fetched_at": "2026-10-17T07:49:46+00:00"
+}

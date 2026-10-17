@@ -1,0 +1,16 @@
+{
+  "url": "https://api.nasa.gov/planetary/apod?api_key=REDACTED",
+  "final_url": "https://api.nasa.gov/planetary/apod?api_key=REDACTED",
+  "status": 500,
+  "https": true,
+  "headers": {
+    "content-type": "application/json",
+    "access-control-allow-origin": "*",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+    "x-ratelimit-limit": "10",
+    "x-ratelimit-remaining": "9"
+  },
+  "bytes": 67,
+  "truncated": false,
+  "fetched_at": "2026-10-17T07:49:44+00:00"
+}

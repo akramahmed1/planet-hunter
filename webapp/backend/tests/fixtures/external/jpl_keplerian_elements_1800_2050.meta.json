@@ -1,0 +1,15 @@
+{
+  "url": "https://ssd.jpl.nasa.gov/txt/p_elem_t1.txt",
+  "final_url": "https://ssd.jpl.nasa.gov/txt/p_elem_t1.txt",
+  "status": 404,
+  "https": true,
+  "headers": {
+    "server": "nginx",
+    "content-type": "text/html",
+    "etag": "\"6ac51815-4326\"",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload"
+  },
+  "bytes": 17190,
+  "truncated": false,
+  "fetched_at": "2026-10-17T07:49:41+00:00"
+}
