@@ -11,7 +11,7 @@
   },
   "bytes": 300001,
   "truncated": true,
-  "fetched_at": "2026-10-17T07:52:37+00:00"
+  "fetched_at": "2026-10-17T07:54:05+00:00"
 }
 
 3D Resources - NASA Science 
@@ -158,7 +158,7 @@
 
  article 
 
- 18 hours ago 
+ 19 hours ago 
 
  [link: https://science.nasa.gov/blogs/perseverance-mars-rover/2026/10/12/nasas-perseverance-sets-off-world-record-for-total-distance-driven/] 
 
@@ -179,7 +179,7 @@
 
  article 
 
- 2 days ago 
+ 3 days ago 
 
  [link: https://www.nasa.gov/help-nasa-find-practical-ways-to-monitor-astronaut-body-temperature-in-low-earth-orbit/] 
 
@@ -272,7 +272,7 @@
 
  article 
 
- 18 hours ago 
+ 19 hours ago 
 
  [link: https://science.nasa.gov/universe/nasa-welcomes-all-ages-experience-levels-for-space-apps-challenge/] 
 
@@ -303,7 +303,7 @@
 
  article 
 
- 15 hours ago 
+ 16 hours ago 
 
  [link: https://science.nasa.gov/missions/hubble/nasas-hubble-spies-spirals-edge/] 
 
@@ -313,7 +313,7 @@
 
  article 
 
- 18 hours ago 
+ 19 hours ago 
 
  [link: https://science.nasa.gov/researchers/solicitations/roses-2025/a-15-biosphere-new-requirement-added-to-section-4-2-1/] 
 
@@ -406,7 +406,7 @@
 
  article 
 
- 2 days ago 
+ 3 days ago 
 
  [link: https://www.nasa.gov/centers-and-facilities/ames/nasa-demonstrates-next-generation-heat-shield-technologies/] 
 

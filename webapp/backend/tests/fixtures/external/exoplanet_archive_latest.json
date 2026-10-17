@@ -1,8 +1,37 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<VOTABLE version="1.4" xmlns="http://www.ivoa.net/xml/VOTable/v1.3">
-<RESOURCE type="results">
-<INFO name="QUERY_STATUS" value="ERROR">
-ORA-00904: 'RELEASEDATE': invalid identifier
-</INFO>
-</RESOURCE>
-</VOTABLE>
+[
+{"pl_name": "55 Cnc f",
+"hostname": "55 Cnc",
+"st_teff": 5198.00,
+"st_lum": -0.19695,
+"pl_orbsmax": 0.8020000000,
+"pl_eqt": 277.07,
+"disc_year": 2007},
+{"pl_name": "55 Cnc e",
+"hostname": "55 Cnc",
+"st_teff": 5172.00,
+"st_lum": -0.19695,
+"pl_orbsmax": 0.0154400000,
+"pl_eqt": 1958.00,
+"disc_year": 2004},
+{"pl_name": "55 Cnc c",
+"hostname": "55 Cnc",
+"st_teff": 5198.00,
+"st_lum": -0.19695,
+"pl_orbsmax": 0.2470000000,
+"pl_eqt": 499.27,
+"disc_year": 2004},
+{"pl_name": "55 Cnc d",
+"hostname": "55 Cnc",
+"st_teff": 5198.00,
+"st_lum": -0.19695,
+"pl_orbsmax": 5.6000000000,
+"pl_eqt": 104.85,
+"disc_year": 2002},
+{"pl_name": "55 Cnc b",
+"hostname": "55 Cnc",
+"st_teff": 5198.00,
+"st_lum": -0.19695,
+"pl_orbsmax": 0.1180000000,
+"pl_eqt": 700.00,
+"disc_year": 1996}
+]
