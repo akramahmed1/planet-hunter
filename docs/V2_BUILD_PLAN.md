@@ -30,7 +30,8 @@ Work one phase at a time, in order, starting at Phase 0. For every phase
 follow this loop exactly:
   1. Plan: print the phase's tasks, the files you will touch and how you
      will verify them. Wait for Akram to reply "go".
-  2. Build on a feature branch cut from `v2` (name: v2/pN-<short-name>).
+  2. Build on a feature branch cut from `v2` (name: v2-pN-<short-name>;
+     git can't hold `v2/...` branches alongside a `v2` branch).
   3. Verify: run every check in the phase's "Done when" list and show the
      output. Fix root causes; never skip, weaken or delete a test.
   4. Open a PR into `v2` (not main). Wait for CI to be green.
@@ -70,6 +71,11 @@ assignments on top of it.
 ### Decisions still open (Claude Code asks Akram at the named phase)
 
 - **Phase 0:** whether to use a custom domain; confirm Railway plan limits for an extra worker and cron service.
+  - 2026-10-17, Akram: keep the Railway URLs for now; revisit a custom domain at the end (Phase 10).
+  - 2026-10-17, Akram: Railway **Hobby** plan. Per https://docs.railway.com/pricing/plans (read 2026-10-17):
+    $5/month including $5 of usage, usage above that billed (RAM $10/GB/month, CPU $20/vCPU/month);
+    per-service caps 48 GB RAM, 48 vCPU, 6 replicas; volumes up to 5 GB. A worker and a cron service fit
+    within these caps; the cost to watch is usage above $5, since staging doubles the running services.
 - **Phase 8:** teacher sign-in method. Recommended: Auth.js with Google plus email magic link through Resend. Students join with a class code, a nickname and a PIN, with no email.
 - **Phase 9:** AI provider and model for the explainer (recommended: Anthropic API with the model set in an env var); Stripe pricing for the classroom plan.
 
@@ -161,7 +167,7 @@ Status values: `todo`, `in-progress`, `staging-verified`, `merged-to-v2`, `live`
 
 | # | Phase | Status |
 |---|---|---|
-| 0 | Prep and verification | todo |
+| 0 | Prep and verification | staging-verified |
 | 1 | Foundations and design system | todo |
 | 2 | Live data layer | todo |
 | 3 | 3D solar system | todo |
@@ -179,6 +185,7 @@ Status values: `todo`, `in-progress`, `staging-verified`, `merged-to-v2`, `live`
 
 **Tasks**
 1. Create branch `v2` from `main`. Delete the two merged `claude/p1-contract-sync*` branches (ask first).
+   - 2026-10-17, Akram: keep them; delete at the end once everything is verified working.
 2. **Railway (guide Akram through it or use the Railway CLI):**
    - Create a `staging` environment that deploys the `v2` branch, with its own frontend and backend services.
    - Add a Postgres database to staging.
@@ -460,5 +467,9 @@ Status values: `todo`, `in-progress`, `staging-verified`, `merged-to-v2`, `live`
 
 ## 8. Staging URLs (filled in during Phase 0)
 
-- Frontend:
-- Backend:
+Railway environment `Staging` (id `29dafcd8-f8c8-4834-874e-44979a44e933`), services track the `v2` branch.
+
+- Frontend: https://frontend-staging-5fce.up.railway.app
+- Backend: https://backend-staging-bade.up.railway.app
+- Postgres: Railway service `Postgres` (private network only), wired to the backend as `DATABASE_URL`.
+- `NASA_API_KEY`: set by Akram as a staging variable (value never in git or chat).

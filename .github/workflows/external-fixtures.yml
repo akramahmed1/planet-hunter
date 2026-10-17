@@ -1,0 +1,51 @@
+name: External fixtures
+
+# Fetches one real sample from each external data source (and runs the v1 QA
+# suites against staging), then commits the results back to the branch.
+# Runs on GitHub's machines because the build sessions have no outbound access
+# to these hosts. Pushes made with GITHUB_TOKEN don't re-trigger workflows.
+# docs/_source_snapshots/ (provider docs as text) is for reading on the branch
+# only; delete it before merging.
+on:
+  workflow_dispatch:
+  push:
+    branches: [v2-p0-prep]
+    paths:
+      - scripts/fetch_external_fixtures.py
+      - .github/workflows/external-fixtures.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: external-fixtures-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Fetch external samples
+        run: python scripts/fetch_external_fixtures.py | tee docs/_source_snapshots.log
+      - name: v1 QA suites against staging
+        run: |
+          mkdir -p docs/_source_snapshots
+          {
+            echo "## qa_backend.py"
+            python webapp/qa/qa_backend.py https://backend-staging-bade.up.railway.app || echo "exit $?"
+            echo "## qa_frontend.py"
+            python webapp/qa/qa_frontend.py https://frontend-staging-5fce.up.railway.app https://backend-staging-bade.up.railway.app || echo "exit $?"
+          } > docs/_source_snapshots/qa_staging.txt 2>&1
+          cat docs/_source_snapshots/qa_staging.txt
+      - name: Commit results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add webapp/backend/tests/fixtures/external docs/_source_snapshots docs/_source_snapshots.log
+          git diff --cached --quiet && exit 0
+          git commit -m "Fetch external source samples and staging QA output"
+          git push
