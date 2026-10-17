@@ -1,13 +1,14 @@
+import Badge, { type BadgeTone } from "@/components/ui/Badge";
 import type { Classification } from "@/lib/api";
 import { CLASSIFICATION_LABELS } from "@/lib/api";
 
-const CLASS_TO_BADGE: Record<Classification, string> = {
-  "clean-recovery": "badge badge-clean",
-  "eclipsing-binary": "badge badge-eclipsing",
-  ambiguous: "badge badge-ambiguous",
-  marginal: "badge badge-marginal",
-  "likely-noise": "badge badge-noise",
-  unreviewed: "badge badge-unreviewed",
+const CLASS_TO_TONE: Record<Classification, BadgeTone> = {
+  "clean-recovery": "clean",
+  "eclipsing-binary": "eclipsing",
+  ambiguous: "ambiguous",
+  marginal: "marginal",
+  "likely-noise": "noise",
+  unreviewed: "unreviewed",
 };
 
 export default function ClassificationBadge({
@@ -17,9 +18,5 @@ export default function ClassificationBadge({
   classification: Classification;
   label?: string;
 }) {
-  return (
-    <span className={CLASS_TO_BADGE[classification]}>
-      {label || CLASSIFICATION_LABELS[classification]}
-    </span>
-  );
+  return <Badge tone={CLASS_TO_TONE[classification]}>{label || CLASSIFICATION_LABELS[classification]}</Badge>;
 }

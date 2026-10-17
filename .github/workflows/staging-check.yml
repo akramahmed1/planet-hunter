@@ -1,0 +1,62 @@
+name: Staging check
+
+# Verifies the Railway staging environment after a push to v2 or a phase
+# branch (v2-p*). Waits until both staging services report this exact commit,
+# then runs the v1 QA suites and the Playwright tests against staging.
+# The build sessions can't reach staging, so this is how staging is verified.
+on:
+  push:
+    branches: [v2, "v2-p*"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: staging-check
+  cancel-in-progress: true
+
+env:
+  FRONTEND: https://frontend-staging-5fce.up.railway.app
+  BACKEND: https://backend-staging-bade.up.railway.app
+
+jobs:
+  staging:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Wait for staging to run this commit
+        run: |
+          for i in $(seq 1 60); do
+            be=$(curl -sf "$BACKEND/api/v2/health" | python3 -c "import json,sys;print(json.load(sys.stdin).get('commit') or '')" 2>/dev/null || true)
+            fe=$(curl -sf "$FRONTEND/" | grep -o 'name="ph-build" content="[^"]*"' | sed 's/.*content="//;s/"$//' || true)
+            echo "attempt $i: backend=${be:-none} frontend=${fe:-none} want=$GITHUB_SHA"
+            if [ "$be" = "$GITHUB_SHA" ] && [ "$fe" = "$GITHUB_SHA" ]; then exit 0; fi
+            sleep 20
+          done
+          echo "::error::staging did not report commit $GITHUB_SHA within 20 minutes. Is staging tracking this branch?"
+          exit 1
+      - name: v2 health reports the database connected
+        run: |
+          curl -sf "$BACKEND/api/v2/health" | tee /tmp/health.json
+          python3 -c "import json;d=json.load(open('/tmp/health.json'));assert d['database']['status']=='connected', d"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: v1 backend QA against staging
+        run: python webapp/qa/qa_backend.py "$BACKEND"
+      - name: v1 frontend QA against staging
+        run: python webapp/qa/qa_frontend.py "$FRONTEND" "$BACKEND"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: webapp/frontend/package-lock.json
+      - name: Playwright against staging
+        working-directory: webapp/frontend
+        env:
+          PW_BASE_URL: ${{ env.FRONTEND }}
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+          npx playwright test

@@ -11,6 +11,9 @@ COPY . .
 
 ARG NEXT_PUBLIC_API_BASE=http://127.0.0.1:8000
 ENV NEXT_PUBLIC_API_BASE=$NEXT_PUBLIC_API_BASE
+# Railway passes the deploy commit as a build arg; shown in a <meta> tag so checks can confirm the live build.
+ARG RAILWAY_GIT_COMMIT_SHA=local
+ENV NEXT_PUBLIC_BUILD_SHA=$RAILWAY_GIT_COMMIT_SHA
 
 RUN npm run build
 

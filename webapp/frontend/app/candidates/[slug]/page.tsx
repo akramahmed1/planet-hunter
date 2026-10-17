@@ -2,6 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import ApiError from "@/components/ApiError";
 import ClassificationBadge from "@/components/ClassificationBadge";
+import Card from "@/components/ui/Card";
+import EmptyState from "@/components/ui/EmptyState";
 import {
   apiGet,
   labelFor,
@@ -27,8 +29,8 @@ export default async function CandidateDetailPage({
     if (res.status === 404) notFound();
     return (
       <div>
-        <p className="muted">
-          <Link href="/candidates">← Back to all candidates</Link>
+        <p>
+          <Link href="/candidates" className="back-link">← Back to all candidates</Link>
         </p>
         <ApiError what="This candidate" error={res.error} />
       </div>
@@ -42,16 +44,12 @@ export default async function CandidateDetailPage({
 
   return (
     <div>
-      <p className="muted">
-        <Link href="/candidates">← Back to all candidates</Link>
+      <p>
+        <Link href="/candidates" className="back-link">← Back to all candidates</Link>
       </p>
 
-      <h1>
-        {candidate.target}{" "}
-        <span className="muted" style={{ fontWeight: 400 }}>
-          {candidate.tic}
-        </span>
-      </h1>
+      <p className="eyebrow">{candidate.tic}</p>
+      <h1>{candidate.target}</h1>
       <p>
         <ClassificationBadge
           classification={candidate.classification}
@@ -60,8 +58,7 @@ export default async function CandidateDetailPage({
       </p>
 
       <div className="detail-grid">
-        <div className="panel">
-          <h2>Measured numbers</h2>
+        <Card title="Measured numbers">
           <dl className="kv">
             <dt>Rank</dt>
             <dd>
@@ -85,35 +82,32 @@ export default async function CandidateDetailPage({
               {candidate.n_cadences.toLocaleString("en-US")}
             </dd>
           </dl>
-        </div>
+        </Card>
 
-        <div>
-          <h2>Readout</h2>
+        <Card title="Readout" tone="flat">
           <div className="readout">
             <p>{candidate.readout}</p>
           </div>
-        </div>
+        </Card>
       </div>
 
       <section aria-labelledby="plot-heading">
         <h2 id="plot-heading">Folded light curve</h2>
         {plotSrc ? (
-          <div className="plot-frame" style={{ maxWidth: "720px" }}>
+          <div className="plot-frame" style={{ maxWidth: "760px" }}>
             <img
               src={plotSrc}
               alt={`Folded light curve of ${candidate.target} at the recovered period of ${candidate.period_d.toFixed(4)} days`}
             />
           </div>
         ) : (
-          <div className="panel">
-            <p className="muted" style={{ margin: 0 }}>
-              No folded plot was rendered for this target in this scan run.
-            </p>
-          </div>
+          <EmptyState title="No folded plot for this target.">
+            <p>No folded plot was rendered for this target in this scan run.</p>
+          </EmptyState>
         )}
       </section>
 
-      <div className="not-note" role="note">
+      <div className="callout callout--nova" role="note">
         <p>
           <strong>What this is NOT.</strong> This is a candidate signal from a
           demo pipeline, not a discovery. The search found a repeating dip and

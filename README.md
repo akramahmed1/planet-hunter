@@ -14,6 +14,15 @@ The results are also live as a web app, with a FastAPI backend and a Next.js fro
 
 Source: `webapp/` in this repo. See `webapp/QA-REPORT.md` for the QA results.
 
+### v2 (in progress)
+
+v2 is being built phase by phase on the `v2` branch, following `docs/V2_BUILD_PLAN.md`,
+and deploys to a Railway staging environment. The live site above does not change until
+the final release phase.
+
+- Staging site: https://frontend-staging-5fce.up.railway.app
+- Staging API: https://backend-staging-bade.up.railway.app (new endpoints under `/api/v2`)
+
 ## How results reach the web app
 
 `candidate_scan.py` writes `candidate_shortlist.csv`. A human reviews each target in
