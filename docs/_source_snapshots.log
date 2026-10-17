@@ -9,6 +9,7 @@ iss_wheretheiss                    200
 iss_open_notify_https              ---  URLError: <urlopen error [Errno 111] Connection refused>
 nasa_apod                          200  
 nasa_donki_notifications           503  
+donki_ccmc_notifications           ---  URLError: <urlopen error [Errno 101] Network is unreachable>
 hips_dss_color_properties          200  
 aladin_lite_v3_js                  200  
 doc:horizons_api_doc               200  

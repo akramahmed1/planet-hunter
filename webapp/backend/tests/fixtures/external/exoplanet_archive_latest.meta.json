@@ -1,13 +1,13 @@
 {
-  "url": "https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select%20top%205%20pl_name%2Chostname%2Cst_teff%2Cst_lum%2Cpl_orbsmax%2Cpl_eqt%2Cdisc_year%2Creleasedate%2Crowupdate%20from%20pscomppars%20order%20by%20releasedate%20desc&format=json",
-  "final_url": "https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select%20top%205%20pl_name%2Chostname%2Cst_teff%2Cst_lum%2Cpl_orbsmax%2Cpl_eqt%2Cdisc_year%2Creleasedate%2Crowupdate%20from%20pscomppars%20order%20by%20releasedate%20desc&format=json",
+  "url": "https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select%20top%205%20pl_name%2Chostname%2Cst_teff%2Cst_lum%2Cpl_orbsmax%2Cpl_eqt%2Cdisc_year%2Creleasedate%20from%20pscomppars%20order%20by%20releasedate%20desc&format=json",
+  "final_url": "https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select%20top%205%20pl_name%2Chostname%2Cst_teff%2Cst_lum%2Cpl_orbsmax%2Cpl_eqt%2Cdisc_year%2Creleasedate%20from%20pscomppars%20order%20by%20releasedate%20desc&format=json",
   "status": 400,
   "https": true,
   "headers": {
     "content-type": "application/xml",
     "server": "cloudflare"
   },
-  "bytes": 249,
+  "bytes": 251,
   "truncated": false,
-  "fetched_at": "2026-10-17T07:50:50+00:00"
+  "fetched_at": "2026-10-17T07:51:39+00:00"
 }

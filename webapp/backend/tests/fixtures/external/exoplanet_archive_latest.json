@@ -2,7 +2,7 @@
 <VOTABLE version="1.4" xmlns="http://www.ivoa.net/xml/VOTable/v1.3">
 <RESOURCE type="results">
 <INFO name="QUERY_STATUS" value="ERROR">
-ORA-00904: 'ROWUPDATE': invalid identifier
+ORA-00904: 'RELEASEDATE': invalid identifier
 </INFO>
 </RESOURCE>
 </VOTABLE>

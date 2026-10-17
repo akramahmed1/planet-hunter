@@ -11,7 +11,7 @@
   },
   "bytes": 300001,
   "truncated": true,
-  "fetched_at": "2026-10-17T07:51:06+00:00"
+  "fetched_at": "2026-10-17T07:52:37+00:00"
 }
 
 3D Resources - NASA Science 
@@ -133,7 +133,7 @@
  [link: https://plus.nasa.gov/] 
  NASA+ 
 
- Highlights [link: https://science.nasa.gov/blogs/honors/2026/10/15/time-best-inventions-of-2026/] 1 min read TIME Best Inventions of 2026 article 1 day ago [link: https://science.nasa.gov/directorates/smd/planetary-science-division/nasa-to-help-unlock-mysteries-of-mars-moons-in-upcoming-mission/] 4 min read NASA to Help Unlock Mysteries of Mars’ Moons in Upcoming Mission article 1 day ago [link: https://science.nasa.gov/solar-system/skywatching/whats-up-october-2026-skywatching-tips-from-nasa/] 3 min read What’s Up: October 2026 Skywatching Tips from NASA article 2 weeks ago 
+ Highlights [link: https://science.nasa.gov/blogs/honors/2026/10/15/time-best-inventions-of-2026/] 1 min read TIME Best Inventions of 2026 article 2 days ago [link: https://science.nasa.gov/directorates/smd/planetary-science-division/nasa-to-help-unlock-mysteries-of-mars-moons-in-upcoming-mission/] 4 min read NASA to Help Unlock Mysteries of Mars’ Moons in Upcoming Mission article 1 day ago [link: https://science.nasa.gov/solar-system/skywatching/whats-up-october-2026-skywatching-tips-from-nasa/] 3 min read What’s Up: October 2026 Skywatching Tips from NASA article 2 weeks ago 
 
  Back 
 
@@ -148,7 +148,7 @@
 
  article 
 
- 1 day ago 
+ 2 days ago 
 
  [link: https://science.nasa.gov/missions/hubble/nasas-hubble-spies-spirals-edge/] 
 
@@ -158,7 +158,7 @@
 
  article 
 
- 8 hours ago 
+ 18 hours ago 
 
  [link: https://science.nasa.gov/blogs/perseverance-mars-rover/2026/10/12/nasas-perseverance-sets-off-world-record-for-total-distance-driven/] 
 
@@ -210,7 +210,7 @@
 
  article 
 
- 17 hours ago 
+ 1 day ago 
 
  [link: https://science.nasa.gov/earth/nasa-satellites-observe-historic-2026-el-nino/] 
 
@@ -220,7 +220,7 @@
 
  article 
 
- 1 day ago 
+ 2 days ago 
 
  [link: https://science.nasa.gov/earth/earth-observatory/fires-arrive-in-the-amazon-rainforest/] 
 
@@ -251,7 +251,7 @@
 
  article 
 
- 3 days ago 
+ 4 days ago 
 
  [link: https://science.nasa.gov/feature/artemis-ii-preliminary-lunar-science-report/] 
 
@@ -272,7 +272,7 @@
 
  article 
 
- 8 hours ago 
+ 18 hours ago 
 
  [link: https://science.nasa.gov/universe/nasa-welcomes-all-ages-experience-levels-for-space-apps-challenge/] 
 
@@ -282,7 +282,7 @@
 
  article 
 
- 1 day ago 
+ 2 days ago 
 
  [link: https://science.nasa.gov/missions/chandra/nasas-chandra-breaks-down-treble-clefs-galaxy-cluster-collision/] 
 
@@ -292,7 +292,7 @@
 
  article 
 
- 2 days ago 
+ 3 days ago 
 
  Highlights 
  [link: https://science.nasa.gov/researchers/solicitations/roses-2025/correction-to-roses-25-b-7-heliophysics-low-cost-access-to-space/] 
@@ -303,7 +303,7 @@
 
  article 
 
- 6 hours ago 
+ 15 hours ago 
 
  [link: https://science.nasa.gov/missions/hubble/nasas-hubble-spies-spirals-edge/] 
 
@@ -313,7 +313,7 @@
 
  article 
 
- 8 hours ago 
+ 18 hours ago 
 
  [link: https://science.nasa.gov/researchers/solicitations/roses-2025/a-15-biosphere-new-requirement-added-to-section-4-2-1/] 
 
@@ -334,7 +334,7 @@
 
  article 
 
- 1 day ago 
+ 2 days ago 
 
  [link: https://www.nasa.gov/centers-and-facilities/langley/nasa-model-wing-lights-up-during-first-pressure-sensitive-paint-tests/] 
 
@@ -375,7 +375,7 @@
 
  article 
 
- 2 days ago 
+ 3 days ago 
 
  [link: https://science.nasa.gov/earth/earth-observatory/hurricane-simon-lurks-off-the-mexican-coast/] 
 
@@ -396,7 +396,7 @@
 
  article 
 
- 1 day ago 
+ 2 days ago 
 
  [link: https://www.nasa.gov/learning-resources/nasa-astronauts-to-answer-questions-from-florida-students/] 
 
@@ -427,7 +427,7 @@
 
  article 
 
- 1 day ago 
+ 2 days ago 
 
  [link: https://science.nasa.gov/universe/nasa-welcomes-all-ages-experience-levels-for-space-apps-challenge/] 
 
@@ -437,7 +437,7 @@
 
  article 
 
- 1 day ago 
+ 2 days ago 
 
  [link: https://www.nasa.gov/blogs/missions/2026/10/07/nasa-releases-artemis-ii-lunar-science-data-images/] 
 
@@ -532,4 +532,4 @@
  Topic 
 
  [link: https://science.nasa.gov/3d-resources/active-cavity-irradiance-monitor-satellite-acrimsat-b/] 
- <img loading="lazy" srcset="https://assets.science.nasa.gov/dynamicimage/assets/science/cds/3d/resources/model/active-cavity-irradiance-monitor-satellite-(acrimsat)-(b)/Active%20Cavity%20Irradiance%20Monitor%20Satellite%20(AcrimSAT)%20(B).png?fit=clip&crop=faces%2Cfocalpoint&w=50&h=28 50w, https://assets.science.nasa.gov/dynamicimage/assets/science/cds/3d/resources/model/active-cavity-irradiance-monitor-satellite-(acrimsat)-(b)/Active%20Cavity%20Irradiance%20Monitor%20Satellite%20(AcrimSAT)%20(B).png?fit=clip&crop=faces%2Cfocalpoint&w=100&h=56 100w, https://assets.science.nasa.gov/dynamicimage/assets/science/cds/3d/resources/model/active-cavity-irradiance-monitor-satellite-(acrimsat)-(b)/Active%20Cavity%20Irradiance%20Monitor%20Satellite%20(AcrimSAT)%20(B).png?fit=clip&crop=faces%2Cfocalpoint&w=150&h=84 150w, https://assets.science.nasa.gov/dynamicimage/assets/science/cds/3d/resources/model/active-cavity-irradiance-monitor-satellite-(acrimsat)-(b)/Active%20Cavity%20Irradiance%20Monitor%20Satellite%20(AcrimSAT)%20(B).png?fit=clip&crop=faces%2Cfocalpoint&w=200&h=113 200w, https://assets.science.nasa.gov/dynamicimage/assets/science/cds/3d/resources/model/active-cavity-irradiance-monitor-satellite-(acrimsat)-(b)/Active%20Cavity%20Irradiance%20Monitor%20Satellite%20(AcrimSAT)%20(B).png?fit=clip&crop=faces%2Cfocalpoint&w=300&h=169 300w, https://assets.science.nasa.gov/dynamicimage/assets/science/cds/3d/resources/model/active-cavity-irradiance-monitor-satellite-(acrimsat)-(b)/Active%20Cavity%20Irradi
+ <img loading="lazy" srcset="https://assets.science.nasa.gov/dynamicimage/assets/science/cds/3d/resources/model/active-cavity-irradiance-monitor-satellite-(acrimsat)-(b)/Active%20Cavity%20Irradiance%20Monitor%20Satellite%20(AcrimSAT)%20(B).png?fit=clip&crop=faces%2Cfocalpoint&w=50&h=28 50w, https://assets.science.nasa.gov/dynamicimage/assets/science/cds/3d/resources/model/active-cavity-irradiance-monitor-satellite-(acrimsat)-(b)/Active%20Cavity%20Irradiance%20Monitor%20Satellite%20(AcrimSAT)%20(B).png?fit=clip&crop=faces%2Cfocalpoint&w=100&h=56 100w, https://assets.science.nasa.gov/dynamicimage/assets/science/cds/3d/resources/model/active-cavity-irradiance-monitor-satellite-(acrimsat)-(b)/Active%20Cavity%20Irradiance%20Monitor%20Satellite%20(AcrimSAT)%20(B).png?fit=clip&crop=faces%2Cfocalpoint&w=150&h=84 150w, https://assets.science.nasa.gov/dynamicimage/assets/science/cds/3d/resources/model/active-cavity-irradiance-monitor-satellite-(acrimsat)-(b)/Active%20Cavity%20Irradiance%20Monitor%20Satellite%20(AcrimSAT)%20(B).png?fit=clip&crop=faces%2Cfocalpoint&w=200&h=113 200w, https://assets.science.nasa.gov/dynamicimage/assets/science/cds/3d/resources/model/active-cavity-irradiance-monitor-satellite-(acrimsat)-(b)/Active%20Cavity%20Irradiance%20Monitor%20Satellite%20(AcrimSAT)%20(B).png?fit=clip&crop=faces%2Cfocalpoint&w=300&h=169 300w, https://assets.science.nasa.gov/dynamicimage/assets/science/cds/3d/resources/model/active-cavity-irradiance-monitor-satellite-(acrimsat)-(b)/Active%20Cavity
