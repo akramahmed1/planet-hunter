@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import math
+from functools import lru_cache
 from datetime import date, timedelta
 
 from fastapi import APIRouter, HTTPException, Path, Query, Response
@@ -152,6 +153,36 @@ def get_positions(response: Response, date: str | None = Query(None, description
     _cache_header(response, 3600 if d == clock.today() else 86_400)
     return s.PositionsResponse(date=d, frame="heliocentric, ecliptic of J2000, au", valid_from=lo, valid_to=hi,
                                bodies=bodies_out, notes=notes)
+
+
+ORBIT_BODIES = ["mercury", "venus", "earth", "mars", "jupiter", "saturn", "uranus", "neptune", "pluto"]
+
+
+@lru_cache(maxsize=1)
+def _orbits() -> s.OrbitsResponse:
+    facts = {b["id"]: b for b in reference.bodies()["bodies"]}
+    out = []
+    for body_id in ORBIT_BODIES:
+        period = facts[body_id]["facts"]["orbit_period_days"]
+        pts = positions.orbit_path(body_id, period)
+        out.append(s.Orbit(
+            id=body_id, period_days=period,
+            points=[[round(c, 5) for c in p] for p in pts],
+            kind="computed", source=PLUTO_SOURCE if body_id == "pluto" else KEPLER_SOURCE,
+            note="One orbit, sampled at 180 evenly spaced times. The orbit shape changes very slowly, "
+                 "so one path is used for every date.",
+        ))
+    return s.OrbitsResponse(frame="heliocentric, ecliptic of J2000, au",
+                            period_source=s.SourceRef(name="Orbital periods: NASA NSSDCA planetary fact sheets",
+                                                      url="https://nssdc.gsfc.nasa.gov/planetary/factsheet/"),
+                            orbits=out)
+
+
+@router.get("/orbits", response_model=s.OrbitsResponse)
+def get_orbits(response: Response) -> s.OrbitsResponse:
+    """Orbit paths for the planets and Pluto, for drawing (computed from the same data as /positions)."""
+    _cache_header(response, 86_400)
+    return _orbits()
 
 
 @router.get("/distances", response_model=s.DistanceResponse)

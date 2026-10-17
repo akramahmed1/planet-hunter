@@ -97,3 +97,22 @@ def parse_horizons_vectors(result: str) -> tuple[float, float, float]:
         return float(parts[2]), float(parts[3]), float(parts[4])
     except (ValueError, IndexError) as exc:
         raise ValueError("unexpected Horizons output") from exc
+
+
+J2000 = date(2000, 1, 1)
+
+
+def orbit_path(body_id: str, period_days: float, samples: int = 180) -> list[tuple[float, float, float]]:
+    """Positions over one orbital period, for drawing the orbit.
+
+    The window is centred on J2000 where it fits, and moved inside the valid
+    range where it does not (Neptune and Pluto take longer than half the range).
+    """
+    lo, hi = valid_range()
+    span = (hi - lo).days
+    if period_days > span:
+        raise ValueError(f"{body_id}'s period is longer than the valid date range")
+    start = J2000.toordinal() - period_days / 2
+    start = min(max(start, lo.toordinal()), hi.toordinal() - period_days)
+    days = [start + period_days * k / samples for k in range(samples)]
+    return [computed_position(body_id, date.fromordinal(round(d))) for d in days]

@@ -225,3 +225,27 @@ those files are stale.
 - **Failure backoff**: after a failed fetch with nothing cached, the API answers "unavailable"
   for 2 minutes without retrying upstream, so a down service neither slows every page nor gets
   hammered.
+
+## Phase 3 findings (2026-10-17)
+
+Fetched with the `p3` set in `scripts/fetch_external_fixtures.py` (all 12 returned 200).
+
+- **JPL Horizons, Earth-to-body distances**: geocentric vectors with JPL's own range (`RG`) and
+  one-way light time (`LT`) columns, plus heliocentric vectors for the same instant, for the Sun,
+  Venus, Mars, Jupiter and Neptune (`horizons_<body>_vectors_{geo,helio}_p3.json`, km and s).
+  The solar-system page computes distances as the difference of two heliocentric positions;
+  `lib/solar.test.ts` checks this against JPL's `RG` and `LT` to 1 part in 10^9 (both are
+  geometric states in the same frame, so only JPL's printed digits differ).
+- **Deep-space temperature**: 2.72548 ± 0.00057 K, from Fixsen (2009), "The Temperature of the
+  Cosmic Microwave Background", ApJ 707, 916, arXiv:0911.1955 (read on alphaXiv: abstract and
+  Section 5). Shown as "about 2.7 K" (-455 °F, -270 °C).
+  - Cross-check: NASA's WMAP overview page gives sky temperatures of 2.7251 K and 2.7249 K. The
+    old `map.gsfc.nasa.gov` CMB pages now redirect there
+    (`https://science.nasa.gov/mission/wmap/wmap-overview/`, saved as `nasa_wmap_cmb_tests.html`).
+- **Orbit paths** (`/api/v2/orbits`): computed from the same JPL Table 1 elements (Pluto: the
+  Horizons table) over one NSSDCA orbital period, 180 samples each. The window is centred on
+  J2000 and moved inside 1800 to 2050 where it does not fit: Neptune (165 years) and Pluto
+  (248 years, which only just fits in the 251-year table).
+- **Tour facts**: generated from the NSSDCA values, never typed in. `lib/tour.test.ts` checks
+  every quiz answer against the data, and checks the one worded claim that is not a number
+  (Venus's carbon dioxide atmosphere: "96.5% Carbon Dioxide" on the NSSDCA Venus sheet).

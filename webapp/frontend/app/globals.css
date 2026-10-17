@@ -1632,3 +1632,133 @@ table.data-table {
     padding: 0.4rem 0.75rem;
   }
 }
+
+/* ---------- Phase 3: solar system ---------- */
+
+.solar {
+  display: grid;
+  gap: 1rem;
+}
+.solar-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+}
+.solar-scale-note {
+  margin: 0;
+}
+.solar-viewport {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  max-height: 70vh;
+  margin-inline: auto;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: radial-gradient(circle at 50% 50%, var(--space-850), var(--space-950) 70%);
+  overflow: hidden;
+  touch-action: none;
+}
+.orbit-map {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.orbit-map text {
+  font-family: var(--font-body);
+  pointer-events: none;
+}
+.map-body {
+  cursor: pointer;
+}
+.map-body:focus {
+  outline: none;
+}
+.map-body:focus-visible circle:last-of-type {
+  stroke: var(--ion-strong);
+  stroke-width: 3px;
+  vector-effect: non-scaling-stroke;
+}
+.scene-3d {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.scene-3d--ready {
+  pointer-events: auto;
+}
+.body-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.body-picker .btn[aria-pressed="true"] {
+  border-color: var(--ion);
+  background: var(--ion-soft);
+}
+.solar-panel {
+  display: grid;
+  gap: 0.75rem;
+}
+.solar-panel > * {
+  margin: 0;
+}
+.quiz {
+  display: grid;
+  gap: 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  margin: 0;
+}
+.quiz legend {
+  padding-inline: 0.25rem;
+  color: var(--ink-dim);
+}
+.quiz-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+}
+.quiz .btn {
+  justify-self: start;
+}
+.date-control {
+  display: grid;
+  gap: 0.5rem;
+}
+.date-control input[type="range"] {
+  width: 100%;
+  min-height: 44px;
+  accent-color: var(--ion);
+}
+.date-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+.date-row .select {
+  flex: 1 1 10rem;
+}
+.solar-units summary {
+  cursor: pointer;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+.body-kv dd {
+  margin: 0;
+}
+.solar-controls .toggle {
+  margin: 0;
+}
+.body-kv {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+.body-kv dd {
+  white-space: nowrap;
+  text-align: right;
+}

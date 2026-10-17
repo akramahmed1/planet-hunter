@@ -247,6 +247,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v2/orbits": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Orbits
+         * @description Orbit paths for the planets and Pluto, for drawing (computed from the same data as /positions).
+         */
+        get: operations["get_orbits_api_v2_orbits_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v2/positions": {
         parameters: {
             query?: never;
@@ -580,6 +600,31 @@ export interface components {
             body: string;
             /** Title */
             title: string;
+        };
+        /** Orbit */
+        Orbit: {
+            /** Id */
+            id: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "measured" | "computed" | "estimate";
+            /** Note */
+            note: string;
+            /** Period Days */
+            period_days: number;
+            /** Points */
+            points: number[][];
+            source: components["schemas"]["SourceRef"];
+        };
+        /** OrbitsResponse */
+        OrbitsResponse: {
+            /** Frame */
+            frame: string;
+            /** Orbits */
+            orbits: components["schemas"]["Orbit"][];
+            period_source: components["schemas"]["SourceRef"];
         };
         /** OverviewResponse */
         OverviewResponse: {
@@ -1180,6 +1225,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Unavailable"];
+                };
+            };
+        };
+    };
+    get_orbits_api_v2_orbits_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OrbitsResponse"];
                 };
             };
         };
