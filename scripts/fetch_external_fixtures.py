@@ -74,7 +74,7 @@ FIXTURE_REQUESTS = [
     ("jpl_approx_pos_elements", "https://ssd.jpl.nasa.gov/planets/approx_pos.html", "html"),
     ("exoplanet_archive_latest",
      TAP + q({"query": "select top 5 pl_name,hostname,st_teff,st_lum,pl_orbsmax,pl_eqt,"
-                       "disc_year,releasedate,rowupdate from pscomppars order by releasedate desc",
+                       "disc_year,releasedate from pscomppars order by releasedate desc",
               "format": "json"}), "json"),
     ("exoplanet_archive_count",
      TAP + q({"query": "select count(*) as n from pscomppars", "format": "json"}), "json"),
@@ -87,6 +87,9 @@ FIXTURE_REQUESTS = [
      "https://api.nasa.gov/DONKI/notifications?"
      + q({"startDate": str(WEEK_AGO), "endDate": str(TODAY), "type": "all", "api_key": NASA_KEY}),
      "json"),
+    ("donki_ccmc_notifications",
+     "https://kauai.ccmc.gsfc.nasa.gov/DONKI/WS/get/notifications?"
+     + q({"startDate": str(WEEK_AGO), "endDate": str(TODAY), "type": "all"}), "json"),
     ("hips_dss_color_properties", "https://alasky.cds.unistra.fr/DSS/DSSColor/properties", "txt"),
 ]
 
