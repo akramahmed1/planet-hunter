@@ -113,7 +113,7 @@ P2_REQUESTS = (
         horizons(i, EPHEM_TYPE="VECTORS", CENTER="500@10", OUT_UNITS="AU-D", VEC_TABLE="1", CSV_FORMAT="YES"),
         "json") for b, i in HORIZONS_IDS.items()]
     + [("horizons_pluto_vectors_helio_1800_2050",
-        horizons("999", start=date(1800, 1, 1), stop=date(2050, 12, 31), step="30 d",
+        horizons("999", start=date(1800, 1, 4), stop=date(2050, 12, 31), step="30 d",
                  EPHEM_TYPE="VECTORS", CENTER="500@10", OUT_UNITS="AU-D", VEC_TABLE="1", CSV_FORMAT="YES"),
         "json"),
        ("exoplanet_archive_system_toi700",
