@@ -7,7 +7,8 @@ Provider docs and terms pages go to docs/_source_snapshots/ as plain text so
 they can be read when filling in docs/DATA_SOURCES.md.
 
 Stdlib only, so it runs anywhere (CI included). Usage:
-    python scripts/fetch_external_fixtures.py
+    python scripts/fetch_external_fixtures.py        # Phase 0 set
+    python scripts/fetch_external_fixtures.py p2     # Phase 2 set only
 API keys are never written to disk: the api.nasa.gov key comes from the
 NASA_API_KEY env var (DEMO_KEY if unset) and is redacted from saved URLs.
 """
@@ -40,15 +41,15 @@ def q(params: dict) -> str:
     return urllib.parse.urlencode(params, quote_via=urllib.parse.quote)
 
 
-def horizons(command: str, **extra: str) -> str:
+def horizons(command: str, start: date = TODAY, stop: date = TOMORROW, step: str = "1 d", **extra: str) -> str:
     params = {
         "format": "json",
         "COMMAND": f"'{command}'",
         "OBJ_DATA": "'NO'",
         "MAKE_EPHEM": "'YES'",
-        "START_TIME": f"'{TODAY}'",
-        "STOP_TIME": f"'{TOMORROW}'",
-        "STEP_SIZE": "'1 d'",
+        "START_TIME": f"'{start}'",
+        "STOP_TIME": f"'{stop}'",
+        "STEP_SIZE": f"'{step}'",
     }
     params.update({k: f"'{v}'" for k, v in extra.items()})
     return "https://ssd.jpl.nasa.gov/api/horizons.api?" + q(params)
@@ -96,6 +97,35 @@ FIXTURE_REQUESTS = [
     ("hips_dss_color_properties", "https://alasky.cds.unistra.fr/DSS/DSSColor/properties", "txt"),
 ]
 
+# Phase 2 set: inputs for /api/v2/bodies, /positions and /exoplanets.
+NSSDCA = "https://nssdc.gsfc.nasa.gov/planetary/factsheet/"
+FACT_SHEETS = ["sun", "mercury", "venus", "earth", "moon", "mars", "jupiter",
+               "saturn", "uranus", "neptune", "pluto"]
+# Horizons major-body IDs: Sun 10, planet bodies x99, Moon 301.
+HORIZONS_IDS = {"mercury": "199", "venus": "299", "earth": "399", "moon": "301", "mars": "499",
+                "jupiter": "599", "saturn": "699", "uranus": "799", "neptune": "899", "pluto": "999"}
+EXO_COLUMNS = ("pl_name,hostname,st_teff,st_rad,st_mass,st_lum,pl_orbsmax,pl_orbper,pl_eqt,"
+               "pl_rade,disc_year,disc_pubdate,ra,dec,sy_dist")
+
+P2_REQUESTS = (
+    [(f"nssdca_{b}fact", f"{NSSDCA}{b}fact.html", "html") for b in FACT_SHEETS]
+    + [(f"horizons_{b}_vectors_helio_today",
+        horizons(i, EPHEM_TYPE="VECTORS", CENTER="500@10", OUT_UNITS="AU-D", VEC_TABLE="1", CSV_FORMAT="YES"),
+        "json") for b, i in HORIZONS_IDS.items()]
+    + [("horizons_pluto_vectors_helio_1800_2050",
+        horizons("999", start=date(1800, 1, 1), stop=date(2050, 12, 31), step="30 d",
+                 EPHEM_TYPE="VECTORS", CENTER="500@10", OUT_UNITS="AU-D", VEC_TABLE="1", CSV_FORMAT="YES"),
+        "json"),
+       ("exoplanet_archive_system_toi700",
+        TAP + q({"query": f"select {EXO_COLUMNS} from pscomppars where hostname = 'TOI-700'",
+                 "format": "json"}), "json"),
+       ("nasa_apod_p2", f"https://api.nasa.gov/planetary/apod?api_key={NASA_KEY}", "json"),
+       ("nasa_donki_notifications_p2",
+        "https://api.nasa.gov/DONKI/notifications?"
+        + q({"startDate": str(WEEK_AGO), "endDate": str(TODAY), "type": "all", "api_key": NASA_KEY}),
+        "json")]
+)
+
 # Only status and size are recorded for these (large client-side assets).
 PROBE_REQUESTS = [
     ("aladin_lite_v3_js", "https://aladin.cds.unistra.fr/AladinLite/api/v3/latest/aladin.js"),
@@ -126,15 +156,15 @@ def redact(url: str) -> str:
     return re.sub(r"(api_key=)[^&]+", r"\1REDACTED", url)
 
 
-def fetch(url: str) -> dict:
+def fetch(url: str, max_bytes: int = MAX_BYTES) -> dict:
     req = urllib.request.Request(url, headers={"User-Agent": UA})
     started = datetime.now(timezone.utc)
     try:
         with urllib.request.urlopen(req, timeout=60) as r:
-            body = r.read(MAX_BYTES + 1)
+            body = r.read(max_bytes + 1)
             status, headers, final = r.status, r.headers, r.geturl()
     except urllib.error.HTTPError as e:
-        body = e.read(MAX_BYTES + 1)
+        body = e.read(max_bytes + 1)
         status, headers, final = e.code, e.headers, url
     except Exception as e:  # network, TLS, DNS
         return {"url": redact(url), "error": f"{type(e).__name__}: {e}",
@@ -146,9 +176,9 @@ def fetch(url: str) -> dict:
         "https": final.startswith("https://"),
         "headers": {k.lower(): v for k, v in headers.items() if KEEP_HEADERS.match(k)},
         "bytes": len(body),
-        "truncated": len(body) > MAX_BYTES,
+        "truncated": len(body) > max_bytes,
         "fetched_at": started.isoformat(timespec="seconds"),
-        "body": body[:MAX_BYTES],
+        "body": body[:max_bytes],
     }
 
 
@@ -167,24 +197,27 @@ def save_meta(path: Path, result: dict) -> None:
 
 
 def main() -> int:
+    # `p2` fetches only the Phase 2 set, so the reviewed Phase 0 samples stay as they are.
+    phase = sys.argv[1] if len(sys.argv) > 1 else "p0"
     FIXTURES.mkdir(parents=True, exist_ok=True)
     SNAPSHOTS.mkdir(parents=True, exist_ok=True)
     summary = []
+    requests = P2_REQUESTS if phase == "p2" else FIXTURE_REQUESTS
 
-    for name, url, ext in FIXTURE_REQUESTS:
-        r = fetch(url)
+    for name, url, ext in requests:
+        r = fetch(url, max_bytes=3_000_000 if "1800_2050" in name else MAX_BYTES)
         body = r["body"].replace(NASA_KEY.encode(), b"REDACTED") if NASA_KEY != "DEMO_KEY" else r["body"]
         if body:
             (FIXTURES / f"{name}.{ext}").write_bytes(body)
         save_meta(FIXTURES / f"{name}.meta.json", r)
         summary.append((name, r.get("status"), r.get("error", "")))
 
-    for name, url in PROBE_REQUESTS:
+    for name, url in PROBE_REQUESTS if phase == "p0" else []:
         r = fetch(url)
         save_meta(FIXTURES / f"{name}.meta.json", r)
         summary.append((name, r.get("status"), r.get("error", "")))
 
-    for name, url in SNAPSHOT_REQUESTS:
+    for name, url in SNAPSHOT_REQUESTS if phase == "p0" else []:
         r = fetch(url)
         meta = {k: v for k, v in r.items() if k != "body"}
         text = html_to_text(r["body"]) if r["body"] else ""
