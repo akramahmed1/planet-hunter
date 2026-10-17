@@ -30,7 +30,8 @@ Work one phase at a time, in order, starting at Phase 0. For every phase
 follow this loop exactly:
   1. Plan: print the phase's tasks, the files you will touch and how you
      will verify them. Wait for Akram to reply "go".
-  2. Build on a feature branch cut from `v2` (name: v2/pN-<short-name>).
+  2. Build on a feature branch cut from `v2` (name: v2-pN-<short-name>;
+     git can't hold `v2/...` branches alongside a `v2` branch).
   3. Verify: run every check in the phase's "Done when" list and show the
      output. Fix root causes; never skip, weaken or delete a test.
   4. Open a PR into `v2` (not main). Wait for CI to be green.
@@ -161,7 +162,7 @@ Status values: `todo`, `in-progress`, `staging-verified`, `merged-to-v2`, `live`
 
 | # | Phase | Status |
 |---|---|---|
-| 0 | Prep and verification | todo |
+| 0 | Prep and verification | in-progress |
 | 1 | Foundations and design system | todo |
 | 2 | Live data layer | todo |
 | 3 | 3D solar system | todo |
