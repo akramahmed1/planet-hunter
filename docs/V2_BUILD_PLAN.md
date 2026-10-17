@@ -71,6 +71,8 @@ assignments on top of it.
 ### Decisions still open (Claude Code asks Akram at the named phase)
 
 - **Phase 0:** whether to use a custom domain; confirm Railway plan limits for an extra worker and cron service.
+  - 2026-10-17, Akram: keep the Railway URLs for now; revisit a custom domain at the end (Phase 10).
+  - Railway plan limits: still to confirm.
 - **Phase 8:** teacher sign-in method. Recommended: Auth.js with Google plus email magic link through Resend. Students join with a class code, a nickname and a PIN, with no email.
 - **Phase 9:** AI provider and model for the explainer (recommended: Anthropic API with the model set in an env var); Stripe pricing for the classroom plan.
 
@@ -180,6 +182,7 @@ Status values: `todo`, `in-progress`, `staging-verified`, `merged-to-v2`, `live`
 
 **Tasks**
 1. Create branch `v2` from `main`. Delete the two merged `claude/p1-contract-sync*` branches (ask first).
+   - 2026-10-17, Akram: keep them; delete at the end once everything is verified working.
 2. **Railway (guide Akram through it or use the Railway CLI):**
    - Create a `staging` environment that deploys the `v2` branch, with its own frontend and backend services.
    - Add a Postgres database to staging.
@@ -461,5 +464,9 @@ Status values: `todo`, `in-progress`, `staging-verified`, `merged-to-v2`, `live`
 
 ## 8. Staging URLs (filled in during Phase 0)
 
-- Frontend:
-- Backend:
+Railway environment `Staging` (id `29dafcd8-f8c8-4834-874e-44979a44e933`), services track the `v2` branch.
+
+- Frontend: https://frontend-staging-5fce.up.railway.app
+- Backend: https://backend-staging-bade.up.railway.app
+- Postgres: Railway service `Postgres` (private network only), wired to the backend as `DATABASE_URL`.
+- `NASA_API_KEY`: set by Akram as a staging variable (value never in git or chat).
