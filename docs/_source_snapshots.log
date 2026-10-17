@@ -1,13 +1,13 @@
 nssdca_factsheet                   200  
 horizons_mars_vectors_helio        200  
 horizons_voyager1_observer_earth   200  
-jpl_keplerian_elements_1800_2050   404  
+jpl_approx_pos_elements            200  
 exoplanet_archive_latest           400  
-exoplanet_archive_count            400  
+exoplanet_archive_count            200  
 mast_tic_coords                    200  
 iss_wheretheiss                    200  
 iss_open_notify_https              ---  URLError: <urlopen error [Errno 111] Connection refused>
-nasa_apod                          500  
+nasa_apod                          200  
 nasa_donki_notifications           503  
 hips_dss_color_properties          200  
 aladin_lite_v3_js                  200  

@@ -2,7 +2,7 @@
 <VOTABLE version="1.4" xmlns="http://www.ivoa.net/xml/VOTable/v1.3">
 <RESOURCE type="results">
 <INFO name="QUERY_STATUS" value="ERROR">
-Table 'pscomp' is not available for querying. Use TAP_SCHEMA.tables to see available tables.
+ORA-00904: 'ROWUPDATE': invalid identifier
 </INFO>
 </RESOURCE>
 </VOTABLE>
