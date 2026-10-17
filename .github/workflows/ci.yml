@@ -91,7 +91,8 @@ jobs:
         working-directory: webapp/backend
         run: |
           pip install -r requirements.txt
-          nohup uvicorn app:app --port 8000 > /tmp/backend.log 2>&1 &
+          # Live endpoints answer from the saved real source samples, so this job never depends on NASA uptime.
+          PH_OFFLINE_FIXTURES=1 nohup uvicorn app:app --port 8000 > /tmp/backend.log 2>&1 &
           for i in $(seq 1 30); do curl -sf http://127.0.0.1:8000/api/health && break; sleep 1; done
       - name: Build and start frontend
         working-directory: webapp/frontend

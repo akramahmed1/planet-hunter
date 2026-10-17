@@ -9,7 +9,7 @@ name: External fixtures
 on:
   workflow_dispatch:
   push:
-    branches: [v2-p0-prep]
+    branches: ["v2-p*"]
     paths:
       - scripts/fetch_external_fixtures.py
       - .github/workflows/external-fixtures.yml
@@ -30,8 +30,13 @@ jobs:
         with:
           python-version: "3.12"
       - name: Fetch external samples
-        run: python scripts/fetch_external_fixtures.py | tee docs/_source_snapshots.log
+        # The phase number comes from the branch name (v2-p2-... runs the p2 set).
+        run: |
+          phase=$(echo "$GITHUB_REF_NAME" | sed -n 's/^v2-\(p[0-9]*\)-.*/\1/p')
+          mkdir -p docs/_source_snapshots
+          python scripts/fetch_external_fixtures.py "${phase:-p0}" | tee docs/_source_snapshots.log
       - name: v1 QA suites against staging
+        if: github.ref_name == 'v2-p0-prep'
         run: |
           mkdir -p docs/_source_snapshots
           {
@@ -45,7 +50,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add webapp/backend/tests/fixtures/external docs/_source_snapshots docs/_source_snapshots.log
+          git add -A -- webapp/backend/tests/fixtures/external docs/
           git diff --cached --quiet && exit 0
           git commit -m "Fetch external source samples and staging QA output"
           git push

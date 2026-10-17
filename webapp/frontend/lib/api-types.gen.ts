@@ -104,6 +104,106 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v2/apod": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Apod
+         * @description NASA's Astronomy Picture of the Day. `copyright` names the owner when the image isn't NASA's.
+         */
+        get: operations["get_apod_api_v2_apod_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v2/bodies": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Bodies
+         * @description Sun, planets, Moon and Pluto from the NASA NSSDCA fact sheets (bundled, versioned).
+         */
+        get: operations["bodies_api_v2_bodies_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v2/distances": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Distance
+         * @description Straight-line distance between two bodies on a date, and the one-way light travel time.
+         */
+        get: operations["get_distance_api_v2_distances_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v2/exoplanets/latest": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Exoplanets Latest
+         * @description Confirmed planet count and planets published in the last 60 days.
+         */
+        get: operations["exoplanets_latest_api_v2_exoplanets_latest_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v2/exoplanets/{name}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Exoplanet System
+         * @description One planetary system: the host star and its planets.
+         */
+        get: operations["exoplanet_system_api_v2_exoplanets__name__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v2/health": {
         parameters: {
             query?: never;
@@ -119,6 +219,66 @@ export interface paths {
          *     when the database is connected.
          */
         get: operations["health_api_v2_health_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v2/iss": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Iss
+         * @description Current ISS position, cached 5 seconds (the provider allows about one request per second).
+         */
+        get: operations["get_iss_api_v2_iss_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v2/positions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Positions
+         * @description Heliocentric positions (ecliptic of J2000, au): Horizons for today, computed for other dates.
+         */
+        get: operations["get_positions_api_v2_positions_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v2/space-weather": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Space Weather
+         * @description Space weather notifications from NASA DONKI for the last 7 days.
+         */
+        get: operations["get_space_weather_api_v2_space_weather_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -148,6 +308,67 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** ApodResponse */
+        ApodResponse: {
+            /** Copyright */
+            copyright: string | null;
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /** Explanation */
+            explanation: string;
+            /**
+             * Fetched At
+             * Format: date-time
+             */
+            fetched_at: string;
+            /** Hdurl */
+            hdurl: string | null;
+            /** Media Type */
+            media_type: string;
+            source: components["schemas"]["SourceRef"];
+            /** Stale */
+            stale: boolean;
+            /** Title */
+            title: string;
+            /** Url */
+            url: string | null;
+        };
+        /** BodiesResponse */
+        BodiesResponse: {
+            /** Bodies */
+            bodies: components["schemas"]["Body"][];
+            /** Dataset Version */
+            dataset_version: number;
+        };
+        /** Body */
+        Body: {
+            blackbody_temperature: components["schemas"]["Temperature"] | null;
+            day_length: components["schemas"]["Quantity"] | null;
+            /** Id */
+            id: string;
+            mass: components["schemas"]["Quantity"] | null;
+            mean_radius: components["schemas"]["Quantity"] | null;
+            /** Name */
+            name: string;
+            orbit_period: components["schemas"]["Quantity"] | null;
+            semimajor_axis: components["schemas"]["Quantity"] | null;
+            source: components["schemas"]["SourceRef"];
+            /**
+             * Source Fetched At
+             * Format: date-time
+             */
+            source_fetched_at: string;
+            /** Temperatures */
+            temperatures: components["schemas"]["TemperatureStatement"][];
+            /**
+             * Type
+             * @enum {string}
+             */
+            type: "star" | "planet" | "moon" | "dwarf_planet";
+        };
         /** Candidate */
         Candidate: {
             /** Bls Power */
@@ -201,6 +422,92 @@ export interface components {
              */
             status: "connected" | "not_configured" | "unavailable";
         };
+        /** Distance */
+        Distance: {
+            /** Au */
+            au: number;
+            /** Km */
+            km: number;
+            /** Mi */
+            mi: number;
+        };
+        /** DistanceResponse */
+        DistanceResponse: {
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            distance: components["schemas"]["Distance"];
+            /** From Body */
+            from_body: string;
+            /** Inputs */
+            inputs: components["schemas"]["Position"][];
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "measured" | "computed" | "estimate";
+            /** Light Time Seconds */
+            light_time_seconds: number;
+            source: components["schemas"]["SourceRef"];
+            /** To Body */
+            to_body: string;
+        };
+        /** ExoPlanet */
+        ExoPlanet: {
+            /** Disc Year */
+            disc_year: number | null;
+            equilibrium_temperature: components["schemas"]["Quantity"] | null;
+            /** Name */
+            name: string;
+            orbit_au: components["schemas"]["Quantity"] | null;
+            period_days: components["schemas"]["Quantity"] | null;
+            radius_earth: components["schemas"]["Quantity"] | null;
+        };
+        /** ExoplanetSummary */
+        ExoplanetSummary: {
+            /** Disc Pubdate */
+            disc_pubdate: string | null;
+            /** Disc Year */
+            disc_year: number | null;
+            equilibrium_temperature: components["schemas"]["Quantity"] | null;
+            /** Host */
+            host: string;
+            /** Name */
+            name: string;
+            orbit_au: components["schemas"]["Quantity"] | null;
+        };
+        /** ExoplanetSystemResponse */
+        ExoplanetSystemResponse: {
+            /**
+             * Fetched At
+             * Format: date-time
+             */
+            fetched_at: string;
+            /** Planets */
+            planets: components["schemas"]["ExoPlanet"][];
+            source: components["schemas"]["SourceRef"];
+            /** Stale */
+            stale: boolean;
+            star: components["schemas"]["Star"];
+        };
+        /** ExoplanetsLatestResponse */
+        ExoplanetsLatestResponse: {
+            confirmed_count: components["schemas"]["Quantity"];
+            /**
+             * Fetched At
+             * Format: date-time
+             */
+            fetched_at: string;
+            /** Latest */
+            latest: components["schemas"]["ExoplanetSummary"][];
+            /** Since */
+            since: string;
+            source: components["schemas"]["SourceRef"];
+            /** Stale */
+            stale: boolean;
+        };
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
@@ -223,6 +530,34 @@ export interface components {
             status: "ok";
             /** Version */
             version: string;
+        };
+        /** IssResponse */
+        IssResponse: {
+            /** Altitude Km */
+            altitude_km: number;
+            /**
+             * Fetched At
+             * Format: date-time
+             */
+            fetched_at: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "measured" | "computed" | "estimate";
+            /** Latitude */
+            latitude: number;
+            /** Longitude */
+            longitude: number;
+            source: components["schemas"]["SourceRef"];
+            /** Stale */
+            stale: boolean;
+            /** Timestamp */
+            timestamp: number;
+            /** Velocity Kmh */
+            velocity_kmh: number;
+            /** Visibility */
+            visibility: string;
         };
         /** MethodResponse */
         MethodResponse: {
@@ -254,6 +589,70 @@ export interface components {
             summary: components["schemas"]["Summary"];
             validation: components["schemas"]["Validation"];
         };
+        /** Position */
+        Position: {
+            /** Distance From Sun Au */
+            distance_from_sun_au: number;
+            /** Fetched At */
+            fetched_at: string | null;
+            /** Id */
+            id: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "measured" | "computed" | "estimate";
+            /** Note */
+            note?: string | null;
+            source: components["schemas"]["SourceRef"];
+            /** Stale */
+            stale: boolean;
+            /** X Au */
+            x_au: number;
+            /** Y Au */
+            y_au: number;
+            /** Z Au */
+            z_au: number;
+        };
+        /** PositionsResponse */
+        PositionsResponse: {
+            /** Bodies */
+            bodies: components["schemas"]["Position"][];
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /** Frame */
+            frame: string;
+            /** Notes */
+            notes: string[];
+            /**
+             * Valid From
+             * Format: date
+             */
+            valid_from: string;
+            /**
+             * Valid To
+             * Format: date
+             */
+            valid_to: string;
+        };
+        /** Quantity */
+        Quantity: {
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "measured" | "computed" | "estimate";
+            /** Note */
+            note?: string | null;
+            source: components["schemas"]["SourceRef"];
+            /** Unit */
+            unit: string;
+            /** Value */
+            value: number;
+        };
         /** RunInfo */
         RunInfo: {
             /** Method */
@@ -269,6 +668,51 @@ export interface components {
             /** Source Csv */
             source_csv: string;
         };
+        /** SourceRef */
+        SourceRef: {
+            /** Name */
+            name: string;
+            /** Url */
+            url: string;
+        };
+        /** SpaceWeatherItem */
+        SpaceWeatherItem: {
+            /** Issued */
+            issued: string;
+            /** Type */
+            type: string;
+            /** Url */
+            url: string | null;
+        };
+        /** SpaceWeatherResponse */
+        SpaceWeatherResponse: {
+            /**
+             * Fetched At
+             * Format: date-time
+             */
+            fetched_at: string;
+            /** Notifications */
+            notifications: components["schemas"]["SpaceWeatherItem"][];
+            source: components["schemas"]["SourceRef"];
+            /** Stale */
+            stale: boolean;
+            /** Window Days */
+            window_days: number;
+        };
+        /** Star */
+        Star: {
+            /** Dec Deg */
+            dec_deg: number | null;
+            distance_pc: components["schemas"]["Quantity"] | null;
+            effective_temperature: components["schemas"]["Quantity"] | null;
+            luminosity_lsun: components["schemas"]["Quantity"] | null;
+            mass_msun: components["schemas"]["Quantity"] | null;
+            /** Name */
+            name: string;
+            /** Ra Deg */
+            ra_deg: number | null;
+            radius_rsun: components["schemas"]["Quantity"] | null;
+        };
         /** Summary */
         Summary: {
             /** By Classification */
@@ -277,6 +721,44 @@ export interface components {
             };
             /** Count */
             count: number;
+        };
+        /** Temperature */
+        Temperature: {
+            /** Celsius */
+            celsius: number;
+            /** Fahrenheit */
+            fahrenheit: number;
+            /** Kelvin */
+            kelvin: number;
+        };
+        /** TemperatureStatement */
+        TemperatureStatement: {
+            /** Approximate */
+            approximate: boolean;
+            high: components["schemas"]["Temperature"] | null;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "measured" | "computed" | "estimate";
+            /** Label */
+            label: string;
+            low: components["schemas"]["Temperature"] | null;
+            /** Quote */
+            quote: string;
+            source: components["schemas"]["SourceRef"];
+            value: components["schemas"]["Temperature"] | null;
+        };
+        /** Unavailable */
+        Unavailable: {
+            /** Message */
+            message: string;
+            source: components["schemas"]["SourceRef"];
+            /**
+             * Status
+             * @constant
+             */
+            status: "unavailable";
         };
         /** V2HealthResponse */
         V2HealthResponse: {
@@ -493,6 +975,166 @@ export interface operations {
             };
         };
     };
+    get_apod_api_v2_apod_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApodResponse"];
+                };
+            };
+            /** @description The upstream source is down and nothing is cached */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Unavailable"];
+                };
+            };
+        };
+    };
+    bodies_api_v2_bodies_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BodiesResponse"];
+                };
+            };
+        };
+    };
+    get_distance_api_v2_distances_get: {
+        parameters: {
+            query: {
+                /** @description body id, e.g. earth */
+                from: string;
+                /** @description body id, e.g. mars */
+                to: string;
+                /** @description YYYY-MM-DD, default today (UTC) */
+                date?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DistanceResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    exoplanets_latest_api_v2_exoplanets_latest_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExoplanetsLatestResponse"];
+                };
+            };
+            /** @description The upstream source is down and nothing is cached */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Unavailable"];
+                };
+            };
+        };
+    };
+    exoplanet_system_api_v2_exoplanets__name__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description host star name, e.g. TOI-700 */
+                name: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExoplanetSystemResponse"];
+                };
+            };
+            /** @description No confirmed planets for this host */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Invalid host name */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The upstream source is down and nothing is cached */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Unavailable"];
+                };
+            };
+        };
+    };
     health_api_v2_health_get: {
         parameters: {
             query?: never;
@@ -509,6 +1151,96 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["V2HealthResponse"];
+                };
+            };
+        };
+    };
+    get_iss_api_v2_iss_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IssResponse"];
+                };
+            };
+            /** @description The upstream source is down and nothing is cached */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Unavailable"];
+                };
+            };
+        };
+    };
+    get_positions_api_v2_positions_get: {
+        parameters: {
+            query?: {
+                /** @description YYYY-MM-DD, default today (UTC) */
+                date?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PositionsResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_space_weather_api_v2_space_weather_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SpaceWeatherResponse"];
+                };
+            };
+            /** @description The upstream source is down and nothing is cached */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Unavailable"];
                 };
             };
         };

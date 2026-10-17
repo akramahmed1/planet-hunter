@@ -38,6 +38,26 @@ What v2 adds on top of the v1 app described further down. The plan is
 - The **Staging check** workflow waits until staging serves the pushed commit,
   then runs the v1 QA suites and Playwright against staging.
 
+## v2 live data (Phase 2)
+
+- Endpoints under `/api/v2`: `bodies`, `positions?date=`, `distances?from=&to=&date=`, `iss`,
+  `apod`, `space-weather`, `exoplanets/latest` and `exoplanets/{host}`. Every value carries a
+  `source` and a `kind` (`measured`, `computed` or `estimate`).
+- `live/` holds the fetchers (`sources.py`), the HTTP client with timeouts and retries
+  (`http.py`), the cache (`cache.py`, Postgres table `external_cache` from migration `0002`, or
+  memory without `DATABASE_URL`), the position maths (`positions.py`) and the estimate
+  (`physics.py`).
+- If a source fails, the last good copy is served with `stale: true`. With nothing cached, the
+  endpoint returns an explicit 503 `{"status": "unavailable", ...}`.
+- Bundled reference data in `data/*.v1.json` is built from the saved source samples by
+  `scripts/build_reference_data.py`; CI fails if it is stale.
+- Daily refresh: `python -m live.refresh` (a Railway cron service in staging).
+- Offline mode: `PH_OFFLINE_FIXTURES=1` makes every external request answer from the saved
+  samples in `tests/fixtures/external/`. The tests, CI's end-to-end job and local Playwright runs
+  use it; deployed environments never set it.
+- The Explore page shows live tiles (ISS, picture of the day, exoplanet count, space weather).
+  Tap any value to see its source, kind and fetch time.
+
 ---
 
 # v1 notes (original local build)

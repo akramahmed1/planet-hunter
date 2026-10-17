@@ -9,6 +9,7 @@ from pathlib import Path
 import pytest
 from alembic import command
 from alembic.config import Config
+from alembic.script import ScriptDirectory
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine, inspect, text
 
@@ -104,7 +105,8 @@ def test_migrations_upgrade_and_downgrade(database_url):
     command.upgrade(cfg, "head")
     eng = create_engine(database_url)
     with eng.connect() as conn:
-        assert conn.execute(text("select version_num from alembic_version")).scalar() == "0001"
+        head = ScriptDirectory.from_config(cfg).get_current_head()
+        assert conn.execute(text("select version_num from alembic_version")).scalar() == head
     command.downgrade(cfg, "base")
     with eng.connect() as conn:
         assert conn.execute(text("select count(*) from alembic_version")).scalar() == 0

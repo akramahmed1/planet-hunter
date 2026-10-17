@@ -1,4 +1,7 @@
+import { Suspense } from "react";
 import ApiError from "@/components/ApiError";
+import LiveTiles from "@/components/live/LiveTiles";
+import TilesSkeleton from "@/components/live/TilesSkeleton";
 import { ButtonLink } from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Stat from "@/components/ui/Stat";
@@ -51,6 +54,14 @@ export default async function Home() {
           How it works
         </ButtonLink>
       </div>
+
+      <section aria-labelledby="live-heading">
+        <h2 id="live-heading">Live from space</h2>
+        <p className="muted">Tap any value to see where it comes from and when it was fetched.</p>
+        <Suspense fallback={<TilesSkeleton />}>
+          <LiveTiles />
+        </Suspense>
+      </section>
 
       <section aria-labelledby="proof-heading">
         <h2 id="proof-heading">The proof: a known planet, recovered blind</h2>

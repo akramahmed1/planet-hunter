@@ -26,7 +26,7 @@ Status values: `verified`, `flagged for Akram`.
 | ISS position: wheretheiss.at | Live ISS position | verified (chosen) | `iss_wheretheiss.json` |
 | ISS position: open-notify | (alternative) | rejected: no HTTPS | `iss_open_notify_https.meta.json` |
 | api.nasa.gov APOD | Picture of the day | verified, with a reliability note | `nasa_apod.json` |
-| api.nasa.gov DONKI | Space weather | **flagged for Akram** | `nasa_donki_notifications.meta.json`, `donki_ccmc_notifications.meta.json` |
+| api.nasa.gov DONKI | Space weather | **flagged for Akram** (still down in Phase 2; shape unverified) | `nasa_donki_notifications.meta.json`, `donki_ccmc_notifications.meta.json` |
 | CDS Aladin Lite v3 | Sky map viewer | verified (**license flagged**) | `aladin_lite_v3_js.meta.json` |
 | CDS HiPS (DSS colored) | Sky imagery | verified (**commercial terms flagged**) | `hips_dss_color_properties.txt` |
 | NASA 3D Resources | TESS model | verified | (model not committed yet; see below) |
@@ -183,3 +183,45 @@ Status values: `verified`, `flagged for Akram`.
     for LLM output, and the insignia may not appear with AI-generated imagery.
     This matters for the Phase 9 explainer: label its answers as AI-generated,
     never as NASA's.
+
+## Phase 2 findings (2026-10-17)
+
+New samples were fetched the same way (the `p2` set in `scripts/fetch_external_fixtures.py`).
+`scripts/build_reference_data.py` turns them into `webapp/backend/data/*.v1.json`, and CI fails if
+those files are stale.
+
+- **NSSDCA per-body fact sheets** (`nssdca_<body>fact.html`, all 11 returned 200): numeric rows are
+  table cells (Earth's page is plain text, which the parser handles). Temperatures are free text
+  and differ by body: an average, a range at one site, a temperature at 1 bar, or several solar
+  layers. So the API serves each statement with NASA's exact wording in `quote`, and a test checks
+  that every quote appears verbatim in the saved page.
+- **Equilibrium-temperature estimate**: Cowan & Agol, arXiv:1011.0428, Eq. 9 (read on alphaXiv).
+  - Check: with NASA's own Sun temperature and radius and each planet's orbit and Bond albedo,
+    it reproduces the NSSDCA black-body temperatures of all eight planets within 0.5%.
+  - Pluto does not match (32.3 K computed vs 37.5 K on the sheet), and the sheet does not say how
+    its value was derived.
+  - For TOI-700 our zero-albedo estimate differs from the archive's published values by up to 7%
+    (planet e: 292 K vs 272.9 K); the archive's numbers come from papers with their own
+    assumptions. The API only estimates when the archive has no value, and labels it `estimate`.
+- **JPL Horizons Pluto table**: Horizons has no Pluto ephemeris before 1800-01-03 ("No ephemeris
+  for target Pluto prior to A.D. 1800-JAN-03"). The table runs from 1800-01-04 to 2050-12-09, so
+  `/api/v2/positions` accepts that range. Linear interpolation is within about 2,100 km of
+  Horizons today.
+- **JPL Table 1 accuracy check** against Horizons today: Mercury, Venus, Earth, Mars, Jupiter,
+  Saturn and Uranus fall within JPL's nominal errors. Neptune is off by 697,000 km, about 2.3 times
+  the nominal figure, which JPL states as typical rather than maximum. The tests allow 3 times the
+  nominal error.
+- **APOD, two failure modes seen**:
+  - A response with HTTP 200 and an error body (`{"code": 500, ...}`). The fetcher treats a
+    response without a title as a failure.
+  - A placeholder response: the right explanation (comet 67P), but the title "NASA Science" and an
+    image link to the NASA logo (`science.nasa.gov/.../nasa-logo@2x.png`). NASA's insignia is not
+    public domain, so the tile only shows images hosted on `apod.nasa.gov` and otherwise says the
+    image was not shown.
+- **DONKI**: still HTTP 503 (one more try, 09:22 UTC). The response shape is therefore still
+  **unverified**. The fetcher keeps only items with `messageType` and `messageIssueTime` and drops
+  anything else. The tile shows an explicit "unavailable" state, and the staging smoke test
+  reports DONKI as a warning until it answers.
+- **Failure backoff**: after a failed fetch with nothing cached, the API answers "unavailable"
+  for 2 minutes without retrying upstream, so a down service neither slows every page nor gets
+  hammered.
