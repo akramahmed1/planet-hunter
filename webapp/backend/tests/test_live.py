@@ -306,6 +306,27 @@ def test_network_down_with_nothing_cached_is_explicitly_unavailable(client, path
     assert r.json()["status"] == "unavailable" and r.json()["message"]
 
 
+def test_horizons_is_called_one_request_at_a_time(client, frozen):
+    import threading
+
+    active, peak, lock = [0], [0], threading.Lock()
+    fixtures = FixtureTransport()
+
+    def counting(request):
+        with lock:
+            active[0] += 1
+            peak[0] = max(peak[0], active[0])
+        try:
+            return fixtures.handle_request(request)
+        finally:
+            with lock:
+                active[0] -= 1
+
+    http.set_transport(httpx.MockTransport(counting))
+    assert client.get("/api/v2/positions").status_code == 200
+    assert peak[0] == 1
+
+
 def test_network_down_positions_fall_back_to_computed(client):
     http.set_transport(OfflineTransport())
     body = client.get("/api/v2/positions").json()

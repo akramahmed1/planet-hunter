@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import math
-from concurrent.futures import ThreadPoolExecutor
 from datetime import date, timedelta
 
 from fastapi import APIRouter, HTTPException, Path, Query, Response
@@ -123,8 +122,9 @@ def positions_for(d: date) -> tuple[list[s.Position], list[str]]:
                 return None
             return _computed(body_id, d, note="JPL Horizons was unavailable, so this is computed instead.")
 
-    with ThreadPoolExecutor(max_workers=6) as pool:
-        result = [p for p in pool.map(one, POSITION_BODIES) if p is not None]
+    # One body at a time: on staging, JPL Horizons answered 503 to some of six parallel
+    # requests from the same client. The daily refresh fills the cache, so pages rarely wait.
+    result = [p for p in map(one, POSITION_BODIES) if p is not None]
     if not any(p.id == "moon" for p in result):
         notes.append("The Moon's position is unavailable right now.")
     return result, notes
