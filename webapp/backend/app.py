@@ -13,6 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
 import data_store
+from api_v2 import router as v2_router
 from schemas import (
     Candidate,
     CandidatesResponse,
@@ -48,6 +49,8 @@ app.add_middleware(
     allow_methods=["GET"],
     allow_headers=["*"],
 )
+
+app.include_router(v2_router)
 
 
 @app.get("/api/health", response_model=HealthResponse)

@@ -1,4 +1,5 @@
 import ApiError from "@/components/ApiError";
+import Card from "@/components/ui/Card";
 import { apiGet, type MethodResponse } from "@/lib/api";
 
 export const dynamic = "force-dynamic";
@@ -25,6 +26,7 @@ export default async function MethodPage() {
 
   return (
     <div>
+      <p className="eyebrow">Method</p>
       <h1>How it works</h1>
       <p className="lede">
         A simple, transparent pipeline. Nothing here is a black box, and every
@@ -32,17 +34,16 @@ export default async function MethodPage() {
       </p>
 
       {dataSource && Object.keys(dataSource).length > 0 && (
-        <div className="panel">
-          <h2>Data source</h2>
-          <dl className="kv">
+        <Card title="Data source">
+          <dl className="kv kv--text">
             {Object.entries(dataSource).map(([k, v]) => (
               <div key={k} style={{ display: "contents" }}>
                 <dt>{k}</dt>
-                <dd style={{ fontWeight: 400 }}>{v}</dd>
+                <dd>{v}</dd>
               </div>
             ))}
           </dl>
-        </div>
+        </Card>
       )}
 
       <section aria-labelledby="steps-heading">
@@ -59,31 +60,31 @@ export default async function MethodPage() {
 
       <section aria-labelledby="limits-heading">
         <h2 id="limits-heading">Limitations, stated plainly</h2>
-        <div className="panel">
+        <Card>
           <ul className="bullet-list">
             {limitations.map((l, i) => (
               <li key={i}>{l}</li>
             ))}
           </ul>
-        </div>
+        </Card>
       </section>
 
       <section aria-labelledby="exominer-heading">
         <h2 id="exominer-heading">How this compares to the pros</h2>
-        <div className="panel">
+        <Card>
           <p>{exominerNote}</p>
-        </div>
+        </Card>
       </section>
 
       <section aria-labelledby="roadmap-heading">
         <h2 id="roadmap-heading">Roadmap (v2)</h2>
-        <div className="panel">
+        <Card>
           <ul className="bullet-list">
             {roadmap.map((r, i) => (
               <li key={i}>{r}</li>
             ))}
           </ul>
-        </div>
+        </Card>
       </section>
     </div>
   );

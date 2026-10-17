@@ -25,10 +25,11 @@ export default async function CandidatesPage() {
 
   return (
     <div>
+      <p className="eyebrow">Hunt</p>
       <h1>Candidate signals</h1>
       <p className="lede">
         {numberWord(summary.count, true)} targets, one strongest signal each.{" "}
-        {scanSummarySentence(summary)} Click any target for the full readout.
+        {scanSummarySentence(summary)} Tap any target for the full readout.
       </p>
       <p className="muted">
         Scan run: {run.run_date}. {run.sectors_per_target} sectors per target.
