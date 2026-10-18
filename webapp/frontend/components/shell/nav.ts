@@ -18,7 +18,7 @@ export const NAV: NavItem[] = [
   { href: "/missions", label: "Missions", icon: "missions" },
   { href: "/learn", label: "Learn", icon: "learn" },
   { href: "/method", label: "Method", icon: "method" },
-  { href: "/classroom", label: "Classroom", icon: "classroom", soon: true },
+  { href: "/classroom", label: "Classroom", icon: "classroom" },
 ];
 
 /** The four sections that get their own phone tab; the rest live under More. */

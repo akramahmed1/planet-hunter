@@ -1,13 +1,18 @@
 import type { Metadata } from "next";
-import ComingSoon from "@/components/ComingSoon";
+import ClassroomHome from "@/components/classroom/ClassroomHome";
 
 export const metadata: Metadata = { title: "Classroom - Planet Hunter" };
 
 export default function ClassroomPage() {
   return (
-    <ComingSoon title="Classroom" phase={8}>
-      Classes, assignments and a gradebook for teachers. Students aged 13 and up join with a class
-      code, a nickname and a PIN.
-    </ComingSoon>
+    <div className="page">
+      <p className="eyebrow">For teachers and students</p>
+      <h1>Classroom</h1>
+      <p className="lede">
+        Teachers make classes and assign lessons, quizzes and hunt challenges. Students aged 13 and up join with a
+        class code, a nickname and a PIN, with no email.
+      </p>
+      <ClassroomHome />
+    </div>
   );
 }

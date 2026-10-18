@@ -27,5 +27,6 @@ export const ROUTES = [
   "/learn",
   "/learn/transits",
   "/classroom",
+  "/privacy",
   "/design-system",
 ];

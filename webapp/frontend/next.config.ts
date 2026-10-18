@@ -27,6 +27,11 @@ export const CSP = [
 ].join("; ");
 
 const nextConfig: NextConfig = {
+  // The browser reaches the API through this origin, so the classroom session cookie is
+  // first-party (the frontend and backend hosts are different sites on Railway).
+  async rewrites() {
+    return [{ source: "/api/v2/:path*", destination: `${API_BASE}/api/v2/:path*` }];
+  },
   async headers() {
     return [
       {

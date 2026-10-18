@@ -12,6 +12,7 @@ COPY live/ ./live/
 COPY pipeline/ ./pipeline/
 COPY scans/ ./scans/
 COPY learn/ ./learn/
+COPY classroom/ ./classroom/
 COPY content/ ./content/
 COPY migrations/ ./migrations/
 COPY data/ ./data/

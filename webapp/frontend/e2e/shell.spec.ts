@@ -59,13 +59,14 @@ test("navigating from the More sheet closes it and marks More active", async ({ 
   await expect(page.getByRole("button", { name: "More" })).toHaveAttribute("aria-current", "page");
 });
 
-test("coming-soon sections say so and link back", async ({ page }) => {
-  for (const [route, title] of [["/classroom", "Classroom"]]) {
+test("every section is built: no coming-soon tags or placeholders are left", async ({ page }) => {
+  for (const [route, title] of [["/learn", "Learn"], ["/classroom", "Classroom"]]) {
     await page.goto(route);
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(title);
-    await expect(page.getByRole("main").getByText("Coming soon", { exact: true })).toBeVisible();
-    await expect(page.getByRole("link", { name: "Explore the candidates" })).toBeVisible();
+    await expect(page.getByRole("main").getByText("Coming soon", { exact: true })).toHaveCount(0);
   }
+  await expect(page.getByText("Soon", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("(coming soon)")).toHaveCount(0);
 });
 
 test("skip link moves focus to the main content", async ({ page }) => {
@@ -79,10 +80,10 @@ test("skip link moves focus to the main content", async ({ page }) => {
 
 test("reduced motion turns animation off", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/classroom");
+  await page.goto("/design-system");
   const durations = await page.evaluate(() => [
     getComputedStyle(document.body, "::after").animationDuration,
-    getComputedStyle(document.querySelector(".orbit-planet")!).animationDuration,
+    getComputedStyle(document.querySelector(".skeleton")!).animationDuration,
   ]);
   expect(durations).toEqual(["0s", "0s"]);
 });

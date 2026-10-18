@@ -7,7 +7,7 @@ import { apiV2Get, type LessonResponse } from "@/lib/api-v2";
 
 export const dynamic = "force-dynamic";
 
-type Props = { params: Promise<{ slug: string }> };
+type Props = { params: Promise<{ slug: string }>; searchParams?: Promise<{ quiz?: string }> };
 
 async function getLesson(slug: string) {
   if (!/^[a-z0-9-]{1,64}$/.test(slug)) return null;
@@ -19,8 +19,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return { title: `${res?.ok ? res.data.title : "Lesson"} - Planet Hunter` };
 }
 
-export default async function LessonPage({ params }: Props) {
+export default async function LessonPage({ params, searchParams }: Props) {
   const res = await getLesson((await params).slug);
+  // Quiz-only classroom assignments link here with ?quiz=1.
+  const startAtQuiz = (await searchParams)?.quiz === "1";
   if (res === null || (!res.ok && (res.status === 404 || res.status === 422))) notFound();
   return (
     <div className="page">
@@ -32,7 +34,7 @@ export default async function LessonPage({ params }: Props) {
           <p className="eyebrow">{res.data.minutes} min lesson</p>
           <h1>{res.data.title}</h1>
           <p className="lede">{res.data.summary}</p>
-          <LessonPlayer lesson={res.data} />
+          <LessonPlayer lesson={res.data} startAtQuiz={startAtQuiz} />
         </>
       ) : (
         <ErrorState title="This lesson could not be loaded." detail={res.error} />
