@@ -23,9 +23,9 @@ def _results() -> list[dict]:
     return json.loads(RESULTS.read_text())["candidates"]
 
 
-def _host(target: str) -> str:
-    # "TOI 700" in results.json is "TOI-700" in the Exoplanet Archive.
-    return target.replace(" ", "-")
+def _system(systems: dict, tic: str) -> dict:
+    """The archive's planets for this TIC ID (empty if it has none)."""
+    return systems["systems"].get(tic, {"hostname": None, "circumbinary": False, "planets": []})
 
 
 def _src(d: dict) -> s.SourceRef:
@@ -43,11 +43,12 @@ def targets(response: Response) -> s.TargetsResponse:
     out = []
     for c in _results():
         st = stars["stars"][c["tic"]]
+        sysd = _system(systems, c["tic"])
         out.append(s.TargetSummary(
-            slug=c["slug"], target=c["target"], tic=c["tic"], host=_host(c["target"]),
+            slug=c["slug"], target=c["target"], tic=c["tic"], host=sysd["hostname"] or c["target"],
             classification=c["classification"], classification_label=c["classification_label"],
             ra_deg=st["ra_deg"], dec_deg=st["dec_deg"], distance_pc=st["distance_pc"], teff_k=st["teff_k"],
-            confirmed_planets=len(systems["systems"].get(_host(c["target"]), [])),
+            confirmed_planets=len(sysd["planets"]),
         ))
     _cache_header(response, 86_400)
     return s.TargetsResponse(targets=out, star_source=_src(stars["source"]), planet_source=_src(systems["source"]))
@@ -62,10 +63,11 @@ def target_system(response: Response, slug: str = Path(..., pattern=r"^[a-z0-9-]
     stars, systems = reference.stars(), reference.systems()
     st = stars["stars"][cand["tic"]]
     star_src, planet_src = _src(stars["source"]), _src(systems["source"])
-    host = _host(cand["target"])
+    sysd = _system(systems, cand["tic"])
+    host = sysd["hostname"] or cand["target"]
 
     planets = []
-    for r in systems["systems"].get(host, []):
+    for r in sysd["planets"]:
         eq = _q(r["pl_eqt"], "K", planet_src)
         if eq is None and None not in (r["st_teff"], r["st_rad"], r["pl_orbsmax"]):
             eq = _q(round(physics.equilibrium_temperature_k(r["st_teff"], r["st_rad"], r["pl_orbsmax"]), 1), "K",
@@ -105,7 +107,7 @@ def target_system(response: Response, slug: str = Path(..., pattern=r"^[a-z0-9-]
                                      "2600 to 7200 K range, so treat the zone as a rough guide."))
     _cache_header(response, 86_400)
     return s.TargetSystemResponse(
-        slug=slug, target=cand["target"], tic=cand["tic"], host=host,
+        slug=slug, target=cand["target"], tic=cand["tic"], host=host, circumbinary=sysd["circumbinary"],
         star=s.Star(name=cand["target"], effective_temperature=_q(st["teff_k"], "K", star_src),
                     radius_rsun=_q(st["radius_rsun"], "solar radii", star_src),
                     mass_msun=_q(st["mass_msun"], "solar masses", star_src),

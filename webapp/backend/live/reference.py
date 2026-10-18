@@ -39,3 +39,7 @@ def missions() -> dict:
 
 def tess() -> dict:
     return load("tess.v1.json")
+
+
+def tess_ebs() -> dict:
+    return load("tess_ebs.v1.json")

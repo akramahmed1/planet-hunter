@@ -1,0 +1,47 @@
+name: Scan check
+
+# Phase 6 "done when": rescanning TOI 700 with the scan engine must reproduce the
+# recorded validation (validate_toi700.py: 16.0509 days) within 0.01%. Runs the real
+# scan (MAST download, BLS, vetting, live cross-match) on GitHub's machines, since the
+# build sessions cannot reach MAST.
+on:
+  workflow_dispatch:
+  push:
+    branches: [v2, "v2-p6*"]
+    paths:
+      - webapp/backend/pipeline/**
+      - webapp/backend/scans/**
+      - .github/workflows/scan-check.yml
+
+jobs:
+  rescan-toi-700:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    defaults:
+      run:
+        working-directory: webapp/backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: webapp/backend/requirements*.txt
+      - run: pip install -r requirements.txt
+      - name: Rescan TOI 700 (validation preset) and compare
+        run: |
+          python - <<'PY'
+          import json, sys
+          from scans import catalogs, run
+          rec = json.load(open("data/results.json"))["validation"]
+          result, signal = run.scan(150428135, run.PRESETS["validation"], print, catalogs.LiveCatalogs())
+          err = abs(signal["period_d"] - rec["recovered_period_d"]) / rec["recovered_period_d"]
+          print(json.dumps({k: v for k, v in signal.items() if k != "vetting"}, indent=1, default=str))
+          for row in signal["vetting"]:
+              print(f"{row['id']:10} {row['status']:7} {row['explanation']}")
+          print(f"recorded {rec['recovered_period_d']} d, rescan {signal['period_d']} d, error {err * 100:.4f}%")
+          assert result["sectors"], "no sectors"
+          assert err <= 1e-4, "rescan does not reproduce the recorded validation within 0.01%"
+          assert signal["proposed_label"] == "known_planet", signal["crossmatch"]
+          print("OK: reproduces the recorded validation and matches TOI-700 c")
+          PY

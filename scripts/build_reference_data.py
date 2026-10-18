@@ -17,6 +17,7 @@ temperature statements keep NASA's own wording in `quote`.
 """
 from __future__ import annotations
 
+import gzip
 import html
 import json
 import re
@@ -235,12 +236,16 @@ ARCHIVE_COLUMNS = ["pl_name", "hostname", "pl_orbper", "pl_orbsmax", "pl_orbecce
 
 
 def build_systems() -> dict:
-    rows = json.loads((FIXTURES / "exoplanet_archive_targets_p4.json").read_text())
-    systems: dict[str, list] = {}
-    for r in sorted(rows, key=lambda r: (r["hostname"], r["pl_orbper"] or 0)):
-        systems.setdefault(r["hostname"], []).append({k: r.get(k) for k in ARCHIVE_COLUMNS})
-    return {"dataset": "systems", "version": 1,
-            "source": {**ARCHIVE_SOURCE, "fetched_at": meta("exoplanet_archive_targets_p4")["fetched_at"]},
+    """Confirmed planets per target star, keyed by TIC ID (never by name: names caused a mix-up, see
+    docs/DATA_SOURCES.md Phase 6)."""
+    rows = json.loads((FIXTURES / "exoplanet_archive_systems_by_tic_p6.json").read_text())
+    systems: dict[str, dict] = {}
+    for r in sorted(rows, key=lambda r: (r["tic_id"], r["pl_orbper"] or 0)):
+        s = systems.setdefault(r["tic_id"], {"hostname": r["hostname"], "circumbinary": False, "planets": []})
+        s["circumbinary"] = s["circumbinary"] or bool(r.get("cb_flag"))
+        s["planets"].append({k: r.get(k) for k in ARCHIVE_COLUMNS})
+    return {"dataset": "systems", "version": 2,
+            "source": {**ARCHIVE_SOURCE, "fetched_at": meta("exoplanet_archive_systems_by_tic_p6")["fetched_at"]},
             "systems": systems}
 
 
@@ -300,6 +305,26 @@ def build_missions() -> dict:
     return {"dataset": "missions", "version": 1, "missions": out}
 
 
+def build_tess_ebs() -> dict:
+    """TESS Eclipsing Binary catalog (Prsa et al. 2022, J/ApJS/258/16): TIC -> periods, for the cross-match."""
+    rows = gzip.open(FIXTURES / "cds_tess_ebs_dat_gz_p6.gz", "rt").read().splitlines()
+    ebs: dict[str, list] = {}
+    for line in rows:
+        f = line.split("|")
+        tic, per, morph = int(f[0]), f[12].strip(), f[14].strip()
+        if not per:
+            continue  # no period in the catalog for this entry
+        ebs.setdefault(str(tic), []).append({"period_d": round(float(per), 6),
+                                              "morph": round(float(morph), 3) if morph else None})
+    if len(rows) != 4584:
+        raise SystemExit(f"expected 4584 catalog rows, got {len(rows)}")
+    return {"dataset": "tess_ebs", "version": 1,
+            "source": {"name": "TESS Eclipsing Binary catalog, Prsa et al. 2022, ApJS 258, 16 (CDS J/ApJS/258/16)",
+                       "url": "https://cdsarc.cds.unistra.fr/viz-bin/cat/J/ApJS/258/16",
+                       "fetched_at": meta("cds_tess_ebs_dat_gz_p6")["fetched_at"]},
+            "ebs": ebs}
+
+
 # TESS explainer facts, with the source's exact words (checked like the mission facts).
 TESS_FACTS = [
     ("orbit", "horizons_tess_vectors_geo_p4", "https://ssd.jpl.nasa.gov/horizons/",
@@ -342,6 +367,7 @@ def main() -> int:
         "systems.v1.json": build_systems(),
         "missions.v1.json": build_missions(),
         "tess.v1.json": build_tess(),
+        "tess_ebs.v1.json": build_tess_ebs(),
     }
     stale = []
     for name, data in outputs.items():

@@ -37,13 +37,13 @@ def bls_snr(time, flux, period, duration, t0) -> float:
     return float(depth / noise * np.sqrt(in_tr.sum()))
 
 
-def bls_search(time, flux, period_min=PERIOD_MIN, period_max=PERIOD_MAX, n_periods=N_PERIODS):
+def bls_search(time, flux, period_min=PERIOD_MIN, period_max=PERIOD_MAX, n_periods=N_PERIODS, durations=None):
     """Box Least Squares over a linear period grid. Returns (periods, power, best Signal)."""
     from astropy.timeseries import BoxLeastSquares
 
     bls = BoxLeastSquares(time, flux)
     periods = np.linspace(period_min, period_max, n_periods)
-    res = bls.power(periods, DURATIONS, oversample=10)
+    res = bls.power(periods, DURATIONS if durations is None else np.asarray(durations), oversample=10)
     best = int(np.argmax(res.power))
     p, d, t0 = float(res.period[best]), float(res.duration[best]), float(res.transit_time[best])
     sig = Signal(period_d=p, duration_d=d, t0_btjd=t0, depth_ppm=float(res.depth[best]) * 1e6,

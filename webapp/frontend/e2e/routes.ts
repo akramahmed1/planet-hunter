@@ -9,6 +9,9 @@ const results = JSON.parse(
 
 export const CANDIDATES = results.candidates;
 
+/** A finished scan of TIC 260128333: seeded as 1 in CI, a real scan on staging (set by the staging check). */
+export const SCAN_ID = process.env.PW_SCAN_ID ?? "1";
+
 export const ROUTES = [
   "/",
   "/candidates",
@@ -19,6 +22,8 @@ export const ROUTES = [
   "/exoplanets/toi-700",
   "/missions",
   "/missions/tess",
+  "/scan",
+  `/scan/${SCAN_ID}`,
   "/learn",
   "/classroom",
   "/design-system",

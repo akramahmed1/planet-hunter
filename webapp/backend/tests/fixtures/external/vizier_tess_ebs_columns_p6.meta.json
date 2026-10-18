@@ -1,0 +1,13 @@
+{
+  "url": "https://tapvizier.cds.unistra.fr/TAPVizieR/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=json&QUERY=SELECT%20column_name%2C%20description%20FROM%20TAP_SCHEMA.columns%20WHERE%20table_name%20%3D%20%27J%2FApJS%2F258%2F16%2Ftess-ebs%27",
+  "final_url": "https://tapvizier.cds.unistra.fr/TAPVizieR/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=json&QUERY=SELECT%20column_name%2C%20description%20FROM%20TAP_SCHEMA.columns%20WHERE%20table_name%20%3D%20%27J%2FApJS%2F258%2F16%2Ftess-ebs%27",
+  "status": 503,
+  "https": true,
+  "headers": {
+    "cache-control": "no-cache",
+    "content-type": "text/html"
+  },
+  "bytes": 108,
+  "truncated": false,
+  "fetched_at": "2026-10-18T01:28:40+00:00"
+}

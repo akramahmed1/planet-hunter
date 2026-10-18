@@ -68,10 +68,11 @@ for r in rows:
     check(f"cand/{r['target']}/n_cadences", r["n_cadences"] == int(srow["n_cadences"]))
     check(f"cand/{r['target']}/duration", r["duration_d"] == float(srow["duration_d"]))
 check("cand/toi216-ambiguous", any(r["target"] == "TOI 216" and r["classification"] == "ambiguous" for r in rows))
-check("cand/toi776-ambiguous", any(r["target"] == "TOI 776" and r["classification"] == "ambiguous" for r in rows))
+# 2026-10-18 correction: TIC 307210830 is TOI 175 (L 98-59), once mislabelled as TOI 776; unreviewed until re-reviewed.
+check("cand/toi175-corrected-unreviewed", any(r["target"] == "TOI 175" and r["classification"] == "unreviewed" and "Correction" in r["readout"] for r in rows))
 check("cand/toi1338-binary", any(r["target"] == "TOI 1338" and r["classification"] == "eclipsing-binary" for r in rows))
 check("cand/no-discovery-claims", not any("discovery of" in r["readout"].lower() or "new planet" in r["readout"].lower() for r in rows))
-check("cand/not-a-discovery-present", any("NOT a discovery" in r["readout"] for r in rows if r["target"] in ("TOI 216", "TOI 776")))
+check("cand/not-a-discovery-present", any("NOT a discovery" in r["readout"] for r in rows if r["target"] in ("TOI 216", "TOI 175")))
 
 # 4. per-slug detail + 404 edge case
 for r in rows:

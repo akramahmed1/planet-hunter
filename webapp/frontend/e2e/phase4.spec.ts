@@ -33,7 +33,7 @@ test("the exoplanets page lists our 8 target systems", async ({ page }) => {
   await expect(list.getByRole("listitem")).toHaveCount(8);
   await expect(list.getByRole("link", { name: "TOI 700" })).toBeVisible();
   await expect(list).toContainText("4 confirmed planets");
-  await expect(list).toContainText("No confirmed planets in the archive");
+  await expect(list).toContainText("1 confirmed planet ·");
 });
 
 test("a system view shows the habitable zone and opens planet and star cards", async ({ page }) => {

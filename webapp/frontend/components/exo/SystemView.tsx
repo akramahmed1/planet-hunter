@@ -52,6 +52,8 @@ export default function SystemView({ system }: { system: TargetSystem }) {
         Orbit sizes and shapes are to scale. Which way each orbit points, and where each planet is along it, are not
         known from these catalogs, so planets are spread out to be easy to tap. The star&apos;s color is a display
         color based on its temperature.
+        {system.circumbinary &&
+          " These planets orbit both stars of a binary pair. The star's numbers and the habitable zone use the main star only, so treat the zone as a rough guide."}
         {zoneOutside && " The habitable zone is farther out than these planets: choose \"With zone\" to see it."}
       </p>
       {webgl === false && (

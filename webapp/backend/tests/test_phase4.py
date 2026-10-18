@@ -12,7 +12,7 @@ from live import habitable, sources
 from live.fixture_transport import FIXTURES
 from tests.test_live import client, frozen, page_text  # noqa: F401  (fixtures)
 
-TARGET_SLUGS = ["toi-1338", "toi-270", "toi-216", "toi-776", "toi-700", "toi-125", "toi-849", "toi-178"]
+TARGET_SLUGS = ["toi-1338", "toi-270", "toi-216", "toi-175", "toi-700", "toi-125", "toi-193", "toi-178"]
 
 
 def fixture(name):
@@ -55,7 +55,10 @@ def test_targets_list_every_target_with_mast_coordinates(client):
         row = mast[t["tic"].split()[1]]
         assert (t["ra_deg"], t["dec_deg"]) == (row["ra"], row["dec"])
     counts = {t["slug"]: t["confirmed_planets"] for t in body["targets"]}
-    assert counts["toi-700"] == 4 and counts["toi-178"] == 6 and counts["toi-1338"] == 0
+    # Matched by TIC ID: TOI-1338's planets orbit "TOI-1338 A", and TIC 307210830 / 183985250 are
+    # L 98-59 and LTT 9779 (see docs/DATA_SOURCES.md, Phase 6 correction).
+    assert counts["toi-700"] == 4 and counts["toi-178"] == 6 and counts["toi-1338"] == 2
+    assert counts["toi-175"] == 5 and counts["toi-193"] == 1
 
 
 def test_system_labels_our_signal_and_never_calls_it_a_planet(client):
@@ -72,10 +75,17 @@ def test_system_labels_our_signal_and_never_calls_it_a_planet(client):
     assert hz["conservative_inner_au"] < d["orbit_au"]["value"] < hz["conservative_outer_au"]
 
 
-def test_eclipsing_binary_target_has_no_confirmed_planets(client):
+def test_eclipsing_binary_target_shows_its_circumbinary_planets(client):
     body = client.get("/api/v2/targets/toi-1338/system").json()
-    assert [p["status"] for p in body["planets"]] == ["pipeline_signal"]
+    assert body["circumbinary"] is True and body["host"] == "TOI-1338 A"
+    assert [p["name"] for p in body["planets"]] == ["TOI 1338 pipeline signal", "TOI-1338 b", "TOI-1338 c"]
     assert "Eclipsing binary" in body["planets"][0]["note"]
+
+
+def test_corrected_targets_show_the_star_actually_scanned(client):
+    body = client.get("/api/v2/targets/toi-175/system").json()
+    assert body["host"] == "L 98-59"
+    assert "L 98-59 c" in [p["name"] for p in body["planets"]]
 
 
 def test_unknown_target_is_404(client):

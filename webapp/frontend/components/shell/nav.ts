@@ -14,7 +14,7 @@ export const NAV: NavItem[] = [
   { href: "/", label: "Explore", icon: "explore" },
   { href: "/solar-system", label: "Solar System", icon: "solar" },
   { href: "/exoplanets", label: "Exoplanets", icon: "exoplanets" },
-  { href: "/candidates", label: "Hunt", icon: "hunt", match: ["/candidates"] },
+  { href: "/candidates", label: "Hunt", icon: "hunt", match: ["/candidates", "/scan"] },
   { href: "/missions", label: "Missions", icon: "missions" },
   { href: "/learn", label: "Learn", icon: "learn", soon: true },
   { href: "/method", label: "Method", icon: "method" },

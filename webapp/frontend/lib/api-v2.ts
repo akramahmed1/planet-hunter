@@ -57,3 +57,30 @@ export type IssTrack = Schemas["IssTrackResponse"];
 export type TessFacts = Schemas["TessFactsResponse"];
 export type LightCurveResponse = Schemas["LightCurveResponse"];
 export type PeriodogramResponse = Schemas["PeriodogramResponse"];
+export type ScanCreated = Schemas["ScanCreated"];
+export type ScanStatus = Schemas["ScanStatus"];
+export type VettingRow = Schemas["VettingRow"];
+
+/** POST JSON to /api/v2. Errors carry the API's `detail` message when there is one. */
+export async function apiV2Post<T>(path: `/api/v2/${string}`, body: unknown): Promise<V2Result<T>> {
+  try {
+    const res = await fetch(`${API_BASE}${path}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    if (!res.ok) {
+      let detail = `HTTP ${res.status}`;
+      try {
+        const j = (await res.json()) as { detail?: unknown };
+        if (typeof j.detail === "string") detail = j.detail;
+      } catch {
+        // not JSON
+      }
+      return { ok: false, status: res.status, error: detail };
+    }
+    return { ok: true, data: (await res.json()) as T };
+  } catch (e) {
+    return { ok: false, status: null, error: e instanceof Error ? e.message : String(e) };
+  }
+}

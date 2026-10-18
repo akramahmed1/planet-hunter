@@ -58,7 +58,7 @@ Note: MAST can be flaky; both scripts retry with backoff.
 
 ## Latest scan
 
-8 TOI targets: recovered known planets (TOI 270 c, TOI 125 b, TOI 700 c). Two unexplained signals (TOI 216, TOI 776) flagged as ambiguous BLS hits, not discoveries.
+8 TOI targets: recovered known planets (TOI 270 c, TOI 125 b, TOI 700 c). One unexplained signal (TOI 216) flagged as an ambiguous BLS hit, not a discovery. Correction (2026-10-18): two targets were mislabelled; the stars scanned as "TOI 776" and "TOI 849" are TOI 175 (L 98-59) and TOI 193 (LTT 9779), and are marked unreviewed until re-reviewed.
 
 ## Honest limitations
 

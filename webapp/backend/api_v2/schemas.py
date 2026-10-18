@@ -291,6 +291,7 @@ class TargetSystemResponse(_Strict):
     target: str
     tic: str
     host: str
+    circumbinary: bool
     star: Star
     planets: list[SystemPlanet]
     habitable_zone: HabitableZone | None
@@ -386,3 +387,83 @@ class PeriodogramResponse(_Strict):
     method: str
     period_d: list[float]
     power: list[float]
+
+
+# ---------- Phase 6: scans ----------
+
+class ScanRequest(_Strict):
+    target: str
+    preset: Literal["standard", "validation"] = "standard"
+
+
+class ScanCreated(_Strict):
+    id: int
+    status: Literal["queued", "running", "succeeded", "failed"]
+    created: bool
+    tic_id: int
+
+
+class VettingRow(_Strict):
+    id: str
+    name: str
+    status: Literal["pass", "warn", "fail", "unknown"]
+    value: dict | None
+    explanation: str
+
+
+class CrossMatchHit(BaseModel):
+    kind: str
+    name: str
+    period_d: float
+    ratio: float
+    relation: str
+    disposition: str | None = None
+    source: SourceRef
+
+
+class CrossMatch(_Strict):
+    matches: list[CrossMatchHit]
+    proposed_label: str
+    label_text: str
+    note: str | None
+    tolerance: float
+    reviewed: bool
+
+
+class ScanSignal(_Strict):
+    period_d: float
+    t0_btjd: float
+    duration_d: float
+    depth_ppm: float
+    snr: float
+    power: float
+    vetting: list[VettingRow]
+    crossmatch: CrossMatch
+    proposed_label: str
+    label_status: Literal["proposed, not reviewed", "reviewed"]
+
+
+class ScanReview(_Strict):
+    label: str
+    reviewer: str
+    note: str | None
+    created_at: dt.datetime
+
+
+class ScanStatus(_Strict):
+    id: int
+    status: Literal["queued", "running", "succeeded", "failed"]
+    progress: str | None
+    error: str | None
+    tic_id: int
+    toi: str | None
+    preset: str
+    attempts: int
+    created_at: dt.datetime
+    started_at: dt.datetime | None
+    finished_at: dt.datetime | None
+    pipeline_version: str | None
+    sectors: list[int] | None
+    n_cadences: int | None
+    signal: ScanSignal | None
+    reviews: list[ScanReview]

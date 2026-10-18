@@ -367,6 +367,83 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v2/scans": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Create Scan
+         * @description Queue a scan of a TESS star by TIC ID or TOI number. A repeat request returns the earlier job.
+         */
+        post: operations["create_scan_api_v2_scans_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v2/scans/{job_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Scan
+         * @description A scan's status and, once finished, its signal, vetting and cross-match.
+         */
+        get: operations["get_scan_api_v2_scans__job_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v2/scans/{job_id}/lightcurve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Scan Lightcurve
+         * @description The scan's light curve, in the same shape as /api/v2/lightcurves/{slug}.
+         */
+        get: operations["scan_lightcurve_api_v2_scans__job_id__lightcurve_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v2/scans/{job_id}/periodogram": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Scan Periodogram */
+        get: operations["scan_periodogram_api_v2_scans__job_id__periodogram_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v2/space-weather": {
         parameters: {
             query?: never;
@@ -580,6 +657,37 @@ export interface components {
             honesty: string;
             run: components["schemas"]["RunInfo"];
             summary: components["schemas"]["Summary"];
+        };
+        /** CrossMatch */
+        CrossMatch: {
+            /** Label Text */
+            label_text: string;
+            /** Matches */
+            matches: components["schemas"]["CrossMatchHit"][];
+            /** Note */
+            note: string | null;
+            /** Proposed Label */
+            proposed_label: string;
+            /** Reviewed */
+            reviewed: boolean;
+            /** Tolerance */
+            tolerance: number;
+        };
+        /** CrossMatchHit */
+        CrossMatchHit: {
+            /** Disposition */
+            disposition?: string | null;
+            /** Kind */
+            kind: string;
+            /** Name */
+            name: string;
+            /** Period D */
+            period_d: number;
+            /** Ratio */
+            ratio: number;
+            /** Relation */
+            relation: string;
+            source: components["schemas"]["SourceRef"];
         };
         /** DatabaseStatus */
         DatabaseStatus: {
@@ -983,6 +1091,110 @@ export interface components {
             /** Source Csv */
             source_csv: string;
         };
+        /** ScanCreated */
+        ScanCreated: {
+            /** Created */
+            created: boolean;
+            /** Id */
+            id: number;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "queued" | "running" | "succeeded" | "failed";
+            /** Tic Id */
+            tic_id: number;
+        };
+        /** ScanRequest */
+        ScanRequest: {
+            /**
+             * Preset
+             * @default standard
+             * @enum {string}
+             */
+            preset: "standard" | "validation";
+            /** Target */
+            target: string;
+        };
+        /** ScanReview */
+        ScanReview: {
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Label */
+            label: string;
+            /** Note */
+            note: string | null;
+            /** Reviewer */
+            reviewer: string;
+        };
+        /** ScanSignal */
+        ScanSignal: {
+            crossmatch: components["schemas"]["CrossMatch"];
+            /** Depth Ppm */
+            depth_ppm: number;
+            /** Duration D */
+            duration_d: number;
+            /**
+             * Label Status
+             * @enum {string}
+             */
+            label_status: "proposed, not reviewed" | "reviewed";
+            /** Period D */
+            period_d: number;
+            /** Power */
+            power: number;
+            /** Proposed Label */
+            proposed_label: string;
+            /** Snr */
+            snr: number;
+            /** T0 Btjd */
+            t0_btjd: number;
+            /** Vetting */
+            vetting: components["schemas"]["VettingRow"][];
+        };
+        /** ScanStatus */
+        ScanStatus: {
+            /** Attempts */
+            attempts: number;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Error */
+            error: string | null;
+            /** Finished At */
+            finished_at: string | null;
+            /** Id */
+            id: number;
+            /** N Cadences */
+            n_cadences: number | null;
+            /** Pipeline Version */
+            pipeline_version: string | null;
+            /** Preset */
+            preset: string;
+            /** Progress */
+            progress: string | null;
+            /** Reviews */
+            reviews: components["schemas"]["ScanReview"][];
+            /** Sectors */
+            sectors: number[] | null;
+            signal: components["schemas"]["ScanSignal"] | null;
+            /** Started At */
+            started_at: string | null;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "queued" | "running" | "succeeded" | "failed";
+            /** Tic Id */
+            tic_id: number;
+            /** Toi */
+            toi: string | null;
+        };
         /** SourceRef */
         SourceRef: {
             /** Name */
@@ -1129,6 +1341,8 @@ export interface components {
         };
         /** TargetSystemResponse */
         TargetSystemResponse: {
+            /** Circumbinary */
+            circumbinary: boolean;
             habitable_zone: components["schemas"]["HabitableZone"] | null;
             /** Host */
             host: string;
@@ -1278,6 +1492,24 @@ export interface components {
             msg: string;
             /** Error Type */
             type: string;
+        };
+        /** VettingRow */
+        VettingRow: {
+            /** Explanation */
+            explanation: string;
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "pass" | "warn" | "fail" | "unknown";
+            /** Value */
+            value: {
+                [key: string]: unknown;
+            } | null;
         };
     };
     responses: never;
@@ -1813,6 +2045,186 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
                 };
+            };
+        };
+    };
+    create_scan_api_v2_scans_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ScanRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ScanCreated"];
+                };
+            };
+            /** @description Not a TIC ID or TOI number */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Rate limited or the queue is full */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Scans need the database, which is not configured or not reachable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    get_scan_api_v2_scans__job_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                job_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ScanStatus"];
+                };
+            };
+            /** @description No such scan, or it has no result yet */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+            /** @description Scans need the database, which is not configured or not reachable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    scan_lightcurve_api_v2_scans__job_id__lightcurve_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                job_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LightCurveResponse"];
+                };
+            };
+            /** @description No such scan, or it has no result yet */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+            /** @description Scans need the database, which is not configured or not reachable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    scan_periodogram_api_v2_scans__job_id__periodogram_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                job_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PeriodogramResponse"];
+                };
+            };
+            /** @description No such scan, or it has no result yet */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+            /** @description Scans need the database, which is not configured or not reachable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
