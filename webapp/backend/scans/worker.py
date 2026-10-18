@@ -96,6 +96,9 @@ def run_job(engine, job: queue.Job, worker: str) -> None:
                 return
             last_beat = time.monotonic()
     proc.join(5)
+    if proc.is_alive():  # e.g. a stalled archive request left behind after a transient error
+        proc.kill()
+        proc.join(5)
     kind, payload = outcome
     if kind == "ok":
         run, sig = payload
