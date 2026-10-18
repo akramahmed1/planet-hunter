@@ -98,6 +98,8 @@ jobs:
       # The explainer runs with the deterministic fake model in CI (no key, no cost).
       EXPLAINER_ENABLED: "1"
       EXPLAINER_FAKE: "1"
+      # All browser tests write from one address.
+      WRITE_LIMIT_PER_MINUTE: "100000"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -135,6 +137,11 @@ jobs:
       - name: Playwright (phone + desktop, with axe accessibility checks)
         working-directory: webapp/frontend
         run: npx playwright test
+      - name: Lighthouse mobile budget (accessibility, best practices, page weight)
+        working-directory: webapp/frontend
+        run: |
+          export CHROME_PATH=$(node -e "console.log(require('playwright').chromium.executablePath())")
+          npx --yes @lhci/cli@0.14.0 autorun
       - name: Playwright report
         if: failure()
         uses: actions/upload-artifact@v4
