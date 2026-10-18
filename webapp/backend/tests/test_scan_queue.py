@@ -164,6 +164,16 @@ def test_worker_records_a_successful_scan(engine, monkeypatch):
 
 
 @needs_db
+def test_worker_runs_scans_with_one_maths_thread(engine, monkeypatch):
+    # Many-core hosts otherwise make OpenBLAS fail to allocate under the memory cap.
+    for k in worker.SINGLE_THREAD_ENV:
+        monkeypatch.delenv(k, raising=False)
+    got = _run_one(engine, monkeypatch, "threads", 8006)
+    assert got["status"] == "succeeded"
+    assert got["signal"]["crossmatch"]["env"] == {"OPENBLAS_NUM_THREADS": "1", "OMP_NUM_THREADS": "1"}
+
+
+@needs_db
 def test_worker_fails_permanently_without_data(engine, monkeypatch):
     got = _run_one(engine, monkeypatch, "nodata", 8002)
     assert got["status"] == "failed" and "no TESS SPOC light curves" in got["error"]

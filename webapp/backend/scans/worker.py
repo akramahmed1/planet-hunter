@@ -23,6 +23,11 @@ TIME_LIMIT_S = int(os.environ.get("SCAN_TIME_LIMIT_S", "900"))
 MEMORY_LIMIT_MB = int(os.environ.get("SCAN_MEMORY_LIMIT_MB", "3000"))
 POLL_S = 5
 HEARTBEAT_S = 30
+# One maths thread per scan. On a host with many cores OpenBLAS otherwise starts a thread per core,
+# each with its own buffers, and fails to allocate under the RLIMIT_AS cap before the scan begins.
+# The spawned child inherits these from os.environ, and they must be set before numpy is imported.
+SINGLE_THREAD_ENV = {k: "1" for k in ("OPENBLAS_NUM_THREADS", "OMP_NUM_THREADS", "MKL_NUM_THREADS",
+                                      "NUMEXPR_NUM_THREADS")}
 
 
 def _child(conn, tic_id: int, params: dict) -> None:
@@ -58,6 +63,8 @@ def _child(conn, tic_id: int, params: dict) -> None:
 
 
 def run_job(engine, job: queue.Job, worker: str) -> None:
+    for k, v in SINGLE_THREAD_ENV.items():
+        os.environ.setdefault(k, v)
     ctx = mp.get_context("spawn")
     parent, child = ctx.Pipe(duplex=False)
     proc = ctx.Process(target=_child, args=(child, job.tic_id, job.params), daemon=True)
@@ -110,7 +117,7 @@ def main() -> int:
         stopping = True
 
     signal.signal(signal.SIGTERM, stop)
-    print(f"scan worker {worker} started", flush=True)
+    print(f"scan worker {worker} started ({os.cpu_count()} CPUs visible)", flush=True)
     while not stopping:
         try:
             job = queue.claim(engine, worker)

@@ -28,3 +28,12 @@ def hog(tic_id, params, progress, catalogs):
     blocks = []
     while True:
         blocks.append(bytearray(50 * 1024 * 1024))
+
+
+def threads(tic_id, params, progress, catalogs):
+    """Reports the maths-thread settings the child process started with."""
+    import os
+    result, signal = ok(tic_id, params, progress, catalogs)
+    signal["crossmatch"] = {"matches": [], "env": {k: os.environ.get(k) for k in
+                                                   ("OPENBLAS_NUM_THREADS", "OMP_NUM_THREADS")}}
+    return result, signal
