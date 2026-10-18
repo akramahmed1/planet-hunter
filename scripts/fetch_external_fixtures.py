@@ -223,6 +223,35 @@ P6_REQUESTS = [
     ("mast_tess_ebs_hlsp_p6", "https://archive.stsci.edu/hlsp/tess-ebs", "html"),
 ]
 
+# Phase 7 set: pages the lessons quote. Several candidates per fact; the lessons cite only
+# the ones that answered and contain the quoted words (checked by tests/test_content.py).
+P7_REQUESTS = [
+    ("iau_resolution_b5_p7", "https://www.iau.org/static/resolutions/Resolution_GA26-5-6.pdf", "pdf"),
+    ("iau_pluto_page_p7", "https://www.iau.org/public/themes/pluto/", "txt-from-html"),
+    ("iau_news_0603_p7", "https://www.iau.org/news/pressreleases/detail/iau0603/", "txt-from-html"),
+    ("nasa_what_is_a_planet_p7", "https://science.nasa.gov/solar-system/planets/what-is-a-planet/", "txt-from-html"),
+    ("nasa_pluto_dwarf_p7", "https://science.nasa.gov/dwarf-planets/pluto/", "txt-from-html"),
+    ("nasa_whats_a_transit_p7", "https://science.nasa.gov/exoplanets/whats-a-transit/", "txt-from-html"),
+    ("nasa_exo_transit_faq_p7", "https://exoplanets.nasa.gov/faq/31/whats-a-transit/", "txt-from-html"),
+    ("nasa_habitable_zone_p7", "https://science.nasa.gov/exoplanets/habitable-zone/", "txt-from-html"),
+    ("nasa_exo_how_find_p7", "https://science.nasa.gov/exoplanets/how-we-find-and-characterize/", "txt-from-html"),
+    ("arxiv_kopparapu2014_abs_p7", "https://arxiv.org/abs/1404.5292", "txt-from-html"),
+    ("arxiv_winn2010_abs_p7", "https://arxiv.org/abs/1001.2010", "txt-from-html"),
+    ("arxiv_prsa2022_abs_p7", "https://arxiv.org/abs/2110.13382", "txt-from-html"),
+    ("exoplanet_archive_toi_doc_p7", "https://exoplanetarchive.ipac.caltech.edu/docs/API_TOI_columns.html", "txt-from-html"),
+    ("exoplanet_archive_criteria_p7", "https://exoplanetarchive.ipac.caltech.edu/docs/exoplanet_criteria.html", "txt-from-html"),
+    ("exoplanet_archive_koi_doc_p7", "https://exoplanetarchive.ipac.caltech.edu/docs/API_kepcandidate_columns.html",
+     "txt-from-html"),
+    ("exoplanet_archive_koi_fp_doc_p7", "https://exoplanetarchive.ipac.caltech.edu/docs/PurposeOfKOITable.html",
+     "txt-from-html"),
+    ("arxiv_thompson2018_abs_p7", "https://arxiv.org/abs/1710.06758", "txt-from-html"),
+    ("arxiv_coughlin2016_abs_p7", "https://arxiv.org/abs/1512.06149", "txt-from-html"),
+    ("nist_kelvin_p7", "https://www.nist.gov/si-redefinition/kelvin", "txt-from-html"),
+    ("nist_c_p7", "https://physics.nist.gov/cgi-bin/cuu/Value?c", "txt-from-html"),
+    ("nasa_tess_toi_count_p7",
+     TAP + q({"query": "select tfopwg_disp,count(*) as n from toi group by tfopwg_disp", "format": "json"}), "json"),
+]
+
 # Only status and size are recorded for these (large client-side assets).
 PROBE_REQUESTS = [
     ("aladin_lite_v3_js", "https://aladin.cds.unistra.fr/AladinLite/api/v3/latest/aladin.js"),
@@ -288,6 +317,13 @@ def html_to_text(raw: bytes) -> str:
     return re.sub(r"[ \t]+", " ", re.sub(r"\n\s*\n+", "\n\n", text)).strip()
 
 
+def redact_tokens(text: str) -> str:
+    """Remove anything shaped like an access token (Mapbox pk./sk., JWTs, long hex keys)."""
+    text = re.sub(r"\b[ps]k\.eyJ[\w.-]+", "REDACTED", text)
+    text = re.sub(r"\beyJ[\w-]{10,}\.[\w-]{10,}\.[\w-]+", "REDACTED", text)
+    return re.sub(r"\b[0-9a-f]{32,}\b", "REDACTED", text)
+
+
 def save_meta(path: Path, result: dict) -> None:
     meta = {k: v for k, v in result.items() if k != "body"}
     path.write_text(json.dumps(meta, indent=2) + "\n")
@@ -299,11 +335,15 @@ def main() -> int:
     FIXTURES.mkdir(parents=True, exist_ok=True)
     SNAPSHOTS.mkdir(parents=True, exist_ok=True)
     summary = []
-    requests = {"p2": P2_REQUESTS, "p3": P3_REQUESTS, "p4": P4_REQUESTS, "p6": P6_REQUESTS}.get(phase, FIXTURE_REQUESTS)
+    requests = {"p2": P2_REQUESTS, "p3": P3_REQUESTS, "p4": P4_REQUESTS, "p6": P6_REQUESTS, "p7": P7_REQUESTS}.get(phase, FIXTURE_REQUESTS)
 
     for name, url, ext in requests:
-        r = fetch(url, max_bytes=3_500_000 if "1800_2050" in name or name.endswith("_glb") or "tess_ebs" in name else MAX_BYTES)
+        r = fetch(url, max_bytes=3_500_000 if "1800_2050" in name or name.endswith("_glb") or "tess_ebs" in name or name.endswith("_pdf_p7") or name.startswith("iau_resolution") else MAX_BYTES)
         body = r["body"].replace(NASA_KEY.encode(), b"REDACTED") if NASA_KEY != "DEMO_KEY" else r["body"]
+        if ext == "txt-from-html":
+            # Text only: no scripts or attributes, so embedded client tokens are not committed.
+            ext = "txt"
+            body = redact_tokens(html_to_text(body)).encode() if body else b""
         if body:
             (FIXTURES / f"{name}.{ext}").write_bytes(body)
         save_meta(FIXTURES / f"{name}.meta.json", r)

@@ -1,13 +1,24 @@
 import type { Metadata } from "next";
-import ComingSoon from "@/components/ComingSoon";
+import LessonList from "@/components/learn/LessonList";
+import ErrorState from "@/components/ui/ErrorState";
+import { apiV2Get, type LessonsResponse } from "@/lib/api-v2";
 
 export const metadata: Metadata = { title: "Learn - Planet Hunter" };
+export const dynamic = "force-dynamic";
 
-export default function LearnPage() {
+export default async function LearnPage() {
+  const res = await apiV2Get<LessonsResponse>("/api/v2/lessons");
   return (
-    <ComingSoon title="Learn" phase={7}>
-      Short lessons and quizzes on planets, temperature in space, light travel time, transits and
-      how scientists avoid false claims.
-    </ComingSoon>
+    <div className="page">
+      <p className="eyebrow">Short lessons, real sources</p>
+      <h1>Learn</h1>
+      <p className="lede">
+        Short lessons on planets, space and how planet hunting works. Every fact names its source: tap it to
+        see where it comes from. Each lesson ends with a quiz you can retry.
+      </p>
+      {res.ok ? <LessonList lessons={res.data.lessons} /> : (
+        <ErrorState title="The lessons could not be loaded." detail={res.error} />
+      )}
+    </div>
   );
 }

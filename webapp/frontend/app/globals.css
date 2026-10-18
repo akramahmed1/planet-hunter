@@ -1940,3 +1940,214 @@ ul.tile-grid {
   display: grid;
   gap: 0.75rem;
 }
+
+/* ---------- learn (Phase 7) ---------- */
+
+.lesson-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--sp-3);
+}
+
+.lesson-list .lesson-card {
+  margin: 0;
+}
+
+.lesson-card .card-title a {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.lesson-card .card-title a:hover,
+.lesson-card .card-title a:focus-visible {
+  color: var(--ion-strong);
+  text-decoration: underline;
+}
+
+.badge-list {
+  list-style: none;
+  margin: var(--sp-3) 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+
+.step-dots {
+  list-style: none;
+  margin: var(--sp-4) 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+
+.step-dot {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 var(--sp-3);
+  border-radius: var(--r-pill);
+  border: 1px solid var(--line-strong);
+  background: var(--space-900);
+  color: var(--ink-dim);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  cursor: pointer;
+}
+
+.step-dot[aria-current="step"] {
+  background: var(--ion);
+  border-color: var(--ion);
+  color: var(--on-bright);
+  font-weight: 600;
+}
+
+.lesson-step h2:focus,
+.lesson-quiz h2:focus {
+  outline: none;
+}
+
+.lesson-step h2:focus-visible,
+.lesson-quiz h2:focus-visible {
+  outline: 2px solid var(--ion-strong);
+  outline-offset: 4px;
+}
+
+.lesson-facts-h {
+  font-size: var(--step-0);
+  color: var(--ink-dim);
+  margin: var(--sp-5) 0 var(--sp-2);
+}
+
+.lesson-facts,
+.lesson-links {
+  margin: 0;
+  padding-left: var(--sp-5);
+  display: grid;
+  gap: var(--sp-2);
+}
+
+.lesson-facts .source-btn {
+  text-align: left;
+}
+
+.lesson-nav {
+  justify-content: space-between;
+}
+
+.quiz-q fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.quiz-prompt {
+  font-weight: 600;
+  margin-bottom: var(--sp-3);
+  padding: 0;
+}
+
+.quiz-num {
+  display: block;
+  color: var(--ink-faint);
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.quiz-choices {
+  display: grid;
+  gap: var(--sp-2);
+}
+
+.quiz-choice {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-height: 44px;
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-md);
+  background: var(--space-900);
+  cursor: pointer;
+}
+
+.quiz-choice.is-picked {
+  border-color: var(--ion);
+  background: var(--ion-soft);
+}
+
+.quiz-choice input {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  flex: none;
+  accent-color: var(--ion);
+}
+
+.quiz-choice input:focus-visible {
+  outline: 2px solid var(--ion-strong);
+  outline-offset: 2px;
+}
+
+.quiz-numeric {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.quiz-numeric p {
+  flex-basis: 100%;
+  margin: var(--sp-1) 0 0;
+}
+
+.quiz-input {
+  width: 8rem;
+  min-height: 44px;
+  font-size: var(--step-0);
+}
+
+.quiz-unit {
+  color: var(--ink-dim);
+}
+
+.quiz-q .btn-row {
+  margin-top: var(--sp-4);
+  align-items: center;
+}
+
+.quiz-result {
+  margin-top: var(--sp-4);
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-md);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--aurora);
+  background: var(--space-850);
+}
+
+.quiz-result--wrong {
+  border-left-color: var(--flare);
+}
+
+.quiz-result p {
+  margin: 0 0 var(--sp-2);
+}
+
+.quiz-verdict {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.quiz-result .source-btn {
+  text-align: left;
+}
+
+.badge-earned h3 {
+  margin: 0 0 var(--sp-2);
+}

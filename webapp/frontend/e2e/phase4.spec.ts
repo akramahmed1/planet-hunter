@@ -108,6 +108,10 @@ test("the TESS explainer cites its facts and draws a transit", async ({ page }) 
   await expect(page.getByTestId("transit-readout")).toContainText("99.764%");
   await slider.fill("0");
   await expect(page.getByTestId("transit-readout")).toContainText("100.000%");
+  // Scrolling after using the slider must not move the planet again.
+  await page.getByTestId("transit-slider").evaluate((el) => el.closest(".transit-demo")!.scrollIntoView({ block: "center" }));
+  await page.waitForTimeout(300);
+  await expect(page.getByTestId("transit-readout")).toContainText("100.000%");
   await page.getByRole("button", { name: "TESS sector size: show source" }).click();
   await expect(page.getByRole("dialog", { name: "Source: TESS sector size" }).getByRole("link"))
     .toHaveAttribute("href", "https://tess.mit.edu/observations/");

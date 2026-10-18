@@ -7,12 +7,14 @@ import Sheet from "@/components/ui/Sheet";
 import type { SourceRef } from "@/lib/api-v2";
 import { formatUtc } from "@/lib/time";
 
-type Kind = "measured" | "computed" | "estimate";
+type Kind = "measured" | "computed" | "estimate" | "definition" | "reference";
 
 const KIND_TEXT: Record<Kind, string> = {
   measured: "Measured: taken directly from this source.",
   computed: "Computed here from the source's data by an exact method.",
   estimate: "Estimate: calculated with simplifying assumptions.",
+  definition: "Definition or explanation, as this source states it.",
+  reference: "The source this explanation is based on.",
 };
 
 /**

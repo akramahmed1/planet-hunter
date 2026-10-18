@@ -16,7 +16,7 @@ export const NAV: NavItem[] = [
   { href: "/exoplanets", label: "Exoplanets", icon: "exoplanets" },
   { href: "/candidates", label: "Hunt", icon: "hunt", match: ["/candidates", "/scan"] },
   { href: "/missions", label: "Missions", icon: "missions" },
-  { href: "/learn", label: "Learn", icon: "learn", soon: true },
+  { href: "/learn", label: "Learn", icon: "learn" },
   { href: "/method", label: "Method", icon: "method" },
   { href: "/classroom", label: "Classroom", icon: "classroom", soon: true },
 ];

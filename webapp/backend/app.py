@@ -5,6 +5,7 @@
 # a live MAST scan.
 from __future__ import annotations
 
+import logging
 import os
 from contextlib import asynccontextmanager
 
@@ -13,6 +14,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
 import data_store
+from api_v2 import learn_router as v2_learn_router
 from api_v2 import live_router as v2_live_router
 from api_v2 import phase4_router as v2_phase4_router
 from api_v2 import phase5_router as v2_phase5_router
@@ -28,6 +30,7 @@ from schemas import (
 )
 
 VERSION = "1.1.0"
+log = logging.getLogger("planet-hunter")
 
 
 def allowed_origins() -> list[str]:
@@ -39,9 +42,25 @@ def allowed_origins() -> list[str]:
     return ["http://localhost:3000", "http://127.0.0.1:3000", *extra]
 
 
+def sync_lessons() -> None:
+    """Copy content/lessons/ into Postgres. A missing or unready database only affects /api/v2/lessons."""
+    import db
+    from learn import store
+
+    eng = db.engine()
+    if eng is None:
+        return
+    try:
+        n = store.sync(eng)
+        log.info("lessons synced: %d written", n)
+    except Exception as exc:  # noqa: BLE001 - startup must not fail on the database
+        log.warning("lessons not synced: %s", exc)
+
+
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     data_store.check_integrity()
+    sync_lessons()
     yield
 
 
@@ -59,6 +78,7 @@ app.include_router(v2_live_router)
 app.include_router(v2_phase4_router)
 app.include_router(v2_phase5_router)
 app.include_router(v2_scan_router)
+app.include_router(v2_learn_router)
 
 
 @app.get("/api/health", response_model=HealthResponse)

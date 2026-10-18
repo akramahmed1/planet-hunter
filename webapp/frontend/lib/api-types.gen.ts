@@ -267,6 +267,66 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v2/lessons": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Lessons
+         * @description Every lesson in order, with its badge and how many steps and questions it has.
+         */
+        get: operations["lessons_api_v2_lessons_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v2/lessons/{slug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Lesson
+         * @description One lesson: steps with their sourced facts, and the quiz questions without their answers.
+         */
+        get: operations["lesson_api_v2_lessons__slug__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v2/lessons/{slug}/answers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Answer
+         * @description Check one answer. Retries are allowed; the explanation comes back either way.
+         */
+        post: operations["answer_api_v2_lessons__slug__answers_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v2/lightcurves/{slug}": {
         parameters: {
             query?: never;
@@ -545,6 +605,35 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** AnswerRequest */
+        AnswerRequest: {
+            /** Choice */
+            choice?: number | null;
+            /** Question */
+            question: string;
+            /** Value */
+            value?: number | null;
+        };
+        /** AnswerResult */
+        AnswerResult: {
+            /** Answer */
+            answer: number | null;
+            /** Choice Explanation */
+            choice_explanation: string | null;
+            /** Correct */
+            correct: boolean;
+            /** Correct Choice */
+            correct_choice: number | null;
+            /** Explanation */
+            explanation: string;
+            /** Question */
+            question: string;
+            source: components["schemas"]["SourceRef"];
+            /** Tolerance */
+            tolerance: number | null;
+            /** Unit */
+            unit: string | null;
+        };
         /** ApodResponse */
         ApodResponse: {
             /** Copyright */
@@ -876,6 +965,101 @@ export interface components {
             source: components["schemas"]["SourceRef"];
             /** Stale */
             stale: boolean;
+        };
+        /** LessonBadge */
+        LessonBadge: {
+            /** Name */
+            name: string;
+            /** Text */
+            text: string;
+        };
+        /** LessonFact */
+        LessonFact: {
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "measured" | "computed" | "definition";
+            source: components["schemas"]["SourceRef"];
+            /** Text */
+            text: string;
+        };
+        /** LessonLink */
+        LessonLink: {
+            /** Href */
+            href: string;
+            /** Label */
+            label: string;
+        };
+        /** LessonQuestion */
+        LessonQuestion: {
+            /** Choices */
+            choices: string[] | null;
+            /** Key */
+            key: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "choice" | "numeric";
+            /** Prompt */
+            prompt: string;
+            /** Tolerance */
+            tolerance: number | null;
+            /** Unit */
+            unit: string | null;
+        };
+        /** LessonResponse */
+        LessonResponse: {
+            badge: components["schemas"]["LessonBadge"];
+            /** Digest */
+            digest: string;
+            /** Links */
+            links: components["schemas"]["LessonLink"][];
+            /** Minutes */
+            minutes: number;
+            /** Questions */
+            questions: components["schemas"]["LessonQuestion"][];
+            /** Slug */
+            slug: string;
+            /** Steps */
+            steps: components["schemas"]["LessonStep"][];
+            /** Summary */
+            summary: string;
+            /** Title */
+            title: string;
+        };
+        /** LessonStep */
+        LessonStep: {
+            /** Body */
+            body: string[];
+            /** Facts */
+            facts: components["schemas"]["LessonFact"][];
+            /** Heading */
+            heading: string;
+        };
+        /** LessonSummary */
+        LessonSummary: {
+            badge: components["schemas"]["LessonBadge"];
+            /** Digest */
+            digest: string;
+            /** Minutes */
+            minutes: number;
+            /** Questions */
+            questions: number;
+            /** Slug */
+            slug: string;
+            /** Steps */
+            steps: number;
+            /** Summary */
+            summary: string;
+            /** Title */
+            title: string;
+        };
+        /** LessonsResponse */
+        LessonsResponse: {
+            /** Lessons */
+            lessons: components["schemas"]["LessonSummary"][];
         };
         /** LightCurveResponse */
         LightCurveResponse: {
@@ -1897,6 +2081,127 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["Unavailable"];
                 };
+            };
+        };
+    };
+    lessons_api_v2_lessons_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LessonsResponse"];
+                };
+            };
+            /** @description Lessons need the database, which is not configured or not reachable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    lesson_api_v2_lessons__slug__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LessonResponse"];
+                };
+            };
+            /** @description No such lesson or question */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+            /** @description Lessons need the database, which is not configured or not reachable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    answer_api_v2_lessons__slug__answers_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AnswerRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AnswerResult"];
+                };
+            };
+            /** @description No such lesson or question */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+            /** @description Lessons need the database, which is not configured or not reachable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
