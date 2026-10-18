@@ -223,6 +223,29 @@ P6_REQUESTS = [
     ("mast_tess_ebs_hlsp_p6", "https://archive.stsci.edu/hlsp/tess-ebs", "html"),
 ]
 
+# Phase 7 set: pages the lessons quote. Several candidates per fact; the lessons cite only
+# the ones that answered and contain the quoted words (checked by tests/test_content.py).
+P7_REQUESTS = [
+    ("iau_resolution_b5_p7", "https://www.iau.org/static/resolutions/Resolution_GA26-5-6.pdf", "pdf"),
+    ("iau_pluto_page_p7", "https://www.iau.org/public/themes/pluto/", "html"),
+    ("iau_news_0603_p7", "https://www.iau.org/news/pressreleases/detail/iau0603/", "html"),
+    ("nasa_what_is_a_planet_p7", "https://science.nasa.gov/solar-system/planets/what-is-a-planet/", "html"),
+    ("nasa_pluto_dwarf_p7", "https://science.nasa.gov/dwarf-planets/pluto/", "html"),
+    ("nasa_whats_a_transit_p7", "https://science.nasa.gov/exoplanets/whats-a-transit/", "html"),
+    ("nasa_exo_transit_faq_p7", "https://exoplanets.nasa.gov/faq/31/whats-a-transit/", "html"),
+    ("nasa_habitable_zone_p7", "https://science.nasa.gov/exoplanets/habitable-zone/", "html"),
+    ("nasa_exo_how_find_p7", "https://science.nasa.gov/exoplanets/how-we-find-and-characterize/", "html"),
+    ("arxiv_kopparapu2014_abs_p7", "https://arxiv.org/abs/1404.5292", "html"),
+    ("arxiv_winn2010_abs_p7", "https://arxiv.org/abs/1001.2010", "html"),
+    ("arxiv_prsa2022_abs_p7", "https://arxiv.org/abs/2110.13382", "html"),
+    ("exoplanet_archive_toi_doc_p7", "https://exoplanetarchive.ipac.caltech.edu/docs/API_TOI_columns.html", "html"),
+    ("exoplanet_archive_criteria_p7", "https://exoplanetarchive.ipac.caltech.edu/docs/exoplanet_criteria.html", "html"),
+    ("nist_kelvin_p7", "https://www.nist.gov/si-redefinition/kelvin", "html"),
+    ("nist_c_p7", "https://physics.nist.gov/cgi-bin/cuu/Value?c", "html"),
+    ("nasa_tess_toi_count_p7",
+     TAP + q({"query": "select tfopwg_disp,count(*) as n from toi group by tfopwg_disp", "format": "json"}), "json"),
+]
+
 # Only status and size are recorded for these (large client-side assets).
 PROBE_REQUESTS = [
     ("aladin_lite_v3_js", "https://aladin.cds.unistra.fr/AladinLite/api/v3/latest/aladin.js"),
@@ -299,10 +322,10 @@ def main() -> int:
     FIXTURES.mkdir(parents=True, exist_ok=True)
     SNAPSHOTS.mkdir(parents=True, exist_ok=True)
     summary = []
-    requests = {"p2": P2_REQUESTS, "p3": P3_REQUESTS, "p4": P4_REQUESTS, "p6": P6_REQUESTS}.get(phase, FIXTURE_REQUESTS)
+    requests = {"p2": P2_REQUESTS, "p3": P3_REQUESTS, "p4": P4_REQUESTS, "p6": P6_REQUESTS, "p7": P7_REQUESTS}.get(phase, FIXTURE_REQUESTS)
 
     for name, url, ext in requests:
-        r = fetch(url, max_bytes=3_500_000 if "1800_2050" in name or name.endswith("_glb") or "tess_ebs" in name else MAX_BYTES)
+        r = fetch(url, max_bytes=3_500_000 if "1800_2050" in name or name.endswith("_glb") or "tess_ebs" in name or name.endswith("_pdf_p7") or name.startswith("iau_resolution") else MAX_BYTES)
         body = r["body"].replace(NASA_KEY.encode(), b"REDACTED") if NASA_KEY != "DEMO_KEY" else r["body"]
         if body:
             (FIXTURES / f"{name}.{ext}").write_bytes(body)
