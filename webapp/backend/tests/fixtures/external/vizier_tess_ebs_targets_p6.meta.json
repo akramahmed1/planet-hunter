@@ -1,0 +1,13 @@
+{
+  "url": "https://tapvizier.cds.unistra.fr/TAPVizieR/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=json&QUERY=SELECT%20%2A%20FROM%20%22J%2FApJS%2F258%2F16%2Ftess-ebs%22%20WHERE%20TIC%20IN%20%28260128333%2C259377017%2C55652896%2C307210830%2C150428135%2C52368076%2C183985250%2C251848941%29",
+  "final_url": "https://tapvizier.cds.unistra.fr/TAPVizieR/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=json&QUERY=SELECT%20%2A%20FROM%20%22J%2FApJS%2F258%2F16%2Ftess-ebs%22%20WHERE%20TIC%20IN%20%28260128333%2C259377017%2C55652896%2C307210830%2C150428135%2C52368076%2C183985250%2C251848941%29",
+  "status": 503,
+  "https": true,
+  "headers": {
+    "cache-control": "no-cache",
+    "content-type": "text/html"
+  },
+  "bytes": 108,
+  "truncated": false,
+  "fetched_at": "2026-10-18T01:22:58+00:00"
+}

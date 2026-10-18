@@ -1,0 +1,13 @@
+{
+  "url": "https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select%20tid%2Ctoi%20from%20toi%20where%20toipfx%20%3D%20700&format=json",
+  "final_url": "https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select%20tid%2Ctoi%20from%20toi%20where%20toipfx%20%3D%20700&format=json",
+  "status": 200,
+  "https": true,
+  "headers": {
+    "content-type": "application/json",
+    "server": "cloudflare"
+  },
+  "bytes": 151,
+  "truncated": false,
+  "fetched_at": "2026-10-18T01:22:57+00:00"
+}
