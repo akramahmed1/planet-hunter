@@ -1,3 +1,4 @@
+import Link from "next/link";
 import ApiError from "@/components/ApiError";
 import CandidatesTable from "@/components/CandidatesTable";
 import {
@@ -37,6 +38,9 @@ export default async function CandidatesPage() {
         days. {honesty}
       </p>
       <CandidatesTable candidates={candidates} />
+      <p>
+        <Link href="/scan" className="btn btn--primary">Scan any TESS star yourself</Link>
+      </p>
     </div>
   );
 }

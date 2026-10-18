@@ -6,7 +6,8 @@ from fastapi import APIRouter, HTTPException, Path, Request, Response
 import db
 from api_v2 import schemas as s
 from live import http
-from scans import catalogs, queue, run
+from scans import catalogs, queue
+from scans.presets import PRESETS
 
 router = APIRouter(prefix="/api/v2", tags=["v2"])
 NO_DB = {503: {"description": "Scans need the database, which is not configured or not reachable"}}
@@ -39,7 +40,7 @@ def create_scan(body: s.ScanRequest, request: Request, response: Response) -> s.
     except http.FetchError as exc:
         raise HTTPException(503, str(exc))
     eng = _engine()
-    params = {"preset": body.preset, **run.PRESETS[body.preset]}
+    params = {"preset": body.preset, **PRESETS[body.preset]}
     try:
         job_id, created = queue.enqueue(eng, tic, params, queue.requester_hash(_client(request)), toi)
     except queue.RateLimited as exc:

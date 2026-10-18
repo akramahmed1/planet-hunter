@@ -81,6 +81,18 @@ jobs:
     name: End-to-end (backend + frontend + browser)
     runs-on: ubuntu-latest
     needs: [backend, frontend]
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: ph_e2e
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s
+          --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/ph_e2e
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -93,6 +105,9 @@ jobs:
         working-directory: webapp/backend
         run: |
           pip install -r requirements.txt
+          alembic upgrade head
+          # A finished scan (TOI 1338) built offline from saved data, for the scan pages' tests.
+          python seed_demo_scans.py
           # Live endpoints answer from the saved real source samples, so this job never depends on NASA uptime.
           PH_OFFLINE_FIXTURES=1 nohup uvicorn app:app --port 8000 > /tmp/backend.log 2>&1 &
           for i in $(seq 1 30); do curl -sf http://127.0.0.1:8000/api/health && break; sleep 1; done

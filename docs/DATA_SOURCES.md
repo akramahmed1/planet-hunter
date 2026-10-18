@@ -293,3 +293,29 @@ Fetched with the `p4` set (19 of 21 returned 200; the two HEASARC TESS pages ret
   114 to 142 KB per target against a 160 KB budget (checked by `tests/test_phase5.py`). The
   periodogram keeps the peak of each of 1500 chunks of the 12,000-period grid, so the
   highest peak stays exactly at the found period.
+
+## Phase 6 findings (2026-10-18)
+
+- **Scans** (`webapp/backend/scans/`, worker `python -m scans.worker`): SPOC PDCSAP light curves
+  from MAST via lightkurve 2.5.1, then the same flatten and BLS pipeline as `candidate_scan.py`,
+  imported from `webapp/backend/pipeline` rather than copied. The "standard" preset searches
+  0.5 to 30 days on up to 4 sectors; the "validation" preset (1 to 40 days) is the one used to
+  check against the recorded results. Both are set in `scans/presets.py`.
+- **TOI 700 rescan** (`.github/workflows/scan-check.yml`, run on GitHub's machines): 16.050853 d
+  against the recorded 16.0509 d, an error of 0.0003% (the plan's limit is 0.01%). Cross-match
+  proposes "Matches a known planet" (TOI-700 c), not reviewed.
+- **Cross-match sources:** the NASA Exoplanet Archive `pscomppars` and `toi` tables, queried by TIC
+  ID through TAP (cached), and the TESS Eclipsing Binary catalog, Prsa et al. 2022, ApJS 258, 16
+  (VizieR J/ApJS/258/16). VizieR TAP answered 503 and the plain `.dat` file 404 when fetched;
+  the `.dat.gz` file worked and is saved as `cds_tess_ebs_dat_gz_p6.gz`. `data/tess_ebs.v1.json`
+  is built from it by `scripts/build_reference_data.py`. A signal matches when its period is
+  within 1% of a catalog period, or of twice or half of it.
+- **Known eclipsing binary:** TOI 1338 (TIC 260128333) is in the TESS EB catalog with period
+  14.608583 d. The signal-only vetting tests (odd/even, secondary, shape) do not catch it at the
+  pipeline's period, so the flag comes from the catalog row "Known eclipsing binary", which
+  fails, and the scan page shows that row with its explanation.
+- **Mislabelled targets found by the cross-match:** TIC 307210830 was listed as TOI 776 but is
+  TOI 175 (L 98-59), and TIC 183985250 was listed as TOI 849 but is TOI 193 (LTT 9779). Both
+  are renamed everywhere and marked unreviewed until Akram re-reviews them.
+- **Transit Least Squares:** optional and not installed; the row says "Not run".
+- **Labels** stay "proposed, not reviewed" until a row exists in `reviews`.
