@@ -3,7 +3,9 @@ import { notFound } from "next/navigation";
 import ApiError from "@/components/ApiError";
 import ClassificationBadge from "@/components/ClassificationBadge";
 import Card from "@/components/ui/Card";
+import SkyPanel from "@/components/sky/SkyPanel";
 import EmptyState from "@/components/ui/EmptyState";
+import { apiV2Get, type TargetsResponse } from "@/lib/api-v2";
 import {
   apiGet,
   labelFor,
@@ -20,9 +22,10 @@ export default async function CandidateDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const [res, health] = await Promise.all([
+  const [res, health, targets] = await Promise.all([
     apiGet<Candidate>(`/api/candidates/${encodeURIComponent(slug)}`),
     apiGet<HealthResponse>("/api/health"),
+    apiV2Get<TargetsResponse>("/api/v2/targets"),
   ]);
 
   if (!res.ok) {
@@ -41,6 +44,7 @@ export default async function CandidateDetailPage({
   const total = health.ok ? health.data.candidate_count : null;
 
   const plotSrc = plotImageUrl(candidate.plot_url);
+  const target = targets.ok ? targets.data.targets.find((t) => t.slug === candidate.slug) : undefined;
 
   return (
     <div>
@@ -106,6 +110,18 @@ export default async function CandidateDetailPage({
           </EmptyState>
         )}
       </section>
+
+      {target && (
+        <>
+          <p>
+            <Link href={`/exoplanets/${target.slug}`} className="btn" data-testid="system-link">
+              See the {target.target} system in 3D
+            </Link>
+          </p>
+          <SkyPanel name={target.target} ra={target.ra_deg} dec={target.dec_deg}
+            source={targets.ok ? targets.data.star_source : { name: "", url: "" }} />
+        </>
+      )}
 
       <div className="callout callout--nova" role="note">
         <p>

@@ -14,6 +14,7 @@ from urllib.parse import unquote_plus
 import httpx
 
 FIXTURES = Path(__file__).resolve().parent.parent / "tests" / "fixtures" / "external"
+SPACECRAFT = {"-95": "tess", "-170": "jwst", "-31": "voyager1", "-32": "voyager2"}
 HORIZONS_IDS = {"199": "mercury", "299": "venus", "399": "earth", "301": "moon", "499": "mars", "599": "jupiter",
                 "699": "saturn", "799": "uranus", "899": "neptune", "999": "pluto"}
 
@@ -21,10 +22,14 @@ HORIZONS_IDS = {"199": "mercury", "299": "venus", "399": "earth", "301": "moon",
 def fixture_for(request: httpx.Request) -> str | None:
     host, url = request.url.host, unquote_plus(str(request.url))
     if host == "ssd.jpl.nasa.gov" and "horizons.api" in url:
+        craft = next((name for code, name in SPACECRAFT.items() if f"COMMAND='{code}'" in url), None)
+        if craft:
+            frame = "geo" if "CENTER='500@399'" in url else "helio"
+            return f"horizons_{craft}_vectors_{frame}_p4"
         body = next((name for code, name in HORIZONS_IDS.items() if f"COMMAND='{code}'" in url), None)
         return f"horizons_{body}_vectors_helio_today" if body else None
     if host == "api.wheretheiss.at":
-        return "iss_wheretheiss"
+        return "iss_ground_track_p4" if "/positions" in url else "iss_wheretheiss"
     if host == "api.nasa.gov" and "/planetary/apod" in url:
         return "nasa_apod"
     if host == "api.nasa.gov" and "/DONKI/" in url:

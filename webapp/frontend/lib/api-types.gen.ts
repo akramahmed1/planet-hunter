@@ -247,6 +247,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v2/iss/track": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Iss Track
+         * @description The ISS ground track for the next 90 minutes (10 points, 10 minutes apart), cached 10 minutes.
+         */
+        get: operations["iss_track_api_v2_iss_track_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v2/missions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Missions
+         * @description TESS, JWST, Voyager 1 and Voyager 2: distance from Earth and the Sun today (JPL Horizons), launch and status.
+         */
+        get: operations["missions_api_v2_missions_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v2/orbits": {
         parameters: {
             query?: never;
@@ -299,6 +339,66 @@ export interface paths {
          * @description Space weather notifications from NASA DONKI for the last 7 days.
          */
         get: operations["get_space_weather_api_v2_space_weather_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v2/targets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Targets
+         * @description The 8 Planet Hunter targets with their star's sky position (MAST TIC) and confirmed planet count.
+         */
+        get: operations["targets_api_v2_targets_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v2/targets/{slug}/system": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Target System
+         * @description A target's star, its confirmed planets, our pipeline's signal and the habitable zone.
+         */
+        get: operations["target_system_api_v2_targets__slug__system_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v2/tess": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Tess
+         * @description Facts for the TESS explainer, each with the source's exact words.
+         */
+        get: operations["tess_api_v2_tess_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -533,6 +633,27 @@ export interface components {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
         };
+        /** HabitableZone */
+        HabitableZone: {
+            /** Conservative Inner Au */
+            conservative_inner_au: number;
+            /** Conservative Outer Au */
+            conservative_outer_au: number;
+            /** In Valid Range */
+            in_valid_range: boolean;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "measured" | "computed" | "estimate";
+            /** Note */
+            note: string;
+            /** Optimistic Inner Au */
+            optimistic_inner_au: number;
+            /** Optimistic Outer Au */
+            optimistic_outer_au: number;
+            source: components["schemas"]["SourceRef"];
+        };
         /** HealthResponse */
         HealthResponse: {
             /** Candidate Count */
@@ -579,6 +700,26 @@ export interface components {
             /** Visibility */
             visibility: string;
         };
+        /** IssTrackResponse */
+        IssTrackResponse: {
+            /**
+             * Fetched At
+             * Format: date-time
+             */
+            fetched_at: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "measured" | "computed" | "estimate";
+            /** Note */
+            note: string;
+            /** Points */
+            points: components["schemas"]["TrackPoint"][];
+            source: components["schemas"]["SourceRef"];
+            /** Stale */
+            stale: boolean;
+        };
         /** MethodResponse */
         MethodResponse: {
             /** Data Source */
@@ -600,6 +741,16 @@ export interface components {
             body: string;
             /** Title */
             title: string;
+        };
+        /** MissionsResponse */
+        MissionsResponse: {
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /** Spacecraft */
+            spacecraft: components["schemas"]["Spacecraft"][];
         };
         /** Orbit */
         Orbit: {
@@ -720,6 +871,19 @@ export interface components {
             /** Url */
             url: string;
         };
+        /** SourcedFact */
+        SourcedFact: {
+            /** Display */
+            display?: string | null;
+            /**
+             * Fetched At
+             * Format: date-time
+             */
+            fetched_at: string;
+            /** Quote */
+            quote: string;
+            source: components["schemas"]["SourceRef"];
+        };
         /** SpaceWeatherItem */
         SpaceWeatherItem: {
             /** Issued */
@@ -744,6 +908,38 @@ export interface components {
             /** Window Days */
             window_days: number;
         };
+        /** Spacecraft */
+        Spacecraft: {
+            from_earth: components["schemas"]["SpacecraftDistance"] | null;
+            from_sun: components["schemas"]["SpacecraftDistance"] | null;
+            /** Id */
+            id: string;
+            launch: components["schemas"]["SourcedFact"] | null;
+            /** Name */
+            name: string;
+            /** Note */
+            note?: string | null;
+            status: components["schemas"]["SourcedFact"] | null;
+        };
+        /** SpacecraftDistance */
+        SpacecraftDistance: {
+            distance: components["schemas"]["Distance"];
+            /**
+             * Fetched At
+             * Format: date-time
+             */
+            fetched_at: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "measured" | "computed" | "estimate";
+            /** Light Time Seconds */
+            light_time_seconds: number;
+            source: components["schemas"]["SourceRef"];
+            /** Stale */
+            stale: boolean;
+        };
         /** Star */
         Star: {
             /** Dec Deg */
@@ -766,6 +962,85 @@ export interface components {
             };
             /** Count */
             count: number;
+        };
+        /** SystemPlanet */
+        SystemPlanet: {
+            /** Disc Year */
+            disc_year: number | null;
+            /** Eccentricity */
+            eccentricity: number | null;
+            equilibrium_temperature: components["schemas"]["Quantity"] | null;
+            /** Name */
+            name: string;
+            /** Note */
+            note?: string | null;
+            orbit_au: components["schemas"]["Quantity"] | null;
+            period_days: components["schemas"]["Quantity"] | null;
+            radius_earth: components["schemas"]["Quantity"] | null;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "confirmed" | "pipeline_signal";
+        };
+        /** TargetSummary */
+        TargetSummary: {
+            /** Classification */
+            classification: string;
+            /** Classification Label */
+            classification_label: string;
+            /** Confirmed Planets */
+            confirmed_planets: number;
+            /** Dec Deg */
+            dec_deg: number;
+            /** Distance Pc */
+            distance_pc: number | null;
+            /** Host */
+            host: string;
+            /** Ra Deg */
+            ra_deg: number;
+            /** Slug */
+            slug: string;
+            /** Target */
+            target: string;
+            /** Teff K */
+            teff_k: number | null;
+            /** Tic */
+            tic: string;
+        };
+        /** TargetSystemResponse */
+        TargetSystemResponse: {
+            habitable_zone: components["schemas"]["HabitableZone"] | null;
+            /** Host */
+            host: string;
+            planet_source: components["schemas"]["SourceRef"];
+            /** Planets */
+            planets: components["schemas"]["SystemPlanet"][];
+            /**
+             * Planets Fetched At
+             * Format: date-time
+             */
+            planets_fetched_at: string;
+            /** Slug */
+            slug: string;
+            star: components["schemas"]["Star"];
+            /**
+             * Star Fetched At
+             * Format: date-time
+             */
+            star_fetched_at: string;
+            star_source: components["schemas"]["SourceRef"];
+            /** Target */
+            target: string;
+            /** Tic */
+            tic: string;
+        };
+        /** TargetsResponse */
+        TargetsResponse: {
+            planet_source: components["schemas"]["SourceRef"];
+            star_source: components["schemas"]["SourceRef"];
+            /** Targets */
+            targets: components["schemas"]["TargetSummary"][];
         };
         /** Temperature */
         Temperature: {
@@ -793,6 +1068,22 @@ export interface components {
             quote: string;
             source: components["schemas"]["SourceRef"];
             value: components["schemas"]["Temperature"] | null;
+        };
+        /** TessFactsResponse */
+        TessFactsResponse: {
+            /** Facts */
+            facts: {
+                [key: string]: components["schemas"]["SourcedFact"];
+            };
+        };
+        /** TrackPoint */
+        TrackPoint: {
+            /** Latitude */
+            latitude: number;
+            /** Longitude */
+            longitude: number;
+            /** Timestamp */
+            timestamp: number;
         };
         /** Unavailable */
         Unavailable: {
@@ -1229,6 +1520,55 @@ export interface operations {
             };
         };
     };
+    iss_track_api_v2_iss_track_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IssTrackResponse"];
+                };
+            };
+            /** @description The upstream source is down and nothing is cached */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Unavailable"];
+                };
+            };
+        };
+    };
+    missions_api_v2_missions_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MissionsResponse"];
+                };
+            };
+        };
+    };
     get_orbits_api_v2_orbits_get: {
         parameters: {
             query?: never;
@@ -1306,6 +1646,84 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Unavailable"];
+                };
+            };
+        };
+    };
+    targets_api_v2_targets_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TargetsResponse"];
+                };
+            };
+        };
+    };
+    target_system_api_v2_targets__slug__system_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TargetSystemResponse"];
+                };
+            };
+            /** @description Not one of the Planet Hunter targets */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tess_api_v2_tess_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TessFactsResponse"];
                 };
             };
         };

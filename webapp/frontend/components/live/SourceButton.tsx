@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 import Badge from "@/components/ui/Badge";
 import Sheet from "@/components/ui/Sheet";
 import type { SourceRef } from "@/lib/api-v2";
@@ -50,6 +51,9 @@ export default function SourceButton({
           i
         </span>
       </button>
+      {/* Rendered into <body> only while open, so a source button can sit inside a paragraph
+          (a <dialog> may not be a descendant of <p>) and the server HTML stays valid. */}
+      {open && createPortal(
       <Sheet open={open} onClose={() => setOpen(false)} title={`Source: ${label}`}>
         <dl className="kv kv--text source-kv">
           <dt>From</dt>
@@ -76,7 +80,8 @@ export default function SourceButton({
             copy we fetched.
           </p>
         )}
-      </Sheet>
+      </Sheet>,
+      document.body)}
     </>
   );
 }

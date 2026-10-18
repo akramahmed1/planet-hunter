@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useReducedMotion, useWebGL } from "@/components/three/hooks";
 import Toggle from "@/components/ui/Toggle";
 import { UnitsToggles } from "@/components/shell/UnitsControls";
 import {
@@ -19,27 +20,6 @@ import OrbitMap2D from "./OrbitMap2D";
 import { DateControl, MeasurePanel, TourPanel } from "./Panels";
 
 type View = "3d" | "map";
-
-function hasWebGL(): boolean {
-  try {
-    const c = document.createElement("canvas");
-    return !!(c.getContext("webgl2") || c.getContext("webgl"));
-  } catch {
-    return false;
-  }
-}
-
-function useReducedMotion(): boolean {
-  const [reduced, setReduced] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduced(mq.matches);
-    const on = () => setReduced(mq.matches);
-    mq.addEventListener("change", on);
-    return () => mq.removeEventListener("change", on);
-  }, []);
-  return reduced;
-}
 
 const SCALE_OPTIONS = [
   { value: "true" as const, label: "True scale", title: "True scale distances" },
@@ -75,7 +55,7 @@ export default function SolarSystem({
   const [scale, setScale] = useState<Scale>("true");
   const [zoom, setZoom] = useState<Zoom>("all");
   const [mode, setMode] = useState<Mode>("explore");
-  const [webgl, setWebgl] = useState<boolean | null>(null);
+  const webgl = useWebGL();
   const [view, setView] = useState<View>("3d");
   const [selected, setSelected] = useState<SceneBodyId | null>(null);
   const [deepSpace, setDeepSpace] = useState(false);
@@ -83,8 +63,6 @@ export default function SolarSystem({
   const [tourIndex, setTourIndex] = useState(0);
   const [sceneReady, setSceneReady] = useState(false);
   const reducedMotion = useReducedMotion();
-
-  useEffect(() => setWebgl(hasWebGL()), []);
 
   // Fetch positions for a new date, after the slider settles.
   useEffect(() => {

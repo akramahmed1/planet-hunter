@@ -174,7 +174,7 @@ Status values: `todo`, `in-progress`, `staging-verified`, `merged-to-v2`, `live`
 | 1 | Foundations and design system | merged-to-v2 |
 | 2 | Live data layer | merged-to-v2 |
 | 3 | 3D solar system | merged-to-v2 |
-| 4 | Exoplanet systems, sky map, TESS explainer, mission tracker | todo |
+| 4 | Exoplanet systems, sky map, TESS explainer, mission tracker | in-progress |
 | 5 | Hunt lab (interactive light curves) | todo |
 | 6 | Live scan engine, vetting, cross-match | todo |
 | 7 | Learn and quiz | todo |
@@ -458,6 +458,22 @@ Status values: `todo`, `in-progress`, `staging-verified`, `merged-to-v2`, `live`
 - The status table shows every phase as `live`.
 
 ---
+
+## Decisions log (2026-10-18)
+
+Akram: "Start and finish everything." Answers to the questions asked that day:
+
+- **Pace:** for Phases 4 to 9, each phase merges into `v2` once CI is green; staging (which tracks `v2`)
+  is then verified by the staging check, and any failure is fixed straight away. Production stays
+  untouched until Akram approves Phase 10.
+- **Phase 8 teacher sign-in:** email and password (no third-party account). Students: class code,
+  nickname and PIN, no email.
+- **Phase 9 AI explainer:** built and tested with a fake model, switched off until an API key is added.
+- **Phase 9 billing:** Stripe test mode, built and tested with fakes, switched off until test keys
+  and a price are set. No money moves.
+- **Phase 4 note:** star coordinates and parameters live in `webapp/backend/data/stars.v1.json`
+  (built from the MAST sample by `scripts/build_reference_data.py`) and are served at
+  `/api/v2/targets`, instead of being added to `results.json`, so the v1 contract stays unchanged.
 
 ## 7. What Akram provides
 

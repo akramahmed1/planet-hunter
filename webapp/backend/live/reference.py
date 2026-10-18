@@ -23,3 +23,19 @@ def kepler() -> dict:
 
 def pluto() -> dict:
     return load("pluto_horizons.v1.json")
+
+
+def stars() -> dict:
+    return load("stars.v1.json")
+
+
+def systems() -> dict:
+    return load("systems.v1.json")
+
+
+def missions() -> dict:
+    return load("missions.v1.json")
+
+
+def tess() -> dict:
+    return load("tess.v1.json")
