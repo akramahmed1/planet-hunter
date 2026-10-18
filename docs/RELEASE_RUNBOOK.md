@@ -5,8 +5,10 @@ Nothing here runs until Akram approves the release on his phone. Production is t
 
 ## 1. Before the release
 
-- [ ] Staging check green on the `v2` commit being released, including the scan step (needs
-      the staging `worker` service) and Playwright against staging.
+- [x] Staging check green on the `v2` commit being released, including the scan step (needs
+      the staging `worker` service) and Playwright against staging. Green on 2026-10-18,
+      run 39137620151 on `56eb3d3`: the real TOI 1338 scan is flagged as a known eclipsing
+      binary, and Playwright passes on phone and desktop. Rerun on the final commit.
 - [ ] Akram has tried on staging: two lessons (tone), a teacher and a student account on his
       phone (Phase 8), the re-reviewed TOI 175 and TOI 193 readouts.
 - [x] Decisions (Akram, 2026-10-18): monitoring is Railway logs plus the uptime workflow;

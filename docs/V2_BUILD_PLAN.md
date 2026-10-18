@@ -187,10 +187,10 @@ Status values: `todo`, `in-progress`, `staging-verified`, `merged-to-v2`, `live`
 | 3 | 3D solar system | merged-to-v2 |
 | 4 | Exoplanet systems, sky map, TESS explainer, mission tracker | staging-verified |
 | 5 | Hunt lab (interactive light curves) | staging-verified |
-| 6 | Live scan engine, vetting, cross-match | merged-to-v2 |
-| 7 | Learn and quiz | merged-to-v2 |
-| 8 | Accounts and multi-tenant classrooms | merged-to-v2 |
-| 9 | AI explainer and billing | merged-to-v2 |
+| 6 | Live scan engine, vetting, cross-match | staging-verified |
+| 7 | Learn and quiz | staging-verified |
+| 8 | Accounts and multi-tenant classrooms | staging-verified |
+| 9 | AI explainer and billing | merged-to-v2 (explainer waits for the staging key) |
 | 10 | Hardening and production release | in-progress |
 
 ---
