@@ -11,6 +11,8 @@ COPY api_v2/ ./api_v2/
 COPY live/ ./live/
 COPY pipeline/ ./pipeline/
 COPY scans/ ./scans/
+COPY learn/ ./learn/
+COPY content/ ./content/
 COPY migrations/ ./migrations/
 COPY data/ ./data/
 COPY plots/ ./plots/

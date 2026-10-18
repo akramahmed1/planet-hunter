@@ -9,7 +9,7 @@ from __future__ import annotations
 import datetime as dt
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class _Strict(BaseModel):
@@ -467,3 +467,80 @@ class ScanStatus(_Strict):
     n_cadences: int | None
     signal: ScanSignal | None
     reviews: list[ScanReview]
+
+
+# Phase 7: lessons and quizzes.
+class LessonBadge(_Strict):
+    name: str
+    text: str
+
+
+class LessonLink(_Strict):
+    href: str
+    label: str
+
+
+class LessonFact(_Strict):
+    text: str
+    kind: Literal["measured", "computed", "definition"]
+    source: SourceRef
+
+
+class LessonStep(_Strict):
+    heading: str
+    body: list[str]
+    facts: list[LessonFact]
+
+
+class LessonQuestion(_Strict):
+    key: str
+    kind: Literal["choice", "numeric"]
+    prompt: str
+    choices: list[str] | None
+    unit: str | None
+    tolerance: float | None
+
+
+class LessonSummary(_Strict):
+    slug: str
+    title: str
+    summary: str
+    minutes: int
+    badge: LessonBadge
+    digest: str
+    steps: int
+    questions: int
+
+
+class LessonsResponse(_Strict):
+    lessons: list[LessonSummary]
+
+
+class LessonResponse(_Strict):
+    slug: str
+    title: str
+    summary: str
+    minutes: int
+    badge: LessonBadge
+    links: list[LessonLink]
+    digest: str
+    steps: list[LessonStep]
+    questions: list[LessonQuestion]
+
+
+class AnswerRequest(_Strict):
+    question: str = Field(pattern=r"^[a-z0-9_]{1,64}$")
+    choice: int | None = Field(default=None, ge=0, le=20)
+    value: float | None = None
+
+
+class AnswerResult(_Strict):
+    question: str
+    correct: bool
+    explanation: str
+    source: SourceRef
+    correct_choice: int | None
+    choice_explanation: str | None
+    answer: float | None
+    tolerance: float | None
+    unit: str | None

@@ -60,6 +60,11 @@ export type PeriodogramResponse = Schemas["PeriodogramResponse"];
 export type ScanCreated = Schemas["ScanCreated"];
 export type ScanStatus = Schemas["ScanStatus"];
 export type VettingRow = Schemas["VettingRow"];
+export type LessonsResponse = Schemas["LessonsResponse"];
+export type LessonSummary = Schemas["LessonSummary"];
+export type LessonResponse = Schemas["LessonResponse"];
+export type LessonQuestion = Schemas["LessonQuestion"];
+export type AnswerResult = Schemas["AnswerResult"];
 
 /** POST JSON to /api/v2. Errors carry the API's `detail` message when there is one. */
 export async function apiV2Post<T>(path: `/api/v2/${string}`, body: unknown): Promise<V2Result<T>> {

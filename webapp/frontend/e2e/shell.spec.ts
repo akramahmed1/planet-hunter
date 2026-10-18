@@ -60,10 +60,7 @@ test("navigating from the More sheet closes it and marks More active", async ({ 
 });
 
 test("coming-soon sections say so and link back", async ({ page }) => {
-  for (const [route, title] of [
-    ["/learn", "Learn"],
-    ["/classroom", "Classroom"],
-  ]) {
+  for (const [route, title] of [["/classroom", "Classroom"]]) {
     await page.goto(route);
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(title);
     await expect(page.getByRole("main").getByText("Coming soon", { exact: true })).toBeVisible();
@@ -82,7 +79,7 @@ test("skip link moves focus to the main content", async ({ page }) => {
 
 test("reduced motion turns animation off", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/learn");
+  await page.goto("/classroom");
   const durations = await page.evaluate(() => [
     getComputedStyle(document.body, "::after").animationDuration,
     getComputedStyle(document.querySelector(".orbit-planet")!).animationDuration,
