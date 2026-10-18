@@ -204,6 +204,10 @@ P6_REQUESTS = [
     ("exoplanet_archive_pscomppars_by_tic_p6",
      TAP + q({"query": "select pl_name,hostname,tic_id,pl_orbper,cb_flag from pscomppars where tic_id in ("
                        + ",".join(f"'TIC {t}'" for t in P4_TICS) + ")", "format": "json"}), "json"),
+    # Planets by TIC ID, so systems are keyed by the star actually scanned, never by a name.
+    ("exoplanet_archive_systems_by_tic_p6",
+     TAP + q({"query": f"select {EXO_COLUMNS},pl_orbeccen,tic_id,cb_flag from pscomppars where tic_id in ("
+                       + ",".join(f"'TIC {t}'" for t in P4_TICS) + ")", "format": "json"}), "json"),
     ("exoplanet_archive_toi_lookup_700_p6",
      TAP + q({"query": "select tid,toi from toi where toipfx = 700", "format": "json"}), "json"),
     ("vizier_tess_ebs_columns_p6",
