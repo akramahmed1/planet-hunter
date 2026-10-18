@@ -1,319 +1,423 @@
 {
  "dataset": "systems",
- "version": 1,
+ "version": 2,
  "source": {
   "name": "NASA Exoplanet Archive, Planetary Systems Composite Parameters (pscomppars)",
   "url": "https://exoplanetarchive.ipac.caltech.edu/",
-  "fetched_at": "2026-10-18T00:37:08+00:00"
+  "fetched_at": "2026-10-18T01:27:48+00:00"
  },
  "systems": {
-  "TOI-125": [
-   {
-    "pl_name": "TOI-125 b",
-    "hostname": "TOI-125",
-    "pl_orbper": 4.65382,
-    "pl_orbsmax": 0.05186,
-    "pl_orbeccen": 0.194,
-    "pl_rade": 2.726,
-    "pl_eqt": 1037.0,
-    "disc_year": 2019,
-    "st_teff": 5320.0,
-    "st_rad": 0.848,
-    "st_mass": 0.859,
-    "st_lum": -0.28483
-   },
-   {
-    "pl_name": "TOI-125 c",
-    "hostname": "TOI-125",
-    "pl_orbper": 9.15059,
-    "pl_orbsmax": 0.0814,
-    "pl_orbeccen": 0.066,
-    "pl_rade": 2.759,
-    "pl_eqt": 827.8,
-    "disc_year": 2019,
-    "st_teff": 5320.0,
-    "st_rad": 0.848,
-    "st_mass": 0.859,
-    "st_lum": -0.28483
-   },
-   {
-    "pl_name": "TOI-125 d",
-    "hostname": "TOI-125",
-    "pl_orbper": 19.98,
-    "pl_orbsmax": 0.137,
-    "pl_orbeccen": 0.168,
-    "pl_rade": 2.93,
-    "pl_eqt": 638.1,
-    "disc_year": 2020,
-    "st_teff": 5320.0,
-    "st_rad": 0.848,
-    "st_mass": 0.859,
-    "st_lum": -0.28483
-   }
-  ],
-  "TOI-178": [
-   {
-    "pl_name": "TOI-178 b",
-    "hostname": "TOI-178",
-    "pl_orbper": 1.9145601,
-    "pl_orbsmax": 0.02607,
-    "pl_orbeccen": null,
-    "pl_rade": 1.2,
-    "pl_eqt": 1040.0,
-    "disc_year": 2021,
-    "st_teff": 4316.0,
-    "st_rad": 0.662,
-    "st_mass": 0.647,
-    "st_lum": -0.86646
-   },
-   {
-    "pl_name": "TOI-178 c",
-    "hostname": "TOI-178",
-    "pl_orbper": 3.238486,
-    "pl_orbsmax": 0.037,
-    "pl_orbeccen": 0.00032,
-    "pl_rade": 1.754,
-    "pl_eqt": 873.0,
-    "disc_year": 2021,
-    "st_teff": 4316.0,
-    "st_rad": 0.662,
-    "st_mass": 0.647,
-    "st_lum": -0.86646
-   },
-   {
-    "pl_name": "TOI-178 d",
-    "hostname": "TOI-178",
-    "pl_orbper": 6.557569,
-    "pl_orbsmax": 0.0592,
-    "pl_orbeccen": 0.0068,
-    "pl_rade": 2.695,
-    "pl_eqt": 690.0,
-    "disc_year": 2021,
-    "st_teff": 4316.0,
-    "st_rad": 0.662,
-    "st_mass": 0.647,
-    "st_lum": -0.86646
-   },
-   {
-    "pl_name": "TOI-178 e",
-    "hostname": "TOI-178",
-    "pl_orbper": 9.96318,
-    "pl_orbsmax": 0.0783,
-    "pl_orbeccen": 0.00038,
-    "pl_rade": 2.301,
-    "pl_eqt": 600.0,
-    "disc_year": 2021,
-    "st_teff": 4316.0,
-    "st_rad": 0.662,
-    "st_mass": 0.647,
-    "st_lum": -0.86646
-   },
-   {
-    "pl_name": "TOI-178 f",
-    "hostname": "TOI-178",
-    "pl_orbper": 15.23335,
-    "pl_orbsmax": 0.1039,
-    "pl_orbeccen": 0.00045,
-    "pl_rade": 2.417,
-    "pl_eqt": 521.0,
-    "disc_year": 2021,
-    "st_teff": 4316.0,
-    "st_rad": 0.662,
-    "st_mass": 0.647,
-    "st_lum": -0.86646
-   },
-   {
-    "pl_name": "TOI-178 g",
-    "hostname": "TOI-178",
-    "pl_orbper": 20.71663,
-    "pl_orbsmax": 0.1275,
-    "pl_orbeccen": 0.00043,
-    "pl_rade": 2.939,
-    "pl_eqt": 470.0,
-    "disc_year": 2021,
-    "st_teff": 4316.0,
-    "st_rad": 0.662,
-    "st_mass": 0.647,
-    "st_lum": -0.86646
-   }
-  ],
-  "TOI-216": [
-   {
-    "pl_name": "TOI-216.02",
-    "hostname": "TOI-216",
-    "pl_orbper": 17.16073,
-    "pl_orbsmax": 0.1293,
-    "pl_orbeccen": 0.16,
-    "pl_rade": 8.0,
-    "pl_eqt": 628.0,
-    "disc_year": 2019,
-    "st_teff": 5026.0,
-    "st_rad": 0.748,
-    "st_mass": 0.77,
-    "st_lum": -0.44159
-   },
-   {
-    "pl_name": "TOI-216.01",
-    "hostname": "TOI-216",
-    "pl_orbper": 34.525528,
-    "pl_orbsmax": 0.2069,
-    "pl_orbeccen": 0.0046,
-    "pl_rade": 10.1,
-    "pl_eqt": 497.0,
-    "disc_year": 2019,
-    "st_teff": 5026.0,
-    "st_rad": 0.748,
-    "st_mass": 0.77,
-    "st_lum": -0.44159
-   }
-  ],
-  "TOI-270": [
-   {
-    "pl_name": "TOI-270 b",
-    "hostname": "TOI-270",
-    "pl_orbper": 3.35992,
-    "pl_orbsmax": 0.03197,
-    "pl_orbeccen": 0.0167,
-    "pl_rade": 1.28,
-    "pl_eqt": 600.0,
-    "disc_year": 2019,
-    "st_teff": 3506.0,
-    "st_rad": 0.38,
-    "st_mass": 0.386,
-    "st_lum": -1.7122
-   },
-   {
-    "pl_name": "TOI-270 c",
-    "hostname": "TOI-270",
-    "pl_orbper": 5.66051,
-    "pl_orbsmax": 0.04526,
-    "pl_orbeccen": 0.0044,
-    "pl_rade": 2.33,
-    "pl_eqt": 489.0,
-    "disc_year": 2019,
-    "st_teff": 3506.0,
-    "st_rad": 0.38,
-    "st_mass": 0.386,
-    "st_lum": -1.7122
-   },
-   {
-    "pl_name": "TOI-270 d",
-    "hostname": "TOI-270",
-    "pl_orbper": 11.38194,
-    "pl_orbsmax": 0.0721,
-    "pl_orbeccen": 0.0066,
-    "pl_rade": 2.0,
-    "pl_eqt": 383.0,
-    "disc_year": 2019,
-    "st_teff": 3506.0,
-    "st_rad": 0.38,
-    "st_mass": 0.386,
-    "st_lum": -1.7122
-   }
-  ],
-  "TOI-700": [
-   {
-    "pl_name": "TOI-700 b",
-    "hostname": "TOI-700",
-    "pl_orbper": 9.97722,
-    "pl_orbsmax": 0.0678,
-    "pl_orbeccen": 0.032,
-    "pl_rade": 0.963,
-    "pl_eqt": 417.0,
-    "disc_year": 2020,
-    "st_teff": 3459.0,
-    "st_rad": 0.4104,
-    "st_mass": 0.417,
-    "st_lum": -1.63264
-   },
-   {
-    "pl_name": "TOI-700 c",
-    "hostname": "TOI-700",
-    "pl_orbper": 16.0511039,
-    "pl_orbsmax": 0.0931,
-    "pl_orbeccen": 0.033,
-    "pl_rade": 2.535,
-    "pl_eqt": 356.0,
-    "disc_year": 2020,
-    "st_teff": 3459.0,
-    "st_rad": 0.4104,
-    "st_mass": 0.417,
-    "st_lum": -1.63264
-   },
-   {
-    "pl_name": "TOI-700 e",
-    "hostname": "TOI-700",
-    "pl_orbper": 27.810124,
-    "pl_orbsmax": 0.1336,
-    "pl_orbeccen": 0.059,
-    "pl_rade": 0.919,
-    "pl_eqt": 272.9,
-    "disc_year": 2023,
-    "st_teff": 3459.0,
-    "st_rad": 0.4104,
-    "st_mass": 0.417,
-    "st_lum": -1.63264
-   },
-   {
-    "pl_name": "TOI-700 d",
-    "hostname": "TOI-700",
-    "pl_orbper": 37.423457,
-    "pl_orbsmax": 0.1642,
-    "pl_orbeccen": 0.042,
-    "pl_rade": 1.145,
-    "pl_eqt": 268.8,
-    "disc_year": 2020,
-    "st_teff": 3459.0,
-    "st_rad": 0.4104,
-    "st_mass": 0.417,
-    "st_lum": -1.63264
-   }
-  ],
-  "TOI-776": [
-   {
-    "pl_name": "TOI-776 b",
-    "hostname": "TOI-776",
-    "pl_orbper": 8.24662,
-    "pl_orbsmax": 0.0653,
-    "pl_orbeccen": 0.052,
-    "pl_rade": 1.798,
-    "pl_eqt": 520.0,
-    "disc_year": 2020,
-    "st_teff": 3725.0,
-    "st_rad": 0.547,
-    "st_mass": 0.542,
-    "st_lum": -1.3098
-   },
-   {
-    "pl_name": "TOI-776 c",
-    "hostname": "TOI-776",
-    "pl_orbper": 15.665323,
-    "pl_orbsmax": 0.1001,
-    "pl_orbeccen": 0.089,
-    "pl_rade": 2.047,
-    "pl_eqt": 420.0,
-    "disc_year": 2020,
-    "st_teff": 3725.0,
-    "st_rad": 0.547,
-    "st_mass": 0.542,
-    "st_lum": -1.3098
-   }
-  ],
-  "TOI-849": [
-   {
-    "pl_name": "TOI-849 b",
-    "hostname": "TOI-849",
-    "pl_orbper": 0.765548,
-    "pl_orbsmax": 0.0155,
-    "pl_orbeccen": 0.0,
-    "pl_rade": 3.64,
-    "pl_eqt": 1932.0,
-    "disc_year": 2020,
-    "st_teff": 5257.0,
-    "st_rad": 0.97,
-    "st_mass": 0.97,
-    "st_lum": -0.2184
-   }
-  ]
+  "TIC 150428135": {
+   "hostname": "TOI-700",
+   "circumbinary": false,
+   "planets": [
+    {
+     "pl_name": "TOI-700 b",
+     "hostname": "TOI-700",
+     "pl_orbper": 9.97722,
+     "pl_orbsmax": 0.0678,
+     "pl_orbeccen": 0.032,
+     "pl_rade": 0.963,
+     "pl_eqt": 417.0,
+     "disc_year": 2020,
+     "st_teff": 3459.0,
+     "st_rad": 0.4104,
+     "st_mass": 0.417,
+     "st_lum": -1.63264
+    },
+    {
+     "pl_name": "TOI-700 c",
+     "hostname": "TOI-700",
+     "pl_orbper": 16.0511039,
+     "pl_orbsmax": 0.0931,
+     "pl_orbeccen": 0.033,
+     "pl_rade": 2.535,
+     "pl_eqt": 356.0,
+     "disc_year": 2020,
+     "st_teff": 3459.0,
+     "st_rad": 0.4104,
+     "st_mass": 0.417,
+     "st_lum": -1.63264
+    },
+    {
+     "pl_name": "TOI-700 e",
+     "hostname": "TOI-700",
+     "pl_orbper": 27.810124,
+     "pl_orbsmax": 0.1336,
+     "pl_orbeccen": 0.059,
+     "pl_rade": 0.919,
+     "pl_eqt": 272.9,
+     "disc_year": 2023,
+     "st_teff": 3459.0,
+     "st_rad": 0.4104,
+     "st_mass": 0.417,
+     "st_lum": -1.63264
+    },
+    {
+     "pl_name": "TOI-700 d",
+     "hostname": "TOI-700",
+     "pl_orbper": 37.423457,
+     "pl_orbsmax": 0.1642,
+     "pl_orbeccen": 0.042,
+     "pl_rade": 1.145,
+     "pl_eqt": 268.8,
+     "disc_year": 2020,
+     "st_teff": 3459.0,
+     "st_rad": 0.4104,
+     "st_mass": 0.417,
+     "st_lum": -1.63264
+    }
+   ]
+  },
+  "TIC 183985250": {
+   "hostname": "LTT 9779",
+   "circumbinary": false,
+   "planets": [
+    {
+     "pl_name": "LTT 9779 b",
+     "hostname": "LTT 9779",
+     "pl_orbper": 0.792052,
+     "pl_orbsmax": 0.01679,
+     "pl_orbeccen": 0.0,
+     "pl_rade": 4.72,
+     "pl_eqt": 1978.0,
+     "disc_year": 2020,
+     "st_teff": 5443.0,
+     "st_rad": 0.949,
+     "st_mass": 1.02,
+     "st_lum": -0.16749
+    }
+   ]
+  },
+  "TIC 251848941": {
+   "hostname": "TOI-178",
+   "circumbinary": false,
+   "planets": [
+    {
+     "pl_name": "TOI-178 b",
+     "hostname": "TOI-178",
+     "pl_orbper": 1.9145601,
+     "pl_orbsmax": 0.02607,
+     "pl_orbeccen": null,
+     "pl_rade": 1.2,
+     "pl_eqt": 1040.0,
+     "disc_year": 2021,
+     "st_teff": 4316.0,
+     "st_rad": 0.662,
+     "st_mass": 0.647,
+     "st_lum": -0.86646
+    },
+    {
+     "pl_name": "TOI-178 c",
+     "hostname": "TOI-178",
+     "pl_orbper": 3.238486,
+     "pl_orbsmax": 0.037,
+     "pl_orbeccen": 0.00032,
+     "pl_rade": 1.754,
+     "pl_eqt": 873.0,
+     "disc_year": 2021,
+     "st_teff": 4316.0,
+     "st_rad": 0.662,
+     "st_mass": 0.647,
+     "st_lum": -0.86646
+    },
+    {
+     "pl_name": "TOI-178 d",
+     "hostname": "TOI-178",
+     "pl_orbper": 6.557569,
+     "pl_orbsmax": 0.0592,
+     "pl_orbeccen": 0.0068,
+     "pl_rade": 2.695,
+     "pl_eqt": 690.0,
+     "disc_year": 2021,
+     "st_teff": 4316.0,
+     "st_rad": 0.662,
+     "st_mass": 0.647,
+     "st_lum": -0.86646
+    },
+    {
+     "pl_name": "TOI-178 e",
+     "hostname": "TOI-178",
+     "pl_orbper": 9.96318,
+     "pl_orbsmax": 0.0783,
+     "pl_orbeccen": 0.00038,
+     "pl_rade": 2.301,
+     "pl_eqt": 600.0,
+     "disc_year": 2021,
+     "st_teff": 4316.0,
+     "st_rad": 0.662,
+     "st_mass": 0.647,
+     "st_lum": -0.86646
+    },
+    {
+     "pl_name": "TOI-178 f",
+     "hostname": "TOI-178",
+     "pl_orbper": 15.23335,
+     "pl_orbsmax": 0.1039,
+     "pl_orbeccen": 0.00045,
+     "pl_rade": 2.417,
+     "pl_eqt": 521.0,
+     "disc_year": 2021,
+     "st_teff": 4316.0,
+     "st_rad": 0.662,
+     "st_mass": 0.647,
+     "st_lum": -0.86646
+    },
+    {
+     "pl_name": "TOI-178 g",
+     "hostname": "TOI-178",
+     "pl_orbper": 20.71663,
+     "pl_orbsmax": 0.1275,
+     "pl_orbeccen": 0.00043,
+     "pl_rade": 2.939,
+     "pl_eqt": 470.0,
+     "disc_year": 2021,
+     "st_teff": 4316.0,
+     "st_rad": 0.662,
+     "st_mass": 0.647,
+     "st_lum": -0.86646
+    }
+   ]
+  },
+  "TIC 259377017": {
+   "hostname": "TOI-270",
+   "circumbinary": false,
+   "planets": [
+    {
+     "pl_name": "TOI-270 b",
+     "hostname": "TOI-270",
+     "pl_orbper": 3.35992,
+     "pl_orbsmax": 0.03197,
+     "pl_orbeccen": 0.0167,
+     "pl_rade": 1.28,
+     "pl_eqt": 600.0,
+     "disc_year": 2019,
+     "st_teff": 3506.0,
+     "st_rad": 0.38,
+     "st_mass": 0.386,
+     "st_lum": -1.7122
+    },
+    {
+     "pl_name": "TOI-270 c",
+     "hostname": "TOI-270",
+     "pl_orbper": 5.66051,
+     "pl_orbsmax": 0.04526,
+     "pl_orbeccen": 0.0044,
+     "pl_rade": 2.33,
+     "pl_eqt": 489.0,
+     "disc_year": 2019,
+     "st_teff": 3506.0,
+     "st_rad": 0.38,
+     "st_mass": 0.386,
+     "st_lum": -1.7122
+    },
+    {
+     "pl_name": "TOI-270 d",
+     "hostname": "TOI-270",
+     "pl_orbper": 11.38194,
+     "pl_orbsmax": 0.0721,
+     "pl_orbeccen": 0.0066,
+     "pl_rade": 2.0,
+     "pl_eqt": 383.0,
+     "disc_year": 2019,
+     "st_teff": 3506.0,
+     "st_rad": 0.38,
+     "st_mass": 0.386,
+     "st_lum": -1.7122
+    }
+   ]
+  },
+  "TIC 260128333": {
+   "hostname": "TOI-1338 A",
+   "circumbinary": true,
+   "planets": [
+    {
+     "pl_name": "TOI-1338 b",
+     "hostname": "TOI-1338 A",
+     "pl_orbper": 95.4001,
+     "pl_orbsmax": 0.4607,
+     "pl_orbeccen": 0.0331,
+     "pl_rade": 7.661,
+     "pl_eqt": 254.65,
+     "disc_year": 2020,
+     "st_teff": 5723.2,
+     "st_rad": 1.313,
+     "st_mass": 1.0936,
+     "st_lum": 0.32898
+    },
+    {
+     "pl_name": "TOI-1338 c",
+     "hostname": "TOI-1338 A",
+     "pl_orbper": 215.79,
+     "pl_orbsmax": 0.794,
+     "pl_orbeccen": 0.037,
+     "pl_rade": 10.3,
+     "pl_eqt": 354.89,
+     "disc_year": 2023,
+     "st_teff": 5723.2,
+     "st_rad": 1.313,
+     "st_mass": 1.0936,
+     "st_lum": 0.32898
+    }
+   ]
+  },
+  "TIC 307210830": {
+   "hostname": "L 98-59",
+   "circumbinary": false,
+   "planets": [
+    {
+     "pl_name": "L 98-59 b",
+     "hostname": "L 98-59",
+     "pl_orbper": 2.253114,
+     "pl_orbsmax": 0.0223,
+     "pl_orbeccen": 0.031,
+     "pl_rade": 0.837,
+     "pl_eqt": 620.0,
+     "disc_year": 2019,
+     "st_teff": 3415.0,
+     "st_rad": 0.3155,
+     "st_mass": 0.2923,
+     "st_lum": -1.91364
+    },
+    {
+     "pl_name": "L 98-59 c",
+     "hostname": "L 98-59",
+     "pl_orbper": 3.6906764,
+     "pl_orbsmax": 0.0309,
+     "pl_orbeccen": 0.002,
+     "pl_rade": 1.329,
+     "pl_eqt": 526.0,
+     "disc_year": 2019,
+     "st_teff": 3415.0,
+     "st_rad": 0.3155,
+     "st_mass": 0.2923,
+     "st_lum": -1.91364
+    },
+    {
+     "pl_name": "L 98-59 d",
+     "hostname": "L 98-59",
+     "pl_orbper": 7.450729,
+     "pl_orbsmax": 0.0494,
+     "pl_orbeccen": 0.006,
+     "pl_rade": 1.627,
+     "pl_eqt": 416.0,
+     "disc_year": 2019,
+     "st_teff": 3415.0,
+     "st_rad": 0.3155,
+     "st_mass": 0.2923,
+     "st_lum": -1.91364
+    },
+    {
+     "pl_name": "L 98-59 e",
+     "hostname": "L 98-59",
+     "pl_orbper": 12.8278,
+     "pl_orbsmax": 0.0712,
+     "pl_orbeccen": 0.012,
+     "pl_rade": 1.49,
+     "pl_eqt": 347.0,
+     "disc_year": 2021,
+     "st_teff": 3415.0,
+     "st_rad": 0.3155,
+     "st_mass": 0.2923,
+     "st_lum": -1.91364
+    },
+    {
+     "pl_name": "L 98-59 f",
+     "hostname": "L 98-59",
+     "pl_orbper": 23.064,
+     "pl_orbsmax": 0.1052,
+     "pl_orbeccen": 0.044,
+     "pl_rade": 1.48,
+     "pl_eqt": 285.0,
+     "disc_year": 2025,
+     "st_teff": 3415.0,
+     "st_rad": 0.3155,
+     "st_mass": 0.2923,
+     "st_lum": -1.91364
+    }
+   ]
+  },
+  "TIC 52368076": {
+   "hostname": "TOI-125",
+   "circumbinary": false,
+   "planets": [
+    {
+     "pl_name": "TOI-125 b",
+     "hostname": "TOI-125",
+     "pl_orbper": 4.65382,
+     "pl_orbsmax": 0.05186,
+     "pl_orbeccen": 0.194,
+     "pl_rade": 2.726,
+     "pl_eqt": 1037.0,
+     "disc_year": 2019,
+     "st_teff": 5320.0,
+     "st_rad": 0.848,
+     "st_mass": 0.859,
+     "st_lum": -0.28483
+    },
+    {
+     "pl_name": "TOI-125 c",
+     "hostname": "TOI-125",
+     "pl_orbper": 9.15059,
+     "pl_orbsmax": 0.0814,
+     "pl_orbeccen": 0.066,
+     "pl_rade": 2.759,
+     "pl_eqt": 827.8,
+     "disc_year": 2019,
+     "st_teff": 5320.0,
+     "st_rad": 0.848,
+     "st_mass": 0.859,
+     "st_lum": -0.28483
+    },
+    {
+     "pl_name": "TOI-125 d",
+     "hostname": "TOI-125",
+     "pl_orbper": 19.98,
+     "pl_orbsmax": 0.137,
+     "pl_orbeccen": 0.168,
+     "pl_rade": 2.93,
+     "pl_eqt": 638.1,
+     "disc_year": 2020,
+     "st_teff": 5320.0,
+     "st_rad": 0.848,
+     "st_mass": 0.859,
+     "st_lum": -0.28483
+    }
+   ]
+  },
+  "TIC 55652896": {
+   "hostname": "TOI-216",
+   "circumbinary": false,
+   "planets": [
+    {
+     "pl_name": "TOI-216.02",
+     "hostname": "TOI-216",
+     "pl_orbper": 17.16073,
+     "pl_orbsmax": 0.1293,
+     "pl_orbeccen": 0.16,
+     "pl_rade": 8.0,
+     "pl_eqt": 628.0,
+     "disc_year": 2019,
+     "st_teff": 5026.0,
+     "st_rad": 0.748,
+     "st_mass": 0.77,
+     "st_lum": -0.44159
+    },
+    {
+     "pl_name": "TOI-216.01",
+     "hostname": "TOI-216",
+     "pl_orbper": 34.525528,
+     "pl_orbsmax": 0.2069,
+     "pl_orbeccen": 0.0046,
+     "pl_rade": 10.1,
+     "pl_eqt": 497.0,
+     "disc_year": 2019,
+     "st_teff": 5026.0,
+     "st_rad": 0.748,
+     "st_mass": 0.77,
+     "st_lum": -0.44159
+    }
+   ]
+  }
  }
 }

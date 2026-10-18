@@ -235,12 +235,16 @@ ARCHIVE_COLUMNS = ["pl_name", "hostname", "pl_orbper", "pl_orbsmax", "pl_orbecce
 
 
 def build_systems() -> dict:
-    rows = json.loads((FIXTURES / "exoplanet_archive_targets_p4.json").read_text())
-    systems: dict[str, list] = {}
-    for r in sorted(rows, key=lambda r: (r["hostname"], r["pl_orbper"] or 0)):
-        systems.setdefault(r["hostname"], []).append({k: r.get(k) for k in ARCHIVE_COLUMNS})
-    return {"dataset": "systems", "version": 1,
-            "source": {**ARCHIVE_SOURCE, "fetched_at": meta("exoplanet_archive_targets_p4")["fetched_at"]},
+    """Confirmed planets per target star, keyed by TIC ID (never by name: names caused a mix-up, see
+    docs/DATA_SOURCES.md Phase 6)."""
+    rows = json.loads((FIXTURES / "exoplanet_archive_systems_by_tic_p6.json").read_text())
+    systems: dict[str, dict] = {}
+    for r in sorted(rows, key=lambda r: (r["tic_id"], r["pl_orbper"] or 0)):
+        s = systems.setdefault(r["tic_id"], {"hostname": r["hostname"], "circumbinary": False, "planets": []})
+        s["circumbinary"] = s["circumbinary"] or bool(r.get("cb_flag"))
+        s["planets"].append({k: r.get(k) for k in ARCHIVE_COLUMNS})
+    return {"dataset": "systems", "version": 2,
+            "source": {**ARCHIVE_SOURCE, "fetched_at": meta("exoplanet_archive_systems_by_tic_p6")["fetched_at"]},
             "systems": systems}
 
 

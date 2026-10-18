@@ -97,7 +97,7 @@ for i in sorted(seen_imgs):
 blob = "".join([home, lst, mp] + [page(p) for p in [f"/candidates/{s}" for s in slugs]])
 check("copy/no-em-or-en-dash", "\u2014" not in blob and "\u2013" not in blob)
 check("copy/toi216-ambiguous-labeled", "NOT a discovery" in page("/candidates/toi-216"))
-check("copy/toi776-ambiguous-labeled", "NOT a discovery" in page("/candidates/toi-776"))
+check("copy/toi175-correction-labeled", "NOT a discovery" in page("/candidates/toi-175"))
 
 print(f"\n{len(PASSES)} passed, {len(FAILURES)} failed")
 if FAILURES:

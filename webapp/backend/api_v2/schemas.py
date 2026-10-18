@@ -291,6 +291,7 @@ class TargetSystemResponse(_Strict):
     target: str
     tic: str
     host: str
+    circumbinary: bool
     star: Star
     planets: list[SystemPlanet]
     habitable_zone: HabitableZone | None

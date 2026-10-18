@@ -1129,6 +1129,8 @@ export interface components {
         };
         /** TargetSystemResponse */
         TargetSystemResponse: {
+            /** Circumbinary */
+            circumbinary: boolean;
             habitable_zone: components["schemas"]["HabitableZone"] | null;
             /** Host */
             host: string;
