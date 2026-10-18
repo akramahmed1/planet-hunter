@@ -174,8 +174,8 @@ Status values: `todo`, `in-progress`, `staging-verified`, `merged-to-v2`, `live`
 | 1 | Foundations and design system | merged-to-v2 |
 | 2 | Live data layer | merged-to-v2 |
 | 3 | 3D solar system | merged-to-v2 |
-| 4 | Exoplanet systems, sky map, TESS explainer, mission tracker | in-progress |
-| 5 | Hunt lab (interactive light curves) | todo |
+| 4 | Exoplanet systems, sky map, TESS explainer, mission tracker | merged-to-v2 |
+| 5 | Hunt lab (interactive light curves) | in-progress |
 | 6 | Live scan engine, vetting, cross-match | todo |
 | 7 | Learn and quiz | todo |
 | 8 | Accounts and multi-tenant classrooms | todo |

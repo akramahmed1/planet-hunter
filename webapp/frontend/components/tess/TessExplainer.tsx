@@ -140,13 +140,14 @@ export default function TessExplainer({ facts, moonKm, depthPpm, target }: {
           200,000 nearby stars for the tiny dips that planets make. <Cite label="TESS launch" fact={facts.launch} />{" "}
           <Cite label="TESS target stars" fact={facts.stars} />
         </p>
-        {modelSource && (
-          <p className="muted small" data-testid="model-credit">
-            {modelSource === "nasa"
-              ? "3D model: NASA 3D Resources (TESS model A), free to use."
-              : "Simple stand-in model: the NASA model could not be loaded."}
-          </p>
-        )}
+        {/* Always rendered, so the text below never shifts when the model finishes loading. */}
+        <p className="muted small" data-testid="model-credit">
+          {modelSource === "nasa"
+            ? "3D model: NASA 3D Resources (TESS model A), free to use."
+            : modelSource === "procedural"
+              ? "Simple stand-in model: the NASA model could not be loaded."
+              : webgl === false ? "" : "Loading the 3D model..."}
+        </p>
       </section>
 
       <section className="tess-step" aria-labelledby="t-orbit">

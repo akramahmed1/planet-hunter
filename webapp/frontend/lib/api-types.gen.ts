@@ -267,6 +267,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v2/lightcurves/{slug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Lightcurve
+         * @description Flattened TESS light curve, median-binned to 10 minutes, flux in ppm from 1.
+         */
+        get: operations["lightcurve_api_v2_lightcurves__slug__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v2/missions": {
         parameters: {
             query?: never;
@@ -299,6 +319,26 @@ export interface paths {
          * @description Orbit paths for the planets and Pluto, for drawing (computed from the same data as /positions).
          */
         get: operations["get_orbits_api_v2_orbits_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v2/periodogram/{slug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Periodogram
+         * @description BLS periodogram (peak-preserving downsample) and the strongest signal.
+         */
+        get: operations["periodogram_api_v2_periodogram__slug__get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -455,6 +495,15 @@ export interface components {
             title: string;
             /** Url */
             url: string | null;
+        };
+        /** Binning */
+        Binning: {
+            /** Bin Minutes */
+            bin_minutes: number;
+            /** Method */
+            method: string;
+            /** N Bins */
+            n_bins: number;
         };
         /** BodiesResponse */
         BodiesResponse: {
@@ -720,6 +769,33 @@ export interface components {
             /** Stale */
             stale: boolean;
         };
+        /** LightCurveResponse */
+        LightCurveResponse: {
+            binning: components["schemas"]["Binning"];
+            /**
+             * Fetched At
+             * Format: date-time
+             */
+            fetched_at: string;
+            /** Flux Ppm */
+            flux_ppm: number[];
+            /** N Cadences */
+            n_cadences: number;
+            /** Processing */
+            processing: string;
+            /** Sectors */
+            sectors: number[];
+            signal: components["schemas"]["PipelineSignal"];
+            /** Slug */
+            slug: string;
+            source: components["schemas"]["SourceRef"];
+            /** Target */
+            target: string;
+            /** Tic */
+            tic: string;
+            /** Time Btjd */
+            time_btjd: number[];
+        };
         /** MethodResponse */
         MethodResponse: {
             /** Data Source */
@@ -784,6 +860,49 @@ export interface components {
             run: components["schemas"]["RunInfo"];
             summary: components["schemas"]["Summary"];
             validation: components["schemas"]["Validation"];
+        };
+        /** PeriodogramResponse */
+        PeriodogramResponse: {
+            /**
+             * Fetched At
+             * Format: date-time
+             */
+            fetched_at: string;
+            /** Method */
+            method: string;
+            /** N Cadences */
+            n_cadences: number;
+            /** Period D */
+            period_d: number[];
+            /** Power */
+            power: number[];
+            /** Processing */
+            processing: string;
+            /** Sectors */
+            sectors: number[];
+            signal: components["schemas"]["PipelineSignal"];
+            /** Slug */
+            slug: string;
+            source: components["schemas"]["SourceRef"];
+            /** Target */
+            target: string;
+            /** Tic */
+            tic: string;
+        };
+        /** PipelineSignal */
+        PipelineSignal: {
+            /** Depth Ppm */
+            depth_ppm: number;
+            /** Duration D */
+            duration_d: number;
+            /** Period D */
+            period_d: number;
+            /** Power */
+            power: number;
+            /** Snr */
+            snr: number;
+            /** T0 Btjd */
+            t0_btjd: number;
         };
         /** Position */
         Position: {
@@ -1549,6 +1668,44 @@ export interface operations {
             };
         };
     };
+    lightcurve_api_v2_lightcurves__slug__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LightCurveResponse"];
+                };
+            };
+            /** @description No light curve exported for this target */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     missions_api_v2_missions_get: {
         parameters: {
             query?: never;
@@ -1585,6 +1742,44 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["OrbitsResponse"];
+                };
+            };
+        };
+    };
+    periodogram_api_v2_periodogram__slug__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PeriodogramResponse"];
+                };
+            };
+            /** @description No light curve exported for this target */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };

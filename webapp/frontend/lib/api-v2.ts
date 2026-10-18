@@ -55,3 +55,5 @@ export type Spacecraft = Schemas["Spacecraft"];
 export type SourcedFact = Schemas["SourcedFact"];
 export type IssTrack = Schemas["IssTrackResponse"];
 export type TessFacts = Schemas["TessFactsResponse"];
+export type LightCurveResponse = Schemas["LightCurveResponse"];
+export type PeriodogramResponse = Schemas["PeriodogramResponse"];
