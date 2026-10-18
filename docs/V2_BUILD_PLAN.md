@@ -80,7 +80,10 @@ assignments on top of it.
   Pluto on other dates uses interpolated Horizons positions; the space-weather tile stays with an
   "unavailable" state; missing exoplanet equilibrium temperatures are estimated and labeled.
 - **Phase 8:** teacher sign-in method. Recommended: Auth.js with Google plus email magic link through Resend. Students join with a class code, a nickname and a PIN, with no email.
+  - 2026-10-18, Akram: teachers sign in with **email and password**. Students join with a class code, a nickname and a PIN, with no email.
 - **Phase 9:** AI provider and model for the explainer (recommended: Anthropic API with the model set in an env var); Stripe pricing for the classroom plan.
+  - 2026-10-18, Akram: build the explainer and test it with a fake model, **switched off** until a key is added. Build billing in Stripe **test mode** with fakes, also switched off.
+- **Pace** (2026-10-18, Akram): each phase merges to `v2` once CI is green, then the staging check verifies it. Production waits for Akram's approval in Phase 10.
 
 ## 3. Current repo state (verified 2026-10-17)
 
@@ -176,8 +179,8 @@ Status values: `todo`, `in-progress`, `staging-verified`, `merged-to-v2`, `live`
 | 3 | 3D solar system | merged-to-v2 |
 | 4 | Exoplanet systems, sky map, TESS explainer, mission tracker | staging-verified |
 | 5 | Hunt lab (interactive light curves) | staging-verified |
-| 6 | Live scan engine, vetting, cross-match | in-progress |
-| 7 | Learn and quiz | todo |
+| 6 | Live scan engine, vetting, cross-match | merged-to-v2 |
+| 7 | Learn and quiz | in-progress |
 | 8 | Accounts and multi-tenant classrooms | todo |
 | 9 | AI explainer and billing | todo |
 | 10 | Hardening and production release | todo |

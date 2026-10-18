@@ -319,3 +319,28 @@ Fetched with the `p4` set (19 of 21 returned 200; the two HEASARC TESS pages ret
   are renamed everywhere and marked unreviewed until Akram re-reviews them.
 - **Transit Least Squares:** optional and not installed; the row says "Not run".
 - **Labels** stay "proposed, not reviewed" until a row exists in `reviews`.
+
+## Phase 7 findings (2026-10-18)
+
+- **Lessons** live in `webapp/backend/content/lessons/` (one JSON file each) and are copied
+  into Postgres at API startup. `tests/test_content.py` is the content lint:
+  - every fact and quiz answer has a source;
+  - every quote is found in a saved copy of its source (`tests/fixtures/external/*_p7*`);
+  - every computed value comes out of `learn/checks.py` exactly as the text states it;
+  - every number in a step's text appears in one of that step's facts.
+- **Pages fetched** by the external-fixtures workflow (p7 set), saved as plain text:
+  - NASA Science: What Is a Planet? (it quotes IAU Resolution B5, 2006); What's a transit?; The Habitable Zone.
+  - NASA Exoplanet Archive: inclusion criteria, TOI column docs (TFOPWG dispositions), KOI column docs, and the Kepler DR25 vetting notes.
+  - NIST: kelvin introduction, and CODATA 2022 c.
+  - arXiv abstracts: Winn 2010, Kopparapu et al. 2014, Prša et al. 2022, Thompson et al. 2018, Coughlin et al. 2016.
+  - The TOI table disposition counts on 2026-10-18.
+- **IAU pages** (resolution PDF, Pluto page, press release iau0603) all returned 404; the IAU
+  site has moved. The planet definition is quoted from NASA's page, which reproduces it.
+- **The NIST kelvin page embeds a client-side map token.** GitHub's secret scanning blocked
+  the raw HTML. The p7 pages are therefore saved as extracted text, with token-shaped strings
+  redacted (`redact_tokens` in `scripts/fetch_external_fixtures.py`).
+- **Transit depth** ≈ (Rp/R★)² is Winn (2010), Eq. 22, read on alphaXiv. The saved abstract
+  only supports the quote about "relative dimensions", so the equation itself was checked by
+  reading the paper.
+- **The TOI counts** (4,820 PC, 815 CP, 1,315 FP) are dated in the lesson. They change as TESS
+  follow-up continues.
