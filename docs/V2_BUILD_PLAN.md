@@ -180,8 +180,8 @@ Status values: `todo`, `in-progress`, `staging-verified`, `merged-to-v2`, `live`
 | 4 | Exoplanet systems, sky map, TESS explainer, mission tracker | staging-verified |
 | 5 | Hunt lab (interactive light curves) | staging-verified |
 | 6 | Live scan engine, vetting, cross-match | merged-to-v2 |
-| 7 | Learn and quiz | in-progress |
-| 8 | Accounts and multi-tenant classrooms | todo |
+| 7 | Learn and quiz | merged-to-v2 |
+| 8 | Accounts and multi-tenant classrooms | in-progress |
 | 9 | AI explainer and billing | todo |
 | 10 | Hardening and production release | todo |
 
