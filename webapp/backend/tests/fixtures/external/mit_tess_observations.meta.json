@@ -1,0 +1,16 @@
+{
+  "url": "https://tess.mit.edu/observations/",
+  "final_url": "https://tess.mit.edu/observations/",
+  "status": 200,
+  "https": true,
+  "headers": {
+    "server": "nginx/1.14.0",
+    "content-type": "text/html; charset=UTF-8",
+    "access-control-allow-origin": "https://dev.v12.co.uk",
+    "cache-control": "max-age=3",
+    "strict-transport-security": "max-age=31536000;"
+  },
+  "bytes": 162030,
+  "truncated": false,
+  "fetched_at": "2026-10-18T00:37:16+00:00"
+}
