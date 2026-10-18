@@ -1910,12 +1910,14 @@ ul.tile-grid {
   gap: 0.5rem;
   min-height: 44px;
 }
-/* Leaflet's default attribution (blue on translucent white) fails WCAG contrast; use the site's colors. */
-.iss-map .leaflet-control-attribution {
+/* Leaflet's default attribution (blue on translucent white) fails WCAG contrast; use the site's colors.
+   Both classes are on the map element: one class alone ties with leaflet.css's
+   `.leaflet-container .leaflet-control-attribution`, and whichever sheet loads last would win. */
+.iss-map.leaflet-container .leaflet-control-attribution {
   background: rgba(4, 6, 13, 0.85);
   color: var(--ink-dim);
 }
-.iss-map .leaflet-control-attribution a {
+.iss-map.leaflet-container .leaflet-control-attribution a {
   color: var(--ion-strong);
 }
 
