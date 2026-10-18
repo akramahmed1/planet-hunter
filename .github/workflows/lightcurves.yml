@@ -1,0 +1,41 @@
+name: Light curves
+
+# Exports each target's light curve and periodogram (scripts/export_lightcurves.py)
+# and commits the JSON to the branch. Runs on GitHub's machines because the build
+# sessions cannot reach MAST. Pushes made with GITHUB_TOKEN don't re-trigger workflows.
+on:
+  workflow_dispatch:
+  push:
+    branches: ["v2-p5*"]
+    paths:
+      - scripts/export_lightcurves.py
+      - webapp/backend/pipeline/**
+      - .github/workflows/lightcurves.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: lightcurves-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install "lightkurve==2.5.1" "astropy>=6,<8" "numpy<3"
+      - name: Export light curves
+        run: python scripts/export_lightcurves.py | tee lightcurves.log
+      - name: Commit results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add webapp/backend/data/lightcurves
+          git diff --cached --quiet && exit 0
+          git commit -m "Export light curves and periodograms"
+          git push

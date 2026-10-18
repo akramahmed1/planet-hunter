@@ -1875,3 +1875,46 @@ ul.tile-grid {
 .cand-cards.system-list {
   display: grid;
 }
+
+/* ---------- Phase 5: hunt lab ---------- */
+
+.hunt {
+  display: grid;
+  gap: 1rem;
+}
+.hunt-card {
+  display: grid;
+  gap: 0.75rem;
+}
+.hunt-card > * {
+  margin: 0;
+}
+.uplot-box {
+  width: 100%;
+  min-height: 240px;
+}
+.uplot-box .u-legend {
+  display: none;
+}
+.uplot-box .u-axis {
+  color: var(--ink-dim);
+}
+.hunt-slider {
+  width: 100%;
+  min-height: 44px;
+  accent-color: var(--ion);
+}
+.toggle-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+}
+/* Leaflet's default attribution (blue on translucent white) fails WCAG contrast; use the site's colors. */
+.iss-map .leaflet-control-attribution {
+  background: rgba(4, 6, 13, 0.85);
+  color: var(--ink-dim);
+}
+.iss-map .leaflet-control-attribution a {
+  color: var(--ion-strong);
+}

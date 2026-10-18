@@ -339,3 +339,50 @@ class IssTrackResponse(Freshness):
 
 class TessFactsResponse(_Strict):
     facts: dict[str, SourcedFact]
+
+
+# ---------- Phase 5: light curves ----------
+
+class PipelineSignal(_Strict):
+    period_d: float
+    t0_btjd: float
+    duration_d: float
+    depth_ppm: float
+    snr: float
+    power: float
+
+
+class Binning(_Strict):
+    method: str
+    bin_minutes: float
+    n_bins: int
+
+
+class LightCurveResponse(_Strict):
+    slug: str
+    target: str
+    tic: str
+    source: SourceRef
+    fetched_at: dt.datetime
+    sectors: list[int]
+    n_cadences: int
+    processing: str
+    signal: PipelineSignal
+    binning: Binning
+    time_btjd: list[float]
+    flux_ppm: list[int]
+
+
+class PeriodogramResponse(_Strict):
+    slug: str
+    target: str
+    tic: str
+    source: SourceRef
+    fetched_at: dt.datetime
+    sectors: list[int]
+    n_cadences: int
+    processing: str
+    signal: PipelineSignal
+    method: str
+    period_d: list[float]
+    power: list[float]

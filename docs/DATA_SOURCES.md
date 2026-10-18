@@ -281,3 +281,15 @@ Fetched with the `p4` set (19 of 21 returned 200; the two HEASARC TESS pages ret
   tile provider with a plan may be needed (Phase 10 decision).
 - **Aladin Lite** is loaded only when someone taps "Show the sky around this star", from
   `.../api/v3/latest/aladin.js`. Pin a version in Phase 10. The GPL and DSS flags (2 and 3) still apply.
+
+## Phase 5 findings (2026-10-18)
+
+- **Light curves** (`scripts/export_lightcurves.py`, run by `.github/workflows/lightcurves.yml` on
+  GitHub's machines): SPOC PDCSAP light curves from MAST via lightkurve 2.5.1, first 2 sectors per
+  target, processed exactly as `candidate_scan.py`. The export reproduces the published scan for
+  all 8 targets: the same period to within 0.004% (TOI 849, 0.79257 vs 0.7926 d), and the same
+  depth and SNR.
+- **Size:** the flattened flux, median-binned to 10 minutes and stored as integer ppm, is
+  114 to 142 KB per target against a 160 KB budget (checked by `tests/test_phase5.py`). The
+  periodogram keeps the peak of each of 1500 chunks of the 12,000-period grid, so the
+  highest peak stays exactly at the found period.

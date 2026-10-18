@@ -3,9 +3,10 @@ import { notFound } from "next/navigation";
 import ApiError from "@/components/ApiError";
 import ClassificationBadge from "@/components/ClassificationBadge";
 import Card from "@/components/ui/Card";
+import HuntLab from "@/components/hunt/HuntLab";
 import SkyPanel from "@/components/sky/SkyPanel";
 import EmptyState from "@/components/ui/EmptyState";
-import { apiV2Get, type TargetsResponse } from "@/lib/api-v2";
+import { apiV2Get, type LightCurveResponse, type PeriodogramResponse, type TargetsResponse } from "@/lib/api-v2";
 import {
   apiGet,
   labelFor,
@@ -22,10 +23,12 @@ export default async function CandidateDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const [res, health, targets] = await Promise.all([
+  const [res, health, targets, lc, pg] = await Promise.all([
     apiGet<Candidate>(`/api/candidates/${encodeURIComponent(slug)}`),
     apiGet<HealthResponse>("/api/health"),
     apiV2Get<TargetsResponse>("/api/v2/targets"),
+    apiV2Get<LightCurveResponse>(`/api/v2/lightcurves/${encodeURIComponent(slug)}`),
+    apiV2Get<PeriodogramResponse>(`/api/v2/periodogram/${encodeURIComponent(slug)}`),
   ]);
 
   if (!res.ok) {
@@ -95,8 +98,15 @@ export default async function CandidateDetailPage({
         </Card>
       </div>
 
+      {lc.ok && pg.ok && (
+        <section aria-labelledby="lab-heading">
+          <h2 id="lab-heading">Hunt lab</h2>
+          <HuntLab lc={lc.data} pg={pg.data} answerPeriod={candidate.period_d} classification={candidate.classification} />
+        </section>
+      )}
+
       <section aria-labelledby="plot-heading">
-        <h2 id="plot-heading">Folded light curve</h2>
+        <h2 id="plot-heading">{lc.ok && pg.ok ? "The pipeline's folded plot" : "Folded light curve"}</h2>
         {plotSrc ? (
           <div className="plot-frame" style={{ maxWidth: "760px" }}>
             <img
