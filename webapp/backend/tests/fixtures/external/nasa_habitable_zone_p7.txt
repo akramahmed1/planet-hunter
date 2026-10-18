@@ -117,7 +117,7 @@ The Habitable Zone - NASA Science
  [link: https://plus.nasa.gov/] 
  NASA+ 
 
- Highlights [link: https://science.nasa.gov/blogs/honors/2026/10/15/time-best-inventions-of-2026/] 1 min read TIME Best Inventions of 2026 article 2 days ago [link: https://science.nasa.gov/directorates/smd/planetary-science-division/nasa-to-help-unlock-mysteries-of-mars-moons-in-upcoming-mission/] 4 min read NASA to Help Unlock Mysteries of Mars’ Moons in Upcoming Mission article 2 days ago [link: https://science.nasa.gov/solar-system/skywatching/whats-up-october-2026-skywatching-tips-from-nasa/] 3 min read What’s Up: October 2026 Skywatching Tips from NASA article 2 weeks ago 
+ Highlights [link: https://science.nasa.gov/blogs/honors/2026/10/15/time-best-inventions-of-2026/] 1 min read TIME Best Inventions of 2026 article 3 days ago [link: https://science.nasa.gov/directorates/smd/planetary-science-division/nasa-to-help-unlock-mysteries-of-mars-moons-in-upcoming-mission/] 4 min read NASA to Help Unlock Mysteries of Mars’ Moons in Upcoming Mission article 2 days ago [link: https://science.nasa.gov/solar-system/skywatching/whats-up-october-2026-skywatching-tips-from-nasa/] 3 min read What’s Up: October 2026 Skywatching Tips from NASA article 2 weeks ago 
 
  Back 
 
@@ -132,7 +132,7 @@ The Habitable Zone - NASA Science
 
  article 
 
- 2 days ago 
+ 3 days ago 
 
  [link: https://science.nasa.gov/missions/hubble/nasas-hubble-spies-spirals-edge/] 
 
@@ -142,7 +142,7 @@ The Habitable Zone - NASA Science
 
  article 
 
- 1 day ago 
+ 2 days ago 
 
  [link: https://science.nasa.gov/blogs/perseverance-mars-rover/2026/10/12/nasas-perseverance-sets-off-world-record-for-total-distance-driven/] 
 
@@ -235,7 +235,7 @@ The Habitable Zone - NASA Science
 
  article 
 
- 4 days ago 
+ 5 days ago 
 
  [link: https://science.nasa.gov/feature/artemis-ii-preliminary-lunar-science-report/] 
 
@@ -245,7 +245,7 @@ The Habitable Zone - NASA Science
 
  article 
 
- 1 week ago 
+ 2 weeks ago 
 
  Highlights 
  [link: https://science.nasa.gov/missions/hubble/nasas-hubble-spies-spirals-edge/] 
@@ -256,7 +256,7 @@ The Habitable Zone - NASA Science
 
  article 
 
- 1 day ago 
+ 2 days ago 
 
  [link: https://science.nasa.gov/universe/nasa-welcomes-all-ages-experience-levels-for-space-apps-challenge/] 
 
@@ -297,7 +297,7 @@ The Habitable Zone - NASA Science
 
  article 
 
- 1 day ago 
+ 2 days ago 
 
  [link: https://science.nasa.gov/researchers/solicitations/roses-2025/a-15-biosphere-new-requirement-added-to-section-4-2-1/] 
 
@@ -411,7 +411,7 @@ The Habitable Zone - NASA Science
 
  article 
 
- 2 days ago 
+ 3 days ago 
 
  [link: https://science.nasa.gov/universe/nasa-welcomes-all-ages-experience-levels-for-space-apps-challenge/] 
 
@@ -628,4 +628,4 @@ The Habitable Zone - NASA Science
  × 
 
 var pum_vars = {"version":"1.25.0","pm_dir_url":"https://science.nasa.gov/wp-content/plugins/popup-maker/","ajaxurl":"https://science.nasa.gov/wp-admin/admin-ajax.php","restapi":"https://science.nasa.gov/wp-json/pum/v1","rest_nonce":null,"default_theme":"878188","debug_mode":"","disable_tracking":"1","disable_url_params":"","home_url":"/","message_position":"top","core_sub_forms_enabled":"1","popups":[],"cookie_domain":"","paramNames":{"popup_id":"pid","cta":"cta","notrack":"notrack"}};
-var pum_sub_vars = {"ajaxurl":"https://science.nasa.g
+var pum_sub_vars = {"ajaxurl":"https://science.nas
