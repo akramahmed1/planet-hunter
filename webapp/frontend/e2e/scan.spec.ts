@@ -22,12 +22,20 @@ test("a finished scan shows its signal, vetting, cross-match and charts", async 
   await expect(page.getByTestId("pg-chart").locator("canvas")).toBeVisible();
 });
 
-test("scanning a star queues it and shows the waiting state", async ({ page }) => {
+test("scanning a star queues it and shows its progress", async ({ page }) => {
   await page.goto("/scan");
   await page.getByTestId("scan-target").fill("TIC 150428135");
   await page.getByTestId("scan-submit").click();
   await expect(page).toHaveURL(/\/scan\/\d+$/);
-  await expect(page.getByTestId("scan-status")).toContainText(/Waiting in the queue|Scanning/);
+  // In CI the scan stays queued. On staging a real worker may already have finished it (the
+  // other browser project asks for the same star), so the result counts too; a failure does not.
+  await expect
+    .poll(async () => {
+      const status = (await page.getByTestId("scan-status").textContent()) ?? "";
+      return /Waiting in the queue|Scanning/.test(status) || (await page.getByTestId("scan-signal").count()) > 0;
+    })
+    .toBe(true);
+  await expect(page.getByTestId("scan-status")).not.toContainText("This scan failed");
   // Asking again returns the same scan instead of queuing new work.
   const url = page.url();
   await page.goto("/scan");
