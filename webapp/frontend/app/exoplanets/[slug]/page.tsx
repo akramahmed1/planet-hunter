@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import ExplainBox from "@/components/explain/ExplainBox";
 import SystemView from "@/components/exo/SystemView";
 import SkyPanel from "@/components/sky/SkyPanel";
 import ErrorState from "@/components/ui/ErrorState";
@@ -31,6 +32,7 @@ export default async function SystemPage({ params }: { params: Promise<{ slug: s
             the star or a planet for its numbers.
           </p>
           <SystemView system={res.data} />
+          <ExplainBox kind="planet" refId={slug} />
           <p>
             <Link href={`/candidates/${slug}`}>See our pipeline&apos;s result for {res.data.target}</Link>
           </p>

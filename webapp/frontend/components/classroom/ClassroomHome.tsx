@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import Badge from "@/components/ui/Badge";
 import ErrorState from "@/components/ui/ErrorState";
 import Skeleton from "@/components/ui/Skeleton";
-import { apiV2Send, type ClassSummary, type Me, type OrgDetail, type StudentHome } from "@/lib/api-v2";
+import { apiV2Send, type ClassSummary, type Me, type OrgBilling, type OrgDetail, type StudentHome } from "@/lib/api-v2";
 import { assignmentHref, formatDue } from "@/lib/classroom";
 import SignIn from "./SignIn";
 
@@ -140,6 +140,7 @@ function OrgPanel({ orgId }: { orgId: number }) {
         <button type="submit" className="btn btn--sm btn--primary" data-testid="create-class">Create class</button>
       </form>
       {error && <p className="error-box" role="alert">{error}</p>}
+      {org.role === "org_admin" && <PlanLine orgId={orgId} />}
       <details>
         <summary>Teachers in {org.name}</summary>
         <ul>
@@ -181,5 +182,28 @@ function StudentAssignments() {
       )}
       <p className="muted small">Quiz scores count the questions you got right on the first try.</p>
     </section>
+  );
+}
+
+/** The organization's plan. Upgrading appears only when billing is switched on (Phase 9). */
+function PlanLine({ orgId }: { orgId: number }) {
+  const [b, setB] = useState<OrgBilling | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  useEffect(() => {
+    apiV2Send<OrgBilling>("GET", `/api/v2/orgs/${orgId}/billing`).then((r) => r.ok && setB(r.data));
+  }, [orgId]);
+  if (!b) return null;
+  return (
+    <p className="muted small" data-testid="plan-line">
+      Plan: {b.plan === "classroom" ? "Classroom plan" : "Free classroom"}.{" "}
+      {b.billing_enabled && b.plan !== "classroom" && (
+        <button type="button" className="btn btn--sm" onClick={async () => {
+          const r = await apiV2Send<{ url: string }>("POST", `/api/v2/orgs/${orgId}/billing/checkout`, {});
+          if (r.ok) window.location.assign(r.data.url);
+          else setError(r.error);
+        }}>Upgrade</button>
+      )}
+      {error && <span className="error-box" role="alert">{error}</span>}
+    </p>
   );
 }

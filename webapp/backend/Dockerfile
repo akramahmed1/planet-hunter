@@ -13,6 +13,8 @@ COPY pipeline/ ./pipeline/
 COPY scans/ ./scans/
 COPY learn/ ./learn/
 COPY classroom/ ./classroom/
+COPY explain/ ./explain/
+COPY billing/ ./billing/
 COPY content/ ./content/
 COPY migrations/ ./migrations/
 COPY data/ ./data/

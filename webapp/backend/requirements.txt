@@ -11,3 +11,5 @@ astropy==7.2.2
 lightkurve==2.5.1
 # Password and PIN hashing for accounts (Phase 8).
 argon2-cffi==25.1.0
+# The explainer's model client (Phase 9); used only when the explainer is switched on.
+anthropic==1.14.0

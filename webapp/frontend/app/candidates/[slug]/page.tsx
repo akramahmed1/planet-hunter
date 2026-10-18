@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import ApiError from "@/components/ApiError";
 import ClassificationBadge from "@/components/ClassificationBadge";
 import Card from "@/components/ui/Card";
+import ExplainBox from "@/components/explain/ExplainBox";
 import HuntLab from "@/components/hunt/HuntLab";
 import SkyPanel from "@/components/sky/SkyPanel";
 import EmptyState from "@/components/ui/EmptyState";
@@ -104,6 +105,8 @@ export default async function CandidateDetailPage({
           <HuntLab lc={lc.data} pg={pg.data} answerPeriod={candidate.period_d} classification={candidate.classification} />
         </section>
       )}
+
+      <ExplainBox kind="candidate" refId={candidate.slug} />
 
       <section aria-labelledby="plot-heading">
         <h2 id="plot-heading">{lc.ok && pg.ok ? "The pipeline's folded plot" : "Folded light curve"}</h2>
