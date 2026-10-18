@@ -85,6 +85,8 @@ def donki(today: date) -> list[dict]:
 def _tap(query: str) -> list[dict]:
     rows = http.get_json(TAP, {"query": query, "format": "json"})
     if not isinstance(rows, list):
+        # Logged like http.get_json's own failures, so Railway's logs say what the archive sent.
+        http.log.warning("fetch failed: Exoplanet Archive returned an error: %.200s", rows)
         raise http.FetchError("Exoplanet Archive returned an error")
     return rows
 
@@ -94,6 +96,7 @@ def exoplanet_count() -> int:
     try:
         return int(rows[0]["n"])
     except (IndexError, KeyError, TypeError, ValueError) as exc:
+        http.log.warning("fetch failed: Exoplanet Archive count missing: %.200s", rows)
         raise http.FetchError("Exoplanet Archive count missing") from exc
 
 

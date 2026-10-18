@@ -432,3 +432,12 @@ def test_orbit_windows_stay_inside_the_valid_range():
         positions.orbit_path("pluto", (hi - lo).days + 1)
     # Pluto's 248-year orbit only just fits in 1800-2050; it must not raise.
     assert len(positions.orbit_path("pluto", 90_560.0)) == 180
+
+
+@pytest.mark.parametrize("reply,reason", [({"error": "TAP service under maintenance"}, "returned an error"),
+                                           ([{}], "count missing")])
+def test_exoplanet_archive_failures_are_logged_with_what_it_sent(monkeypatch, caplog, reply, reason):
+    monkeypatch.setattr(sources.http, "get_json", lambda url, params: reply)
+    with caplog.at_level("WARNING", logger="planet-hunter.live"), pytest.raises(sources.http.FetchError):
+        sources.exoplanet_count()
+    assert any(f"fetch failed: Exoplanet Archive {reason}" in r.getMessage() for r in caplog.records)
