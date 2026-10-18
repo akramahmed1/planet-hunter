@@ -5,6 +5,8 @@ pipeline module. Runs inside the worker's child process (scans/worker.py).
 """
 from __future__ import annotations
 
+import os
+import threading
 import time
 from datetime import datetime, timezone
 
@@ -25,6 +27,33 @@ class Transient(Exception):
     """Retryable: the archive or network failed."""
 
 
+# astroquery sends MAST Portal requests with no network timeout, so a stalled answer can hang a
+# search for the whole scan budget (seen on 2026-10-18). Each search attempt gets this deadline;
+# four attempts with their pauses stay inside the worker's 15-minute limit.
+SEARCH_TIMEOUT_S = int(os.environ.get("SCAN_SEARCH_TIMEOUT_S", "120"))
+
+
+def _with_deadline(fn, seconds: float, what: str):
+    """Runs fn on a daemon thread and gives up after `seconds`. A stalled thread is left behind;
+    being a daemon, it does not keep the scan process from exiting."""
+    box: dict = {}
+
+    def target():
+        try:
+            box["value"] = fn()
+        except BaseException as exc:  # noqa: BLE001 - re-raised in the caller's thread
+            box["error"] = exc
+
+    t = threading.Thread(target=target, daemon=True)
+    t.start()
+    t.join(seconds)
+    if t.is_alive():
+        raise TimeoutError(f"{what} gave no answer in {seconds:g} s")
+    if "error" in box:
+        raise box["error"]
+    return box["value"]
+
+
 def _retry(fn, what, tries=4):
     for attempt in range(1, tries + 1):
         try:
@@ -40,7 +69,8 @@ def scan(tic_id: int, params: dict, progress=lambda msg: None, catalogs=None) ->
     from lightkurve import search_lightcurve
 
     progress("searching the TESS archive")
-    sr = _retry(lambda: search_lightcurve(f"TIC {tic_id}", mission="TESS", author="SPOC"), "MAST search")
+    sr = _retry(lambda: _with_deadline(lambda: search_lightcurve(f"TIC {tic_id}", mission="TESS", author="SPOC"),
+                                       SEARCH_TIMEOUT_S, "MAST search"), "MAST search")
     if len(sr) == 0:
         raise NoData(f"no TESS SPOC light curves for TIC {tic_id}")
     picked = sr[: params["max_sectors"]]
