@@ -93,6 +93,8 @@ jobs:
           --health-timeout 5s --health-retries 10
     env:
       DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/ph_e2e
+      # Every browser test signs up from 127.0.0.1.
+      AUTH_SIGNUPS_PER_HOUR: "1000"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

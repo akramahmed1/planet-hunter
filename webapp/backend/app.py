@@ -14,6 +14,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
 import data_store
+from api_v2 import classroom_router as v2_classroom_router
 from api_v2 import learn_router as v2_learn_router
 from api_v2 import live_router as v2_live_router
 from api_v2 import phase4_router as v2_phase4_router
@@ -69,7 +70,7 @@ app = FastAPI(title="planet-hunter API", version=VERSION, lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins(),
-    allow_methods=["GET", "POST"],
+    allow_methods=["GET", "POST", "PUT", "DELETE"],
     allow_headers=["*"],
 )
 
@@ -79,6 +80,7 @@ app.include_router(v2_phase4_router)
 app.include_router(v2_phase5_router)
 app.include_router(v2_scan_router)
 app.include_router(v2_learn_router)
+app.include_router(v2_classroom_router)
 
 
 @app.get("/api/health", response_model=HealthResponse)

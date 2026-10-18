@@ -9,9 +9,9 @@ import QuizQuestion from "./QuizQuestion";
 import { useProgress } from "./useProgress";
 
 /** A lesson: its steps one at a time with Back and Next, then the quiz and the badge. */
-export default function LessonPlayer({ lesson }: { lesson: LessonResponse }) {
+export default function LessonPlayer({ lesson, startAtQuiz = false }: { lesson: LessonResponse; startAtQuiz?: boolean }) {
   const { progress, update, ready, saved } = useProgress();
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(startAtQuiz ? lesson.steps.length : 0);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const moved = useRef(false);
   const total = lesson.steps.length;

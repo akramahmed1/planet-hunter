@@ -544,3 +544,200 @@ class AnswerResult(_Strict):
     answer: float | None
     tolerance: float | None
     unit: str | None
+
+
+# Phase 8: accounts and classrooms.
+class BirthMonth(_Strict):
+    """Asked in a neutral way (month and year from lists); only the 13+ outcome is stored (ADR 0005)."""
+    birth_month: int = Field(ge=1, le=12)
+    birth_year: int = Field(ge=1900, le=2100)
+
+
+class TeacherSignup(BirthMonth):
+    email: str = Field(min_length=3, max_length=254)
+    password: str = Field(min_length=1, max_length=200)
+    display_name: str = Field(min_length=1, max_length=80)
+    org_name: str | None = Field(default=None, min_length=2, max_length=120)
+    org_code: str | None = Field(default=None, min_length=4, max_length=20)
+
+
+class TeacherLogin(_Strict):
+    email: str = Field(min_length=3, max_length=254)
+    password: str = Field(min_length=1, max_length=200)
+
+
+class StudentJoin(BirthMonth):
+    class_code: str = Field(min_length=4, max_length=20)
+    nickname: str = Field(min_length=1, max_length=24)
+    pin: str = Field(min_length=4, max_length=8)
+
+
+class StudentLogin(_Strict):
+    class_code: str = Field(min_length=4, max_length=20)
+    nickname: str = Field(min_length=1, max_length=24)
+    pin: str = Field(min_length=4, max_length=8)
+
+
+class OrgRole(_Strict):
+    org_id: int
+    name: str
+    role: Literal["org_admin", "teacher"]
+
+
+class MeTeacher(_Strict):
+    kind: Literal["teacher"]
+    display_name: str
+    email: str
+    orgs: list[OrgRole]
+
+
+class MeStudent(_Strict):
+    kind: Literal["student"]
+    nickname: str
+    class_id: int
+    class_name: str
+
+
+class Me(_Strict):
+    me: MeTeacher | MeStudent | None
+
+
+class OrgCreate(_Strict):
+    name: str = Field(min_length=2, max_length=120)
+
+
+class OrgJoin(_Strict):
+    code: str = Field(min_length=4, max_length=20)
+
+
+class OrgTeacher(_Strict):
+    user_id: int
+    display_name: str
+    role: Literal["org_admin", "teacher"]
+
+
+class OrgDetail(_Strict):
+    id: int
+    name: str
+    role: Literal["org_admin", "teacher"]
+    join_code: str | None
+    teachers: list[OrgTeacher]
+
+
+class RoleChange(_Strict):
+    role: Literal["org_admin", "teacher"]
+
+
+class JoinCode(_Strict):
+    join_code: str
+
+
+class ClassCreate(_Strict):
+    name: str = Field(min_length=1, max_length=80)
+
+
+class ClassSummary(_Strict):
+    id: int
+    org_id: int
+    name: str
+    join_code: str
+    created_at: dt.datetime
+    students: int
+
+
+class ClassList(_Strict):
+    classes: list[ClassSummary]
+
+
+class Student(_Strict):
+    id: int
+    nickname: str
+    created_at: dt.datetime
+
+
+class Assignment(_Strict):
+    id: int
+    kind: Literal["lesson", "quiz", "hunt"]
+    ref: str
+    title: str
+    due_at: dt.datetime | None
+    created_at: dt.datetime
+
+
+class ClassDetail(_Strict):
+    id: int
+    org_id: int
+    name: str
+    join_code: str
+    created_at: dt.datetime
+    students: list[Student]
+    assignments: list[Assignment]
+
+
+class AssignmentCreate(_Strict):
+    kind: Literal["lesson", "quiz", "hunt"]
+    ref: str = Field(pattern=r"^[a-z0-9-]{1,64}$")
+    due_at: dt.datetime | None = None
+
+
+class PinReset(_Strict):
+    pin: str = Field(min_length=4, max_length=8)
+
+
+class GradeCell(_Strict):
+    score: float
+    max_score: float
+    completed_at: dt.datetime | None
+    late: bool
+
+
+class GradeRow(_Strict):
+    member_id: int
+    nickname: str
+    cells: list[GradeCell | None]
+
+
+class ClassRef(_Strict):
+    id: int
+    name: str
+
+
+class Gradebook(_Strict):
+    class_: ClassRef = Field(alias="class")
+    assignments: list[Assignment]
+    rows: list[GradeRow]
+
+    model_config = ConfigDict(extra="forbid", populate_by_name=True)
+
+
+class AssignmentResult(_Strict):
+    score: float
+    max_score: float
+    completed_at: dt.datetime | None
+
+
+class StudentAssignment(Assignment):
+    result: AssignmentResult | None
+
+
+class StudentHome(_Strict):
+    class_: ClassRef = Field(alias="class")
+    nickname: str
+    assignments: list[StudentAssignment]
+
+    model_config = ConfigDict(extra="forbid", populate_by_name=True)
+
+
+class HuntSubmit(_Strict):
+    period_d: float = Field(gt=0, lt=1000)
+
+
+class HuntResult(_Strict):
+    points: int
+    verdict: Literal["exact", "close", "harmonic", "off"]
+    harmonic: str | None = None
+    best: float
+
+
+class Ok(_Strict):
+    ok: bool
