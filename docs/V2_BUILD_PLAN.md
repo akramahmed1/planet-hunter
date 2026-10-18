@@ -190,8 +190,8 @@ Status values: `todo`, `in-progress`, `staging-verified`, `merged-to-v2`, `live`
 | 6 | Live scan engine, vetting, cross-match | merged-to-v2 |
 | 7 | Learn and quiz | merged-to-v2 |
 | 8 | Accounts and multi-tenant classrooms | merged-to-v2 |
-| 9 | AI explainer and billing | in-progress |
-| 10 | Hardening and production release | todo |
+| 9 | AI explainer and billing | merged-to-v2 |
+| 10 | Hardening and production release | in-progress |
 
 ---
 
