@@ -1,0 +1,16 @@
+{
+  "url": "https://cdsarc.cds.unistra.fr/ftp/J/ApJS/258/16/tess-ebs.dat.gz",
+  "final_url": "https://cdsarc.cds.unistra.fr/ftp/J/ApJS/258/16/tess-ebs.dat.gz",
+  "status": 200,
+  "https": true,
+  "headers": {
+    "server": "Apache/2.4.66 (Ubuntu)",
+    "access-control-allow-origin": "*",
+    "content-type": "application/x-gzip",
+    "etag": "\"d3948-5e5567a254fde\"",
+    "last-modified": "Wed, 03 Aug 2022 13:47:42 GMT"
+  },
+  "bytes": 866632,
+  "truncated": false,
+  "fetched_at": "2026-10-18T01:28:44+00:00"
+}

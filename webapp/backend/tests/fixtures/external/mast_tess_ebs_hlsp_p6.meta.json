@@ -1,0 +1,16 @@
+{
+  "url": "https://archive.stsci.edu/hlsp/tess-ebs",
+  "final_url": "https://archive.stsci.edu/hlsp/tess-ebs",
+  "status": 200,
+  "https": true,
+  "headers": {
+    "server": "openresty",
+    "access-control-allow-origin": "*",
+    "content-type": "text/html;charset=UTF-8",
+    "cache-control": "private",
+    "strict-transport-security": "max-age=31536000; includeSubDomains"
+  },
+  "bytes": 92504,
+  "truncated": false,
+  "fetched_at": "2026-10-18T01:28:56+00:00"
+}
