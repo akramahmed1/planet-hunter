@@ -33,8 +33,8 @@ from pipeline.core import bin_time_series, bls_search, downsample_peaks  # noqa:
 OUT = REPO / "webapp" / "backend" / "data" / "lightcurves"
 TARGETS = [  # same list and order as candidate_scan.py
     ("TIC 150428135", "TOI 700"), ("TIC 259377017", "TOI 270"), ("TIC 251848941", "TOI 178"),
-    ("TIC 183985250", "TOI 849"), ("TIC 260128333", "TOI 1338"), ("TIC 55652896", "TOI 216"),
-    ("TIC 52368076", "TOI 125"), ("TIC 307210830", "TOI 776"),
+    ("TIC 183985250", "TOI 193"), ("TIC 260128333", "TOI 1338"), ("TIC 55652896", "TOI 216"),
+    ("TIC 52368076", "TOI 125"), ("TIC 307210830", "TOI 175"),
 ]
 MAX_SECTORS = 2
 BIN_MINUTES = 10

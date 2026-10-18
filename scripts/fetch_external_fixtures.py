@@ -218,6 +218,9 @@ P6_REQUESTS = [
     ("vizier_tess_ebs_readme_p6", "https://cdsarc.cds.unistra.fr/ftp/J/ApJS/258/16/ReadMe", "txt"),
     # The whole catalog file (VizieR's TAP service returned 503 on the first run).
     ("cds_tess_ebs_dat_p6", "https://cdsarc.cds.unistra.fr/ftp/J/ApJS/258/16/tess-ebs.dat", "txt"),
+    ("cds_tess_ebs_dat_gz_p6", "https://cdsarc.cds.unistra.fr/ftp/J/ApJS/258/16/tess-ebs.dat.gz", "gz"),
+    ("cds_tess_ebs_vizbin_p6", "https://cdsarc.cds.unistra.fr/viz-bin/nph-Cat/txt?J/ApJS/258/16/tess-ebs.dat", "txt"),
+    ("mast_tess_ebs_hlsp_p6", "https://archive.stsci.edu/hlsp/tess-ebs", "html"),
 ]
 
 # Only status and size are recorded for these (large client-side assets).
@@ -299,7 +302,7 @@ def main() -> int:
     requests = {"p2": P2_REQUESTS, "p3": P3_REQUESTS, "p4": P4_REQUESTS, "p6": P6_REQUESTS}.get(phase, FIXTURE_REQUESTS)
 
     for name, url, ext in requests:
-        r = fetch(url, max_bytes=3_500_000 if "1800_2050" in name or name.endswith("_glb") or "tess_ebs_dat" in name else MAX_BYTES)
+        r = fetch(url, max_bytes=3_500_000 if "1800_2050" in name or name.endswith("_glb") or "tess_ebs" in name else MAX_BYTES)
         body = r["body"].replace(NASA_KEY.encode(), b"REDACTED") if NASA_KEY != "DEMO_KEY" else r["body"]
         if body:
             (FIXTURES / f"{name}.{ext}").write_bytes(body)
