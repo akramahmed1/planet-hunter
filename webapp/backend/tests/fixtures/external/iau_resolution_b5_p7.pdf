@@ -1,0 +1,968 @@
+
+
+<!DOCTYPE html>
+
+
+
+<html id="MainHtml" lang="en" class="html-main">
+    <head id="ctl01_Head1">
+                    <script type="text/javascript">
+                        window.AsiAppInsights = {
+                            connectionstring: 'InstrumentationKey=96392a35-9d5a-4f7c-adcb-1a186bd1a320;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/',
+                            tenantID: 'IAU',
+                            correlationID: '6a4e1e5b906902ebf79d4ed7a557b307',
+                            disableCookiesUsage: true
+                        };
+                    </script><script type="text/javascript" src="/AsiCommon/Scripts/Unbundled/ApplicationInsightsCookieCleanup.min.js?v=1081336175"></script><script type="text/javascript" src="/AsiCommon/Scripts/Unbundled/ApplicationInsights.js?v=-866593060"></script><meta charset="UTF-8" /><title>
+	iMIS
+</title><link rel="stylesheet" href="/Assets/css/10-UltraWaveResponsive.css?v=639240586720000000"><!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TL3DNP0PPZ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-TL3DNP0PPZ');
+</script><link rel="shortcut icon" href="/images/iaudefaults/favicon.ico" />
+<link rel="canonical" href="https://www.iau.org/IAU/404.aspx?=404%3bhttps%3a%2f%2fwww.iau.org%3a443%2fstatic%2fresolutions%2fResolution_GA26-5-6.pdf" />
+
+
+<script type="text/javascript">
+    //Do not place any JavaScript above this line
+    //<![CDATA[
+    var gDocumentTitle = document.title, gPostBackFormObject = null, gPostBackFormProcessSubmit = true, gWindowOnLoad = [], gWebRoot ='', gWebSiteRoot ='https://www.iau.org', gPageTheme ='IAU-NewFlatWhite', gWebsiteKey ='9e4eaea2-b0d6-4c4b-bd18-913a208b91be', gHKey ='',gIsPostBack=false,gDefaultConfirmMessage='Continue without saving changes?',gIsEasyEditEnabled=false,gMasterPage='/templates/masterpages/wst-iau_coffee.master',gCurrentCultureCode='en-US';if(gWebsiteKey!=='fbdf17a3-cae7-4943-b1eb-71b9c0dd65d2'&&gWebsiteKey!=='fad2fd17-7e27-4c96-babe-3291ecde4822'){gIsEasyEditEnabled=false; }
+    !function (n) { n.Modernizr = { mq: function () { sessionStorage.getItem("modernizrDeprecated") || (console.warn("Asi: Modernizr has been deprecated."), sessionStorage.setItem("modernizrDeprecated", "true")); return true; } } }(window);
+    //Delegates unload permission to Telerik RadWindow content frames.
+    !function(){function e(){var e=window.Telerik,n=e&&e.Web&&e.Web.UI&&e.Web.UI.RadWindow;if(!n||!n.prototype||n.prototype._asiUnloadPermissionPatched)return!!n;var t=n.prototype._createUI;return"function"!=typeof t?!1:(n.prototype._createUI=function(){var e=t.apply(this,arguments),n=this.get_contentFrame?this.get_contentFrame():this._iframe;return n&&n.setAttribute("allow","unload *"),e},n.prototype._asiUnloadPermissionPatched=!0,!0)}e()||"loading"!==document.readyState||document.addEventListener("DOMContentLoaded",e,!1)}();
+    //]]>
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />  
+        <script type="text/javascript">
+            // Add a class to the <html> tag of browsers that do not support Media Queries
+            var mqSupported = Modernizr.mq('only all');
+            if (!mqSupported) {
+                document.documentElement.className += ' no-mqs';
+            }
+        </script>       
+        
+    
+                    <script type="text/javascript">
+                        window.AsiAmplitude = {
+                            cleanupKeyPrefix: '0f6f7594dc'
+                        };
+                    </script><script type="text/javascript" src="/AsiCommon/Scripts/Unbundled/AmplitudeCookieCleanup.min.js?v=-2031735941"></script><link href="../../App_Themes/IAU-NewFlatWhite/99-Flat_White.css?v=504911232000000000" type="text/css" rel="stylesheet" /><link href="../../App_Themes/IAU-NewFlatWhite/Z_IAU-CSS.css" type="text/css" rel="stylesheet" /><link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
+<style>
+.ErrorPageContainer h2{ 
+  font: 8em 'Cookie', serif;
+}
+</style><script src="/AsiCommon/Scripts/Jquery/Jquery.min.js" type="text/javascript" ></script><script src="/AsiCommon/Scripts/Jquery/jquery-migrate.min.js" type="text/javascript" ></script><style type="text/css">/*header*/
+header.header .header-logo-container {
+    align-self: flex-start;
+    padding-top: 20px;
+    padding-bottom: 30px;
+}
+@media(max-width: 1800px){
+header.header .header-logo-container {
+    justify-self: left;
+    padding-left: 140px;
+}
+/*Moves Logo inline with text on homepage - CN*/
+@media (min-width: 1380px) {
+    .Wrapper-HomePage header.header .header-logo-container {
+        max-width: 380px;
+        justify-self: left;
+        padding-left: 90px;
+    }
+}
+@media (max-width: 1300px) {
+    .Wrapper-HomePage header.header .header-logo-container {
+        max-width: 380px;
+        justify-self: left;
+        padding-left: 65px;
+    }
+}
+/*Moves primary nav inline with keyword search-CN*/
+@media (min-width: 1380px) {
+    header.header .header-primary-nav-container {
+        max-width: 650px;
+        justify-self: center;
+    }
+}
+/*footer */
+footer.footer {
+  background-color: #000000 !important;
+}
+
+.slideshow-banner .carousel-caption {
+    background-color: Transparent;
+}
+
+/* URL("images/ResponsiveHeaderSprite.PNG") */
+.backToTop {
+  background: #494DAD 5px -223px no-repeat;
+} 
+
+html .RadTabStrip_MetroTouch .rtsLevel1 a.rtsLink:hover, html .RadTabStrip_MetroTouch .rtsLevel1 a.rtsLink.rtsSelected, html .RadTabStrip_MetroTouch .rtsLevel1 a.rtsLink.rtsSelected:hover {
+    color: #a4b6d6 !important;
+}
+
+/* phone logo */
+@media (max-width: 991px) {
+    .Wrapper-HomePage header.header > .header-logo-container {
+        background-color: #000000;
+        width: 100%;
+    }
+}
+
+/* Shadow Box */
+.shadow {
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+    border: 1px solid #dbdbdb;
+}
+
+/* relates to slideshow height */
+
+.Wrapper-HomePage header.header .header-background-container {
+    display: block;
+    position: relative;
+    height: 600px !important;
+}
+/* Editing how the search results display to remove the image tile and shift the description over */
+    .SearchResultSummary .ImageSection {
+    display: none;
+    }
+   .SearchResultSummary .ImageSection img {
+    display: none;
+    }
+    .SearchResultSummary .Description {
+    margin: 1.5em !important;
+    }
+    .hidebutton {
+    display: none;
+    }
+.list-with-featured .newsImage {
+  width: 240px;
+  height: 150px;
+}
+/*margin after bulleted list CN*/
+ul, ol {
+    margin-top: 0px;
+    margin-bottom: 16px;
+}</style><link href="/Telerik.Web.UI.WebResource.axd?d=PMrIT5dOWaVYIcpFWUE4nBXe8BB3mntCDirfJAvU1Dlbd378sRGkZWkTwcq8_1G0UYs_VDgfe8X3qmrD-Jzij-NpRuOpW69T8Gugmxe_D1lfkekWyekiYABAvIUcV7OZ0&amp;t=638841090637275692&amp;compress=1&amp;_TSM_CombinedScripts_=%3b%3bTelerik.Web.UI%2c+Version%3d2026.3.812.462%2c+Culture%3dneutral%2c+PublicKeyToken%3d121fae78165ba3d4%3aen-US%3aab6aa57e-34e3-4a88-a53e-99567e45582d%3aed2942d4%3ad7e35272%3a505983de%3aaac68f9%3a92753c09%3bTelerik.Web.UI.Skins%2c+Version%3d2026.3.812.462%2c+Culture%3dneutral%2c+PublicKeyToken%3d121fae78165ba3d4%3aen-US%3a7029ea36-5fb5-4cac-9485-47ea571c06ca%3ad19c3573" type="text/css" rel="stylesheet" /><meta property="og:title" content="iMIS" /></head>
+    <body id="MainBody">
+        
+        <a href="#mainContentWrapper" class="screen-reader-text show-on-focus">Skip to main content</a>
+        <form method="post" action="./Resolution_GA26-5-6.pdf?404%3bhttps%3a%2f%2fwww.iau.org%3a443%2fstatic%2fresolutions%2fResolution_GA26-5-6.pdf" id="aspnetForm" class="form-main" novalidate="">
+<input type="hidden" name="__CTRLKEY" id="__CTRLKEY" value="" />
+<input type="hidden" name="__SHIFTKEY" id="__SHIFTKEY" value="" />
+<input type="hidden" name="ctl01_ScriptManager1_TSM" id="ctl01_ScriptManager1_TSM" value="" />
+<input type="hidden" name="ctl01_StyleSheetManager1_TSSM" id="ctl01_StyleSheetManager1_TSSM" value="" />
+<input type="hidden" name="PageInstanceKey" id="PageInstanceKey" value="0ea5da77-ae5a-4a35-aa4a-3ff4ebd3721c" />
+<input type="hidden" name="__RequestVerificationToken" id="__RequestVerificationToken" value="vji9xPptCzBAhOjTc4YAWmYZ2LLWdSg-exTvlaJLxua8V1F_lItF28k1vosRR5zx53vuSDSYmw_Mxd2M08NIJOOiI7bP5EMU85h5T0Q0cto1" />
+<input type="hidden" name="TemplateUserMessagesID" id="TemplateUserMessagesID" value="ctl01_TemplateUserMessages_ctl00_Messages" />
+<input type="hidden" name="PageIsDirty" id="PageIsDirty" value="false" />
+<input type="hidden" name="IsControlPostBack" id="IsControlPostBack" value="1" />
+<input type="hidden" name="NavMenuClientID" id="NavMenuClientID" value="ctl01_ciPrimaryNavigation_NavControl_NavMenu" />
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="C/WK7QBYbzu+SrIQFyl1HJwlZ3DQ1ZMsP/+p4I3X95DfLgvSCI8wpAfFoccPq05ybo24UTwDHwu0pkRGGyGjZSuKxLslpYrTPds2s48KFkZJdLGteyQZRXprgS9xufB0NcRAMFzakK8JZX4cFtC/NY/jyIklc/tylQY3YoHGSHCaarWLMPIE+5DWdMG5Mbapikw0UwMj3qcC/GwJTlMYe+aTez8I/91AofslMVQgSV8xdQO0bX5rpdzYed7zrSp6WuFcFpRYKer9fWPBvHIJeD0DAs9dZ3i88OU0l7kCLwjThOeGTHA/H1zOGzfMat7wXsXMRUxowYwkew+kw8T2cOPqxbwnUPMscjoSYhHkP4Wf+TZlp0TajfWqpa7zG6MtgPpAPiukhaIiRK5rKPP59Rxj7VtmG1Z0PMiJb9Cd2I9bmfUTu9dAKbh6h9obNJjEsR5V4QGU112f6oeUixA5ztiFaBVmolwCAmX8hhUOmFNhKXVqno4zgHEHSFJ0sTVm3FbLK8VE7c/O22bO2sZqGA==" />
+
+
+<script type="text/javascript">
+//<![CDATA[
+window['Asi.timeoutPopup.disable']=true;//]]>
+</script>
+
+<script src="/Telerik.Web.UI.WebResource.axd?_TSM_HiddenField_=ctl01_ScriptManager1_TSM&amp;compress=1&amp;_TSM_CombinedScripts_=%3b%3bAjaxControlToolkit%3aen-US%3a0c8c847b-b611-49a7-8e75-2196aa6e72fa%3aea597d4b%3ab25378d2%3bTelerik.Web.UI%2c+Version%3d2026.3.812.462%2c+Culture%3dneutral%2c+PublicKeyToken%3d121fae78165ba3d4%3aen-US%3aab6aa57e-34e3-4a88-a53e-99567e45582d%3a16e4e7cd%3a33715776%3af7645509%3a24ee1bba%3ae330518b%3a2003d0b8%3ac128760b%3a1e771326%3a88144a7a%3ac8618e41%3a1a73651d%3a333f8d94%3af46195d3%3ae524c98b%3aed16cbdc%3a19620875%3a874f8ea2%3ab2e06756%3a92fe8ea0%3afa31b949%3a4877f69a%3a490a9d4e%3abd8f85e4" type="text/javascript"></script>
+<script src="/AsiCommon/Scripts/Asi.js?v=816475033" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+var PageMethods = function() {
+PageMethods.initializeBase(this);
+this._timeout = 0;
+this._userContext = null;
+this._succeeded = null;
+this._failed = null;
+}
+PageMethods.prototype = {
+_get_path:function() {
+ var p = this.get_path();
+ if (p) return p;
+ else return PageMethods._staticInstance.get_path();},
+GetActionLink:function(action,templateType,docType,hierarchyKey,documentVersionKey,folderHierarchyKey,itemCount,closeWindowOnCommit,websiteKey,pageInstanceKey,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetActionLink',false,{action:action,templateType:templateType,docType:docType,hierarchyKey:hierarchyKey,documentVersionKey:documentVersionKey,folderHierarchyKey:folderHierarchyKey,itemCount:itemCount,closeWindowOnCommit:closeWindowOnCommit,websiteKey:websiteKey,pageInstanceKey:pageInstanceKey},succeededCallback,failedCallback,userContext); },
+GetWindowProperties:function(action,templateType,docType,hierarchyKey,documentVersionKey,folderHierarchyKey,itemCount,closeWindowOnCommit,websiteKey,pageInstanceKey,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetWindowProperties',false,{action:action,templateType:templateType,docType:docType,hierarchyKey:hierarchyKey,documentVersionKey:documentVersionKey,folderHierarchyKey:folderHierarchyKey,itemCount:itemCount,closeWindowOnCommit:closeWindowOnCommit,websiteKey:websiteKey,pageInstanceKey:pageInstanceKey},succeededCallback,failedCallback,userContext); },
+GetAddressCompletionList:function(prefixText,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetAddressCompletionList',false,{prefixText:prefixText},succeededCallback,failedCallback,userContext); },
+CheckForPasteConflict:function(selectedKeys,targetHierarchyKey,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'CheckForPasteConflict',false,{selectedKeys:selectedKeys,targetHierarchyKey:targetHierarchyKey},succeededCallback,failedCallback,userContext); }}
+PageMethods.registerClass('PageMethods',Sys.Net.WebServiceProxy);
+PageMethods._staticInstance = new PageMethods();
+PageMethods.set_path = function(value) { PageMethods._staticInstance.set_path(value); }
+PageMethods.get_path = function() { return PageMethods._staticInstance.get_path(); }
+PageMethods.set_timeout = function(value) { PageMethods._staticInstance.set_timeout(value); }
+PageMethods.get_timeout = function() { return PageMethods._staticInstance.get_timeout(); }
+PageMethods.set_defaultUserContext = function(value) { PageMethods._staticInstance.set_defaultUserContext(value); }
+PageMethods.get_defaultUserContext = function() { return PageMethods._staticInstance.get_defaultUserContext(); }
+PageMethods.set_defaultSucceededCallback = function(value) { PageMethods._staticInstance.set_defaultSucceededCallback(value); }
+PageMethods.get_defaultSucceededCallback = function() { return PageMethods._staticInstance.get_defaultSucceededCallback(); }
+PageMethods.set_defaultFailedCallback = function(value) { PageMethods._staticInstance.set_defaultFailedCallback(value); }
+PageMethods.get_defaultFailedCallback = function() { return PageMethods._staticInstance.get_defaultFailedCallback(); }
+PageMethods.set_enableJsonp = function(value) { PageMethods._staticInstance.set_enableJsonp(value); }
+PageMethods.get_enableJsonp = function() { return PageMethods._staticInstance.get_enableJsonp(); }
+PageMethods.set_jsonpCallbackParameter = function(value) { PageMethods._staticInstance.set_jsonpCallbackParameter(value); }
+PageMethods.get_jsonpCallbackParameter = function() { return PageMethods._staticInstance.get_jsonpCallbackParameter(); }
+PageMethods.set_path("404.aspx");
+PageMethods.GetActionLink= function(action,templateType,docType,hierarchyKey,documentVersionKey,folderHierarchyKey,itemCount,closeWindowOnCommit,websiteKey,pageInstanceKey,onSuccess,onFailed,userContext) {PageMethods._staticInstance.GetActionLink(action,templateType,docType,hierarchyKey,documentVersionKey,folderHierarchyKey,itemCount,closeWindowOnCommit,websiteKey,pageInstanceKey,onSuccess,onFailed,userContext); }
+PageMethods.GetWindowProperties= function(action,templateType,docType,hierarchyKey,documentVersionKey,folderHierarchyKey,itemCount,closeWindowOnCommit,websiteKey,pageInstanceKey,onSuccess,onFailed,userContext) {PageMethods._staticInstance.GetWindowProperties(action,templateType,docType,hierarchyKey,documentVersionKey,folderHierarchyKey,itemCount,closeWindowOnCommit,websiteKey,pageInstanceKey,onSuccess,onFailed,userContext); }
+PageMethods.GetAddressCompletionList= function(prefixText,onSuccess,onFailed,userContext) {PageMethods._staticInstance.GetAddressCompletionList(prefixText,onSuccess,onFailed,userContext); }
+PageMethods.CheckForPasteConflict= function(selectedKeys,targetHierarchyKey,onSuccess,onFailed,userContext) {PageMethods._staticInstance.CheckForPasteConflict(selectedKeys,targetHierarchyKey,onSuccess,onFailed,userContext); }
+var gtc = Sys.Net.WebServiceProxy._generateTypedConstructor;
+Type.registerNamespace('Asi.Web.UI.Common.BSA');
+if (typeof(Asi.Web.UI.Common.BSA.WindowProperties) === 'undefined') {
+Asi.Web.UI.Common.BSA.WindowProperties=gtc("Asi.Web.UI.Common.BSA.WindowProperties");
+Asi.Web.UI.Common.BSA.WindowProperties.registerClass('Asi.Web.UI.Common.BSA.WindowProperties');
+}
+Type.registerNamespace('Asi.Web.UI');
+if (typeof(Asi.Web.UI.PageOperation) === 'undefined') {
+Asi.Web.UI.PageOperation = function() { throw Error.invalidOperation(); }
+Asi.Web.UI.PageOperation.prototype = {None: 0,Edit: 1,New: 2,Execute: 3,Select: 4,SelectAndReturnValue: 5,Delete: 6,Purge: 7,Import: 8,Export: 9,Publish: 10,Versions: 11,Refresh: 12,Cut: 13,Copy: 14,Paste: 15,Undo: 16,SelectAll: 17,Search: 18,Preview: 19,Submit: 20,RequestDelete: 21,PurgeAll: 22,Download: 23}
+Asi.Web.UI.PageOperation.registerEnum('Asi.Web.UI.PageOperation', true);
+}
+if (typeof(Asi.Web.UI.TemplateType) === 'undefined') {
+Asi.Web.UI.TemplateType = function() { throw Error.invalidOperation(); }
+Asi.Web.UI.TemplateType.prototype = {I: 0,D: 1,P: 2,E: 3,T: 4,F: 5,A: 6}
+Asi.Web.UI.TemplateType.registerEnum('Asi.Web.UI.TemplateType', true);
+}
+//]]>
+</script>
+
+<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="193A34DB" /><object hidden type='application/json'><param name='__ClientContext' id='__ClientContext' value='{"baseUrl":"/","isAnonymous":true,"tenantId":"IAU","licenseClientId":"711904","loggedInPartyId":"1","selectedPartyId":"1","correlationId":"6a4e1e5b906902ebf79d4ed7a557b307","websiteRoot":"https://www.iau.org/","virtualDir":"","appTimeZoneOffset":3600000.0,"cookieConsent":0}'></object>
+            <input type="hidden" name="ctl01$lastClickedElementId" id="lastClickedElementId" />
+            <input type="hidden" name="ctl01$ScriptManager1" id="ctl01_ScriptManager1" />
+<script type="text/javascript">
+//<![CDATA[
+Sys.Application.setServerId("ctl01_ScriptManager1", "ctl01$ScriptManager1");
+Sys.Application._enableHistoryInScriptManager();
+//]]>
+</script>
+
+            <script type="text/javascript">
+                
+            </script>                                 
+            <div id="ctl01_masterWrapper" class="wrapper">
+	<a id="PageTop" class="sr-only">Top of the Page</a>
+
+	<header id="hd" class="header ClearFix">	
+<div class="header-background-container" data-label="Background">				<div ID="WTZone1_Page1" class="WTZone ">
+				<div id="ste_container_ciHomepageHeaderBackground" class="ContentItemContainer">
+ 	
+
+</div>
+				<div id="ste_container_ciInternalPageHeaderBackground" class="ContentItemContainer"><div class="internal-header-wrapper">
+<div id="ste_container_CopyofNewSlideshowCommon" class="ContentItemContainer"><div class="panel ">
+	<div id="ctl01_ciInternalPageHeaderBackground_ContentRecordTemplateArea_CopyofNewSlideshowCommon__Head" class="panel-heading">
+
+	</div><div id="ctl01_ciInternalPageHeaderBackground_ContentRecordTemplateArea_CopyofNewSlideshowCommon__BodyContainer" class="panel-body-container">
+		<div id="ctl01_ciInternalPageHeaderBackground_ContentRecordTemplateArea_CopyofNewSlideshowCommon__Body" class="panel-body">
+			<div id="ctl01_ciInternalPageHeaderBackground_ContentRecordTemplateArea_CopyofNewSlideshowCommon_Carousel" class="carousel slide" data-ride="carousel" translate="yes" data-interval="5000">    
+    <!-- Indicators -->    
+    
+    <!-- Slides -->
+    <div class="carousel-inner bg-img" tabindex="0">
+        <div class="item active" style="height:500px;background-image:url(/images/iaudefaults/homeatacama.jpg?version=2BB974B6);">
+				<a class="carousel-link" href="/IAU/About/About.aspx?hkey=d6fa2a14-dc07-4a62-b6c6-3dec9120a679&amp;WebsiteKey=9e4eaea2-b0d6-4c4b-bd18-913a208b91be"><div class="carousel-caption"><br><br><h1>Uniting A Global Community<br>to Advance Astronomy for All</h1><p>The International Astronomical Union (IAU) is the world&rsquo;s largest professional society for astronomy dedicated to promoting and safeguarding the science of astronomy in all its aspects through global collaboration.</p></div></a>
+			</div>    
+    </div>
+    <!-- Controls -->
+    
+</div>
+
+<script type="text/javascript">
+
+    var carouselSlider = document.querySelectorAll(".carousel-inner");
+
+    for (i = 0; i < carouselSlider.length; i++) {
+        carouselSlider[i].addEventListener('keyup', function followLink(e) {
+            if (e.key === 'Enter' || e.keyCode === 13) {
+                this.querySelector(".item.active a").click();
+            }
+        });
+    }
+
+</script>
+		</div>
+	</div>
+</div></div><div class="ContentRecordPageButtonPanel">
+
+</div> 	
+
+</div></div>
+					</div>
+</div>
+		<div class="header-logo-container" data-label="Logo">
+							<div ID="WTZone2_Page1" class="WTZone ">
+				<div id="ste_container_ciLogoContent" class="ContentItemContainer">
+ 	
+
+</div>
+				<div id="ste_container_ciLogoonBlack" class="ContentItemContainer">
+<div id="ste_container_HeaderLogoSpan" class="ContentItemContainer"><a href="https://www.iau.org/"><img src="/images/IAUDefaults/iau_wb.jpg?version=FC78BB6E" alt="IAUlogo" style="width: 130px;"></a></div><div class="ContentRecordPageButtonPanel">
+
+</div> 	
+
+</div>
+					</div>
+
+		</div>	  
+		<div class="header-aux-container" data-label="Aux">
+							<div ID="WTZone3_Page1" class="WTZone ">
+				<div id="ste_container_ciUtilityNavigation" class="ContentItemContainer"><div id="ctl01_ciUtilityNavigation_UtilityPlaceholder" class="UtilityNavigation nav-auxiliary">
+	<div class="UtilitySection UtilityAccountArea">
+		<ul id="ctl01_ciUtilityNavigation_ctl01_AccountMenu" class="account-menu"> 
+    <li id="ctl01_ciUtilityNavigation_ctl01_SignInLI">
+        <a id="ctl01_ciUtilityNavigation_ctl01_LoginStatus1" class="sign-in-link" translate="yes" href="javascript:__doPostBack(&#39;ctl01$ciUtilityNavigation$ctl01$LoginStatus1$ctl02&#39;,&#39;&#39;)">Sign in</a>
+    </li>
+    
+    
+
+    
+</ul>
+
+<script>
+    function ToggleOBO(toggle_id) {
+        var $this = jQuery("#" + toggle_id);
+        var enabled = $this.hasClass("on");
+        var button;
+
+        if (enabled) // click the clear button
+            button = window.$get('ctl01_ciUtilityNavigation_ctl01_OBOControlPanel_ClearContactButton');
+        else // click the select button
+            button = window.$get('ctl01_ciUtilityNavigation_ctl01_OBOControlPanel_SelectContactButton');
+
+
+        if (button != null)
+            button.click();
+    }
+
+    jQuery(document).ready(function () {
+        jQuery('.website-item:gt(2)').hide();
+        jQuery('.js-show-more-sites').show();
+
+        jQuery('.js-show-more-sites a').on("click", function () {
+            jQuery('.website-item:not(:visible):lt(5)').fadeIn(function () {
+                if (jQuery('.website-item:not(:visible)').length == 0) {
+                    jQuery('.website-item a').last().focus();
+                    jQuery('.js-show-more-sites').remove();
+                }
+            });
+            return false;
+        });
+    });
+</script>
+	</div><div class="UtilitySection UtilityNavigationToggle">
+		<button onclick="return false;" class="navbar-toggle collapsed menu-toggle" data-toggle="collapse" data-target=".navbar-collapse" data-parent=".navbar"><span class="sr-only" translate="yes">Toggle navigation</span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+</button>
+	</div><div class="UtilitySection UtilityNavigationToggle">
+		<button onclick="return false;" class="navbar-toggle collapsed searchbar-toggle" data-toggle="collapse" data-target=".searchbar-collapse" data-parent=".navbar"><span class="sr-only" translate="yes">Toggle search</span>
+<span class="icon-search"></span>
+</button>
+	</div><div class="UtilitySection UtilitySearch">
+		<div class="search-container-sm" data-set="searchbar">
+			<div class="header-search">
+				<div id="SimpleSearchBlock" role="search" class="SimpleSearchBlock"><label for="ctl01_ciUtilityNavigation_ctl09_SearchTerms" id="ctl01_ciUtilityNavigation_ctl09_Prompt" class="screen-reader-text" translate="yes">Keyword search</label><input name="ctl01$ciUtilityNavigation$ctl09$SearchTerms" type="text" value="Keyword search" id="ctl01_ciUtilityNavigation_ctl09_SearchTerms" class="search-field Watermarked" onfocus="SimpleSearchField_OnFocus(&#39;ctl01_ciUtilityNavigation_ctl09_SearchTerms&#39;, ctl01_ciUtilityNavigation_ctl09_SearchTermsProperties);" onblur="SimpleSearchField_OnBlur(&#39;ctl01_ciUtilityNavigation_ctl09_SearchTerms&#39;, ctl01_ciUtilityNavigation_ctl09_SearchTermsProperties);" onkeypress="return clickButton(event,&#39;ctl01_ciUtilityNavigation_ctl09_GoSearch&#39;);" translate="yes" /><input type="button" name="ctl01$ciUtilityNavigation$ctl09$GoSearch" value="Go" onclick="SimpleSearchField_ExecuteSearch(&#39;ctl01_ciUtilityNavigation_ctl09_SearchTerms&#39;, ctl01_ciUtilityNavigation_ctl09_SearchTermsProperties); return cancelEvent();__doPostBack(&#39;ctl01$ciUtilityNavigation$ctl09$GoSearch&#39;,&#39;&#39;)" id="ctl01_ciUtilityNavigation_ctl09_GoSearch" class="TextButton" /></div>
+			</div>
+		</div>
+	</div><div class="UtilitySection UtilitySTEToggle ste-section">
+
+	</div><div id="ctl01_ciUtilityNavigation_search-collapse" class="searchbar-collapse collapse" style="height:auto;">
+		<div class="search-container" data-set="searchbar">
+			<div class="header-search">
+				<div id="ResponsiveSimpleSearchBlock" role="search" class="SimpleSearchBlock"><label for="ctl01_ciUtilityNavigation_ctl15_SearchTerms" id="ctl01_ciUtilityNavigation_ctl15_Prompt" class="screen-reader-text" translate="yes">Keyword search</label><input name="ctl01$ciUtilityNavigation$ctl15$SearchTerms" type="text" value="Keyword search" id="ctl01_ciUtilityNavigation_ctl15_SearchTerms" class="search-field Watermarked" onfocus="SimpleSearchField_OnFocus(&#39;ctl01_ciUtilityNavigation_ctl15_SearchTerms&#39;, ctl01_ciUtilityNavigation_ctl15_SearchTermsProperties);" onblur="SimpleSearchField_OnBlur(&#39;ctl01_ciUtilityNavigation_ctl15_SearchTerms&#39;, ctl01_ciUtilityNavigation_ctl15_SearchTermsProperties);" onkeypress="return clickButton(event,&#39;ctl01_ciUtilityNavigation_ctl15_GoSearch&#39;);" translate="yes" /><input type="button" name="ctl01$ciUtilityNavigation$ctl15$GoSearch" value="Go" onclick="SimpleSearchField_ExecuteSearch(&#39;ctl01_ciUtilityNavigation_ctl15_SearchTerms&#39;, ctl01_ciUtilityNavigation_ctl15_SearchTermsProperties); return cancelEvent();__doPostBack(&#39;ctl01$ciUtilityNavigation$ctl15$GoSearch&#39;,&#39;&#39;)" id="ctl01_ciUtilityNavigation_ctl15_GoSearch" class="TextButton" /></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+    //<![CDATA[
+    // adapted from bs.collapse - if the search bar is open when opening the menu, close it (and vise versa)
+    function UtilityAreaAction(utilityControl, hideArea) {
+        jQuery(utilityControl).on('show.bs.collapse', function() {
+            var actives = jQuery(hideArea).find('> .in');
+            if (actives && actives.length) {
+                var hasData = actives.data('bs.collapse');
+                if (hasData && hasData.transitioning) return;
+                actives.collapse('hide');
+                hasData || actives.data('bs.collapse', null);
+            }
+        });
+    }
+    jQuery(document).ready(function () {
+        UtilityAreaAction('.navbar-collapse', '.nav-auxiliary');
+        UtilityAreaAction('.searchbar-collapse', '.primary-navigation-area');
+    });
+    //]]>              
+</script>
+     </div>
+					</div>
+
+		</div>
+		<div class="header-primary-nav-container" data-label="Primary">
+							<div ID="WTZone4_Page1" class="WTZone ">
+				<div id="ste_container_ciPrimaryNavigation" class="ContentItemContainer">
+<div id="ctl01_ciPrimaryNavigation_PrimaryNavigationArea" class="primary-navigation-area">
+    <div id="ctl01_ciPrimaryNavigation_PrimaryNavigationControl" class="collapse navbar-collapse nav-primary">
+        <nav id="ctl01_ciPrimaryNavigation_NavControl_NavWrapper" aria-label="primary">
+    <div tabindex="0" id="ctl01_ciPrimaryNavigation_NavControl_NavMenu" class="RadMenu RadMenu_Coffee  MainMenu" Translate="Yes" PerspectiveId="ebf0d6ca-c8e0-4066-bbc7-c33f01afb11e" Version="6D258871" NavigationArea="1" MaxDataBindDepth="3" style="z-index:2999;">
+	<!-- 2026.3.812.462 --><input class="rmRootGroup rmToggleHandles rmHorizontal" id="ctl01_ciPrimaryNavigation_NavControl_NavMenu_ClientState" name="ctl01_ciPrimaryNavigation_NavControl_NavMenu_ClientState" type="hidden" />
+</div> 
+</nav>
+    </div>
+</div></div>
+				<div id="ste_container_ciWelcome_8aa2a44e7ef74715b2b32207fb0c62b3" class="ContentItemContainer"><div class="ContentBorder"><div id="ctl01_ciWelcome_8aa2a44e7ef74715b2b32207fb0c62b3_Panel_Welcome">
+
+</div></div></div>
+					</div>
+
+		</div>
+		<div class="home-page-header-container" data-label="Home Content">	
+							<div ID="WTZone5_Page1" class="WTZone ">
+				<div id="ste_container_ciFullWidthContent" class="ContentItemContainer">
+ 	
+
+</div>
+					</div>
+
+		</div>
+		<div class="internal-header-container" data-label="Internal Header">
+							<div ID="WTZone6_Page1" class="WTZone ">
+				<div id="ste_container_ciInternalFullWidthHeader" class="ContentItemContainer">
+<div class="ContentRecordPageButtonPanel">
+
+</div> 	
+
+</div>
+					</div>
+
+		</div>
+	</header>
+
+	<div class="container main-container ClearFix">
+		<main class="body-container" id="ContentPanel">
+			<div data-label="Secondary Navigation" class="col-secondary cs-right d-none">
+								<div ID="WTZone7_Page1" class="WTZone ">
+				<div id="ste_container_ciSecondary" class="ContentItemContainer">
+<div id="ctl01_ciSecondary_SecondaryNavigationArea">
+    <div class="nav-secondary NotPrinted">                
+        <nav id="ctl01_ciSecondary_SubNavControl_NavWrapper" class="sub-nav" aria-labelledby="ctl01_ciSecondary_SubNavControl_SubNavHead">
+    <div id="ctl01_ciSecondary_SubNavControl_SubNavHead" class="sub-nav-head" translate="yes">
+	
+        
+    
+</div>
+    <div id="ctl01_ciSecondary_SubNavControl_SubNavPanel" class="sub-nav-body" translate="yes">
+	
+        <div id="ctl01_ciSecondary_SubNavControl_SubNavigationTree" class="RadTreeView RadTreeView_Coffee" NavigateOnClick="true" PerspectiveId="ebf0d6ca-c8e0-4066-bbc7-c33f01afb11e" Version="6D258871" NavigationArea="2" StartingNodeOffset="1" WrapperContainerId="ctl01_masterWrapper" SubNavTitleContainerId="ctl01_ciSecondary_SubNavControl_SubNavHead">
+		<input id="ctl01_ciSecondary_SubNavControl_SubNavigationTree_ClientState" name="ctl01_ciSecondary_SubNavControl_SubNavigationTree_ClientState" type="hidden" />
+	</div>
+    
+</div> 
+</nav>    
+    </div>    
+</div></div>
+			
+				<div id="ste_container_ciSideContent" class="ContentItemContainer">
+<div id="ste_container_BlankSpace" class="ContentItemContainer"><p>&nbsp;</p>
+<p>&nbsp;</p></div><div id="ste_container_NewContentHtml" class="ContentItemContainer"><p><a href="/Iau/About/Strategic_Plan" class=""><img src="/images/IAU_SP_2020_2030.png?version=E307C929" alt="" style="top: 205.125px; width: 271.667px; height: 1089.67px;"></a></p></div><div class="ContentRecordPageButtonPanel">
+
+</div> 	
+
+</div>
+					</div>
+
+			</div>
+			<div class="col-primary" data-label="Main Content">
+								<div ID="WTZone8_Page1" class="WTZone ">
+		<div id="mainContentWrapper" class="ContentPanel">
+			<div id="masterMainBreadcrumb" data-height-offset="true" ></div>
+			<div id="ctl01_UserMessagesUpdatePanel">
+						
+				
+</div>
+			
+
+    <div id="ctl01_TemplateBody_PublishUpdatePanel">
+
+</div><div id="ctl01_TemplateBody_pnlFaultData">
+	
+        <div id="ctl01_TemplateBody_divFaultedUrl" class="small text-center">
+            <span>Page requested: </span>
+            <span id="ctl01_TemplateBody_lblFaultedUrl">https://www.iau.org/static/resolutions/Resolution_GA26-5-6.pdf (current)</span>
+        </div>
+        <div id="ctl01_TemplateBody_divFaultedOperationId" class="small text-center">
+            <span>Incident ID: </span>
+            <span id="ctl01_TemplateBody_lblFaultedOperationId">6a4e1e5b906902ebf79d4ed7a557b307 (current)</span>
+        </div>
+    
+</div>
+
+    
+
+    <div class="ContentWizardDisplay ClearFix"><div>
+	<div class="row">
+		<div class="col-sm-12">
+			<div id="ctl01_TemplateBody_Zone1PlaceHolder" class="WebPartZone ErrorPageContainer">
+	<div id="ste_container_NewContentHtml" class="ContentItemContainer"><div class="ErrorPageGrid" style="text-align: center;">
+<img src="/images/IAUDefaults/error404_graphic_2.png?version=244B1BFB" alt="Person looking through telescope the wrong way.">
+<h2 class="PageHeading d-md-block" style="text-align: center;">&nbsp;</h2>
+<h2 class="PageHeading d-md-block" style="text-align: center;">Sorry!</h2>
+<div class="ErrorMessage d-md-block" style="text-align: center;">
+<p style="text-align: center;">&nbsp;</p>
+<p style="text-align: center;">We couldn't find what you are looking for, please contact <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="751c14001c1b131a06351c14055b1307">[email&#160;protected]</a> with a cut and paste of this URL.</p>
+<small>- error 404 -</small>
+</div>
+</div>
+<div class="MobileErrorMessage d-md-none">
+<h2>Sorry!</h2>
+<p>We couldn’t find what you’re looking for.</p>
+<small>- error 404 -</small>
+</div>
+<br></div><div id="ctl01_TemplateBody_ControlErrorPanel_NewContentHtml" class="Error" style="Display:None;">
+
+	</div>
+</div>
+		</div>
+	</div>
+</div></div>
+
+		</div>
+							</div>
+
+			</div>
+		</main>
+	</div>
+	
+	<a class="backToTop" href="#PageTop">Back to Top</a>
+	<footer id="ft" class="footer ClearFix">
+<div class="footer-banner">				<div ID="WTZone9_Page1" class="WTZone ">
+				<div id="ste_container_ciFooterBanner" class="ContentItemContainer">
+<div id="ste_container_IAUGA2027" class="ContentItemContainer"><div class="slideshow-banner"><div class="panel ">
+	<div id="ctl01_ciFooterBanner_ContentRecordTemplateArea_IAUGA2027__Head" class="panel-heading">
+
+	</div><div id="ctl01_ciFooterBanner_ContentRecordTemplateArea_IAUGA2027__BodyContainer" class="panel-body-container">
+		<div id="ctl01_ciFooterBanner_ContentRecordTemplateArea_IAUGA2027__Body" class="panel-body">
+			<div id="ctl01_ciFooterBanner_ContentRecordTemplateArea_IAUGA2027_Carousel" class="carousel slide" data-ride="carousel" translate="yes" data-interval="0">    
+    <!-- Indicators -->    
+    
+    <!-- Slides -->
+    <div class="carousel-inner bg-img" tabindex="0">
+        <div class="item active" style="height:135px;background-image:url(/images/slideshow/slider_01.jpg?version=3F5996C6);">
+				<a class="carousel-link" href="https://iaurome2027.org/"><div class="carousel-caption"><h2>Join us for the 2027 General Assembly&nbsp;</h2><p class=""><em>August 10th - 19th, 2027, Rome, Italy</em></p></div></a>
+			</div>    
+    </div>
+    <!-- Controls -->
+    
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/javascript">
+
+    var carouselSlider = document.querySelectorAll(".carousel-inner");
+
+    for (i = 0; i < carouselSlider.length; i++) {
+        carouselSlider[i].addEventListener('keyup', function followLink(e) {
+            if (e.key === 'Enter' || e.keyCode === 13) {
+                this.querySelector(".item.active a").click();
+            }
+        });
+    }
+
+</script>
+		</div>
+	</div>
+</div></div></div><div class="ContentRecordPageButtonPanel">
+
+</div> 	
+
+</div>
+					</div>
+</div>
+		<div class="footer-content">
+			<div class="container">
+<div class="footer-column" data-label="Footer Column 1">				<div ID="WTZone10_Page1" class="WTZone ">
+				<div id="ste_container_ciFooterContent1" class="ContentItemContainer">
+<div id="ste_container_FooterCommunications" class="ContentItemContainer"><h3>Contact</h3>
+<div class="row">
+<div class="col-sm-7">IAU-UAI Headquarters</div>
+<div class="col-sm-7">98-bis Blvd Arago</div>
+<div class="col-sm-7">75014 Paris, France</div>
+<div class="col-sm-7">📞 +33 1 43 25 83 58</div>
+<div class="col-sm-7">📧&nbsp;<a href="/cdn-cgi/l/email-protection#6f060e1a060109001c2f060e1f41091d">&nbsp;</a><a href="/cdn-cgi/l/email-protection#4d25282c293c382c3f39283f3e0d242c3863223f2a"><span class="__cf_email__" data-cfemail="3b535e5a5f4a4e5a494f5e49487b525a4e1554495c">[email&#160;protected]</span></a></div>
+<p class="col-sm-7">📧&nbsp;<a href="/cdn-cgi/l/email-protection#5b323a2e2b293e2828343d3d32383e1b323a2e7534293c"><span class="__cf_email__" data-cfemail="2353514650504c45454a4046634a42560d4c5144">[email&#160;protected]</span></a><br>
+📝&nbsp;<a href="https://lp.constantcontactpages.com/sl/chivRi2/iaunewsletter">IAU Newsletter</a></p>
+</div>
+<p> </p>
+<a href="https://www.facebook.com/InternationalAstronomicalUnion" title="Visit our Facebook page" target="_blank" class="SocialSprite LargeButtons FacebookIcon">Facebook</a>&nbsp;<a href="https://www.linkedin.com/company/the-international-astronomical-union/?viewAsMember=true" title="Visit our LinkedIn page" target="_blank" class="SocialSprite LargeButtons LinkedInIcon">inkedIn</a>
+<a href="https://www.youtube.com/channel/UCc3I9q-N0NA05vIYeNMmtTw" title="Visit our YouTube channel" target="_blank" class="SocialSprite LargeButtons YouTubeIcon">Youtube</a>
+<a href="https://www.instagram.com/international_astronomy_union/" title="Follow the IAU on Instagram" target="_blank" class="SocialSprite LargeButtons InstagramIcon">Instagram</a></div><div class="ContentRecordPageButtonPanel">
+
+</div> 	
+
+</div>
+					</div>
+</div>
+<div class="footer-column" data-label="Footer Column 2">				<div ID="WTZone11_Page1" class="WTZone ">
+				<div id="ste_container_ciFooterContent2" class="ContentItemContainer">
+<div id="ste_container_NewContentHtml" class="ContentItemContainer">© <span id="thisyear">2025</span> International Astronomical Union (IAU)</div><div class="ContentRecordPageButtonPanel">
+
+</div> 	
+
+</div>
+				<div id="ste_container_ciNewUtilityNavigationCommon" class="ContentItemContainer"><div id="ctl01_ciNewUtilityNavigationCommon_UtilityPlaceholder" class="UtilityNavigation nav-auxiliary">
+
+</div>
+
+     </div>
+					</div>
+</div>
+<div class="footer-column" data-label="Footer Column 3">				<div ID="WTZone12_Page1" class="WTZone ">
+				<div id="ste_container_ciFooterContent3" class="ContentItemContainer">
+<div id="ste_container_NewContentHtml" class="ContentItemContainer"><ul>
+    <li><a href="/Iau/About/About.aspx" class="">About</a>
+    <ul>
+        <li><a href="/IAU/About/Governance.aspx" class="">Governance</a></li>
+        <li><a href="/IAU/About/Offices.aspx" class="">Offices</a></li>
+        <li><a href="/IAU/About/Centres.aspx" class="">Centres</a></li>
+        <li><a href="/IAU/About/Contact.aspx" class="">Contact</a></li>
+        <li><a href="/IAU/About/Partners.aspx" class="">Partners</a></li>
+    </ul>
+    </li>
+    <li><a href="/Iau/Science/Scientific-Bodies.aspx" class="">Scientific Bodies</a>
+    <ul>
+        <li><a href="https://www.iau.org/IAU/Iau/Science/Divisions.aspx">Divisions</a></li>
+        <li><a href="/IAU/Science/Commissions.aspx" class="">Commissions</a></li>
+        <li><a href="https://www.iau.org/IAU/IAU/Science/Working_Groups.aspx">Working Groups</a><a href="https://www.iau.org/Iau/News/News"></a></li>
+    </ul>
+    </li>
+    <li><a href="https://www.iau.org/Iau/News/News">News</a>
+    <ul>
+        <li><a href="https://www.iau.org/Iau/News/News"></a><a href="https://www.iau.org/Iau/News/All_Announcements">Announcements</a></li>
+        <li><a href="https://www.iau.org/Iau/News/All_Press_Releases">Press Releases</a></li>
+        <li><a href="/IAU/About/Press-and-Media.aspx" class="">Press &amp; Media</a></li>
+    </ul>
+    </li>
+</ul>
+<p>&nbsp;</p>
+<ul>
+    <li><a href="https://www.iau.org/IAU/IAU/Science/Scientific-Meetings-Overview.aspx?">Meetings &amp; Events</a>
+    <ul>
+        <li>
+        <a href="https://www.iau.org/IAU/IAU/Science/Scientific-Meetings/General-Assemblies.aspx">General Assembly</a> </li>
+        <li><a href="https://www.iau.org/IAU/IAU/Science/Scientific-Meetings/Symposia.aspx">Symposia</a></li>
+        <li><a href="https://www.iau.org/IAU/IAU/Science/Scientific-Meetings/Regional-Meetings.aspx">Regional Meetings</a></li>
+        <li><a href="https://www.iau.org/IAU/IAU/Science/Scientific-Meetings/Focus_Meetings.aspx">Focus Meetings</a></li>
+        <li><a href="https://www.iau.org/IAU/OYA/About-ISYA.aspx">ISYA Schools</a></li>
+        <li><a href="https://www.iau.org/IAU/IAU/Science/Trainings---Workshops/I-HOW-Hands-On-Workshops.aspx">I-HOW Workshops</a></li>
+        <li><a href="https://www.iau.org/IAU/IAU/Science/Trainings---Workshops/Shaw-IAU-Workshop.aspx">Shaw-IAU Workshop</a></li>
+    </ul>
+    </li>
+    <li><a href="/Iau/Membership/Membership.aspx" class="">IAU Affiliation</a>
+    <ul>
+        <li><a href="/Iau/Membership/National-Members.aspx" class="">National Members</a></li>
+        <li><a href="https://iau.org/IAU/IAU/Membership/Individual-Members.aspx?hkey=34e01e66-ec42-4fec-8de9-cd01456ed518">Individual Members</a></li>
+        <li><a href="https://iau.org/IAU/IAU/Membership/Junior-Members.aspx?hkey=11a0d166-2b73-4a12-801f-6c8f95418947">Junior Members</a></li>
+        <li><a href="https://www.iau.org/Iau/Membership/Honorary-Members.aspx">Honourary Members</a></li>
+        <li><a href="/Iau/Membership/Associates.aspx" class="">Associates</a></li>
+    </ul>
+    </li>
+    <li><a href="https://www.iau.org/IAU/IAU/Science/Prizes--Grants.aspx?">Prizes &amp; Grants</a>
+    <ul>
+        <li><a href="https://www.iau.org/Iau/Science/Grants-and-Prizes/Kavli-Prize.aspx?">Kavli Prize</a></li>
+        <li><a href="https://www.iau.org/Iau/Science/Grants-and-Prizes/Shaw-Prize.aspx">Shaw Prize</a></li>
+        <li><a href="https://www.iau.org/Iau/Iau/Science/Grants-and-Prizes/Gruber-Cosmology-Prize.aspx">TGF Cosmology Prize</a></li>
+        <li><a href="https://www.iau.org/Iau/Iau/Science/Grants-and-Prizes/Gruber-Fellowship.aspx">TGF Fellowship</a></li>
+        <li><a href="https://www.iau.org/Iau/Science/Grants-and-Prizes/PhD-Prize.aspx">IAU-Shaw PhD Prize</a></li>
+        <li><a href="https://www.iau.org/Iau/Science/Grants-and-Prizes/ODE-Prize.aspx?">IAU Education, Outreach and Development Prize</a></li>
+    </ul>
+    </li>
+</ul></div><div id="ste_container_PrivacyPolicy" class="ContentItemContainer"><a href="https://www.iubenda.com/privacy-policy/23933326" class="iubenda-black iubenda-noiframe iubenda-embed iubenda-noiframe " title="Privacy Policy ">Privacy Policy</a>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/javascript">(function (w,d) {var loader = function () {var s = d.createElement("script"), tag = d.getElementsByTagName("script")[0]; s.src="https://cdn.iubenda.com/iubenda.js"; tag.parentNode.insertBefore(s,tag);}; if(w.addEventListener){w.addEventListener("load", loader, false);}else if(w.attachEvent){w.attachEvent("onload", loader);}else{w.onload = loader;}})(window, document);</script></div><div id="ste_container_CookiePolicy" class="ContentItemContainer"><a href="https://www.iubenda.com/privacy-policy/23933326/cookie-policy" class="iubenda-black iubenda-noiframe iubenda-embed iubenda-noiframe " title="Cookie Policy ">Cookie Policy</a>
+<script type="text/javascript">(function (w,d) {var loader = function () {var s = d.createElement("script"), tag = d.getElementsByTagName("script")[0]; s.src="https://cdn.iubenda.com/iubenda.js"; tag.parentNode.insertBefore(s,tag);}; if(w.addEventListener){w.addEventListener("load", loader, false);}else if(w.attachEvent){w.attachEvent("onload", loader);}else{w.onload = loader;}})(window, document);</script></div><div class="ContentRecordPageButtonPanel">
+
+</div> 	
+
+</div>
+				<div id="ste_container_ciNewUtilityNavigationCommon2" class="ContentItemContainer"><div id="ctl01_ciNewUtilityNavigationCommon2_UtilityPlaceholder" class="UtilityNavigation nav-auxiliary" role="navigation">
+	<div class="UtilitySection UtilityNavigationList">
+
+	</div>
+</div>
+
+     </div>
+				<div id="ste_container_ciNewContentHtml_da104cc0ba754ed89057758cd120f88f" class="ContentItemContainer"><div id="ctl01_ciNewContentHtml_da104cc0ba754ed89057758cd120f88f_Panel_NewContentHtml">
+	<script src="/App_Themes/IAU-NewFlatWhite//js/aos.min.js"></script>
+<script>
+    AOS.init({
+  disable: 'phone',
+  offset: 170,
+  delay: 100,
+  duration: 500,
+  once: true
+});
+  </script>
+<script type="text/javascript">
+document.getElementById("thisyear").innerHTML = new Date().getFullYear();
+
+var caps = document.querySelectorAll(".slideshow-banner .item");
+
+for(x=0;x<caps.length;x++){
+    var image = caps[x].style.backgroundImage;
+    image = image.replace(/"/g, "'");
+    
+  var content = caps[x].innerHTML;
+  var link = content.includes("carousel-link");
+
+  if(link){
+   var current = caps[x].getElementsByClassName("carousel-link");
+   let link = current[0].href;
+    current = current[0].innerHTML;
+      caps[x].innerHTML = '<a href="' + link + '" class="link"><div class="img" style="background-image:' + image + ';"></div><div class="caption-wrapper">' + current + '</div></div></a>';
+      
+  } else {
+      var current =  caps[x].innerHTML;
+      caps[x].innerHTML = '<div class="bg"><div class="img" style="background-image:'+ image +';"></div><div class="caption-wrapper">' + current + '</div></div>';
+      
+  }
+    
+}
+
+var listImages = document.getElementsByClassName('contentTaggedListImageThumbnailR');
+var newsImages = document.getElementsByClassName('newsImage');
+var newsTitle = document.getElementsByClassName("newsTitle");
+
+for(i=0;i<listImages.length;i++){
+var link = listImages[i].src;
+var hasImage = link.search("NoImageAvailable");
+
+if(hasImage == -1){
+  link.replace(" ", "%20");
+  
+  jQuery(newsImages[i]).css('background-image', 'url(' + link + ')');
+} else{
+   jQuery(newsImages[i]).css('background-image', 'url(/images/MyWebsite/news-default.png)');
+}
+
+ if(newsTitle[i]){
+var titleLen = newsTitle[i].innerHTML.length;
+var title = newsTitle[i].innerHTML;
+  if(titleLen > 50){
+    title = title.substring(0, 47) + "...";
+    newsTitle[i].innerHTML = title;
+  } else{
+  }
+}
+  
+}
+
+</script>
+</div></div>
+					</div>
+</div>
+			</div>
+		</div>
+	</footer>
+</div>	
+
+                                        
+            <!--Jscript from Page.ResgisterStartupScript extention is loaded here -->
+            <Div><script type="text/javascript">Sys.Application.add_load(function () {{ MasterPageBase_Init(); }});</script>
+<script>var cookieConsentProperties = new CookieConsentProperties();cookieConsentProperties.ShowLink = false;cookieConsentProperties.Message = 'This website uses cookies to ensure you get the best experience on our website.';cookieConsentProperties.Allow = 'Accept All';cookieConsentProperties.Deny = 'Reject All';cookieConsentProperties.Link = 'Learn more';cookieConsentProperties.Href = '';cookieConsentProperties.AuditUrl = '/api/CookieConsentAudit';cookieConsentProperties.WebsiteProviderCookiePolicyHref = 'https://www.advsol.com/imiscookiepolicy';cookieConsentProperties.Position = 'bottom';cookieConsentProperties.Static = false;SetUpCookieWarning(cookieConsentProperties);</script>
+<script type="text/javascript">Sys.Application.add_load(function() { { BreadCrumb_load('ebf0d6ca-c8e0-4066-bbc7-c33f01afb11e','6D258871'); } }); </script>
+</Div><input name="ctl01$TemplateScripts$timeoutsoonmsg" type="hidden" id="timeoutsoonmsg" value="PGgyPllvdSBhcmUgYWJvdXQgdG8gYmUgc2lnbmVkIG91dDwvaDI+DQo8cD5Zb3Ugd2lsbCBiZSBzaWduZWQgb3V0IGluIDxzdHJvbmc+W1NlY29uZHNSZW1haW5pbmddPC9zdHJvbmc+IHNlY29uZHMgZHVlIHRvIGluYWN0aXZpdHkuIFlvdXIgY2hhbmdlcyB3aWxsIG5vdCBiZSBzYXZlZC4gVG8gY29udGludWUgd29ya2luZyBvbiB0aGUgd2Vic2l0ZSwgY2xpY2sgIlN0YXkgU2lnbmVkIEluIiBiZWxvdy48L3A+" /><input name="ctl01$TemplateScripts$timeoutsoonstaysignintxt" type="hidden" id="timeoutsoonstaysignintxt" value="U3RheSBTaWduZWQgSW4=" /><input name="ctl01$TemplateScripts$timeoutsoonlogouttxt" type="hidden" id="timeoutsoonlogouttxt" value="U2lnbiBPdXQ=" /><input name="ctl01$TemplateScripts$stayLoggedInURL" type="hidden" id="stayLoggedInURL" /><input name="ctl01$TemplateScripts$logoutUrl" type="hidden" id="logoutUrl" value="aHR0cHM6Ly93d3cuaWF1Lm9yZy9hc2ljb21tb24vY29udHJvbHMvc2hhcmVkL2Zvcm1zYXV0aGVudGljYXRpb24vbG9naW4uYXNweD9TZXNzaW9uVGltZW91dD0xJlJldHVyblVybD0lMmY0MDQuYXNweCUzZjQwNCUyNTNiaHR0cHMlMjUzYSUyNTJmJTI1MmZ3d3cuaWF1Lm9yZyUyNTNhNDQzJTI1MmZzdGF0aWMlMjUyZnJlc29sdXRpb25zJTI1MmZSZXNvbHV0aW9uX0dBMjYtNS02LnBkZg==" />
+
+<!-- Bootstrap Modal -->
+<div id="BootstrapModal" class="modal fade" tabindex="-1" role="dialog" aria-label="Modal" aria-hidden="true">
+    <div id="BootstrapDocument" class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body p-0 m-0">
+                <iframe id="ContentFrame" class="modal-content-iframe" width="100%" height="100px" frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+</div>                    	            
+        <div id="ctl01_RadAjaxManager1SU">
+	<span id="ctl01_RadAjaxManager1" style="display:none;"></span>
+</div><div id="ctl01_WindowManager1" style="display:none;">
+	<div id="ctl01_GenericWindow" style="display:none;">
+		<div id="ctl01_GenericWindow_C" style="display:none;">
+
+		</div><input id="ctl01_GenericWindow_ClientState" name="ctl01_GenericWindow_ClientState" type="hidden" />
+	</div><div id="ctl01_ObjectBrowser" style="display:none;">
+		<div id="ctl01_ObjectBrowser_C" style="display:none;">
+
+		</div><input id="ctl01_ObjectBrowser_ClientState" name="ctl01_ObjectBrowser_ClientState" type="hidden" />
+	</div><div id="ctl01_ObjectBrowserDialog" style="display:none;">
+		<div id="ctl01_ObjectBrowserDialog_C" style="display:none;">
+
+		</div><input id="ctl01_ObjectBrowserDialog_ClientState" name="ctl01_ObjectBrowserDialog_ClientState" type="hidden" />
+	</div><div id="ctl01_WindowManager1_alerttemplate" style="display:none;">
+        <div class="rwDialogPopup radalert">
+            <div class="rwDialogText" role="alert">
+            {1}
+            </div>
+
+            <div>
+                <a  onclick="$find('{0}').close(true);"
+                class="rwPopupButton" href="javascript:void(0);">
+                    <span class="rwOuterSpan">
+                        <span class="rwInnerSpan">##LOC[OK]##</span>
+                    </span>
+                </a>
+            </div>
+        </div>
+        </div><div id="ctl01_WindowManager1_prompttemplate" style="display:none;">
+         <div class="rwDialogPopup radprompt">
+                <div class="rwDialogText">
+                {1}
+                </div>
+                <div>
+                    <script type="text/javascript">
+                    function RadWindowprompt_detectenter(id, ev, input)
+                    {
+                        if (!ev) ev = window.event;
+                        if (ev.keyCode == 13)
+                        {
+                            var but = input.parentNode.parentNode.getElementsByTagName("A")[0];
+                            if (but)
+                            {
+                                if (but.click) but.click();
+                                else if (but.onclick)
+                                {
+                                    but.focus(); var click = but.onclick; but.onclick = null; if (click) click.call(but);
+                                }
+                            }
+                           return false;
+                        }
+                        else return true;
+                    }
+                    </script>
+                    <input title="Enter Value" aria-label="Enter Value" onkeydown="return RadWindowprompt_detectenter('{0}', event, this);" type="text"  class="rwDialogInput" value="{2}" />
+                </div>
+                <div>
+                    <a onclick="$find('{0}').close(this.parentNode.parentNode.getElementsByTagName('input')[0].value);"
+                        class="rwPopupButton" href="javascript:void(0);" ><span class="rwOuterSpan"><span class="rwInnerSpan">##LOC[OK]##</span></span></a>
+                    <a onclick="$find('{0}').close(null);" class="rwPopupButton"  href="javascript:void(0);"><span class="rwOuterSpan"><span class="rwInnerSpan">##LOC[Cancel]##</span></span></a>
+                </div>
+            </div>
+        </div><div id="ctl01_WindowManager1_confirmtemplate" style="display:none;">
+        <div class="rwDialogPopup radconfirm">
+            <div class="rwDialogText">
+            {1}
+            </div>
+            <div>
+                <a onclick="$find('{0}').close(true);"  class="rwPopupButton" href="javascript:void(0);" ><span class="rwOuterSpan"><span class="rwInnerSpan">##LOC[OK]##</span></span></a>
+                <a onclick="$find('{0}').close(false);" class="rwPopupButton"  href="javascript:void(0);"><span class="rwOuterSpan"><span class="rwInnerSpan">##LOC[Cancel]##</span></span></a>
+            </div>
+        </div>
+        </div><input id="ctl01_WindowManager1_ClientState" name="ctl01_WindowManager1_ClientState" type="hidden" />
+</div>
+
+<script type="text/javascript">
+    //<![CDATA[
+
+    var gCartCount;
+    var cartDiv = $get("CartItemCount");
+    if (cartDiv != null){
+        jQuery.ajax({
+            type: "POST",
+            url: gWebRoot + "/WebMethodUtilities.aspx/GetCartItemCount",
+            data: "{}",
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            success: function(result) {
+                if (result.d != '' && result.d != null) {
+                    gCartCount = result.d;
+                    if (gCartCount != null) {
+                        cartDiv.innerHTML = gCartCount;
+                    }
+                }
+            },
+            async: true
+        });
+    }
+
+    function CheckForChildren() {
+        var contentRecordPageButtonPanelHasChildren = false;
+        var contentRecordPageButtonPanel = jQuery('div.ContentRecordPageButtonPanel');
+        for (var i = 0, max = contentRecordPageButtonPanel.length; i < max; i++) {
+            if (contentRecordPageButtonPanel[i].children.length > 0) {
+                contentRecordPageButtonPanelHasChildren = true;
+                break;
+            }
+        }
+        if (!contentRecordPageButtonPanelHasChildren) {
+            jQuery("Body").addClass("TemplateAreaEasyEditOn");
+        }
+    }
+    if (gIsEasyEditEnabled)
+        CheckForChildren();  
+    //]]>
+</script>
+
+
+<script type="text/javascript">
+//<![CDATA[
+__Document_Head_Init('https://www.iau.org/NoCookies.html', '', false);window.__TsmHiddenField = $get('ctl01_ScriptManager1_TSM');var ctl01_ciUtilityNavigation_ctl09_SearchTermsProperties = new SimpleSearchFieldProperties();
+ctl01_ciUtilityNavigation_ctl09_SearchTermsProperties.WatermarkClass = 'Watermarked';
+ctl01_ciUtilityNavigation_ctl09_SearchTermsProperties.WatermarkText = 'Keyword search';
+ctl01_ciUtilityNavigation_ctl09_SearchTermsProperties.SearchTarget = 'https://www.iau.org/Search';
+var ctl01_ciUtilityNavigation_ctl15_SearchTermsProperties = new SimpleSearchFieldProperties();
+ctl01_ciUtilityNavigation_ctl15_SearchTermsProperties.WatermarkClass = 'Watermarked';
+ctl01_ciUtilityNavigation_ctl15_SearchTermsProperties.WatermarkText = 'Keyword search';
+ctl01_ciUtilityNavigation_ctl15_SearchTermsProperties.SearchTarget = 'https://www.iau.org/Search';
+NavigationList_NavControlId = 'ctl01_ciPrimaryNavigation_NavControl_NavMenu';NavigationList_Init();PageNavR_NavMenuClientID = 'ctl01_ciPrimaryNavigation_NavControl_NavMenu';NavigationList_NavControlId = 'ctl01_ciSecondary_SubNavControl_SubNavigationTree';NavigationList_Init();Telerik.Web.UI.RadTreeView._preInitialize("ctl01_ciSecondary_SubNavControl_SubNavigationTree","0");NavigationList_NavControlId = '_rptWrapper';NavigationList_Init();;(function() {
+                        function loadHandler() {
+                            var hf = $get('ctl01_StyleSheetManager1_TSSM');
+                            if (!hf._RSSM_init) { hf._RSSM_init = true; hf.value = ''; }
+                            hf.value += ';Telerik.Web.UI, Version=2026.3.812.462, Culture=neutral, PublicKeyToken=121fae78165ba3d4:en-US:ab6aa57e-34e3-4a88-a53e-99567e45582d:ed2942d4:d7e35272:505983de:aac68f9:92753c09;Telerik.Web.UI.Skins, Version=2026.3.812.462, Culture=neutral, PublicKeyToken=121fae78165ba3d4:en-US:7029ea36-5fb5-4cac-9485-47ea571c06ca:d19c3573';
+                            Sys.Application.remove_load(loadHandler);
+                        };
+                        Sys.Application.add_load(loadHandler);
+                    })();Sys.Application.add_init(function() {
+    $create(Telerik.Web.UI.RadMenu, {"_childListElementCssClass":"rmRootGroup rmToggleHandles rmHorizontal","_skin":"Coffee","attributes":{"Translate":"Yes","PerspectiveId":"ebf0d6ca-c8e0-4066-bbc7-c33f01afb11e","Version":"6D258871","NavigationArea":"1","MaxDataBindDepth":"3"},"autoScrollMinimumWidth":100,"clientStateFieldID":"ctl01_ciPrimaryNavigation_NavControl_NavMenu_ClientState","collapseAnimation":"{\"type\":0,\"duration\":450}","defaultGroupSettings":"{\"flow\":0,\"expandDirection\":2,\"offsetX\":0}","expandAnimation":"{\"type\":0,\"duration\":450}","itemData":[],"showToggleHandle":true}, {"itemClicking":PageNavR_OnClientItemClicking,"itemClosed":PageNavR_OnItemClosed,"itemOpened":PageNavR_OnItemOpened,"load":PageNavR_OnClientLoadHandler}, null, $get("ctl01_ciPrimaryNavigation_NavControl_NavMenu"));
+});
+Sys.Application.add_init(function() {
+    $create(Telerik.Web.UI.RadTreeView, {"_renderMode":2,"_showLineImages":false,"_skin":"Coffee","_uniqueId":"ctl01$ciSecondary$SubNavControl$SubNavigationTree","attributes":{"NavigateOnClick":"true","PerspectiveId":"ebf0d6ca-c8e0-4066-bbc7-c33f01afb11e","Version":"6D258871","NavigationArea":"2","StartingNodeOffset":"1","WrapperContainerId":"ctl01_masterWrapper","SubNavTitleContainerId":"ctl01_ciSecondary_SubNavControl_SubNavHead"},"clientStateFieldID":"ctl01_ciSecondary_SubNavControl_SubNavigationTree_ClientState","collapseAnimation":"{\"duration\":200}","expandAnimation":"{\"duration\":200}","nodeData":[],"persistLoadOnDemandNodes":false,"singleExpandPath":true}, {"load":SubNavigation_OnClientLoad,"nodeClicked":SubNavigation_OnClientNodeClicked,"nodeClicking":SubNavigation_OnClientNodeClicking}, null, $get("ctl01_ciSecondary_SubNavControl_SubNavigationTree"));
+});
+Sys.Application.add_init(function() {
+    $create(Telerik.Web.UI.RadAjaxManager, {"_updatePanels":"","ajaxSettings":[],"clientEvents":{OnRequestStart:"",OnResponseEnd:""},"defaultLoadingPanelID":"AjaxStatusLoadingPanel","enableAJAX":true,"enableHistory":false,"links":[],"styles":[],"uniqueID":"ctl01$RadAjaxManager1","updatePanelsRenderMode":0}, null, null, $get("ctl01_RadAjaxManager1"));
+});
+Sys.Application.add_init(function() {
+    $create(Telerik.Web.UI.RadWindow, {"_dockMode":false,"behaviors":117,"clientStateFieldID":"ctl01_GenericWindow_ClientState","enableAriaSupport":true,"formID":"aspnetForm","height":"550px","iconUrl":"","localization":"{\"Close\":\"Close\",\"Maximize\":\"Maximize\",\"Minimize\":\"Minimize\",\"Reload\":\"Reload\",\"PinOn\":\"PinOn\",\"PinOff\":\"PinOff\",\"Restore\":\"Restore\",\"OK\":\"OK\",\"Cancel\":\"Cancel\",\"Yes\":\"Yes\",\"No\":\"No\"}","minimizeIconUrl":"","modal":true,"name":"GenericWindow","shortcuts":"[[\u0027close\u0027,\u0027Esc\u0027]]","showContentDuringLoad":false,"skin":"MetroTouch","visibleStatusbar":false,"width":"800px"}, null, null, $get("ctl01_GenericWindow"));
+});
+Sys.Application.add_init(function() {
+    $create(Telerik.Web.UI.RadWindow, {"_dockMode":false,"behaviors":117,"clientStateFieldID":"ctl01_ObjectBrowser_ClientState","enableAriaSupport":true,"formID":"aspnetForm","height":"550px","iconUrl":"","localization":"{\"Close\":\"Close\",\"Maximize\":\"Maximize\",\"Minimize\":\"Minimize\",\"Reload\":\"Reload\",\"PinOn\":\"PinOn\",\"PinOff\":\"PinOff\",\"Restore\":\"Restore\",\"OK\":\"OK\",\"Cancel\":\"Cancel\",\"Yes\":\"Yes\",\"No\":\"No\"}","minimizeIconUrl":"","modal":true,"name":"ObjectBrowser","shortcuts":"[[\u0027close\u0027,\u0027Esc\u0027]]","showContentDuringLoad":false,"skin":"MetroTouch","visibleStatusbar":false,"width":"760px"}, null, null, $get("ctl01_ObjectBrowser"));
+});
+Sys.Application.add_init(function() {
+    $create(Telerik.Web.UI.RadWindow, {"_dockMode":false,"behaviors":117,"clientStateFieldID":"ctl01_ObjectBrowserDialog_ClientState","enableAriaSupport":true,"formID":"aspnetForm","height":"400px","iconUrl":"","localization":"{\"Close\":\"Close\",\"Maximize\":\"Maximize\",\"Minimize\":\"Minimize\",\"Reload\":\"Reload\",\"PinOn\":\"PinOn\",\"PinOff\":\"PinOff\",\"Restore\":\"Restore\",\"OK\":\"OK\",\"Cancel\":\"Cancel\",\"Yes\":\"Yes\",\"No\":\"No\"}","minimizeIconUrl":"","modal":true,"name":"ObjectBrowserDialog","shortcuts":"[[\u0027close\u0027,\u0027Esc\u0027]]","showContentDuringLoad":false,"skin":"MetroTouch","visibleStatusbar":false,"width":"600px"}, null, null, $get("ctl01_ObjectBrowserDialog"));
+});
+Sys.Application.add_init(function() {
+    $create(Telerik.Web.UI.RadWindowManager, {"behaviors":117,"clientStateFieldID":"ctl01_WindowManager1_ClientState","enableAriaSupport":true,"formID":"aspnetForm","iconUrl":"","localization":"{\"Close\":\"Close\",\"Maximize\":\"Maximize\",\"Minimize\":\"Minimize\",\"Reload\":\"Reload\",\"PinOn\":\"PinOn\",\"PinOff\":\"PinOff\",\"Restore\":\"Restore\",\"OK\":\"OK\",\"Cancel\":\"Cancel\",\"Yes\":\"Yes\",\"No\":\"No\"}","minimizeIconUrl":"","name":"WindowManager1","shortcuts":"[[\u0027close\u0027,\u0027Esc\u0027]]","skin":"MetroTouch","windowControls":"['ctl01_GenericWindow','ctl01_ObjectBrowser','ctl01_ObjectBrowserDialog']"}, null, {"child":"ctl01_GenericWindow"}, $get("ctl01_WindowManager1"));
+});
+//]]>
+</script>
+</form>
+        
+        <div id="fb-root"></div>
+    </body>
+</html>

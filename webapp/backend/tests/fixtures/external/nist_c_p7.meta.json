@@ -1,0 +1,14 @@
+{
+  "url": "https://physics.nist.gov/cgi-bin/cuu/Value?c",
+  "final_url": "https://physics.nist.gov/cgi-bin/cuu/Value?c",
+  "status": 200,
+  "https": true,
+  "headers": {
+    "content-type": "text/html",
+    "server": "cloudflare",
+    "strict-transport-security": "max-age=31536000; includeSubdomains"
+  },
+  "bytes": 8102,
+  "truncated": false,
+  "fetched_at": "2026-10-18T02:04:40+00:00"
+}

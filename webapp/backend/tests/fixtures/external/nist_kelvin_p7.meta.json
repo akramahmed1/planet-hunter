@@ -1,0 +1,16 @@
+{
+  "url": "https://www.nist.gov/si-redefinition/kelvin",
+  "final_url": "https://www.nist.gov/si-redefinition/kelvin-introduction",
+  "status": 200,
+  "https": true,
+  "headers": {
+    "content-type": "text/html; charset=UTF-8",
+    "cache-control": "public, max-age=2764800",
+    "last-modified": "Sat, 17 Oct 2026 09:46:05 GMT",
+    "server": "cloudflare",
+    "strict-transport-security": "max-age=31536000"
+  },
+  "bytes": 90718,
+  "truncated": false,
+  "fetched_at": "2026-10-18T02:04:40+00:00"
+}

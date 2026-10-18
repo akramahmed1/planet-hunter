@@ -1,0 +1,15 @@
+{
+  "url": "https://www.iau.org/static/resolutions/Resolution_GA26-5-6.pdf",
+  "final_url": "https://www.iau.org/static/resolutions/Resolution_GA26-5-6.pdf",
+  "status": 404,
+  "https": true,
+  "headers": {
+    "content-type": "text/html; charset=utf-8",
+    "cache-control": "private",
+    "server": "cloudflare",
+    "strict-transport-security": "max-age=2592000; includeSubDomains"
+  },
+  "bytes": 62242,
+  "truncated": false,
+  "fetched_at": "2026-10-18T02:04:35+00:00"
+}
