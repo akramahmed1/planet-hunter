@@ -14,6 +14,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
 import data_store
+from security_mw import SecurityMiddleware
 from api_v2 import classroom_router as v2_classroom_router
 from api_v2 import learn_router as v2_learn_router
 from api_v2 import live_router as v2_live_router
@@ -68,6 +69,7 @@ async def lifespan(_: FastAPI):
 
 app = FastAPI(title="planet-hunter API", version=VERSION, lifespan=lifespan)
 
+app.add_middleware(SecurityMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins(),
