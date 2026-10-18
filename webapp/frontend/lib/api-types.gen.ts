@@ -252,6 +252,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v2/billing/plans": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Billing Plans */
+        get: operations["billing_plans_api_v2_billing_plans_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v2/bodies": {
         parameters: {
             query?: never;
@@ -467,6 +484,43 @@ export interface paths {
          * @description One planetary system: the host star and its planets.
          */
         get: operations["exoplanet_system_api_v2_exoplanets__name__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v2/explain": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Explain
+         * @description Answer one question about one candidate, scan or planet system, from its data only.
+         */
+        post: operations["explain_api_v2_explain_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v2/explain/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Explain Status */
+        get: operations["explain_status_api_v2_explain_status_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -743,6 +797,43 @@ export interface paths {
         get: operations["get_org_api_v2_orgs__org_id__get"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v2/orgs/{org_id}/billing": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Org Billing */
+        get: operations["org_billing_api_v2_orgs__org_id__billing_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v2/orgs/{org_id}/billing/checkout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Checkout
+         * @description Start Stripe Checkout for the classroom plan. Only an organization admin can.
+         */
+        post: operations["checkout_api_v2_orgs__org_id__billing_checkout_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1203,6 +1294,11 @@ export interface components {
             run: components["schemas"]["RunInfo"];
             summary: components["schemas"]["Summary"];
         };
+        /** CheckoutResponse */
+        CheckoutResponse: {
+            /** Url */
+            url: string;
+        };
         /** ClassCreate */
         ClassCreate: {
             /** Name */
@@ -1384,6 +1480,47 @@ export interface components {
             source: components["schemas"]["SourceRef"];
             /** Stale */
             stale: boolean;
+        };
+        /** ExplainCitation */
+        ExplainCitation: {
+            /** Path */
+            path: string;
+            /** Value */
+            value: string | number | boolean | null;
+        };
+        /** ExplainRequest */
+        ExplainRequest: {
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "candidate" | "scan" | "planet";
+            /** Question */
+            question: string;
+            /** Ref */
+            ref: string;
+        };
+        /** ExplainResponse */
+        ExplainResponse: {
+            /** Answer */
+            answer: string;
+            /** Citations */
+            citations: components["schemas"]["ExplainCitation"][];
+            /** Known */
+            known: boolean;
+            /** Model */
+            model: string;
+            /** Note */
+            note: string;
+        };
+        /** ExplainStatus */
+        ExplainStatus: {
+            /** Enabled */
+            enabled: boolean;
+            /** Model */
+            model: string | null;
+            /** Reason */
+            reason: string | null;
         };
         /** GradeCell */
         GradeCell: {
@@ -1746,6 +1883,20 @@ export interface components {
             orbits: components["schemas"]["Orbit"][];
             period_source: components["schemas"]["SourceRef"];
         };
+        /** OrgBilling */
+        OrgBilling: {
+            /** Billing Enabled */
+            billing_enabled: boolean;
+            /** Org Id */
+            org_id: number;
+            /**
+             * Plan
+             * @enum {string}
+             */
+            plan: "free" | "classroom";
+            /** Status */
+            status: string;
+        };
         /** OrgCreate */
         OrgCreate: {
             /** Name */
@@ -1851,6 +2002,33 @@ export interface components {
             snr: number;
             /** T0 Btjd */
             t0_btjd: number;
+        };
+        /** Plan */
+        Plan: {
+            /** Classes */
+            classes: number;
+            /** Explainer Per Class Per Day */
+            explainer_per_class_per_day: number;
+            /**
+             * Id
+             * @enum {string}
+             */
+            id: "free" | "classroom";
+            /** Name */
+            name: string;
+            /** Students Per Class */
+            students_per_class: number;
+        };
+        /** PlansResponse */
+        PlansResponse: {
+            /** Enabled */
+            enabled: boolean;
+            /** Limits Placeholder */
+            limits_placeholder: boolean;
+            /** Plans */
+            plans: components["schemas"]["Plan"][];
+            /** Reason */
+            reason: string | null;
         };
         /** Position */
         Position: {
@@ -2830,6 +3008,26 @@ export interface operations {
             };
         };
     };
+    billing_plans_api_v2_billing_plans_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlansResponse"];
+                };
+            };
+        };
+    };
     bodies_api_v2_bodies_get: {
         parameters: {
             query?: never;
@@ -3246,6 +3444,80 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Unavailable"];
+                };
+            };
+        };
+    };
+    explain_api_v2_explain_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ExplainRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExplainResponse"];
+                };
+            };
+            /** @description No such item */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+            /** @description Rate limited */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The explainer is switched off or unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    explain_status_api_v2_explain_status_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExplainStatus"];
                 };
             };
         };
@@ -3676,6 +3948,75 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
                 };
+            };
+        };
+    };
+    org_billing_api_v2_orgs__org_id__billing_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OrgBilling"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    checkout_api_v2_orgs__org_id__billing_checkout_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CheckoutResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+            /** @description Billing is switched off */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

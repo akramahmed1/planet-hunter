@@ -83,6 +83,10 @@ assignments on top of it.
   - 2026-10-18, Akram: teachers sign in with **email and password**. Students join with a class code, a nickname and a PIN, with no email.
 - **Phase 9:** AI provider and model for the explainer (recommended: Anthropic API with the model set in an env var); Stripe pricing for the classroom plan.
   - 2026-10-18, Akram: build the explainer and test it with a fake model, **switched off** until a key is added. Build billing in Stripe **test mode** with fakes, also switched off.
+- **Phase 9, still open for Akram** (built and switched off, 2026-10-18):
+  - Explainer model key: add `ANTHROPIC_API_KEY` and `EXPLAINER_ENABLED=1` as Railway variables to switch it on (model `claude-opus-5-5` by default, `EXPLAINER_MODEL` to change; server-side refusal fallback on).
+  - Eval pass bar: proposed as every refuse and injection case plus 5 of 6 grounded cases (`python -m explain.evals --live`, costs a few cents per run).
+  - Classroom price and plan limits: `billing/plans.py` holds placeholders (free: 1 class of 40; classroom plan: 30 classes of 200). Billing needs `BILLING_ENABLED=1`, a Stripe test key, `STRIPE_PRICE_ID` and `STRIPE_WEBHOOK_SECRET`; live keys are refused until Phase 10.
 - **Pace** (2026-10-18, Akram): each phase merges to `v2` once CI is green, then the staging check verifies it. Production waits for Akram's approval in Phase 10.
 
 ## 3. Current repo state (verified 2026-10-17)
@@ -181,8 +185,8 @@ Status values: `todo`, `in-progress`, `staging-verified`, `merged-to-v2`, `live`
 | 5 | Hunt lab (interactive light curves) | staging-verified |
 | 6 | Live scan engine, vetting, cross-match | merged-to-v2 |
 | 7 | Learn and quiz | merged-to-v2 |
-| 8 | Accounts and multi-tenant classrooms | in-progress |
-| 9 | AI explainer and billing | todo |
+| 8 | Accounts and multi-tenant classrooms | merged-to-v2 |
+| 9 | AI explainer and billing | in-progress |
 | 10 | Hardening and production release | todo |
 
 ---

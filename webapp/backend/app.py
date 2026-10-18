@@ -19,6 +19,7 @@ from api_v2 import learn_router as v2_learn_router
 from api_v2 import live_router as v2_live_router
 from api_v2 import phase4_router as v2_phase4_router
 from api_v2 import phase5_router as v2_phase5_router
+from api_v2 import phase9_router as v2_phase9_router
 from api_v2 import scan_router as v2_scan_router
 from api_v2 import router as v2_router
 from schemas import (
@@ -81,6 +82,7 @@ app.include_router(v2_phase5_router)
 app.include_router(v2_scan_router)
 app.include_router(v2_learn_router)
 app.include_router(v2_classroom_router)
+app.include_router(v2_phase9_router)
 
 
 @app.get("/api/health", response_model=HealthResponse)

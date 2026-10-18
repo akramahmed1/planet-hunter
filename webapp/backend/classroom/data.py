@@ -13,6 +13,7 @@ from sqlalchemy.engine import Connection, Engine
 from sqlalchemy.exc import IntegrityError
 
 import data_store
+from billing import plans
 from classroom import security
 from classroom.auth import Principal, end_all_sessions
 
@@ -31,6 +32,14 @@ class Conflict(Exception):
 
 class Invalid(Exception):
     pass
+
+
+def _plan_check(fn) -> None:
+    """Plan limits apply only while billing is switched on (billing/plans.py)."""
+    try:
+        fn()
+    except plans.OverLimit as exc:
+        raise Conflict(str(exc)) from None
 
 
 def _j(v) -> str:
@@ -199,6 +208,7 @@ def list_classes(eng: Engine, p: Principal, org_id: int) -> list[dict]:
 def create_class(eng: Engine, p: Principal, org_id: int, name: str) -> dict:
     _role(p, org_id)
     with eng.begin() as c:
+        _plan_check(lambda: plans.check_new_class(c, org_id))
         row = c.execute(text("""insert into classes (org_id, name, join_code, created_by)
                                 values (:o, :n, :c, :u) returning id, org_id, name, join_code, created_at"""),
                         {"o": org_id, "n": name, "c": _unique_code(c, "classes"), "u": p.user_id}).mappings().one()
@@ -282,6 +292,7 @@ def student_join(eng: Engine, code: str, nickname: str, pin: str) -> int:
             k = class_by_code(c, code)
             if k is None:
                 raise Invalid("No class has that code. Check it with your teacher.")
+            _plan_check(lambda: plans.check_new_student(c, k["org_id"], k["id"]))
             return c.execute(text("""insert into class_members (org_id, class_id, nickname, pin_hash, age_confirmed_at)
                                      values (:o, :k, :n, :h, now()) returning id"""),
                              {"o": k["org_id"], "k": k["id"], "n": nickname, "h": pin_hash}).scalar_one()

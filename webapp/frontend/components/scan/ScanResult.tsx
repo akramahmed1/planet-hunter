@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import ExplainBox from "@/components/explain/ExplainBox";
 import HuntLab from "@/components/hunt/HuntLab";
 import Badge from "@/components/ui/Badge";
 import {
@@ -110,6 +111,7 @@ export default function ScanResult({ id, initial }: { id: number; initial: ScanS
           </section>
 
           {lc && pg && <HuntLab lc={lc} pg={pg} answerPeriod={sig.period_d} classification="" />}
+          <ExplainBox kind="scan" refId={String(id)} />
         </>
       )}
     </div>

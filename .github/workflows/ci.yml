@@ -95,6 +95,9 @@ jobs:
       DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/ph_e2e
       # Every browser test signs up from 127.0.0.1.
       AUTH_SIGNUPS_PER_HOUR: "1000"
+      # The explainer runs with the deterministic fake model in CI (no key, no cost).
+      EXPLAINER_ENABLED: "1"
+      EXPLAINER_FAKE: "1"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

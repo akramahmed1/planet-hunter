@@ -741,3 +741,55 @@ class HuntResult(_Strict):
 
 class Ok(_Strict):
     ok: bool
+
+
+# Phase 9: explainer and billing.
+class ExplainStatus(_Strict):
+    enabled: bool
+    reason: str | None
+    model: str | None
+
+
+class ExplainRequest(_Strict):
+    kind: Literal["candidate", "scan", "planet"]
+    ref: str = Field(pattern=r"^[a-z0-9-]{1,40}$")
+    question: str = Field(min_length=1, max_length=600)
+
+
+class ExplainCitation(_Strict):
+    path: str
+    value: str | int | float | bool | None
+
+
+class ExplainResponse(_Strict):
+    known: bool
+    answer: str
+    citations: list[ExplainCitation]
+    model: str
+    note: str
+
+
+class Plan(_Strict):
+    id: Literal["free", "classroom"]
+    name: str
+    classes: int
+    students_per_class: int
+    explainer_per_class_per_day: int
+
+
+class PlansResponse(_Strict):
+    enabled: bool
+    reason: str | None
+    limits_placeholder: bool
+    plans: list[Plan]
+
+
+class OrgBilling(_Strict):
+    org_id: int
+    plan: Literal["free", "classroom"]
+    status: str
+    billing_enabled: bool
+
+
+class CheckoutResponse(_Strict):
+    url: str

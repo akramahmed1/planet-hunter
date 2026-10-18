@@ -72,6 +72,9 @@ export type ClassDetail = Schemas["ClassDetail"];
 export type Gradebook = Schemas["Gradebook"];
 export type StudentHome = Schemas["StudentHome"];
 export type HuntResult = Schemas["HuntResult"];
+export type ExplainStatus = Schemas["ExplainStatus"];
+export type ExplainResponse = Schemas["ExplainResponse"];
+export type OrgBilling = Schemas["OrgBilling"];
 
 /**
  * Send JSON to /api/v2 and read the reply. In the browser this goes to the frontend's own
