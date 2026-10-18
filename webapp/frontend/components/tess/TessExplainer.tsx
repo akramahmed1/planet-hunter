@@ -59,6 +59,8 @@ function TransitDemo({ depth }: { depth: number }) {
   const reduced = useReducedMotion();
   const [p, setP] = useState(0.5);
   const box = useRef<HTMLDivElement>(null);
+  // Once the reader takes hold of the slider, scrolling no longer moves the planet.
+  const manual = useRef(false);
   const sliderId = useId();
   const k = Math.sqrt(depth); // planet radius / star radius
   // Show the planet 4x larger than true so it is visible; the curve uses the true ratio.
@@ -69,7 +71,7 @@ function TransitDemo({ depth }: { depth: number }) {
     if (reduced) return;
     const onScroll = () => {
       const el = box.current;
-      if (!el) return;
+      if (!el || manual.current) return;
       const r = el.getBoundingClientRect();
       const t = 1 - (r.top + r.height / 2) / window.innerHeight;
       setP(Math.min(1, Math.max(0, t * 1.4 - 0.2)));
@@ -109,7 +111,11 @@ function TransitDemo({ depth }: { depth: number }) {
       </svg>
       <label htmlFor={sliderId} className="select-label">Move the planet</label>
       <input id={sliderId} type="range" min={0} max={1000} value={Math.round(p * 1000)}
-        onChange={(e) => setP(Number(e.target.value) / 1000)} data-testid="transit-slider" />
+        onFocus={() => { manual.current = true; }} onPointerDown={() => { manual.current = true; }}
+        onChange={(e) => {
+          manual.current = true;
+          setP(Number(e.target.value) / 1000);
+        }} data-testid="transit-slider" />
       <p className="muted small" data-testid="transit-readout">
         Brightness now: {(flux(x) * 100).toFixed(3)}% of normal. The planet is drawn four times larger than it is, so
         you can see it; the curve uses its true size.
