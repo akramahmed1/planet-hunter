@@ -185,6 +185,35 @@ P4_REQUESTS = (
         "Transiting%20Exoplanet%20Survey%20Satellite%20(TESS)%20(A).glb", "glb")]
 )
 
+# Phase 6 set: what the scan engine's cross-match and ID validation read.
+VIZIER_TAP = "https://tapvizier.cds.unistra.fr/TAPVizieR/tap/sync?"
+P6_TIC_LIST = ",".join(P4_TICS)
+
+
+def vizier(query: str) -> str:
+    return VIZIER_TAP + q({"REQUEST": "doQuery", "LANG": "ADQL", "FORMAT": "json", "QUERY": query})
+
+
+P6_REQUESTS = [
+    ("exoplanet_archive_toi_targets_p6",
+     TAP + q({"query": f"select tid,toi,toipfx,pl_orbper,pl_trandurh,pl_trandep,tfopwg_disp from toi where tid in ({P6_TIC_LIST})",
+              "format": "json"}), "json"),
+    ("exoplanet_archive_toi_columns_p6",
+     TAP + q({"query": "select column_name,description from TAP_SCHEMA.columns where table_name like 'toi'",
+              "format": "json"}), "json"),
+    ("exoplanet_archive_pscomppars_by_tic_p6",
+     TAP + q({"query": "select pl_name,hostname,tic_id,pl_orbper,cb_flag from pscomppars where tic_id in ("
+                       + ",".join(f"'TIC {t}'" for t in P4_TICS) + ")", "format": "json"}), "json"),
+    ("exoplanet_archive_toi_lookup_700_p6",
+     TAP + q({"query": "select tid,toi from toi where toipfx = 700", "format": "json"}), "json"),
+    ("vizier_tess_ebs_columns_p6",
+     vizier("SELECT column_name, description FROM TAP_SCHEMA.columns WHERE table_name = 'J/ApJS/258/16/tess-ebs'"),
+     "json"),
+    ("vizier_tess_ebs_targets_p6",
+     vizier(f'SELECT * FROM "J/ApJS/258/16/tess-ebs" WHERE TIC IN ({P6_TIC_LIST})'), "json"),
+    ("vizier_tess_ebs_readme_p6", "https://cdsarc.cds.unistra.fr/ftp/J/ApJS/258/16/ReadMe", "txt"),
+]
+
 # Only status and size are recorded for these (large client-side assets).
 PROBE_REQUESTS = [
     ("aladin_lite_v3_js", "https://aladin.cds.unistra.fr/AladinLite/api/v3/latest/aladin.js"),
@@ -261,7 +290,7 @@ def main() -> int:
     FIXTURES.mkdir(parents=True, exist_ok=True)
     SNAPSHOTS.mkdir(parents=True, exist_ok=True)
     summary = []
-    requests = {"p2": P2_REQUESTS, "p3": P3_REQUESTS, "p4": P4_REQUESTS}.get(phase, FIXTURE_REQUESTS)
+    requests = {"p2": P2_REQUESTS, "p3": P3_REQUESTS, "p4": P4_REQUESTS, "p6": P6_REQUESTS}.get(phase, FIXTURE_REQUESTS)
 
     for name, url, ext in requests:
         r = fetch(url, max_bytes=3_000_000 if "1800_2050" in name or name.endswith("_glb") else MAX_BYTES)
