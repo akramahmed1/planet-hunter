@@ -204,12 +204,144 @@ def build_pluto() -> dict:
     }
 
 
+# ---------- Phase 4: target stars, their planets, missions ----------
+
+TARGET_TICS = ["260128333", "259377017", "55652896", "307210830", "150428135", "52368076", "183985250", "251848941"]
+TIC_COLUMNS = {"ra": "ra_deg", "dec": "dec_deg", "Teff": "teff_k", "rad": "radius_rsun", "mass": "mass_msun",
+               "lum": "luminosity_lsun", "d": "distance_pc", "Tmag": "tess_mag"}
+MAST_SOURCE = {"name": "MAST TESS Input Catalog v8 (Mast.Catalogs.Filtered.Tic)", "url": "https://mast.stsci.edu/api/v0/"}
+ARCHIVE_SOURCE = {"name": "NASA Exoplanet Archive, Planetary Systems Composite Parameters (pscomppars)",
+                  "url": "https://exoplanetarchive.ipac.caltech.edu/"}
+
+
+def build_stars() -> dict:
+    data = json.loads((FIXTURES / "mast_tic_targets_p4.json").read_text())
+    if data.get("status") != "COMPLETE":
+        raise SystemExit("MAST sample is not COMPLETE")
+    rows = {str(r["ID"]): r for r in data["data"]}
+    missing = sorted(set(TARGET_TICS) - set(rows))
+    if missing:
+        raise SystemExit(f"MAST sample is missing TIC {missing}")
+    stars = {}
+    for tic in TARGET_TICS:
+        r = rows[tic]
+        stars[f"TIC {tic}"] = {new: r[old] for old, new in TIC_COLUMNS.items()}
+    return {"dataset": "stars", "version": 1,
+            "source": {**MAST_SOURCE, "fetched_at": meta("mast_tic_targets_p4")["fetched_at"]}, "stars": stars}
+
+
+ARCHIVE_COLUMNS = ["pl_name", "hostname", "pl_orbper", "pl_orbsmax", "pl_orbeccen", "pl_rade", "pl_eqt", "disc_year",
+                   "st_teff", "st_rad", "st_mass", "st_lum"]
+
+
+def build_systems() -> dict:
+    rows = json.loads((FIXTURES / "exoplanet_archive_targets_p4.json").read_text())
+    systems: dict[str, list] = {}
+    for r in sorted(rows, key=lambda r: (r["hostname"], r["pl_orbper"] or 0)):
+        systems.setdefault(r["hostname"], []).append({k: r.get(k) for k in ARCHIVE_COLUMNS})
+    return {"dataset": "systems", "version": 1,
+            "source": {**ARCHIVE_SOURCE, "fetched_at": meta("exoplanet_archive_targets_p4")["fetched_at"]},
+            "systems": systems}
+
+
+def page_text(name: str) -> str:
+    raw = (FIXTURES / f"{name}.html").read_text(encoding="utf-8", errors="replace")
+    raw = re.sub(r"(?is)<(script|style).*?</\1>", " ", raw)
+    return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", raw)))
+
+
+def horizons_header(name: str) -> str:
+    return json.loads((FIXTURES / f"{name}.json").read_text())["result"]
+
+
+# Each fact keeps the source's exact words (quote) and a plain rewording for the page (display); the build
+# fails if a quote is not on the saved page.
+MISSION_FACTS = {
+    "tess": {"name": "TESS", "horizons_id": "-95",
+             "launch": ("nasa_tess_mission", "https://science.nasa.gov/mission/tess/", "Launch April 18, 2018",
+                        "April 18, 2018"),
+             "status": ("nasa_tess_mission", "https://science.nasa.gov/mission/tess/", "Status Extended mission",
+                        "Extended mission")},
+    "jwst": {"name": "James Webb Space Telescope", "horizons_id": "-170",
+             "launch": ("horizons_jwst_vectors_geo_p4", "https://ssd.jpl.nasa.gov/horizons/",
+                        "Launched by Ariane 5 booster on 2021-Dec-25 @ 12:20 UTC", "December 25, 2021"),
+             "status": None},
+    "voyager1": {"name": "Voyager 1", "horizons_id": "-31",
+                 "launch": ("nasa_voyager1_mission", "https://science.nasa.gov/mission/voyager/voyager-1/",
+                            "launch Sept. 5, 1977", "September 5, 1977"),
+                 "status": ("nasa_voyager1_mission", "https://science.nasa.gov/mission/voyager/voyager-1/",
+                            "Status Extended Mission", "Extended mission")},
+    "voyager2": {"name": "Voyager 2", "horizons_id": "-32",
+                 "launch": ("nasa_voyager2_mission", "https://science.nasa.gov/mission/voyager/voyager-2/",
+                            "launch Aug. 20, 1977", "August 20, 1977"),
+                 "status": ("nasa_voyager2_mission", "https://science.nasa.gov/mission/voyager/voyager-2/",
+                            "Status Extended Mission", "Extended mission")},
+}
+SOURCE_NAMES = {"nasa_tess_mission": "NASA Science: TESS", "horizons_jwst_vectors_geo_p4": "JPL Horizons object data: JWST (-170)",
+                "nasa_voyager1_mission": "NASA Science: Voyager 1", "nasa_voyager2_mission": "NASA Science: Voyager 2"}
+
+
+def build_missions() -> dict:
+    out = {}
+    for key, m in MISSION_FACTS.items():
+        entry = {"name": m["name"], "horizons_id": m["horizons_id"]}
+        for field in ("launch", "status"):
+            spec = m[field]
+            if spec is None:
+                entry[field] = None
+                continue
+            fixture, url, quote, display = spec
+            text = horizons_header(fixture) if fixture.startswith("horizons") else page_text(fixture)
+            if quote not in re.sub(r"\s+", " ", text):
+                raise SystemExit(f"{key} {field}: quote not found on the saved page: {quote!r}")
+            entry[field] = {"quote": quote, "display": display, "source": {"name": SOURCE_NAMES[fixture], "url": url,
+                                                      "fetched_at": meta(fixture)["fetched_at"]}}
+        out[key] = entry
+    return {"dataset": "missions", "version": 1, "missions": out}
+
+
+# TESS explainer facts, with the source's exact words (checked like the mission facts).
+TESS_FACTS = [
+    ("orbit", "horizons_tess_vectors_geo_p4", "https://ssd.jpl.nasa.gov/horizons/",
+     "The operational orbit chosen for TESS is a highly eccentric, 2:1 lunar resonance orbit of 108,400 by "
+     "376,300 kilometers at an inclination of 37 degrees"),
+    ("sector", "mit_tess_observations", "https://tess.mit.edu/observations/",
+     "TESS observes the sky in sectors measuring 24° x 96°. Each sector is observed for two orbits of the "
+     "satellite around the Earth, or about 27 days on average."),
+    ("cameras", "mit_tess_observations", "https://tess.mit.edu/observations/",
+     "then (RA, dec, roll) in degrees (J2000) of the spacecraft and four camera boresights"),
+    ("pole", "mit_tess_observations", "https://tess.mit.edu/observations/",
+     "a 24° diameter region centered on the ecliptic pole can be observed for nearly a full year"),
+    ("stars", "horizons_tess_vectors_geo_p4", "https://ssd.jpl.nasa.gov/horizons/",
+     "Monitor 200,000 nearby stars for planets"),
+    ("launch", "horizons_tess_vectors_geo_p4", "https://ssd.jpl.nasa.gov/horizons/",
+     "Launched : 2018-Apr-18 22:51 UTC"),
+]
+TESS_SOURCE_NAMES = {"horizons_tess_vectors_geo_p4": "JPL Horizons object data: TESS (-95)",
+                     "mit_tess_observations": "MIT TESS Science Office: TESS Observations"}
+
+
+def build_tess() -> dict:
+    facts = {}
+    for key, fixture, url, quote in TESS_FACTS:
+        text = horizons_header(fixture) if fixture.startswith("horizons") else page_text(fixture)
+        if quote not in re.sub(r"\s+", " ", text):
+            raise SystemExit(f"TESS {key}: quote not found on the saved page: {quote!r}")
+        facts[key] = {"quote": quote, "source": {"name": TESS_SOURCE_NAMES[fixture], "url": url,
+                                                 "fetched_at": meta(fixture)["fetched_at"]}}
+    return {"dataset": "tess", "version": 1, "facts": facts}
+
+
 def main() -> int:
     check = "--check" in sys.argv
     outputs = {
         "bodies.v1.json": build_bodies(),
         "kepler_elements.v1.json": build_kepler(),
         "pluto_horizons.v1.json": build_pluto(),
+        "stars.v1.json": build_stars(),
+        "systems.v1.json": build_systems(),
+        "missions.v1.json": build_missions(),
+        "tess.v1.json": build_tess(),
     }
     stale = []
     for name, data in outputs.items():

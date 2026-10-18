@@ -1,12 +1,14 @@
 name: Staging check
 
-# Verifies the Railway staging environment after a push to v2 or a phase
-# branch (v2-p*). Waits until both staging services report this exact commit,
+# Verifies the Railway staging environment after a push to v2 (staging tracks v2;
+# since 2026-10-18 phases merge to v2 when CI is green, then staging is checked here).
+# Waits until both staging services report this exact commit,
 # then runs the v1 QA suites and the Playwright tests against staging.
 # The build sessions can't reach staging, so this is how staging is verified.
 on:
   push:
-    branches: [v2, "v2-p*"]
+    branches: [v2]
+  workflow_dispatch:
 
 permissions:
   contents: read

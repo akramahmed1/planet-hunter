@@ -143,6 +143,48 @@ P3_REQUESTS = (
        ("nasa_wmap_cmb_faq", "https://map.gsfc.nasa.gov/site/faq.html", "html")]
 )
 
+# Phase 4 set: target stars (MAST TIC), the confirmed planets of our 8 target
+# systems, spacecraft positions and mission facts, the ISS ground track, and
+# NASA TESS pages for the explainer.
+P4_TICS = ["260128333", "259377017", "55652896", "307210830", "150428135", "52368076", "183985250", "251848941"]
+P4_HOSTS = ["TOI-1338", "TOI-270", "TOI-216", "TOI-776", "TOI-700", "TOI-125", "TOI-849", "TOI-178"]
+SPACECRAFT = {"tess": "-95", "jwst": "-170", "voyager1": "-31", "voyager2": "-32"}
+MAST_TIC_P4 = {
+    "service": "Mast.Catalogs.Filtered.Tic",
+    "format": "json",
+    "params": {"columns": "ID,ra,dec,Tmag,Teff,rad,mass,lum,d,logg",
+               "filters": [{"paramName": "ID", "values": P4_TICS}]},
+}
+_NOW = int(datetime.now(timezone.utc).timestamp())
+P4_REQUESTS = (
+    [("mast_tic_targets_p4", "https://mast.stsci.edu/api/v0/invoke?" + q({"request": json.dumps(MAST_TIC_P4)}), "json"),
+     ("exoplanet_archive_targets_p4",
+      TAP + q({"query": f"select {EXO_COLUMNS},pl_orbeccen,st_spectype from pscomppars where hostname in ("
+                        + ",".join(f"'{h}'" for h in P4_HOSTS) + ")", "format": "json"}), "json"),
+     ("iss_ground_track_p4",
+      "https://api.wheretheiss.at/v1/satellites/25544/positions?"
+      + q({"timestamps": ",".join(str(_NOW + 600 * k) for k in range(10)), "units": "kilometers"}), "json")]
+    + [(f"horizons_{n}_vectors_geo_p4",
+        horizons(i, EPHEM_TYPE="VECTORS", CENTER="500@399", OUT_UNITS="KM-S", VEC_TABLE="3", CSV_FORMAT="YES",
+                 OBJ_DATA="YES"), "json") for n, i in SPACECRAFT.items()]
+    + [(f"horizons_{n}_vectors_helio_p4",
+        horizons(i, EPHEM_TYPE="VECTORS", CENTER="500@10", OUT_UNITS="KM-S", VEC_TABLE="3", CSV_FORMAT="YES"),
+        "json") for n, i in SPACECRAFT.items()]
+    + [("nasa_tess_mission", "https://science.nasa.gov/mission/tess/", "html"),
+       ("heasarc_tess_telescope", "https://heasarc.gsfc.nasa.gov/docs/tess/the-tess-space-telescope.html", "html"),
+       ("heasarc_tess_observing", "https://heasarc.gsfc.nasa.gov/docs/tess/observing-technical.html", "html"),
+       ("mit_tess_observations", "https://tess.mit.edu/observations/", "html"),
+       ("nasa_webb_mission", "https://science.nasa.gov/mission/webb/", "html"),
+       ("nasa_voyager1_mission", "https://science.nasa.gov/mission/voyager/voyager-1/", "html"),
+       ("nasa_voyager2_mission", "https://science.nasa.gov/mission/voyager/voyager-2/", "html"),
+       ("jpl_voyager_status", "https://science.nasa.gov/mission/voyager/where-are-voyager-1-and-voyager-2-now/", "html"),
+       ("osm_tile_usage_policy", "https://operations.osmfoundation.org/policies/tiles/", "html"),
+       ("nasa3d_tess_a_glb",
+        "https://raw.githubusercontent.com/nasa/NASA-3D-Resources/11ebb4e/3D%20Models/"
+        "Transiting%20Exoplanet%20Survey%20Satellite%20(TESS)%20(A)/"
+        "Transiting%20Exoplanet%20Survey%20Satellite%20(TESS)%20(A).glb", "glb")]
+)
+
 # Only status and size are recorded for these (large client-side assets).
 PROBE_REQUESTS = [
     ("aladin_lite_v3_js", "https://aladin.cds.unistra.fr/AladinLite/api/v3/latest/aladin.js"),
@@ -219,10 +261,10 @@ def main() -> int:
     FIXTURES.mkdir(parents=True, exist_ok=True)
     SNAPSHOTS.mkdir(parents=True, exist_ok=True)
     summary = []
-    requests = {"p2": P2_REQUESTS, "p3": P3_REQUESTS}.get(phase, FIXTURE_REQUESTS)
+    requests = {"p2": P2_REQUESTS, "p3": P3_REQUESTS, "p4": P4_REQUESTS}.get(phase, FIXTURE_REQUESTS)
 
     for name, url, ext in requests:
-        r = fetch(url, max_bytes=3_000_000 if "1800_2050" in name else MAX_BYTES)
+        r = fetch(url, max_bytes=3_000_000 if "1800_2050" in name or name.endswith("_glb") else MAX_BYTES)
         body = r["body"].replace(NASA_KEY.encode(), b"REDACTED") if NASA_KEY != "DEMO_KEY" else r["body"]
         if body:
             (FIXTURES / f"{name}.{ext}").write_bytes(body)

@@ -110,3 +110,44 @@ def exoplanet_system(host: str) -> list[dict]:
         raise ValueError("invalid host name")
     safe = host.replace("'", "''")
     return _tap(f"select {EXO_COLUMNS} from pscomppars where hostname = '{safe}'")
+
+
+SPACECRAFT_IDS = {"tess": "-95", "jwst": "-170", "voyager1": "-31", "voyager2": "-32"}
+
+
+def parse_horizons_range(result: str) -> tuple[float, float]:
+    """(range km, one-way light time s) from the first row of a VEC_TABLE=3 CSV table in KM-S."""
+    try:
+        block = result[result.index("$$SOE") + 5 : result.index("$$EOE")].strip()
+        parts = [p.strip() for p in block.splitlines()[0].split(",")]
+        return float(parts[9]), float(parts[8])
+    except (ValueError, IndexError) as exc:
+        raise ValueError("unexpected Horizons output") from exc
+
+
+def spacecraft_range(craft: str, d: date, center: str) -> dict:
+    """Distance of a spacecraft from Earth (center 500@399) or the Sun (500@10) on a date."""
+    params = {
+        "format": "json", "COMMAND": f"'{SPACECRAFT_IDS[craft]}'", "OBJ_DATA": "'NO'", "MAKE_EPHEM": "'YES'",
+        "EPHEM_TYPE": "'VECTORS'", "CENTER": f"'{center}'", "OUT_UNITS": "'KM-S'", "VEC_TABLE": "'3'",
+        "CSV_FORMAT": "'YES'", "START_TIME": f"'{d}'", "STOP_TIME": f"'{d + timedelta(days=1)}'",
+        "STEP_SIZE": "'1 d'",
+    }
+    body = http.get_json(HORIZONS, params)
+    try:
+        km, lt = parse_horizons_range(body["result"])
+    except (KeyError, ValueError) as exc:
+        raise http.FetchError("Horizons returned no vectors") from exc
+    return {"km": km, "light_time_s": lt}
+
+
+def iss_track(start_ts: int, step_s: int = 600, n: int = 10) -> list[dict]:
+    """ISS positions at n future times (the provider accepts up to 10 timestamps per request)."""
+    stamps = ",".join(str(start_ts + step_s * k) for k in range(n))
+    rows = http.get_json(f"{ISS}/positions", {"timestamps": stamps, "units": "kilometers"})
+    if not isinstance(rows, list) or not rows:
+        raise http.FetchError("ISS track response was not a list")
+    try:
+        return [{"latitude": r["latitude"], "longitude": r["longitude"], "timestamp": r["timestamp"]} for r in rows]
+    except (KeyError, TypeError) as exc:
+        raise http.FetchError("ISS track rows missing fields") from exc

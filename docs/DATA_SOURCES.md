@@ -249,3 +249,35 @@ Fetched with the `p3` set in `scripts/fetch_external_fixtures.py` (all 12 return
 - **Tour facts**: generated from the NSSDCA values, never typed in. `lib/tour.test.ts` checks
   every quiz answer against the data, and checks the one worded claim that is not a number
   (Venus's carbon dioxide atmosphere: "96.5% Carbon Dioxide" on the NSSDCA Venus sheet).
+
+## Phase 4 findings (2026-10-18)
+
+Fetched with the `p4` set (19 of 21 returned 200; the two HEASARC TESS pages returned 404 and are not used).
+
+- **MAST TIC v8** for the 8 targets: RA/Dec (J2000), Teff, radius, mass, luminosity and distance,
+  built into `data/stars.v1.json`. TOI-700: RA 97.0967866°, Dec -65.5793115°, matching Phase 0.
+- **Exoplanet Archive** `pscomppars` for the 8 hosts: 21 planets in 7 systems. TOI-1338 has none
+  under hostname `TOI-1338` (our pipeline classifies it as an eclipsing binary). TOI-216's two
+  planets are listed as `TOI-216.01` and `TOI-216.02`, and we show the archive's names as given.
+- **Habitable zone:** Kopparapu et al. 2014 (arXiv:1404.5292), Eq. 4 and 5 with Table 1's
+  1 Earth-mass coefficients, read on alphaXiv. Valid for 2600 to 7200 K; the API flags stars outside.
+  For the Sun it gives 0.95 to 1.68 au (conservative). TOI-700 d's average distance (0.164 au) is
+  inside the conservative zone (0.159 to 0.309 au) computed from the TIC values.
+- **Spacecraft (JPL Horizons, -95 TESS, -170 JWST, -31 Voyager 1, -32 Voyager 2):** geocentric and
+  heliocentric range and light time. Cross-check: NASA says Voyager 1 reaches one light-day
+  (25.902 billion km) on 2026-11-18; our 2026-10-18 distance is 25.8 billion km (test allows 1%).
+- **Launch dates:** Horizons' Voyager 1 header says "1977-Sep-06 Launch ... @ 12:56 UTC", while
+  NASA's Voyager 1 page says "launch Sept. 5, 1977". The page shows NASA's date. JWST's launch comes
+  from its Horizons header; NASA's Webb page has no status line, so none is shown.
+- **TESS facts:** sector size and length, four cameras and pole coverage from MIT's TESS
+  Observations page; orbit, launch and the 200,000-star goal from the Horizons TESS header. Every
+  quote is checked against the saved page by `build_reference_data.py`.
+- **NASA 3D model** (TESS model A, commit `11ebb4e`) is Draco-compressed (`KHR_draco_mesh_compression`).
+  The decoder files are copied from three.js 0.186.0 (Apache-2.0) to `public/draco/`.
+- **ISS ground track:** `wheretheiss.at/v1/satellites/25544/positions` with 10 timestamps,
+  10 minutes apart, cached 10 minutes.
+- **OpenStreetMap tiles:** the usage policy requires visible attribution, a Referer header (our
+  Referrer-Policy sends the origin) and light use. Fine for staging. For a busy production site, a
+  tile provider with a plan may be needed (Phase 10 decision).
+- **Aladin Lite** is loaded only when someone taps "Show the sky around this star", from
+  `.../api/v3/latest/aladin.js`. Pin a version in Phase 10. The GPL and DSS flags (2 and 3) still apply.

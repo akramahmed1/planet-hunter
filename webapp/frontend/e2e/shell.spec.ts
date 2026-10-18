@@ -61,8 +61,6 @@ test("navigating from the More sheet closes it and marks More active", async ({ 
 
 test("coming-soon sections say so and link back", async ({ page }) => {
   for (const [route, title] of [
-    ["/exoplanets", "Exoplanets"],
-    ["/missions", "Missions"],
     ["/learn", "Learn"],
     ["/classroom", "Classroom"],
   ]) {
@@ -84,7 +82,7 @@ test("skip link moves focus to the main content", async ({ page }) => {
 
 test("reduced motion turns animation off", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/exoplanets");
+  await page.goto("/learn");
   const durations = await page.evaluate(() => [
     getComputedStyle(document.body, "::after").animationDuration,
     getComputedStyle(document.querySelector(".orbit-planet")!).animationDuration,

@@ -232,3 +232,110 @@ class ExoplanetSystemResponse(Freshness):
     star: Star
     planets: list[ExoPlanet]
     source: SourceRef
+
+
+# ---------- Phase 4: target systems, missions, TESS ----------
+
+class SourcedFact(_Strict):
+    quote: str
+    display: str | None = None
+    source: SourceRef
+    fetched_at: dt.datetime
+
+
+class HabitableZone(_Strict):
+    conservative_inner_au: float
+    conservative_outer_au: float
+    optimistic_inner_au: float
+    optimistic_outer_au: float
+    in_valid_range: bool
+    kind: Kind
+    source: SourceRef
+    note: str
+
+
+class SystemPlanet(_Strict):
+    name: str
+    status: Literal["confirmed", "pipeline_signal"]
+    orbit_au: Quantity | None
+    period_days: Quantity | None
+    radius_earth: Quantity | None
+    eccentricity: float | None
+    equilibrium_temperature: Quantity | None
+    disc_year: int | None
+    note: str | None = None
+
+
+class TargetSummary(_Strict):
+    slug: str
+    target: str
+    tic: str
+    host: str
+    classification: str
+    classification_label: str
+    ra_deg: float
+    dec_deg: float
+    distance_pc: float | None
+    teff_k: float | None
+    confirmed_planets: int
+
+
+class TargetsResponse(_Strict):
+    targets: list[TargetSummary]
+    star_source: SourceRef
+    planet_source: SourceRef
+
+
+class TargetSystemResponse(_Strict):
+    slug: str
+    target: str
+    tic: str
+    host: str
+    star: Star
+    planets: list[SystemPlanet]
+    habitable_zone: HabitableZone | None
+    star_source: SourceRef
+    star_fetched_at: dt.datetime
+    planet_source: SourceRef
+    planets_fetched_at: dt.datetime
+
+
+class SpacecraftDistance(_Strict):
+    distance: Distance
+    light_time_seconds: float
+    kind: Kind
+    source: SourceRef
+    fetched_at: dt.datetime
+    stale: bool
+
+
+class Spacecraft(_Strict):
+    id: str
+    name: str
+    from_earth: SpacecraftDistance | None
+    from_sun: SpacecraftDistance | None
+    launch: SourcedFact | None
+    status: SourcedFact | None
+    note: str | None = None
+
+
+class MissionsResponse(_Strict):
+    date: dt.date
+    spacecraft: list[Spacecraft]
+
+
+class TrackPoint(_Strict):
+    latitude: float
+    longitude: float
+    timestamp: int
+
+
+class IssTrackResponse(Freshness):
+    points: list[TrackPoint]
+    kind: Kind
+    source: SourceRef
+    note: str
+
+
+class TessFactsResponse(_Strict):
+    facts: dict[str, SourcedFact]
