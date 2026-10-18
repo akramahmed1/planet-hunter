@@ -142,3 +142,50 @@ def test_concurrent_enqueues_respect_the_cap(engine):
     with engine.connect() as c:
         assert c.execute(text("select count(*) from scan_jobs")).scalar() == queue.MAX_QUEUED
     assert len(errors) == 5
+
+
+# ---------- the worker ----------
+
+from scans import worker  # noqa: E402
+
+
+def _run_one(engine, monkeypatch, runner, tic):
+    monkeypatch.setenv("SCAN_RUNNER", f"tests.fake_scans:{runner}")
+    job_id, _ = queue.enqueue(engine, tic, P(), "w")
+    job = queue.claim(engine, "w1")
+    worker.run_job(engine, job, "w1")
+    return queue.get(engine, job_id)
+
+
+@needs_db
+def test_worker_records_a_successful_scan(engine, monkeypatch):
+    got = _run_one(engine, monkeypatch, "ok", 8001)
+    assert got["status"] == "succeeded" and got["signal"]["period_d"] == 3.0
+
+
+@needs_db
+def test_worker_fails_permanently_without_data(engine, monkeypatch):
+    got = _run_one(engine, monkeypatch, "nodata", 8002)
+    assert got["status"] == "failed" and "no TESS SPOC light curves" in got["error"]
+
+
+@needs_db
+def test_worker_requeues_transient_errors(engine, monkeypatch):
+    got = _run_one(engine, monkeypatch, "flaky", 8003)
+    assert got["status"] == "queued" and "MAST timed out" in got["error"]
+
+
+@needs_db
+def test_worker_enforces_the_time_limit(engine, monkeypatch):
+    monkeypatch.setattr(worker, "TIME_LIMIT_S", 2)
+    got = _run_one(engine, monkeypatch, "slow", 8004)
+    assert got["status"] == "failed" and "longer than" in got["error"]
+
+
+@needs_db
+def test_worker_enforces_the_memory_cap(engine, monkeypatch):
+    monkeypatch.setenv("SCAN_MEMORY_LIMIT_MB", "600")
+    import importlib
+    importlib.reload(worker)
+    got = _run_one(engine, monkeypatch, "hog", 8005)
+    assert got["status"] == "failed" and "memory" in got["error"]

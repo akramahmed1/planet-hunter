@@ -5,3 +5,7 @@ sqlalchemy>=2.1,<2.2
 alembic>=1.20,<2
 psycopg[binary]>=3.3,<4
 httpx>=0.27,<1
+# Science stack for the pipeline, vetting and the scan worker (Phase 6).
+numpy==2.5.3
+astropy==7.2.2
+lightkurve==2.5.1

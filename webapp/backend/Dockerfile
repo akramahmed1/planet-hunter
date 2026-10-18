@@ -10,6 +10,7 @@ COPY app.py schemas.py data_store.py db.py export_openapi.py alembic.ini ./
 COPY api_v2/ ./api_v2/
 COPY live/ ./live/
 COPY pipeline/ ./pipeline/
+COPY scans/ ./scans/
 COPY migrations/ ./migrations/
 COPY data/ ./data/
 COPY plots/ ./plots/

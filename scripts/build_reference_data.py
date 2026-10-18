@@ -17,6 +17,7 @@ temperature statements keep NASA's own wording in `quote`.
 """
 from __future__ import annotations
 
+import gzip
 import html
 import json
 import re
@@ -304,6 +305,26 @@ def build_missions() -> dict:
     return {"dataset": "missions", "version": 1, "missions": out}
 
 
+def build_tess_ebs() -> dict:
+    """TESS Eclipsing Binary catalog (Prsa et al. 2022, J/ApJS/258/16): TIC -> periods, for the cross-match."""
+    rows = gzip.open(FIXTURES / "cds_tess_ebs_dat_gz_p6.gz", "rt").read().splitlines()
+    ebs: dict[str, list] = {}
+    for line in rows:
+        f = line.split("|")
+        tic, per, morph = int(f[0]), f[12].strip(), f[14].strip()
+        if not per:
+            continue  # no period in the catalog for this entry
+        ebs.setdefault(str(tic), []).append({"period_d": round(float(per), 6),
+                                              "morph": round(float(morph), 3) if morph else None})
+    if len(rows) != 4584:
+        raise SystemExit(f"expected 4584 catalog rows, got {len(rows)}")
+    return {"dataset": "tess_ebs", "version": 1,
+            "source": {"name": "TESS Eclipsing Binary catalog, Prsa et al. 2022, ApJS 258, 16 (CDS J/ApJS/258/16)",
+                       "url": "https://cdsarc.cds.unistra.fr/viz-bin/cat/J/ApJS/258/16",
+                       "fetched_at": meta("cds_tess_ebs_dat_gz_p6")["fetched_at"]},
+            "ebs": ebs}
+
+
 # TESS explainer facts, with the source's exact words (checked like the mission facts).
 TESS_FACTS = [
     ("orbit", "horizons_tess_vectors_geo_p4", "https://ssd.jpl.nasa.gov/horizons/",
@@ -346,6 +367,7 @@ def main() -> int:
         "systems.v1.json": build_systems(),
         "missions.v1.json": build_missions(),
         "tess.v1.json": build_tess(),
+        "tess_ebs.v1.json": build_tess_ebs(),
     }
     stale = []
     for name, data in outputs.items():
