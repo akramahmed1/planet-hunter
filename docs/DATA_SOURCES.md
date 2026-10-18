@@ -280,7 +280,7 @@ Fetched with the `p4` set (19 of 21 returned 200; the two HEASARC TESS pages ret
   Referrer-Policy sends the origin) and light use. Fine for staging. For a busy production site, a
   tile provider with a plan may be needed (Phase 10 decision).
 - **Aladin Lite** is loaded only when someone taps "Show the sky around this star", from
-  `.../api/v3/latest/aladin.js`. Pin a version in Phase 10. The GPL and DSS flags (2 and 3) still apply.
+  `.../api/v3/latest/aladin.js`. Pinned in Phase 10 (below). The GPL and DSS flags (2 and 3) still apply.
 
 ## Phase 5 findings (2026-10-18)
 
@@ -344,3 +344,14 @@ Fetched with the `p4` set (19 of 21 returned 200; the two HEASARC TESS pages ret
   reading the paper.
 - **The TOI counts** (4,820 PC, 815 CP, 1,315 FP) are dated in the lesson. They change as TESS
   follow-up continues.
+
+## Phase 10 findings (2026-10-18)
+
+- **Aladin Lite pinned** to `https://aladin.cds.unistra.fr/AladinLite/api/v3/3.8.2/aladin.js`.
+  3.8.2 is the latest non-beta release on npm (`npm view aladin-lite`, published 2026-03-06; 3.9.x
+  is beta). This session cannot reach the CDS server, so the staging check fetches the pinned URL
+  from GitHub's machines and fails if it is not served. Kind: verified only once that step is green.
+- **OpenStreetMap tiles** stay for launch. The frontend's Referrer-Policy
+  (`strict-origin-when-cross-origin`) sends the origin, and the map shows the attribution. The
+  standard tiles are meant for light use; if traffic grows, move to a provider with a plan (a paid
+  service, so Akram decides).

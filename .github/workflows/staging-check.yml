@@ -42,6 +42,15 @@ jobs:
         run: |
           curl -sf "$BACKEND/api/v2/health" | tee /tmp/health.json
           python3 -c "import json;d=json.load(open('/tmp/health.json'));assert d['database']['status']=='connected', d"
+      - name: The pinned Aladin Lite script is served by CDS (Phase 10)
+        run: |
+          url=$(grep -o 'https://aladin.cds.unistra.fr/AladinLite/api/v3/[^"]*/aladin.js' webapp/frontend/components/sky/SkyPanel.tsx)
+          echo "$url"
+          case "$url" in */latest/*|"") echo "::error::Aladin Lite is not pinned"; exit 1;; esac
+          code=$(curl -sL -o /tmp/aladin.js -w '%{http_code}' "$url")
+          size=$(wc -c < /tmp/aladin.js)
+          echo "HTTP $code, $size bytes"
+          [ "$code" = 200 ] && [ "$size" -gt 100000 ]
       - name: Live smoke test, one request per source (Phase 2)
         # Each endpoint must answer from its real upstream. Space weather may be an explicit
         # "unavailable" 503 while NASA DONKI is down (docs/DATA_SOURCES.md), never a bare error.

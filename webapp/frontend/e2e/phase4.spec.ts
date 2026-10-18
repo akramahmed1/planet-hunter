@@ -8,7 +8,7 @@ const PNG = Buffer.from(
 
 async function stubExternals(page: Page, seen: { aladin?: Record<string, unknown> } = {}) {
   await page.route(/tile\.openstreetmap\.org/, (r) => r.fulfill({ status: 200, contentType: "image/png", body: PNG }));
-  await page.route(/aladin\.cds\.unistra\.fr\/AladinLite\/api\/v3\/latest\/aladin\.js/, (r) =>
+  await page.route(/aladin\.cds\.unistra\.fr\/AladinLite\/api\/v3\/[^/]+\/aladin\.js/, (r) =>
     r.fulfill({
       status: 200,
       contentType: "application/javascript",
