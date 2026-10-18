@@ -5,8 +5,9 @@ import SourceButton from "@/components/live/SourceButton";
 import type { SourceRef } from "@/lib/api-v2";
 import { formatDec, formatRa } from "@/lib/sky";
 
-// Aladin Lite v3 from the CDS server (GPL-3.0; see docs/DATA_SOURCES.md flag 2). Loaded only when asked for.
-export const ALADIN_SRC = "https://aladin.cds.unistra.fr/AladinLite/api/v3/latest/aladin.js";
+// Aladin Lite from the CDS server (GPL-3.0; see docs/DATA_SOURCES.md flag 2). Loaded only when asked for.
+// Pinned to a release (3.8.2, the latest non-beta on npm as of 2026-10-18); the staging check fetches it.
+export const ALADIN_SRC = "https://aladin.cds.unistra.fr/AladinLite/api/v3/3.8.2/aladin.js";
 
 type AladinGlobal = {
   init: Promise<void>;
