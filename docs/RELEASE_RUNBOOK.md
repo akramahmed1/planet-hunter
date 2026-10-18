@@ -9,8 +9,10 @@ Nothing here runs until Akram approves the release on his phone. Production is t
       the staging `worker` service) and Playwright against staging.
 - [ ] Akram has tried on staging: two lessons (tone), a teacher and a student account on his
       phone (Phase 8), the re-reviewed TOI 175 and TOI 193 readouts.
-- [ ] Decisions recorded: error monitoring (Sentry or OpenTelemetry), custom domain or the
-      Railway URLs, whether the explainer and billing stay switched off at launch.
+- [x] Decisions (Akram, 2026-10-18): monitoring is Railway logs plus the uptime workflow;
+      the Railway URLs stay; the explainer is on at launch, billing off.
+- [ ] Explainer: `ANTHROPIC_API_KEY` and `EXPLAINER_ENABLED=1` set on staging, and the live
+      eval (`python -m explain.evals --live`) meets the bar there before production.
 - [ ] Legal: privacy notice reviewed by an attorney before student accounts open in
       production (ADR 0005); GPL and DSS licence flags reviewed (docs/DATA_SOURCES.md).
 
@@ -29,8 +31,11 @@ flow in the production environment):
 | refresh (cron, check it exists in production) | `DATABASE_URL`, `NASA_API_KEY`, start `python -m live.refresh`, schedule `13 6 * * *` | |
 | frontend | `NEXT_PUBLIC_API_BASE` | the production backend URL |
 
+| backend | `EXPLAINER_ENABLED` | `1` (Akram's launch decision) |
+| backend | `ANTHROPIC_API_KEY` | added by Akram in Railway, never in chat or git |
+
 Not set in production (defaults are the safe values): `AUTH_SIGNUPS_PER_HOUR`,
-`WRITE_LIMIT_PER_MINUTE`, `EXPLAINER_ENABLED`, `BILLING_ENABLED`. Live Stripe keys are
+`WRITE_LIMIT_PER_MINUTE`, `BILLING_ENABLED`, `EXPLAINER_FAKE`. Live Stripe keys are
 refused by the code until a later change allows them.
 
 ## 3. Release

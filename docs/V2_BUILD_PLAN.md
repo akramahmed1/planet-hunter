@@ -87,6 +87,10 @@ assignments on top of it.
   - Explainer model key: add `ANTHROPIC_API_KEY` and `EXPLAINER_ENABLED=1` as Railway variables to switch it on (model `claude-opus-5-5` by default, `EXPLAINER_MODEL` to change; server-side refusal fallback on).
   - Eval pass bar: proposed as every refuse and injection case plus 5 of 6 grounded cases (`python -m explain.evals --live`, costs a few cents per run).
   - Classroom price and plan limits: `billing/plans.py` holds placeholders (free: 1 class of 40; classroom plan: 30 classes of 200). Billing needs `BILLING_ENABLED=1`, a Stripe test key, `STRIPE_PRICE_ID` and `STRIPE_WEBHOOK_SECRET`; live keys are refused until Phase 10.
+- **Phase 10** (2026-10-18, Akram): error monitoring is Railway's logs plus the uptime check
+  (no new service); keep the Railway URLs (no custom domain at launch); the explainer is **on**
+  at launch, billing stays off. Akram adds `ANTHROPIC_API_KEY` as a Railway variable (never in
+  chat); the live eval runs on staging first and must meet the bar before production.
 - **Pace** (2026-10-18, Akram): each phase merges to `v2` once CI is green, then the staging check verifies it. Production waits for Akram's approval in Phase 10.
 
 ## 3. Current repo state (verified 2026-10-17)
