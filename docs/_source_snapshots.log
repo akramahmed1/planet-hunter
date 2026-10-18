@@ -7,3 +7,6 @@ vizier_tess_ebs_columns_p6              503
 vizier_tess_ebs_targets_p6              503  
 vizier_tess_ebs_readme_p6               200  
 cds_tess_ebs_dat_p6                     404  
+cds_tess_ebs_dat_gz_p6                  200  
+cds_tess_ebs_vizbin_p6                  200  
+mast_tess_ebs_hlsp_p6                   200  
