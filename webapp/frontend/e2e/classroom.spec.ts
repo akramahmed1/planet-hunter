@@ -120,3 +120,12 @@ test("the privacy notice is marked as a draft", async ({ page }) => {
   await page.goto("/privacy");
   await expect(page.getByTestId("privacy-draft")).toContainText("has not been reviewed by an attorney");
 });
+
+test("a signed-out visitor on a class or challenge page is pointed to the sign-in", async ({ page }) => {
+  await page.goto("/classroom/class/999999");
+  await expect(page.getByText("This class could not be loaded.")).toBeVisible();
+  await page.getByRole("link", { name: "Go to Classroom to sign in as a teacher" }).click();
+  await expect(page).toHaveURL(/\/classroom$/);
+  await page.goto("/classroom/hunt/999999");
+  await expect(page.getByRole("link", { name: "Go to Classroom to sign in as a student" })).toBeVisible();
+});

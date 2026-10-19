@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import ErrorState from "@/components/ui/ErrorState";
 import Skeleton from "@/components/ui/Skeleton";
 import { apiV2Send, type ClassDetail, type Gradebook, type LessonsResponse } from "@/lib/api-v2";
-import { endOfDay, formatDue, gradeText, type AssignmentKind } from "@/lib/classroom";
+import { endOfDay, formatDue, gradeText, needsSignIn, type AssignmentKind } from "@/lib/classroom";
 
 const KIND_LABEL: Record<AssignmentKind, string> = { lesson: "Lesson and quiz", quiz: "Quiz only", hunt: "Hunt challenge" };
 
@@ -48,7 +48,13 @@ export default function ClassPage({ id, candidates }: { id: number; candidates: 
     return <p className="callout" role="status">The class and everything stored about its students were deleted.{" "}
       <Link href="/classroom">Back to your classes</Link></p>;
   }
-  if (error && !k) return <ErrorState title="This class could not be loaded." detail={error} />;
+  if (error && !k) {
+    return (
+      <ErrorState title="This class could not be loaded." detail={error}>
+        {needsSignIn(error) && <p><Link href="/classroom">Go to Classroom to sign in as a teacher</Link></p>}
+      </ErrorState>
+    );
+  }
   if (!k) return <Skeleton height="10rem" />;
 
   return (
