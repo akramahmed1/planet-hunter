@@ -140,3 +140,32 @@ def test_explain_api_with_the_fake_model_and_rate_limits(engine, monkeypatch):  
         r = c.post("/api/v2/explain", json={"kind": "candidate", "ref": "toi-700", "question": "depth?"})
         assert r.status_code == 429  # third counted call this hour (the 404 did not count)
         assert c.post("/api/v2/explain", json={"kind": "scan", "ref": "abc", "question": "x"}).status_code == 404
+
+
+def test_remote_eval_runs_the_eval_set_through_a_server(monkeypatch):
+    import io
+    from types import SimpleNamespace
+
+    from explain import remote_eval
+
+    monkeypatch.setattr(remote_eval.urllib.request, "urlopen",
+                        lambda url, timeout: io.BytesIO(json.dumps({"enabled": True}).encode()))
+    monkeypatch.setattr(remote_eval.time, "sleep", lambda s: None)
+    fake = model.FakeModel()
+
+    def server(base, case):  # what the deployed /api/v2/explain would answer, minus the HTTP
+        out = service.explain(fake, grounding.grounding_for(evals.item_for(case)), case["question"])
+        return SimpleNamespace(known=out.known, answer=out.answer, citations=out.citations)
+
+    monkeypatch.setattr(remote_eval, "ask", server)
+    assert remote_eval.main("http://server") == 0
+
+    # A server that answers a question the data cannot answer misses the pass bar.
+    monkeypatch.setattr(remote_eval, "ask", lambda base, case: SimpleNamespace(
+        known=True, answer="Sure.", citations=[{"path": "item.period_d", "value": 1}]))
+    assert remote_eval.main("http://server") == 1
+
+    # A server with the explainer off is reported, not graded.
+    monkeypatch.setattr(remote_eval.urllib.request, "urlopen",
+                        lambda url, timeout: io.BytesIO(json.dumps({"enabled": False, "reason": "off"}).encode()))
+    assert remote_eval.main("http://server") == 2
