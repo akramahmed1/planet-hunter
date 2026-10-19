@@ -9,6 +9,11 @@ on:
   push:
     branches: [v2]
   workflow_dispatch:
+    inputs:
+      allow_stale:
+        description: "Accept a stale copy of live NASA data (as served during a NASA outage) as a warning. Push runs are always strict."
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -52,6 +57,8 @@ jobs:
           echo "HTTP $code, $size bytes"
           [ "$code" = 200 ] && [ "$size" -gt 100000 ]
       - name: Live smoke test, one request per source (Phase 2)
+        env:
+          ALLOW_STALE: ${{ inputs.allow_stale }}
         # Each endpoint must answer from its real upstream. Space weather may be an explicit
         # "unavailable" 503 while NASA DONKI is down (docs/DATA_SOURCES.md), never a bare error.
         run: |
@@ -61,6 +68,8 @@ jobs:
             code=$(curl -s -o /tmp/body.json -w '%{http_code}' "$BACKEND$path")
             if [ "$code" = 200 ] && python3 -c "import json,sys;d=json.load(open('/tmp/body.json'));sys.exit(0 if not d.get('stale') else 1)"; then
               echo "ok      $path"
+            elif [ "$code" = 200 ] && [ "$ALLOW_STALE" = true ] && python3 -c "import json,sys;sys.exit(0 if json.load(open('/tmp/body.json')).get('stale') is True else 1)"; then
+              echo "WARN    $path served a stale copy (allowed for this manual run): $(head -c 120 /tmp/body.json)"
             elif [ "$code" = 503 ] && [ "$allow_unavailable" = yes ] && grep -q '"status":"unavailable"' /tmp/body.json; then
               echo "WARN    $path explicitly unavailable: $(cat /tmp/body.json)"
             else
