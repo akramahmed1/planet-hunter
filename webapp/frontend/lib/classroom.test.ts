@@ -1,7 +1,7 @@
 // Classroom helpers.
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { assignmentHref, endOfDay, formatDue, gradeText } from "./classroom.ts";
+import { assignmentHref, endOfDay, formatDue, gradeText, needsSignIn } from "./classroom.ts";
 
 describe("classroom helpers", () => {
   it("sends each assignment kind to the right page", () => {
@@ -28,5 +28,14 @@ describe("classroom helpers", () => {
     assert.equal(gradeText({ score: 2, max_score: 3, completed_at: null, late: false }), "2 / 3 (in progress)");
     assert.equal(gradeText({ score: 3, max_score: 3, completed_at: "x", late: false }), "3 / 3");
     assert.equal(gradeText({ score: 1, max_score: 3, completed_at: "x", late: true }), "1 / 3 (late)");
+  });
+
+  it("recognises the errors that mean 'sign in first'", () => {
+    assert.equal(needsSignIn("Sign in as a teacher first."), true);
+    assert.equal(needsSignIn("Sign in as a student first."), true);
+    assert.equal(needsSignIn("this needs a teacher account"), true);
+    assert.equal(needsSignIn("this needs a student account"), true);
+    assert.equal(needsSignIn("no such class"), false);
+    assert.equal(needsSignIn("Failed to fetch"), false);
   });
 });

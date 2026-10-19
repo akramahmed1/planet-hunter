@@ -31,3 +31,8 @@ export function gradeText(cell: { score: number; max_score: number; completed_at
   if (!cell.completed_at) return `${base} (in progress)`;
   return cell.late ? `${base} (late)` : base;
 }
+
+/** True when a classroom load failed because nobody (or the wrong kind of person) is signed in. */
+export function needsSignIn(message: string): boolean {
+  return /sign in|needs a (teacher|student) account/i.test(message);
+}

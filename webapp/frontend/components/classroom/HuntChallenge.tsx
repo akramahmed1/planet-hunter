@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import ErrorState from "@/components/ui/ErrorState";
 import Skeleton from "@/components/ui/Skeleton";
 import { apiV2Send, type HuntResult, type StudentHome } from "@/lib/api-v2";
+import { needsSignIn } from "@/lib/classroom";
 import { parseNumber } from "@/lib/learn";
 
 const VERDICT: Record<HuntResult["verdict"], string> = {
@@ -24,7 +25,13 @@ export default function HuntChallenge({ id }: { id: number }) {
     apiV2Send<StudentHome>("GET", "/api/v2/me/assignments").then((r) =>
       r.ok ? setHome(r.data) : setError(r.status === 401 || r.status === 403 ? "Sign in as a student first." : r.error));
   }, []);
-  if (error && !home) return <ErrorState title="This challenge could not be loaded." detail={error} />;
+  if (error && !home) {
+    return (
+      <ErrorState title="This challenge could not be loaded." detail={error}>
+        {needsSignIn(error) && <p><Link href="/classroom">Go to Classroom to sign in as a student</Link></p>}
+      </ErrorState>
+    );
+  }
   if (!home) return <Skeleton height="6rem" />;
   const a = home.assignments.find((x) => x.id === id && x.kind === "hunt");
   if (!a) return <ErrorState title="No such hunt challenge in your class." detail="Check your assignments." />;
