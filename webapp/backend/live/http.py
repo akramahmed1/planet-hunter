@@ -32,9 +32,10 @@ def set_transport(transport: httpx.BaseTransport | None) -> None:
 def _client() -> httpx.Client:
     transport = _transport
     if transport is None and os.environ.get("PH_OFFLINE_FIXTURES"):
-        from live.fixture_transport import FixtureTransport
+        from live.fixture_transport import FixtureTransport, OfflineTransport
 
-        transport = FixtureTransport()
+        # "down" answers every upstream call as a failure, for the end-to-end run of the unavailable states.
+        transport = OfflineTransport() if os.environ["PH_OFFLINE_FIXTURES"] == "down" else FixtureTransport()
     return httpx.Client(timeout=TIMEOUT, headers={"User-Agent": USER_AGENT}, follow_redirects=True,
                         transport=transport)
 

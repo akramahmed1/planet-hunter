@@ -1,6 +1,8 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import ApiError from "@/components/ApiError";
+import RunLabel from "@/components/RunLabel";
 import ClassificationBadge from "@/components/ClassificationBadge";
 import Card from "@/components/ui/Card";
 import ExplainBox from "@/components/explain/ExplainBox";
@@ -14,7 +16,16 @@ import {
   plotImageUrl,
   type Candidate,
   type HealthResponse,
+  type OverviewResponse,
 } from "@/lib/api";
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const name = (await params).slug.toUpperCase().replace("-", " ");
+  return {
+    title: `${name} candidate signal`,
+    description: `${name}: the strongest repeating dip our pipeline found, with its checks. A candidate signal, never a discovery.`,
+  };
+}
 
 export const dynamic = "force-dynamic";
 
@@ -24,12 +35,13 @@ export default async function CandidateDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const [res, health, targets, lc, pg] = await Promise.all([
+  const [res, health, targets, lc, pg, overview] = await Promise.all([
     apiGet<Candidate>(`/api/candidates/${encodeURIComponent(slug)}`),
     apiGet<HealthResponse>("/api/health"),
     apiV2Get<TargetsResponse>("/api/v2/targets"),
     apiV2Get<LightCurveResponse>(`/api/v2/lightcurves/${encodeURIComponent(slug)}`),
     apiV2Get<PeriodogramResponse>(`/api/v2/periodogram/${encodeURIComponent(slug)}`),
+    apiGet<OverviewResponse>("/api/overview"),
   ]);
 
   if (!res.ok) {
@@ -67,6 +79,11 @@ export default async function CandidateDetailPage({
 
       <div className="detail-grid">
         <Card title="Measured numbers">
+          {overview.ok && (
+            <p>
+              <RunLabel kind="batch" sectors={overview.data.run.sectors_per_target} date={overview.data.run.run_date} />
+            </p>
+          )}
           <dl className="kv">
             <dt>Rank</dt>
             <dd>

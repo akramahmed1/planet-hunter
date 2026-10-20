@@ -18,6 +18,7 @@ export default defineConfig({
   projects: [
     {
       name: "mobile",
+      testIgnore: /down\.spec/,
       use: {
         browserName: "chromium",
         viewport: { width: 375, height: 812 },
@@ -28,8 +29,24 @@ export default defineConfig({
     },
     {
       name: "desktop",
+      testIgnore: /down\.spec/,
       use: { browserName: "chromium", viewport: { width: 1280, height: 800 } },
     },
+    // Every live source down: a second backend whose upstream calls all fail, and a second server
+    // rendering from it (e2e/down.spec.ts). Not run against a deployed site.
+    ...(remote
+      ? []
+      : [
+          {
+            name: "upstream-down",
+            testMatch: /down\.spec/,
+            use: {
+              browserName: "chromium" as const,
+              baseURL: "http://127.0.0.1:3001",
+              viewport: { width: 375, height: 812 },
+            },
+          },
+        ]),
   ],
   webServer: remote
     ? undefined
@@ -42,6 +59,22 @@ export default defineConfig({
           url: "http://127.0.0.1:8000/api/health",
           reuseExistingServer: true,
           timeout: 60_000,
+        },
+        {
+          command: "python3 -m uvicorn app:app --port 8001",
+          cwd: "../backend",
+          // No database (so no shared cache) and every upstream call fails.
+          env: { PH_OFFLINE_FIXTURES: "down", DATABASE_URL: "" },
+          url: "http://127.0.0.1:8001/api/health",
+          reuseExistingServer: true,
+          timeout: 60_000,
+        },
+        {
+          command: "npm run start -- --port 3001",
+          env: { PH_SERVER_API_BASE: "http://127.0.0.1:8001" },
+          url: "http://127.0.0.1:3001",
+          reuseExistingServer: true,
+          timeout: 120_000,
         },
         {
           command: "npm run start -- --port 3000",

@@ -1,3 +1,4 @@
+import RunLabel from "@/components/RunLabel";
 import { Suspense } from "react";
 import ApiError from "@/components/ApiError";
 import LiveTiles from "@/components/live/LiveTiles";
@@ -75,6 +76,7 @@ export default async function Home() {
                   {validation.planet}, and asked it to find the period. The
                   pipeline knew nothing about the planet ahead of time.
                 </p>
+                <p><RunLabel kind="validation" sectors={validation.sectors} /></p>
                 <ul className="fact-list">
                   <li>
                     Recovered period <strong>{validation.recovered_period_d} days</strong>

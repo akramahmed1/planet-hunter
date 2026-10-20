@@ -11,7 +11,11 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  return { title: `${slug.toUpperCase().replace("-", " ")} system - Planet Hunter` };
+  const name = slug.toUpperCase().replace("-", " ");
+  return {
+    title: `${name} system`,
+    description: `${name}: its confirmed planets, its habitable zone, and where our pipeline's signal would orbit.`,
+  };
 }
 
 export default async function SystemPage({ params }: { params: Promise<{ slug: string }> }) {

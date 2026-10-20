@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useUnits } from "@/components/UnitsProvider";
 import { apiV2Get, type Iss } from "@/lib/api-v2";
 import { KM_PER_MILE } from "@/lib/units";
-import { formatUtc } from "@/lib/time";
+import LocalTime from "@/components/LocalTime";
 import SourceButton from "./SourceButton";
 
 const POLL_MS = 5000;
@@ -64,7 +64,7 @@ export default function IssTile({ initial }: { initial: Iss | null }) {
             {iss.visibility === "daylight" ? " · in sunlight" : iss.visibility === "eclipsed" ? " · in Earth's shadow" : ""}
           </p>
           <p className="tile-meta">
-            Updated <time dateTime={iss.fetched_at}>{formatUtc(iss.fetched_at)}</time>
+            Updated <LocalTime iso={iss.fetched_at} />
             {(iss.stale || down) && <span className="stale-tag">May be out of date</span>}
           </p>
         </>

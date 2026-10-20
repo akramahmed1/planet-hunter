@@ -317,7 +317,7 @@ Fetched with the `p4` set (19 of 21 returned 200; the two HEASARC TESS pages ret
 - **Mislabelled targets found by the cross-match:** TIC 307210830 was listed as TOI 776 but is
   TOI 175 (L 98-59), and TIC 183985250 was listed as TOI 849 but is TOI 193 (LTT 9779). Both
   are renamed everywhere and marked unreviewed until Akram re-reviews them.
-- **Transit Least Squares:** optional and not installed; the row says "Not run".
+- **Transit Least Squares:** optional and not installed; the row says "Not part of this scan."
 - **Labels** stay "proposed, not reviewed" until a row exists in `reviews`.
 
 ## Phase 7 findings (2026-10-18)

@@ -45,7 +45,7 @@ export default function SystemView({ system }: { system: TargetSystem }) {
 
   return (
     <div className="solar">
-      <div className="solar-viewport">
+      <div className="solar-viewport" data-heavy-gl={show3d ? "" : undefined}>
         {show3d ? <SystemScene3D {...props} /> : <SystemMap2D {...props} />}
       </div>
       <p className="muted" data-testid="system-note">

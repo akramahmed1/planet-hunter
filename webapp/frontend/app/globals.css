@@ -2328,3 +2328,81 @@ ul.tile-grid {
   font-size: var(--step--1);
   overflow-wrap: anywhere;
 }
+
+/* Which run a number came from (components/RunLabel.tsx). */
+.run-label {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--ink-dim);
+  font-size: 0.85rem;
+}
+.run-label-i {
+  min-width: 44px;
+  min-height: 44px;
+  margin: -0.7rem -0.4rem;
+  border: 0;
+  background: transparent;
+  color: var(--ion-strong);
+  font: inherit;
+  font-style: italic;
+  cursor: pointer;
+}
+.run-label-note {
+  flex-basis: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(4, 6, 13, 0.6);
+  color: var(--ink);
+}
+
+/* Living cosmos background (components/shell/CosmosBackground.tsx): behind everything, never takes input. */
+.cosmos-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+/* When it is drawing, it replaces the CSS stars; without WebGL these stay. */
+html.cosmos-on body::before,
+html.cosmos-on body::after {
+  display: none;
+}
+
+/* Phone width: every control is at least 44 px tall (WCAG 2.2 target size, and comfortable for a thumb). */
+@media (max-width: 640px) {
+  .btn--sm,
+  .btn--icon,
+  .select,
+  .filter-btn,
+  .tab,
+  .toggle-option span {
+    min-height: 44px;
+  }
+  .btn--sm,
+  .btn--icon {
+    min-width: 44px;
+  }
+  .toggle-option span {
+    min-width: 56px;
+  }
+  /* Inline "i" source buttons sit in running text; grow the tappable area, not the line. */
+  .source-btn {
+    position: relative;
+  }
+  .source-btn::after {
+    content: "";
+    position: absolute;
+    inset: -12px -6px;
+  }
+  /* Leaflet's zoom buttons (ISS map). */
+  .leaflet-container.leaflet-touch .leaflet-bar a {
+    width: 44px;
+    height: 44px;
+    line-height: 44px;
+  }
+}

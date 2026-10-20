@@ -1,3 +1,5 @@
+import RunLabel from "@/components/RunLabel";
+import type { Metadata } from "next";
 import Link from "next/link";
 import ApiError from "@/components/ApiError";
 import CandidatesTable from "@/components/CandidatesTable";
@@ -8,6 +10,10 @@ import {
   type CandidatesResponse,
 } from "@/lib/api";
 
+export const metadata: Metadata = {
+  title: "Hunt",
+  description: "Eight stars, one strongest repeating dip each. Candidate signals from public TESS data, never discoveries.",
+};
 export const dynamic = "force-dynamic";
 
 export default async function CandidatesPage() {
@@ -37,6 +43,7 @@ export default async function CandidatesPage() {
         Periods searched: {run.search_period_min_d} to {run.search_period_max_d}{" "}
         days. {honesty}
       </p>
+      <p><RunLabel kind="batch" sectors={run.sectors_per_target} date={run.run_date} /></p>
       <CandidatesTable candidates={candidates} />
       <p>
         <Link href="/scan" className="btn btn--primary">Scan any TESS star yourself</Link>

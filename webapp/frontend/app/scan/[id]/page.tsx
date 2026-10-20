@@ -5,7 +5,8 @@ import ScanResult from "@/components/scan/ScanResult";
 import ErrorState from "@/components/ui/ErrorState";
 import { apiV2Get, type ScanStatus } from "@/lib/api-v2";
 
-export const metadata: Metadata = { title: "Scan - Planet Hunter" };
+export const metadata: Metadata = { title: "Scan result",
+  description: "The strongest repeating dip found in a TESS star, with vetting checks." };
 export const dynamic = "force-dynamic";
 
 export default async function ScanStatusPage({ params }: { params: Promise<{ id: string }> }) {

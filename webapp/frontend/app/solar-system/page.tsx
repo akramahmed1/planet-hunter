@@ -3,7 +3,8 @@ import ErrorState from "@/components/ui/ErrorState";
 import SolarSystem from "@/components/solar/SolarSystem";
 import { apiV2Get, type BodiesResponse, type OrbitsResponse, type PositionsResponse } from "@/lib/api-v2";
 
-export const metadata: Metadata = { title: "Solar System - Planet Hunter" };
+export const metadata: Metadata = { title: "Solar System",
+  description: "The planets where they are today, from NASA JPL Horizons, with sources for every number." };
 export const dynamic = "force-dynamic";
 
 export default async function SolarSystemPage() {

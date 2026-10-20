@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import os
 import re
+from urllib.parse import urlparse
 from datetime import date, timedelta
 
 from live import http
@@ -64,7 +65,13 @@ def apod() -> dict:
     b = http.get_json(APOD, {"api_key": _nasa_key()})
     if not isinstance(b, dict) or "title" not in b:
         raise http.FetchError("APOD response missing fields")
-    return {k: b.get(k) for k in ("date", "title", "explanation", "media_type", "url", "hdurl", "copyright")}
+    out = {k: b.get(k) for k in ("date", "title", "explanation", "media_type", "url", "hdurl", "copyright")}
+    # An image must come from apod.nasa.gov (Phase 2 saw a NASA logo link instead). Treat anything
+    # else as a failed fetch so the last good picture is served; a video is kept and shown as a link.
+    if out["media_type"] == "image" and urlparse(out["url"] or "").hostname != "apod.nasa.gov":
+        http.log.warning("fetch failed: APOD image is not hosted on apod.nasa.gov: %.200s", out["url"])
+        raise http.FetchError("APOD image link is not an APOD picture")
+    return out
 
 
 def donki(today: date) -> list[dict]:

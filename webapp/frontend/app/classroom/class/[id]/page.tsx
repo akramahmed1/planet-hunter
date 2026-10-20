@@ -4,7 +4,8 @@ import { notFound } from "next/navigation";
 import ClassPage from "@/components/classroom/ClassPage";
 import { apiGet, type CandidatesResponse } from "@/lib/api";
 
-export const metadata: Metadata = { title: "Class - Planet Hunter" };
+export const metadata: Metadata = { title: "Class",
+  description: "Your class, its students and assignments." };
 export const dynamic = "force-dynamic";
 
 export default async function ClassRoute({ params }: { params: Promise<{ id: string }> }) {

@@ -21,6 +21,8 @@ test("find the dip: a far guess scores low, the pipeline's period scores 100", a
   await lab.getByRole("button", { name: "Show the answer" }).click();
   await expect(lab.getByTestId("answer")).toContainText(`${c.period_d.toFixed(4)} days`);
   await lab.getByRole("button", { name: "Fold there" }).click();
+  // The readout is the exact pipeline period, not the nearest slider step.
+  await expect(lab.getByTestId("guess-period")).toHaveText(`${c.period_d.toFixed(4)} days`);
   await lab.getByTestId("check-guess").click();
   await expect(lab.getByTestId("score")).toContainText("100 points");
   // Nudging by +1% moves the guess off the answer.

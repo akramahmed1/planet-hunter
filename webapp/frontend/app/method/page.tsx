@@ -1,7 +1,12 @@
+import type { Metadata } from "next";
 import ApiError from "@/components/ApiError";
 import Card from "@/components/ui/Card";
 import { apiGet, type MethodResponse } from "@/lib/api";
 
+export const metadata: Metadata = {
+  title: "Method",
+  description: "Exactly how the pipeline finds, checks and ranks candidate signals, and what it cannot tell you.",
+};
 export const dynamic = "force-dynamic";
 
 export default async function MethodPage() {

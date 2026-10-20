@@ -28,11 +28,13 @@ export default function HuntLab({ lc, pg, answerPeriod, classification }: {
 }) {
   const [xRange, setXRange] = useState<[number, number] | null>(null);
   const [step, setStep] = useState(toStep(3));
+  // "Fold there" sets the pipeline's exact period; the slider only reaches steps about 0.02% apart.
+  const [exactPeriod, setExactPeriod] = useState<number | null>(null);
   const [score, setScore] = useState<Score | null>(null);
   const [revealed, setRevealed] = useState(false);
   const [whole, setWhole] = useState(false);
   const sliderId = useId();
-  const period = toPeriod(step);
+  const period = exactPeriod ?? toPeriod(step);
   const t0 = lc.signal.t0_btjd;
 
   const lcData = useMemo(() => [lc.time_btjd, lc.flux_ppm], [lc]);
@@ -64,7 +66,10 @@ export default function HuntLab({ lc, pg, answerPeriod, classification }: {
     const d = (b - a) * f;
     setXRange([a + d, b + d]);
   };
-  const nudge = (pct: number) => setStep((s) => toStep(Math.min(P_MAX, Math.max(P_MIN, toPeriod(s) * (1 + pct)))));
+  const nudge = (pct: number) => {
+    setExactPeriod(null);
+    setStep(toStep(Math.min(P_MAX, Math.max(P_MIN, period * (1 + pct)))));
+  };
 
   const sourceNote = `${lc.processing} Binning: ${lc.binning.method}. Sectors ${lc.sectors.join(", ")}.`;
 
@@ -101,6 +106,7 @@ export default function HuntLab({ lc, pg, answerPeriod, classification }: {
           Period: <span className="mono" data-testid="guess-period">{period.toFixed(4)} days</span>
         </label>
         <input id={sliderId} type="range" min={0} max={STEPS} value={step} onChange={(e) => {
+          setExactPeriod(null);
           setStep(Number(e.target.value));
           setScore(null);
         }} data-testid="period-slider" className="hunt-slider" />
@@ -130,7 +136,10 @@ export default function HuntLab({ lc, pg, answerPeriod, classification }: {
           {revealed && (
             <p data-testid="answer">
               Our pipeline found <span className="mono">{answerPeriod.toFixed(4)} days</span>.{" "}
-              <button type="button" className="btn btn--sm" onClick={() => setStep(toStep(answerPeriod))}>Fold there</button>
+              <button type="button" className="btn btn--sm" onClick={() => {
+                setStep(toStep(answerPeriod));
+                setExactPeriod(answerPeriod);
+              }}>Fold there</button>
             </p>
           )}
         </div>

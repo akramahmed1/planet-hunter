@@ -119,5 +119,5 @@ def vet(t, f, period, t0, duration, depth_ppm, star_radius_rsun=None) -> list[di
         transit_shape(t, f, period, t0, duration),
         implied_size(depth_ppm, star_radius_rsun),
         {"id": "tls", "name": "Transit Least Squares", "status": "unknown", "value": None,
-         "explanation": "Not run: the optional TLS check is not installed on this server."},
+         "explanation": "Not part of this scan."},
     ]

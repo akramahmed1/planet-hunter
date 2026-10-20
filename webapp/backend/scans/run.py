@@ -114,7 +114,8 @@ def scan(tic_id: int, params: dict, progress=lambda msg: None, catalogs=None) ->
                                              "empty bins dropped", "bin_minutes": 10, "n_bins": int(len(bt))},
                        "time_btjd": [round(float(x), 5) for x in bt],
                        "flux_ppm": [int(round((float(x) - 1) * 1e6)) for x in bf]},
-        "periodogram": {"method": f"BLS power, {len(periods)} periods from {periods[0]} to {periods[-1]} days, "
+        "periodogram": {"method": f"BLS power, {len(periods)} periods from {periods[0]:.3f} to {periods[-1]:.3f} days "
+                                  f"(spaced for a {float(np.ptp(t)):.0f}-day baseline), then a fine pass around the peak; "
                                   "kept as the peak of each of 1500 equal chunks",
                         "period_d": [round(float(x), 5) for x in pp], "power": [round(float(x), 7) for x in pw]},
     }

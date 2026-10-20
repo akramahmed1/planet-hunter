@@ -51,7 +51,7 @@ def resolve(target: str) -> tuple[int, str | None]:
         if not hit.payload:
             raise BadTarget(f"TOI {pfx} is not in the TESS Objects of Interest list")
         return int(hit.payload[0]["tid"]), f"TOI {pfx}"
-    raise BadTarget("enter a TIC ID (like TIC 150428135) or a TOI number (like TOI 700)")
+    raise BadTarget("Enter a TIC ID (like TIC 150428135) or a TOI number (like TOI 700).")
 
 
 class LiveCatalogs:

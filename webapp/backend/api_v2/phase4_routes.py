@@ -23,6 +23,10 @@ def _results() -> list[dict]:
     return json.loads(RESULTS.read_text())["candidates"]
 
 
+def _run() -> dict:
+    return json.loads(RESULTS.read_text())["run"]
+
+
 def _system(systems: dict, tic: str) -> dict:
     """The archive's planets for this TIC ID (empty if it has none)."""
     return systems["systems"].get(tic, {"hostname": None, "circumbinary": False, "planets": []})
@@ -92,7 +96,8 @@ def target_system(response: Response, slug: str = Path(..., pattern=r"^[a-z0-9-]
             s.SourceRef(**physics.EQ_TEMP_SOURCE), "estimate",
             "Estimated: assumes no reflected light and heat spread evenly around the planet."),
         disc_year=None,
-        note=f"Classification: {cand['classification_label']}. A candidate signal, never a discovery.",
+        note=(f"Our signal: {cand['classification_label']}. A candidate signal, never a discovery. "
+              f"From the batch scan: {_run()['sectors_per_target']} sectors, {_run()['run_date']}."),
     ))
     planets.sort(key=lambda p: p.orbit_au.value if p.orbit_au else math.inf)
 

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import UnitsProvider from "@/components/UnitsProvider";
+import CosmosLoader from "@/components/shell/CosmosLoader";
 import Footer from "@/components/shell/Footer";
 import TabBar from "@/components/shell/TabBar";
 import TopBar from "@/components/shell/TopBar";
@@ -28,9 +29,14 @@ const mono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Planet Hunter - Candidate exoplanet signals from public TESS data",
+  title: {
+    default: "Planet Hunter - Candidate exoplanet signals from public TESS data",
+    template: "%s - Planet Hunter",
+  },
   description:
     "An open build-in-public demo that hunts repeating dips in NASA TESS light curves. Candidate signals, never discoveries.",
+  openGraph: { siteName: "Planet Hunter", type: "website" },
+  twitter: { card: "summary_large_image" },
   // Which commit this build came from (set by Railway); lets staging checks confirm the live build.
   other: { "ph-build": process.env.NEXT_PUBLIC_BUILD_SHA || "local" },
 };
@@ -49,6 +55,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <a href="#main" className="skip-link">
           Skip to content
         </a>
+        <CosmosLoader />
         <UnitsProvider>
           <TopBar />
           <main id="main" className="page" tabIndex={-1}>

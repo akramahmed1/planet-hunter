@@ -24,7 +24,7 @@ export default function ApodImage({ src, alt }: { src: string; alt: string }) {
   const [failed, setFailed] = useState(false);
   useEffect(() => setShow(true), []);
   if (!isApodImage(src)) {
-    return <p className="tile-sub">Image not shown: NASA's API returned a link that is not an APOD picture.</p>;
+    return null; // the backend rejects these; never show a developer message
   }
   if (!show || failed) return null;
   return <img className="tile-img" src={src} alt={alt} loading="lazy" onError={() => setFailed(true)} />;

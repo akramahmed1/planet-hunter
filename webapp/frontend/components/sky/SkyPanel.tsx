@@ -75,7 +75,7 @@ export default function SkyPanel({ name, ra, dec, source }: { name: string; ra: 
       )}
       {state !== "idle" && state !== "failed" && (
         <>
-          <div ref={box} className="sky-view" data-testid="sky-view" aria-label={`Sky image centered on ${name}`}
+          <div ref={box} className="sky-view" data-testid="sky-view" data-heavy-gl="" aria-label={`Sky image centered on ${name}`}
             role="img" />
           <p className="muted small">
             Sky image: Digitized Sky Survey, STScI/NASA, colored and made into HiPS by CDS. Viewer: Aladin Lite, CDS

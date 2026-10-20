@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import ExplainBox from "@/components/explain/ExplainBox";
 import HuntLab from "@/components/hunt/HuntLab";
+import RunLabel from "@/components/RunLabel";
 import Badge from "@/components/ui/Badge";
 import {
   apiV2Get,
@@ -63,6 +64,9 @@ export default function ScanResult({ id, initial }: { id: number; initial: ScanS
         <>
           <section className="card hunt-card" aria-labelledby="sig-h" data-testid="scan-signal">
             <h2 id="sig-h" className="card-title">The strongest signal</h2>
+            {scan.sectors && scan.sectors.length > 0 && (
+              <p><RunLabel kind="scan" sectors={scan.sectors.length} date={scan.finished_at?.slice(0, 10)} /></p>
+            )}
             <dl className="kv">
               <dt>Period</dt><dd className="num">{sig.period_d.toFixed(4)} days</dd>
               <dt>Depth</dt><dd className="num">{Math.round(sig.depth_ppm).toLocaleString("en-US")} ppm</dd>

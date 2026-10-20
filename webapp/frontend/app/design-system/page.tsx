@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import DesignSystemDemo from "@/components/DesignSystemDemo";
 
 export const metadata: Metadata = {
-  title: "Design system - Planet Hunter",
+  title: "Design system",
+  description: "Colors, type and components used across Planet Hunter.",
   robots: { index: false, follow: false },
 };
 

@@ -5,7 +5,8 @@ import SpacecraftCards from "@/components/missions/SpacecraftCards";
 import ErrorState from "@/components/ui/ErrorState";
 import { apiV2Get, type MissionsResponse } from "@/lib/api-v2";
 
-export const metadata: Metadata = { title: "Missions - Planet Hunter" };
+export const metadata: Metadata = { title: "Missions",
+  description: "Where the ISS, TESS, JWST and the Voyagers are right now." };
 export const dynamic = "force-dynamic";
 
 export default async function MissionsPage() {

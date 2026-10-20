@@ -16,8 +16,8 @@ test("every live value opens its source on tap", async ({ page }) => {
     await expect(tile).toBeVisible(); // tiles stream in after the loading placeholders
     const button = tile.getByRole("button", { name: /show source/ });
     if ((await button.count()) === 0) {
-      // A source that is down must say so explicitly instead of showing nothing.
-      await expect(tile.getByText("Unavailable", { exact: true })).toBeVisible();
+      // A source that is down must say so instead of showing nothing: a tag, or for space weather a quiet line.
+      await expect(tile.getByText("Unavailable", { exact: true }).or(tile.getByTestId("weather-quiet"))).toBeVisible();
       continue;
     }
     await button.click();

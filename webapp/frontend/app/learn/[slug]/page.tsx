@@ -16,7 +16,8 @@ async function getLesson(slug: string) {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const res = await getLesson((await params).slug);
-  return { title: `${res?.ok ? res.data.title : "Lesson"} - Planet Hunter` };
+  const title = res?.ok ? res.data.title : "Lesson";
+  return { title, description: `Lesson: ${title}. A short read with a quiz.` };
 }
 
 export default async function LessonPage({ params, searchParams }: Props) {
