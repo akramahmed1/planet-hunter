@@ -5,8 +5,7 @@ import { useUnits } from "@/components/UnitsProvider";
 import type { MissionsResponse, SourcedFact } from "@/lib/api-v2";
 import { formatDistance, formatLightTime } from "@/lib/units";
 
-function Fact({ label, fact }: { label: string; fact: SourcedFact | null }) {
-  if (!fact) return <span className="muted">Not listed by the source</span>;
+function Fact({ label, fact }: { label: string; fact: SourcedFact }) {
   return (
     <SourceButton label={label} source={fact.source} kind="measured" fetchedAt={fact.fetched_at}
       note={`Source wording: "${fact.quote}"`}>
@@ -45,10 +44,12 @@ export default function SpacecraftCards({ data }: { data: MissionsResponse }) {
                 </SourceButton>
               ) : <span className="muted">Unavailable</span>}
             </dd>
-            <dt>Launched</dt>
-            <dd><Fact label={`${c.name} launch`} fact={c.launch} /></dd>
-            <dt>Status</dt>
-            <dd><Fact label={`${c.name} status`} fact={c.status} /></dd>
+            {c.launch && (
+              <><dt>Launched</dt><dd><Fact label={`${c.name} launch`} fact={c.launch} /></dd></>
+            )}
+            {c.status && (
+              <><dt>Status</dt><dd><Fact label={`${c.name} status`} fact={c.status} /></dd></>
+            )}
           </dl>
           {c.note && <p className="muted small">{c.note}</p>}
         </li>

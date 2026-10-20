@@ -48,6 +48,14 @@ export default async function LiveTiles() {
           {apod.data.media_type === "image" && apod.data.url && (
             <ApodImage src={apod.data.url} alt={apod.data.title} />
           )}
+          {apod.data.media_type !== "image" && (
+            <p className="tile-sub" data-testid="apod-video">
+              Today's picture is a video.{" "}
+              <a href="https://apod.nasa.gov/apod/astropix.html" target="_blank" rel="noopener noreferrer">
+                Watch it on apod.nasa.gov
+              </a>
+            </p>
+          )}
           <SourceButton label="Picture of the day" source={apod.data.source} kind="measured"
             fetchedAt={apod.data.fetched_at} stale={apod.data.stale}>
             <span className="tile-value tile-value--text">{apod.data.title}</span>
@@ -102,8 +110,14 @@ export default async function LiveTiles() {
           <Meta fetchedAt={weather.data.fetched_at} stale={weather.data.stale} />
         </article>
       ) : (
-        <Unavailable id="tile-weather" title="Space weather"
-          message={weather.unavailable?.message ?? "Space weather notices are unavailable right now."} />
+        <article className="tile" aria-labelledby="tile-weather">
+          <p className="eyebrow" id="tile-weather">
+            Space weather
+          </p>
+          <p className="tile-sub" data-testid="weather-quiet">
+            NASA's space weather notices can't be shown right now. They return on their own.
+          </p>
+        </article>
       )}
     </div>
   );

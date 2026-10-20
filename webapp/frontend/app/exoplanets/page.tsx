@@ -27,7 +27,7 @@ export default async function ExoplanetsPage() {
                 <Link href={`/exoplanets/${t.slug}`} className="cand-card-title">
                   {t.target}
                 </Link>
-                <ClassificationBadge classification={t.classification as Classification} label={t.classification_label} />
+                <ClassificationBadge classification={t.classification as Classification} system />
               </div>
               <p className="muted">
                 {t.confirmed_planets === 0

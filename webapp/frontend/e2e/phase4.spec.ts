@@ -89,7 +89,8 @@ test("the missions page shows the live ISS map and four spacecraft", async ({ pa
     await expect(card.getByTestId("light-time")).not.toBeEmpty();
   }
   await expect(page.getByTestId("craft-voyager1")).toContainText("September 5, 1977");
-  await expect(page.getByTestId("craft-jwst")).toContainText("Not listed by the source");
+  // A fact the source does not list is left out, not shown as a gap.
+  await expect(page.getByTestId("craft-jwst")).not.toContainText("Not listed");
   await expect(page.getByText("OpenStreetMap")).toBeVisible();
   expect(csp).toEqual([]);
 });
@@ -128,3 +129,19 @@ test("every page sends a Content Security Policy that names only the needed host
   expect(csp).not.toContain("*;");
   expect(csp).not.toMatch(/(^|\s)\*(\s|;|$)/);
 });
+
+// Aladin Lite fetches its own data: URLs; connect-src must allow them (a violation left the viewer blank).
+for (const path of ["/exoplanets/toi-700", "/exoplanets/toi-270", "/candidates/toi-270"]) {
+  test(`${path} allows data: fetches for the sky viewer and logs no CSP violation`, async ({ page }) => {
+    await stubExternals(page);
+    const violations = collectCspViolations(page);
+    const res = await page.goto(path);
+    expect(res?.headers()["content-security-policy"]).toMatch(/connect-src [^;]*\bdata:/);
+    const ok = await page.evaluate(async () => (await fetch("data:text/plain;base64,aGk=")).text());
+    expect(ok).toBe("hi");
+    const sky = page.getByTestId("sky-show");
+    if (await sky.count()) await sky.click();
+    await page.waitForTimeout(300);
+    expect(violations).toEqual([]);
+  });
+}

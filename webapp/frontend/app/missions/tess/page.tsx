@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import RunLabel from "@/components/RunLabel";
 import TessExplainer from "@/components/tess/TessExplainer";
 import ErrorState from "@/components/ui/ErrorState";
 import { apiGet, type OverviewResponse } from "@/lib/api";
@@ -24,7 +25,10 @@ export default async function TessPage() {
       <p className="eyebrow">The telescope behind our data</p>
       <h1>How TESS finds planets</h1>
       {facts.ok && moon && v ? (
+        <>
+        <p><RunLabel kind="validation" sectors={v.sectors} /></p>
         <TessExplainer facts={facts.data.facts} moonKm={moon.value * 1e6} depthPpm={v.depth_ppm} target={v.target} />
+        </>
       ) : (
         <ErrorState title="This page's facts could not be loaded."
           detail={[facts, bodies, overview].map((r) => (r.ok ? null : r.error)).filter(Boolean).join(", ")} />

@@ -2,7 +2,7 @@
 
 "standard" matches candidate_scan.py; "validation" matches validate_toi700.py.
 """
-PIPELINE_VERSION = "2.0.0"
+PIPELINE_VERSION = "2.1.0"
 
 PRESETS = {
     "standard": {"period_min": 0.5, "period_max": 30.0, "n_periods": 12000, "durations": [0.05, 0.4, 8],

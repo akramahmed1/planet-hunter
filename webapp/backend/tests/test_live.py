@@ -196,7 +196,7 @@ def test_iss(client):
 
 def test_apod(client):
     body = client.get("/api/v2/apod").json()
-    raw = fixture_json("nasa_apod")
+    raw = fixture_json("nasa_apod_image")
     assert body["title"] == raw["title"] and body["date"] == raw["date"]
     assert body["copyright"] is None
 
@@ -372,6 +372,68 @@ def test_refresh_job(frozen):
     assert refresh.main() == 0  # all but DONKI succeed against the samples
     assert cache._read("exo:count").payload == fixture_json("exoplanet_archive_count")[0]["n"]
     assert cache._read(f"donki:{SAMPLE_TIME.date()}") is None
+
+
+def test_apod_image_from_another_host_is_a_failed_fetch(frozen):
+    # The real Phase 2 sample: the API sent NASA's logo as the picture.
+    http.set_transport(httpx.MockTransport(lambda req: httpx.Response(200, json=fixture_json("nasa_apod"))))
+    with pytest.raises(http.FetchError):
+        sources.apod()
+
+
+def test_apod_video_is_kept_as_a_video(frozen):
+    body = {**fixture_json("nasa_apod_image"), "media_type": "video", "url": "https://www.youtube.com/embed/x"}
+    http.set_transport(httpx.MockTransport(lambda req: httpx.Response(200, json=body)))
+    assert sources.apod()["media_type"] == "video"
+
+
+def test_apod_and_space_weather_serve_the_last_good_copy_on_a_new_day(client, frozen):
+    assert client.get("/api/v2/apod").status_code == 200
+    http.set_transport(httpx.MockTransport(lambda req: httpx.Response(503)))
+    frozen.t = SAMPLE_TIME + timedelta(days=1)
+    r = client.get("/api/v2/apod")
+    assert r.status_code == 200 and r.json()["stale"] is True
+
+
+def test_last_good_copy_for_space_weather(frozen):
+    ok = [{"messageType": "FLR", "messageIssueTime": "2026-10-16T10:00Z", "messageURL": "u"}]
+    http.set_transport(httpx.MockTransport(lambda req: httpx.Response(200, json=ok)))
+    today = SAMPLE_TIME.date()
+    first = cache.cached(f"donki:{today}", timedelta(hours=3), lambda: sources.donki(today), sources.SRC_DONKI,
+                         fallback_key="donki:last")
+    assert first.stale is False
+    http.set_transport(httpx.MockTransport(lambda req: httpx.Response(503)))
+    tomorrow = today + timedelta(days=1)
+    frozen.t = SAMPLE_TIME + timedelta(days=1)
+    again = cache.cached(f"donki:{tomorrow}", timedelta(hours=3), lambda: sources.donki(tomorrow), sources.SRC_DONKI,
+                         fallback_key="donki:last")
+    assert again.stale is True and again.payload == first.payload
+
+
+def test_concurrent_misses_fetch_once(frozen):
+    import threading
+    import time
+    calls = []
+
+    def slow():
+        calls.append(1)
+        time.sleep(0.2)
+        return {"v": 1}
+
+    out = []
+    threads = [threading.Thread(target=lambda: out.append(cache.cached("k:flight", timedelta(hours=1), slow, {})))
+               for _ in range(5)]
+    [t.start() for t in threads]
+    [t.join() for t in threads]
+    assert len(calls) == 1 and len(out) == 5 and all(not o.stale for o in out)
+
+
+def test_refresh_prewarms_tomorrows_positions_after_18_utc(frozen):
+    keys = [j[0] for j in refresh.jobs()]
+    assert not any("2026-10-18" in k for k in keys)
+    frozen.t = SAMPLE_TIME.replace(hour=18, minute=5)
+    keys = [j[0] for j in refresh.jobs()]
+    assert "horizons:vectors:earth:2026-10-18" in keys and "horizons:vectors:earth:2026-10-17" in keys
 
 
 # ---------- the Postgres-backed cache ----------

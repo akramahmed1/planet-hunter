@@ -37,17 +37,46 @@ def bls_snr(time, flux, period, duration, t0) -> float:
     return float(depth / noise * np.sqrt(in_tr.sum()))
 
 
+# A period that is off by dP drifts a transit by (baseline / P) * dP over the whole light curve. To keep
+# that drift under shortest_duration / PERIOD_OVERSAMPLE, the grid step must be a fixed fraction of the
+# period (a geometric grid), and finer the longer the baseline. A fixed linear grid of 12,000 periods
+# (0.0025 d apart) missed the true period of a star observed in far-apart sectors.
+PERIOD_OVERSAMPLE = 3.0
+MAX_PERIODS = 250_000
+REFINE_POINTS = 301
+
+
+def period_grid(time, period_min, period_max, shortest_duration, n_min=0):
+    """Geometric period grid fine enough for the light curve's baseline (at least n_min periods)."""
+    baseline = float(np.ptp(time))
+    step = shortest_duration / (PERIOD_OVERSAMPLE * max(baseline, 1e-6))  # relative step, dP / P
+    n = int(np.ceil(np.log(period_max / period_min) / np.log1p(step))) + 1
+    return np.geomspace(period_min, period_max, int(min(MAX_PERIODS, max(n, n_min))))
+
+
 def bls_search(time, flux, period_min=PERIOD_MIN, period_max=PERIOD_MAX, n_periods=N_PERIODS, durations=None):
-    """Box Least Squares over a linear period grid. Returns (periods, power, best Signal)."""
+    """Box Least Squares over a period grid sized to the baseline, then a fine pass around the best peak.
+
+    Returns (periods, power, best Signal); periods and power are the coarse grid, for the periodogram chart.
+    """
     from astropy.timeseries import BoxLeastSquares
 
+    time = np.asarray(time)
+    durs = np.asarray(DURATIONS if durations is None else durations)
     bls = BoxLeastSquares(time, flux)
-    periods = np.linspace(period_min, period_max, n_periods)
-    res = bls.power(periods, DURATIONS if durations is None else np.asarray(durations), oversample=10)
+    periods = period_grid(time, period_min, period_max, float(durs.min()), n_periods)
+    res = bls.power(periods, durs, oversample=10)
     best = int(np.argmax(res.power))
-    p, d, t0 = float(res.period[best]), float(res.duration[best]), float(res.transit_time[best])
-    sig = Signal(period_d=p, duration_d=d, t0_btjd=t0, depth_ppm=float(res.depth[best]) * 1e6,
-                 power=float(res.power[best]), snr=bls_snr(time, flux, p, d, t0))
+    # Fine pass: the coarse step is up to shortest_duration / 3 of drift, so re-search +/- 2 steps around the peak.
+    step = float(np.log(periods[-1] / periods[0]) / max(len(periods) - 1, 1))
+    lo, hi = periods[best] * np.exp(-2 * step), periods[best] * np.exp(2 * step)
+    fine = bls.power(np.linspace(max(lo, period_min * 0.5), hi, REFINE_POINTS), durs, oversample=10)
+    fb = int(np.argmax(fine.power))
+    res_best = fine if fine.power[fb] >= res.power[best] else res
+    k = fb if res_best is fine else best
+    p, d, t0 = float(res_best.period[k]), float(res_best.duration[k]), float(res_best.transit_time[k])
+    sig = Signal(period_d=p, duration_d=d, t0_btjd=t0, depth_ppm=float(res_best.depth[k]) * 1e6,
+                 power=float(res_best.power[k]), snr=bls_snr(time, flux, p, d, t0))
     return np.asarray(res.period), np.asarray(res.power), sig
 
 

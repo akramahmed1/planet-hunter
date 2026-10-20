@@ -238,7 +238,8 @@ def get_iss(response: Response):
 def get_apod(response: Response):
     """NASA's Astronomy Picture of the Day. `copyright` names the owner when the image isn't NASA's."""
     try:
-        hit = cache.cached(f"apod:{clock.today()}", timedelta(hours=3), sources.apod, sources.SRC_APOD)
+        hit = cache.cached(f"apod:{clock.today()}", timedelta(hours=3), sources.apod, sources.SRC_APOD,
+                           fallback_key="apod:last")
     except cache.Unavailable:
         return _unavailable("NASA's picture of the day is unavailable right now.", sources.SRC_APOD)
     p = hit.payload
@@ -254,7 +255,8 @@ def get_space_weather(response: Response):
     """Space weather notifications from NASA DONKI for the last 7 days."""
     today = clock.today()
     try:
-        hit = cache.cached(f"donki:{today}", timedelta(hours=3), lambda: sources.donki(today), sources.SRC_DONKI)
+        hit = cache.cached(f"donki:{today}", timedelta(hours=3), lambda: sources.donki(today), sources.SRC_DONKI,
+                           fallback_key="donki:last")
     except cache.Unavailable:
         return _unavailable("NASA's space weather service (DONKI) is temporarily unavailable.", sources.SRC_DONKI)
     _cache_header(response, 900)
@@ -293,7 +295,7 @@ def exoplanets_latest(response: Response):
     try:
         count = cache.cached("exo:count", timedelta(hours=12), sources.exoplanet_count, sources.SRC_EXO)
         latest = cache.cached(f"exo:latest:{today}", timedelta(hours=12), lambda: sources.exoplanets_latest(today),
-                              sources.SRC_EXO)
+                              sources.SRC_EXO, fallback_key="exo:latest:last")
     except cache.Unavailable:
         return _unavailable("The NASA Exoplanet Archive is unavailable right now.", sources.SRC_EXO)
     since = (today - timedelta(days=60)).strftime("%Y-%m")

@@ -4,7 +4,8 @@ import type { NextConfig } from "next";
 //   API backend          NEXT_PUBLIC_API_BASE (fetches from the browser)
 //   apod.nasa.gov        picture of the day
 //   tile.openstreetmap.org  ISS map tiles
-//   *.cds.unistra.fr, *.u-strasbg.fr  Aladin Lite script and its sky image tiles (loaded on request)
+//   *.cds.unistra.fr, *.u-strasbg.fr  Aladin Lite script and its sky image tiles (loaded on request);
+//                        Aladin also fetches its own data: URLs (fonts, shaders), hence data: in connect-src
 // Next.js injects inline scripts, so 'unsafe-inline' stays until Phase 10 adds nonces;
 // Aladin Lite needs WebAssembly ('wasm-unsafe-eval').
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE || "http://127.0.0.1:8000";
@@ -17,7 +18,7 @@ export const CSP = [
   `script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'${dev ? " 'unsafe-eval'" : ""} https://aladin.cds.unistra.fr`,
   "style-src 'self' 'unsafe-inline' https://aladin.cds.unistra.fr",
   `img-src 'self' data: blob: ${API_ORIGIN} https://apod.nasa.gov https://tile.openstreetmap.org ${CDS}`,
-  `connect-src 'self' ${API_ORIGIN} ${CDS}`,
+  `connect-src 'self' data: blob: ${API_ORIGIN} ${CDS}`,
   "font-src 'self' data:",
   "worker-src 'self' blob:",
   "object-src 'none'",

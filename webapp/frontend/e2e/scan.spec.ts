@@ -48,11 +48,18 @@ test("a bad star name is explained, not queued", async ({ page }) => {
   await page.goto("/scan");
   await page.getByTestId("scan-target").fill("Proxima Centauri");
   await page.getByTestId("scan-submit").click();
-  await expect(page.getByTestId("scan-error")).toContainText("enter a TIC ID");
+  await expect(page.getByTestId("scan-error")).toContainText("Enter a TIC ID");
   await expect(page).toHaveURL(/\/scan$/);
 });
 
 test("an unknown scan is a 404", async ({ page }) => {
   const res = await page.goto("/scan/999999");
   expect(res?.status()).toBe(404);
+});
+
+test("submitting nothing asks for a star", async ({ page }) => {
+  await page.goto("/scan");
+  await page.getByTestId("scan-submit").click();
+  await expect(page.getByTestId("scan-error")).toHaveText("Enter a star to scan.");
+  await expect(page).toHaveURL(/\/scan$/);
 });

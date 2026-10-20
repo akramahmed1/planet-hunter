@@ -31,7 +31,8 @@ def fixture_for(request: httpx.Request) -> str | None:
     if host == "api.wheretheiss.at":
         return "iss_ground_track_p4" if "/positions" in url else "iss_wheretheiss"
     if host == "api.nasa.gov" and "/planetary/apod" in url:
-        return "nasa_apod"
+        # nasa_apod is the real sample, whose link was NASA's logo (rejected); this copy points at apod.nasa.gov.
+        return "nasa_apod_image"
     if host == "api.nasa.gov" and "/DONKI/" in url:
         return "nasa_donki_notifications"
     if host == "exoplanetarchive.ipac.caltech.edu":
