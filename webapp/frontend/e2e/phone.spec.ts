@@ -16,7 +16,9 @@ for (const size of SIZES) {
       test(`${route} fits, clears the tab bar and has big enough tap targets`, async ({ page }, info) => {
         test.skip(info.project.name !== "mobile", "phone sizes only");
         await page.goto(route);
-        await page.waitForLoadState("networkidle");
+        // Not "networkidle": the home page's ISS tile polls, so the network is never idle there.
+        await page.locator("h1").first().waitFor();
+        await page.waitForTimeout(500);
 
         const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
         expect(overflow, `horizontal overflow on ${route}`).toBeLessThanOrEqual(0);
