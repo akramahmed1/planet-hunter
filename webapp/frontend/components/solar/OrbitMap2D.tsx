@@ -26,7 +26,8 @@ export default function OrbitMap2D({
   // Screen y grows downward; flip so the map matches the usual ecliptic view.
   const xy = (p: readonly number[]) => [p[0], -p[1]] as const;
   const at = Object.fromEntries(model.bodies.map((b) => [b.id, xy(b.p)])) as Record<SceneBodyId, readonly [number, number]>;
-  const hitR = E * 0.035;
+  // A 24 px or larger tap target on a phone (the map is about 330 px wide); planets sit close together, so no larger.
+  const hitR = E * 0.08;
   const font = E * 0.042;
 
   function key(e: KeyboardEvent, id: SceneBodyId) {

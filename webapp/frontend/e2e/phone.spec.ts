@@ -44,7 +44,9 @@ for (const size of SIZES) {
             }
             if (r.width === 0 || r.height === 0 || cs.visibility === "hidden" || el.closest("[hidden]")) continue;
             if (el.matches(".skip-link, [tabindex='-1']")) continue;
-            if (r.height < 43.5 || r.width < 43.5) out.push(`${el.tagName.toLowerCase()} "${(el.innerText || el.getAttribute("aria-label") || "").slice(0, 30)}" ${Math.round(r.width)}x${Math.round(r.height)}`);
+            // Planets on the top-down maps sit close together, so their targets are 24 px (WCAG 2.2 AA minimum).
+            const min = el.closest(".orbit-map") ? 23.5 : 43.5;
+            if (r.height < min || r.width < min) out.push(`${el.tagName.toLowerCase()} "${(el.innerText || el.getAttribute("aria-label") || "").slice(0, 30)}" ${Math.round(r.width)}x${Math.round(r.height)}`);
           }
           return out;
         }, TAP);
