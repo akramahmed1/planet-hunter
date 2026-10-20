@@ -6,7 +6,8 @@ import ErrorState from "@/components/ui/ErrorState";
 import { apiGet, type OverviewResponse } from "@/lib/api";
 import { apiV2Get, type BodiesResponse, type TessFacts } from "@/lib/api-v2";
 
-export const metadata: Metadata = { title: "How TESS works - Planet Hunter" };
+export const metadata: Metadata = { title: "How TESS works",
+  description: "How NASA's TESS telescope finds planets by watching stars dim." };
 export const dynamic = "force-dynamic";
 
 export default async function TessPage() {

@@ -3,7 +3,8 @@ import LessonList from "@/components/learn/LessonList";
 import ErrorState from "@/components/ui/ErrorState";
 import { apiV2Get, type LessonsResponse } from "@/lib/api-v2";
 
-export const metadata: Metadata = { title: "Learn - Planet Hunter" };
+export const metadata: Metadata = { title: "Learn",
+  description: "Short lessons on how astronomers find planets, each with a quiz." };
 export const dynamic = "force-dynamic";
 
 export default async function LearnPage() {

@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import HuntChallenge from "@/components/classroom/HuntChallenge";
 
-export const metadata: Metadata = { title: "Hunt challenge - Planet Hunter" };
+export const metadata: Metadata = { title: "Hunt challenge",
+  description: "Find the repeating dip in a star's light curve for your class." };
 
 export default async function HuntRoute({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

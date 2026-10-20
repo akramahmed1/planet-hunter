@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import ApiError from "@/components/ApiError";
@@ -17,6 +18,14 @@ import {
   type HealthResponse,
   type OverviewResponse,
 } from "@/lib/api";
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const name = (await params).slug.toUpperCase().replace("-", " ");
+  return {
+    title: `${name} candidate signal`,
+    description: `${name}: the strongest repeating dip our pipeline found, with its checks. A candidate signal, never a discovery.`,
+  };
+}
 
 export const dynamic = "force-dynamic";
 

@@ -1,7 +1,7 @@
 import { apiV2Get, type Apod, type ExoplanetsLatest, type Iss, type SpaceWeather } from "@/lib/api-v2";
 import ApodImage from "./ApodImage";
 import IssTile from "./IssTile";
-import { formatUtc } from "@/lib/time";
+import LocalTime from "@/components/LocalTime";
 import SourceButton from "./SourceButton";
 
 function Unavailable({ id, title, message }: { id: string; title: string; message: string }) {
@@ -21,7 +21,7 @@ function Unavailable({ id, title, message }: { id: string; title: string; messag
 function Meta({ fetchedAt, stale }: { fetchedAt: string; stale: boolean }) {
   return (
     <p className="tile-meta">
-      Updated <time dateTime={fetchedAt}>{formatUtc(fetchedAt)}</time>
+      Updated <LocalTime iso={fetchedAt} />
       {stale && <span className="stale-tag">May be out of date</span>}
     </p>
   );

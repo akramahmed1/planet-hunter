@@ -12,7 +12,8 @@ import {
   type Position,
   type PositionsResponse,
 } from "@/lib/api-v2";
-import { BODY_NAMES, SCENE_BODIES, type Scale, type SceneBodyId } from "@/lib/solar";
+import { BODY_NAMES, clampDate, SCENE_BODIES, type Scale, type SceneBodyId } from "@/lib/solar";
+import { localDate } from "@/lib/time";
 import { buildTour, TOUR_ORDER } from "@/lib/tour";
 import { BodySheet, DeepSpaceSheet } from "./BodySheet";
 import { buildModel, type Mode, type Zoom } from "./model";
@@ -48,8 +49,16 @@ export default function SolarSystem({
   initial: PositionsResponse;
   orbits: OrbitsResponse;
 }) {
-  const today = initial.date;
-  const [date, setDate] = useState(today);
+  // The server's date is UTC; the viewer's own calendar date (kept inside the supported range) is "today" to them.
+  const [today, setToday] = useState(initial.date);
+  const [date, setDate] = useState(initial.date);
+  useEffect(() => {
+    const local = clampDate(localDate(), initial.valid_from, initial.valid_to);
+    if (local !== initial.date) {
+      setToday(local);
+      setDate(local);
+    }
+  }, [initial.date, initial.valid_from, initial.valid_to]);
   const [data, setData] = useState<PositionsResponse>(initial);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [scale, setScale] = useState<Scale>("true");
@@ -116,7 +125,7 @@ export default function SolarSystem({
 
   return (
     <div className="solar">
-      <div className="solar-viewport">
+      <div className="solar-viewport" data-heavy-gl={show3d ? "" : undefined}>
         {/* The map is the first paint; the 3D view covers it once three.js has drawn a frame. */}
         {!(show3d && sceneReady) && <OrbitMap2D {...viewProps} />}
         {show3d && (

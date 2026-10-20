@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import ClassroomHome from "@/components/classroom/ClassroomHome";
 
-export const metadata: Metadata = { title: "Classroom - Planet Hunter" };
+export const metadata: Metadata = { title: "Classroom",
+  description: "Teachers set planet-hunting assignments and students join with a class code." };
 
 export default function ClassroomPage() {
   return (

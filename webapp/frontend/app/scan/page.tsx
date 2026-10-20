@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import ScanForm from "@/components/scan/ScanForm";
 
-export const metadata: Metadata = { title: "Scan a star - Planet Hunter" };
+export const metadata: Metadata = { title: "Scan a star",
+  description: "Search any TESS star for repeating dips. Results are candidate signals, never discoveries." };
 
 export default function ScanPage() {
   return (

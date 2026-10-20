@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "Privacy (draft) - Planet Hunter" };
+export const metadata: Metadata = { title: "Privacy (draft)",
+  description: "What Planet Hunter collects, why, and how a child's data is handled." };
 
 // Mirrors docs/PRIVACY_NOTICE_DRAFT.md. Draft until an attorney reviews it (ADR 0005).
 export default function PrivacyPage() {

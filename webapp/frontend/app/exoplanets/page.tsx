@@ -6,7 +6,8 @@ import type { Classification } from "@/lib/api";
 import { apiV2Get, type TargetsResponse } from "@/lib/api-v2";
 import { parsecsToLightYears } from "@/lib/sky";
 
-export const metadata: Metadata = { title: "Exoplanets - Planet Hunter" };
+export const metadata: Metadata = { title: "Exoplanets",
+  description: "The eight stars our pipeline searched, their confirmed planets and habitable zones." };
 export const dynamic = "force-dynamic";
 
 export default async function ExoplanetsPage() {
