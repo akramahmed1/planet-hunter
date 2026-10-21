@@ -74,7 +74,7 @@ def _limit(eng, key: str, limit: int, minutes: int, message: str) -> None:
 # ---------- sign in and out ----------
 
 @router.post("/auth/teacher/signup", response_model=s.Ok, status_code=201)
-def teacher_signup(body: s.TeacherSignup, request: Request, response: Response) -> s.Ok:
+def teacher_signup(body: s.TeacherSignup, request: Request, response: Response, tasks: BackgroundTasks) -> s.Ok:
     """Create a teacher account and either a new organization or a place in an existing one."""
     auth.check_csrf(request)
     eng = auth.engine()
@@ -94,6 +94,9 @@ def teacher_signup(body: s.TeacherSignup, request: Request, response: Response) 
     with _errors():
         uid = data.create_teacher(eng, email, body.password, body.display_name.strip(), body.org_name, body.org_code)
     auth.start_session(eng, request, response, user_id=uid)
+    made = data.start_email_verification(eng, uid)
+    if made is not None:
+        tasks.add_task(_send_verify_email, made[1], made[0], made[2])
     return s.Ok(ok=True)
 
 
@@ -133,6 +136,50 @@ def _send_reset_email(email: str, token: str, name: str) -> None:
                 f"To choose a new one, open this link within {data.RESET_MINUTES} minutes:\n\n{link}\n\n"
                 "The link works once. If you did not ask for this, ignore this email: your password has not "
                 "changed.\n")
+
+
+def _send_verify_email(email: str, token: str, name: str) -> None:
+    base = _reset_base()
+    if base is None:
+        log.warning("verification email not sent: APP_BASE_URL is not set")
+        return
+    link = f"{base}/classroom/verify#token={token}"
+    mailer.send(email, "Confirm your Planet Hunter email",
+                f"Hello {name},\n\nPlease confirm that this is your email address for your Planet Hunter teacher "
+                f"account. Open this link within {data.VERIFY_HOURS} hours:\n\n{link}\n\nThe link works once. If "
+                "you did not make an account, ignore this email.\n")
+
+
+@router.post("/auth/teacher/verify", response_model=s.Ok)
+def teacher_verify(body: s.VerifyEmail, request: Request, response: Response) -> s.Ok:
+    """Confirm an address with the emailed token. No sign-in needed: the token is the proof."""
+    auth.check_csrf(request)
+    eng = auth.engine()
+    _no_store(response)
+    ip = security.requester_key(auth.client_ip(request))
+    _limit(eng, f"verify:ip:{ip}", 20, 15, "Too many tries from here. Wait 15 minutes.")
+    try:
+        with _errors():
+            data.finish_email_verification(eng, body.token)
+    except HTTPException:
+        data.record_failure(eng, f"verify:ip:{ip}")
+        raise
+    return s.Ok(ok=True)
+
+
+@router.post("/auth/teacher/verify/resend", response_model=s.Ok, status_code=202)
+def teacher_verify_resend(request: Request, response: Response, tasks: BackgroundTasks,
+                          p: Principal = Depends(TEACHER)) -> s.Ok:
+    """Send the confirmation email again to the signed-in teacher. Three a day."""
+    _no_store(response)
+    eng = auth.engine()
+    key = f"verify-resend:user:{p.user_id}"
+    _limit(eng, key, 3, 24 * 60, "You have asked for three emails today. Check your spam folder or try tomorrow.")
+    data.record_failure(eng, key)
+    made = data.start_email_verification(eng, p.user_id)
+    if made is not None:
+        tasks.add_task(_send_verify_email, made[1], made[0], made[2])
+    return s.Ok(ok=True)
 
 
 @router.post("/auth/teacher/forgot", response_model=s.Ok, status_code=202)
@@ -234,7 +281,8 @@ def me(request: Request, response: Response) -> s.Me:
     eng = auth.engine()
     if p.kind == "teacher":
         orgs = [s.OrgRole(org_id=o, name=data.org_detail(eng, p, o)["name"], role=r) for o, r in sorted(p.roles.items())]
-        return s.Me(me=s.MeTeacher(kind="teacher", display_name=p.display_name, email=p.email, orgs=orgs))
+        return s.Me(me=s.MeTeacher(kind="teacher", display_name=p.display_name, email=p.email,
+                                                  email_verified=data.email_verified(eng, p.user_id), orgs=orgs))
     home = data.student_assignments(eng, p)
     return s.Me(me=s.MeStudent(kind="student", nickname=p.nickname, class_id=p.class_id,
                                class_name=home["class"]["name"]))

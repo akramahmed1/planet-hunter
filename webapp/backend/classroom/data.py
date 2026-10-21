@@ -155,6 +155,50 @@ def finish_password_reset(eng: Engine, token: str, new_password: str) -> None:
             audit(c, org, uid, "password.reset", f"user:{uid}")
 
 
+# ---------- email verification (T18) ----------
+
+VERIFY_HOURS = 48
+
+
+def email_verified(eng: Engine, user_id: int) -> bool:
+    with eng.connect() as c:
+        return c.execute(text("select email_verified_at is not null from users where id = :u"),
+                         {"u": user_id}).scalar() is True
+
+
+def start_email_verification(eng: Engine, user_id: int) -> tuple[str, str, str] | None:
+    """Make a single use token proving this teacher's current address. Returns (token, email, display_name), or
+    None if the address is already verified. Earlier unused tokens stop working."""
+    with eng.begin() as c:
+        r = c.execute(text("select email, display_name, email_verified_at from users where id = :u"),
+                      {"u": user_id}).first()
+        if r is None or r[2] is not None:
+            return None
+        token = security.new_token()
+        c.execute(text("delete from email_verifications where user_id = :u and used_at is null"), {"u": user_id})
+        c.execute(text("""insert into email_verifications (user_id, email, token_hash, expires_at)
+                          values (:u, :e, :h, now() + make_interval(hours => :n))"""),
+                  {"u": user_id, "e": r[0], "h": security.token_hash(token), "n": VERIFY_HOURS})
+        c.execute(text("delete from email_verifications where expires_at < now() - interval '1 day'"))
+        return token, r[0], r[1]
+
+
+def finish_email_verification(eng: Engine, token: str) -> None:
+    """Spend the token and mark the address verified, but only if it is still the account's address."""
+    with eng.begin() as c:
+        row = c.execute(text("""update email_verifications set used_at = now()
+                                where token_hash = :h and used_at is null and expires_at > now()
+                                returning user_id, email"""), {"h": security.token_hash(token)}).first()
+        if row is None:
+            raise Invalid("That verification link is not valid any more. Sign in and ask for a new one.")
+        done = c.execute(text("""update users set email_verified_at = now()
+                                 where id = :u and lower(email) = lower(:e)"""), {"u": row[0], "e": row[1]}).rowcount
+        if not done:
+            raise Invalid("That verification link is not valid any more. Sign in and ask for a new one.")
+        for (org,) in c.execute(text("select org_id from memberships where user_id = :u"), {"u": row[0]}):
+            audit(c, org, row[0], "email.verify", f"user:{row[0]}")
+
+
 def create_org(eng: Engine, p: Principal, name: str) -> int:
     with eng.begin() as c:
         org = c.execute(text("insert into organizations (name, join_code) values (:n, :c) returning id"),

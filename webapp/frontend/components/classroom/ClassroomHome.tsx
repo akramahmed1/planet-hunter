@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import Badge from "@/components/ui/Badge";
 import ErrorState from "@/components/ui/ErrorState";
 import Skeleton from "@/components/ui/Skeleton";
-import { apiV2Send, type ClassSummary, type Me, type OrgBilling, type OrgDetail, type StudentHome } from "@/lib/api-v2";
+import { apiV2Post, apiV2Send, type ClassSummary, type Me, type OrgBilling, type OrgDetail, type StudentHome } from "@/lib/api-v2";
 import { assignmentHref, formatDue } from "@/lib/classroom";
 import SignIn from "./SignIn";
 
@@ -40,8 +40,33 @@ export default function ClassroomHome() {
         Signed in as <strong>{me.kind === "teacher" ? me.display_name : me.nickname}</strong>.{" "}
         <button type="button" className="btn btn--sm btn--ghost" onClick={logout} data-testid="logout">Sign out</button>
       </p>
+      {me.kind === "teacher" && !me.email_verified && <VerifyBanner email={me.email} />}
       {me.kind === "teacher" ? <TeacherHome orgs={me.orgs} onChange={load} /> : <StudentAssignments />}
     </>
+  );
+}
+
+function VerifyBanner({ email }: { email: string }) {
+  const [state, setState] = useState<"idle" | "busy" | "sent" | string>("idle");
+  return (
+    <div className="callout" role="status" data-testid="verify-banner">
+      <p>
+        Please confirm your email address. We sent a link to <strong>{email}</strong>.{" "}
+        {state === "sent" ? (
+          <span data-testid="verify-resent">Sent again. Check your spam folder too.</span>
+        ) : (
+          <button type="button" className="btn btn--sm btn--ghost" disabled={state === "busy"} data-testid="verify-resend"
+            onClick={async () => {
+              setState("busy");
+              const r = await apiV2Post<{ ok: boolean }>("/api/v2/auth/teacher/verify/resend", {});
+              setState(r.ok ? "sent" : r.error);
+            }}>
+            {state === "busy" ? "One moment..." : "Send the email again"}
+          </button>
+        )}
+      </p>
+      {state !== "idle" && state !== "busy" && state !== "sent" && <p className="error-box" role="alert">{state}</p>}
+    </div>
   );
 }
 
