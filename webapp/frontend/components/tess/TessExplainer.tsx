@@ -138,7 +138,14 @@ export default function TessExplainer({ facts, moonKm, depthPpm, target }: {
     <div className="tess">
       <section className="tess-step" aria-labelledby="t-hero">
         <h2 id="t-hero">Meet TESS</h2>
-        {webgl ? <TessModel reducedMotion={reduced} onSource={onSource} /> : (
+        {webgl ? (
+          <div className="tess-model-wrap">
+            {/* The panel's own look from the first paint; the model draws over it. */}
+            {modelSource === null && <div className="tess-model tess-model--placeholder" aria-hidden="true" />}
+            <TessModel reducedMotion={reduced} onSource={onSource} />
+            {modelSource === null && <p className="scene-loading" role="status">Loading the 3D view</p>}
+          </div>
+        ) : (
           <p className="muted">Your browser cannot show the 3D model here.</p>
         )}
         <p>
@@ -152,7 +159,7 @@ export default function TessExplainer({ facts, moonKm, depthPpm, target }: {
             ? "3D model: NASA 3D Resources (TESS model A), free to use."
             : modelSource === "procedural"
               ? "Simple stand-in model: the NASA model could not be loaded."
-              : webgl === false ? "" : "Loading the 3D model..."}
+              : "\u00a0" /* the loading note sits on the model; this keeps the line's height */}
         </p>
       </section>
 

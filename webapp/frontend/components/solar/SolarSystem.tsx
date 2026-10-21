@@ -122,6 +122,9 @@ export default function SolarSystem({
   }, [mode]);
 
   const show3d = view === "3d" && webgl === true;
+  useEffect(() => {
+    if (!show3d) setSceneReady(false); // coming back to 3D shows the map again until the scene has drawn
+  }, [show3d]);
   const viewProps = { model, highlight, line, onPick, onEmpty };
 
   return (
@@ -133,6 +136,7 @@ export default function SolarSystem({
           <Scene3D {...viewProps} focus={focus} reducedMotion={reducedMotion} ready={sceneReady}
             onReady={() => setSceneReady(true)} />
         )}
+        {show3d && !sceneReady && <p className="scene-loading" role="status">Loading the 3D view</p>}
       </div>
       {webgl === false && (
         <p className="muted" data-testid="webgl-note">
