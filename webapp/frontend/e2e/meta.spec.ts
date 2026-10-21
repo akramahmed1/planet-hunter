@@ -24,3 +24,20 @@ test("every route has its own title and description, and the shared images and i
   }
   expect((await request.get("/icon.svg")).status()).toBe(200);
 });
+
+test("share-card images are absolute URLs on the real site, never localhost when deployed", async ({ page }, info) => {
+  test.skip(info.project.name !== "desktop", "one pass is enough");
+  const remote = process.env.PW_BASE_URL;
+  for (const route of ["/", "/candidates", "/method"]) {
+    await page.goto(route);
+    for (const sel of ['meta[property="og:image"]', 'meta[name="twitter:image"]']) {
+      const url = await page.locator(sel).first().getAttribute("content");
+      expect(url, `${sel} on ${route}`).toMatch(/^https?:\/\//);
+      if (remote) {
+        // Against a deployed site the card must point at that site, not at localhost.
+        expect(new URL(url!).hostname, `${sel} on ${route}`).not.toMatch(/^(localhost|127\.0\.0\.1)$/);
+        expect(new URL(url!).origin, `${sel} on ${route}`).toBe(new URL(remote).origin);
+      }
+    }
+  }
+});
