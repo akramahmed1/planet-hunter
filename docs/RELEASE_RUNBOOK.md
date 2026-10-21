@@ -43,6 +43,9 @@ flow in the production environment):
 | backend | `EXPLAINER_BASE_URL` | Only for `openai_compatible`. Must be https (plain http only for localhost) |
 | backend | `EXPLAINER_RESPONSE_FORMAT` | Optional for `openai_compatible`; default asks for a JSON object |
 | backend | `EXPLAINER_ALLOW_UNAPPROVED` | `1` lets a not yet approved model run, for running the eval only. Never set in production |
+| backend | `EMAIL_PROVIDER` | `resend` (default, the one real sender). `memory` is for tests only and must never be set in production. With nothing configured no email is sent and callers are told so |
+| backend | `EMAIL_API_KEY` | Resend API key. Railway variable only, never in code or chat. Create it with sending access only |
+| backend | `EMAIL_FROM` | Sender, for example `Planet Hunter <hello@yourdomain>`. The domain must be verified at Resend (SPF and DKIM records) or mail lands in spam. Names the provider in the privacy notice as a processor |
 | backend | `ANTHROPIC_API_KEY` | added by Akram in Railway, never in chat or git |
 
 Not set in production (defaults are the safe values): `AUTH_SIGNUPS_PER_HOUR`,

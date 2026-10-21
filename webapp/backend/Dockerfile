@@ -15,6 +15,7 @@ COPY learn/ ./learn/
 COPY classroom/ ./classroom/
 COPY explain/ ./explain/
 COPY billing/ ./billing/
+COPY mailer/ ./mailer/
 COPY content/ ./content/
 COPY migrations/ ./migrations/
 COPY data/ ./data/
