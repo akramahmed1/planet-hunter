@@ -28,6 +28,8 @@ If a task fails its tests twice, stop and ask Akram whether to fix it, move it t
 ### Phase 1: quick fixes from the audits
 | ID | Task | Diff |
 |---|---|---|
+| T05a | Fix npm audit findings: `sharp` (high, `npm audit fix`, non-breaking) | E |
+| T05b | Fix npm audit findings: `postcss` (high) and `next` (moderate) need Next 16, a major upgrade: design note, full test and screenshot pass | H |
 | T06 | Plural wording ("1 ambiguous signal", "1 clean recovery") | E |
 | T07 | "Select" instead of "Tap" on desktop; "Tap" kept on touch | E |
 | T08 | Form field border contrast >= 3:1, plus a test that checks contrast of fields | E |
