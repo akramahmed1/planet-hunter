@@ -5,8 +5,12 @@ import ClassPage from "@/components/classroom/ClassPage";
 import { apiGet, type CandidatesResponse } from "@/lib/api";
 import { getFeatures } from "@/lib/features";
 
-export const metadata: Metadata = { title: "Class",
-  description: "Your class, its students and assignments." };
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  // A bad address, or Classroom switched off, renders the 404 page: the tab title must say so.
+  const { id } = await params;
+  if (!/^\d{1,18}$/.test(id) || !(await getFeatures()).classroom) return { title: "Page not found" };
+  return { title: "Class", description: "Your class, its students and assignments." };
+}
 export const dynamic = "force-dynamic";
 
 export default async function ClassRoute({ params }: { params: Promise<{ id: string }> }) {

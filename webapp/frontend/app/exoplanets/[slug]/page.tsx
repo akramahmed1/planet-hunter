@@ -12,6 +12,8 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
+  const known = await apiV2Get<TargetSystem>(`/api/v2/targets/${encodeURIComponent(slug)}/system`);
+  if (!known.ok && (known.status === 404 || known.status === 422)) return { title: "Page not found" };
   const name = slug.toUpperCase().replace("-", " ");
   return {
     title: `${name} system`,

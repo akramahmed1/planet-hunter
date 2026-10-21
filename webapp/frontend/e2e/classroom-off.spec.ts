@@ -16,5 +16,6 @@ for (const path of ["/classroom", "/classroom/class/1", "/classroom/hunt/1"]) {
     const res = await page.goto(path);
     expect(res?.status()).toBe(404);
     await expect(page.getByRole("heading", { level: 1 })).not.toHaveText("Classroom");
+    await expect(page).toHaveTitle(/Page not found - Planet Hunter/);
   });
 }

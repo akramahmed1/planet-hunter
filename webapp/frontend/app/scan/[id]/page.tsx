@@ -5,8 +5,13 @@ import ScanResult from "@/components/scan/ScanResult";
 import ErrorState from "@/components/ui/ErrorState";
 import { apiV2Get, type ScanStatus } from "@/lib/api-v2";
 
-export const metadata: Metadata = { title: "Scan result",
-  description: "The strongest repeating dip found in a TESS star, with vetting checks." };
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
+  if (!/^\d{1,18}$/.test(id)) return { title: "Page not found" };
+  const res = await apiV2Get<ScanStatus>(`/api/v2/scans/${id}`);
+  if (!res.ok && (res.status === 404 || res.status === 422)) return { title: "Page not found" };
+  return { title: "Scan result", description: "The strongest repeating dip found in a TESS star, with vetting checks." };
+}
 export const dynamic = "force-dynamic";
 
 export default async function ScanStatusPage({ params }: { params: Promise<{ id: string }> }) {

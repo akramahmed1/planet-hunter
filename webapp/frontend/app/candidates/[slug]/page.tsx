@@ -20,7 +20,11 @@ import {
 } from "@/lib/api";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const name = (await params).slug.toUpperCase().replace("-", " ");
+  const { slug } = await params;
+  // An unknown address renders the 404 page, so its tab title must not repeat the made-up name.
+  const known = await apiGet<Candidate>(`/api/candidates/${encodeURIComponent(slug)}`);
+  if (!known.ok && known.status === 404) return { title: "Page not found" };
+  const name = slug.toUpperCase().replace("-", " ");
   return {
     title: `${name} candidate signal`,
     description: `${name}: the strongest repeating dip our pipeline found, with its checks. A candidate signal, never a discovery.`,

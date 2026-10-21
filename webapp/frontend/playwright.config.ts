@@ -104,6 +104,8 @@ export default defineConfig({
         },
         {
           command: "npm run start -- --port 3000",
+          // /error-check throws only when this is set, so the error page can be tested end to end.
+          env: { PH_ERROR_TEST: "1" },
           url: "http://127.0.0.1:3000",
           reuseExistingServer: true,
           timeout: 120_000,

@@ -3,8 +3,11 @@ import { notFound } from "next/navigation";
 import HuntChallenge from "@/components/classroom/HuntChallenge";
 import { getFeatures } from "@/lib/features";
 
-export const metadata: Metadata = { title: "Hunt challenge",
-  description: "Find the repeating dip in a star's light curve for your class." };
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
+  if (!/^\d{1,18}$/.test(id) || !(await getFeatures()).classroom) return { title: "Page not found" };
+  return { title: "Hunt challenge", description: "Find the repeating dip in a star's light curve for your class." };
+}
 
 export const dynamic = "force-dynamic";
 
