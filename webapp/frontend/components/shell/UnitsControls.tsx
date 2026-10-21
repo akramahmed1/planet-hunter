@@ -7,15 +7,15 @@ import Toggle from "@/components/ui/Toggle";
 import { DISTANCE_LABELS, TEMP_LABELS, type DistanceUnit, type TempUnit } from "@/lib/units";
 
 const TEMP_OPTIONS: { value: TempUnit; label: string; title: string }[] = [
-  { value: "F", label: TEMP_LABELS.F, title: "Fahrenheit" },
-  { value: "C", label: TEMP_LABELS.C, title: "Celsius" },
-  { value: "K", label: TEMP_LABELS.K, title: "Kelvin" },
+  { value: "F", label: TEMP_LABELS.F, title: "°F, Fahrenheit" },
+  { value: "C", label: TEMP_LABELS.C, title: "°C, Celsius" },
+  { value: "K", label: TEMP_LABELS.K, title: "K, Kelvin" },
 ];
 
 const DISTANCE_OPTIONS: { value: DistanceUnit; label: string; title: string }[] = [
-  { value: "mi", label: DISTANCE_LABELS.mi, title: "Miles" },
-  { value: "km", label: DISTANCE_LABELS.km, title: "Kilometers" },
-  { value: "au", label: DISTANCE_LABELS.au, title: "Astronomical units" },
+  { value: "mi", label: DISTANCE_LABELS.mi, title: "mi, miles" },
+  { value: "km", label: DISTANCE_LABELS.km, title: "km, kilometers" },
+  { value: "au", label: DISTANCE_LABELS.au, title: "AU, astronomical units" },
 ];
 
 export function UnitsToggles() {
