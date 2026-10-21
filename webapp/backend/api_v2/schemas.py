@@ -708,6 +708,11 @@ class ClassSummary(_Strict):
     join_code: str
     created_at: dt.datetime
     students: int
+    assignments: int
+    expected: int
+    completed: int
+    average_percent: int | None
+    next_due: dt.datetime | None
 
 
 class ClassList(_Strict):

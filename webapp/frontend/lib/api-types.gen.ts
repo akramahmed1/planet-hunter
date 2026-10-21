@@ -1570,17 +1570,27 @@ export interface components {
         };
         /** ClassSummary */
         ClassSummary: {
+            /** Assignments */
+            assignments: number;
+            /** Average Percent */
+            average_percent: number | null;
+            /** Completed */
+            completed: number;
             /**
              * Created At
              * Format: date-time
              */
             created_at: string;
+            /** Expected */
+            expected: number;
             /** Id */
             id: number;
             /** Join Code */
             join_code: string;
             /** Name */
             name: string;
+            /** Next Due */
+            next_due: string | null;
             /** Org Id */
             org_id: number;
             /** Students */

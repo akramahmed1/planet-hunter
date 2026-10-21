@@ -483,14 +483,27 @@ def set_role(eng: Engine, p: Principal, org_id: int, user_id: int, role: str) ->
 # ---------- classes ----------
 
 def list_classes(eng: Engine, p: Principal, org_id: int) -> list[dict]:
+    """Each class with the numbers a teacher wants at a glance. Every number is counted inside this school only and
+    means exactly what it says: `assignments` set for the class, `expected` = students x assignments (the work that
+    could be handed in), `completed` = finished hand-ins by students still in the class, `average_percent` = the mean
+    of score / max score over those finished hand-ins (null until there is one), `next_due` = the soonest future due
+    date."""
     _role(p, org_id)
     with eng.connect() as c:
-        rows = c.execute(text("""select k.id, k.org_id, k.name, k.join_code, k.created_at,
-                                   (select count(*) from class_members m where m.org_id = k.org_id and m.class_id = k.id)
-                                     as students
-                                 from classes k where k.org_id = :o order by k.created_at"""),
-                         {"o": org_id}).mappings().all()
-    return [dict(r) for r in rows]
+        rows = c.execute(text("""
+            select k.id, k.org_id, k.name, k.join_code, k.created_at,
+              (select count(*) from class_members m where m.org_id = k.org_id and m.class_id = k.id) as students,
+              (select count(*) from assignments a where a.org_id = k.org_id and a.class_id = k.id) as assignments,
+              (select count(*) from submissions s join assignments a on a.org_id = s.org_id and a.id = s.assignment_id
+                where a.org_id = k.org_id and a.class_id = k.id and s.completed_at is not null) as completed,
+              (select round(avg(100.0 * s.score / s.max_score))::int
+                 from submissions s join assignments a on a.org_id = s.org_id and a.id = s.assignment_id
+                where a.org_id = k.org_id and a.class_id = k.id and s.completed_at is not null and s.max_score > 0)
+                as average_percent,
+              (select min(a.due_at) from assignments a
+                where a.org_id = k.org_id and a.class_id = k.id and a.due_at > now()) as next_due
+            from classes k where k.org_id = :o order by k.created_at"""), {"o": org_id}).mappings().all()
+    return [{**r, "expected": r["students"] * r["assignments"]} for r in rows]
 
 
 def create_class(eng: Engine, p: Principal, org_id: int, name: str) -> dict:
@@ -500,7 +513,8 @@ def create_class(eng: Engine, p: Principal, org_id: int, name: str) -> dict:
         row = c.execute(text("""insert into classes (org_id, name, join_code, created_by)
                                 values (:o, :n, :c, :u) returning id, org_id, name, join_code, created_at"""),
                         {"o": org_id, "n": name, "c": _unique_code(c, "classes"), "u": p.user_id}).mappings().one()
-    return {**dict(row), "students": 0}
+    return {**dict(row), "students": 0, "assignments": 0, "expected": 0, "completed": 0, "average_percent": None,
+            "next_due": None}
 
 
 def _class(c: Connection, p: Principal, class_id: int) -> dict:
