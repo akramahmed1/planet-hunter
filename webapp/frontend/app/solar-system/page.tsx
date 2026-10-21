@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import ErrorState from "@/components/ui/ErrorState";
 import SolarSystem from "@/components/solar/SolarSystem";
 import { apiV2Get, type BodiesResponse, type OrbitsResponse, type PositionsResponse } from "@/lib/api-v2";
+import Tap from "@/components/ui/Tap";
 
 export const metadata: Metadata = { title: "Solar System",
   description: "The planets where they are today, from NASA JPL Horizons, with sources for every number." };
@@ -19,7 +20,7 @@ export default async function SolarSystemPage() {
       <p className="eyebrow">Real positions from NASA JPL</p>
       <h1>Solar System</h1>
       <p className="lede">
-        The Sun, the eight planets and Pluto where they really are on the date you pick. Tap anything to see its
+        The Sun, the eight planets and Pluto where they really are on the date you pick. <Tap /> anything to see its
         numbers and where they come from.
       </p>
       {bodies.ok && positions.ok && orbits.ok ? (

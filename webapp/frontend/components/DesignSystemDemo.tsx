@@ -16,6 +16,7 @@ import {
   Tabs,
 } from "@/components/ui";
 import { KM_PER_AU, formatDistance, formatLightTime, formatTemp, lightTimeSeconds } from "@/lib/units";
+import Tap from "@/components/ui/Tap";
 
 export default function DesignSystemDemo() {
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -72,7 +73,7 @@ export default function DesignSystemDemo() {
           </Button>
         </div>
         <Sheet open={sheetOpen} onClose={() => setSheetOpen(false)} title="Example sheet">
-          <p>On a phone this slides up from the bottom. Press Escape or tap outside to close.</p>
+          <p>On a phone this slides up from the bottom. Press Escape or <Tap lower pointer="click" /> outside to close.</p>
         </Sheet>
       </section>
 

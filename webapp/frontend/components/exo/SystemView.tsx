@@ -14,6 +14,7 @@ import type { ViewFit } from "@/lib/system";
 import { formatDistance, formatTemp, KM_PER_AU } from "@/lib/units";
 import { buildSystemModel, inConservativeZone } from "./model";
 import SystemMap2D, { type Pick } from "./SystemMap2D";
+import Tap from "@/components/ui/Tap";
 
 const SystemScene3D = dynamic(() => import("./SystemScene3D"), { ssr: false });
 
@@ -50,7 +51,7 @@ export default function SystemView({ system }: { system: TargetSystem }) {
       </div>
       <p className="muted" data-testid="system-note">
         Orbit sizes and shapes are to scale. Which way each orbit points, and where each planet is along it, are not
-        known from these catalogs, so planets are spread out to be easy to tap. The star&apos;s color is a display
+        known from these catalogs, so planets are spread out to be easy to <Tap lower />. The star&apos;s color is a display
         color based on its temperature.
         {system.circumbinary &&
           " These planets orbit both stars of a binary pair. The star's numbers and the habitable zone use the main star only, so treat the zone as a rough guide."}

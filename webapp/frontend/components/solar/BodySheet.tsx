@@ -18,6 +18,7 @@ import {
   type Vec3,
 } from "@/lib/solar";
 import { formatDistance, formatLightTime, formatTemp, type TempUnit } from "@/lib/units";
+import Tap from "@/components/ui/Tap";
 
 const WMAP_SOURCE = { name: "NASA Science: WMAP overview", url: "https://science.nasa.gov/mission/wmap/wmap-overview/" };
 
@@ -78,7 +79,7 @@ export function BodySheet({
       {open && body && (
         <>
         <p className="muted">
-          Distances for <span className="mono nowrap">{date}</span>. Tap any value for its source.
+          Distances for <span className="mono nowrap">{date}</span>. <Tap /> any value for its source.
         </p>
         <dl className="kv kv--text body-kv" data-testid="body-sheet">
           {body.temperatures.map((t) => (

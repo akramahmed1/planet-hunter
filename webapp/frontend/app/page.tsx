@@ -14,6 +14,7 @@ import {
   type OverviewResponse,
 } from "@/lib/api";
 import { count, noun } from "@/lib/plural";
+import Tap from "@/components/ui/Tap";
 
 export const dynamic = "force-dynamic";
 
@@ -59,7 +60,7 @@ export default async function Home() {
 
       <section aria-labelledby="live-heading">
         <h2 id="live-heading">Live from space</h2>
-        <p className="muted">Tap any value to see where it comes from and when it was fetched.</p>
+        <p className="muted"><Tap /> any value to see where it comes from and when it was fetched.</p>
         <Suspense fallback={<TilesSkeleton />}>
           <LiveTiles />
         </Suspense>

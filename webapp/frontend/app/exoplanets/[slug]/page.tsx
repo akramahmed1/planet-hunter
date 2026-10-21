@@ -6,6 +6,7 @@ import SystemView from "@/components/exo/SystemView";
 import SkyPanel from "@/components/sky/SkyPanel";
 import ErrorState from "@/components/ui/ErrorState";
 import { apiV2Get, type TargetSystem } from "@/lib/api-v2";
+import Tap from "@/components/ui/Tap";
 
 export const dynamic = "force-dynamic";
 
@@ -32,7 +33,7 @@ export default async function SystemPage({ params }: { params: Promise<{ slug: s
           <p className="eyebrow">{res.data.tic}</p>
           <h1>{res.data.target} system</h1>
           <p className="lede">
-            Confirmed planets from the NASA Exoplanet Archive, plus where our pipeline&apos;s signal would orbit. Tap
+            Confirmed planets from the NASA Exoplanet Archive, plus where our pipeline&apos;s signal would orbit. <Tap />
             the star or a planet for its numbers.
           </p>
           <SystemView system={res.data} />
