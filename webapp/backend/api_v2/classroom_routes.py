@@ -425,6 +425,14 @@ def get_org(response: Response, org_id: int = ID(), p: Principal = Depends(TEACH
         return s.OrgDetail(**data.org_detail(auth.engine(), p, org_id))
 
 
+@router.get("/orgs/{org_id}/overview", response_model=s.OrgOverview)
+def org_overview(response: Response, org_id: int = ID(), p: Principal = Depends(TEACHER)) -> s.OrgOverview:
+    """The whole school for its admins: teachers, classes and totals. Read only."""
+    _no_store(response)
+    with _errors():
+        return s.OrgOverview(**data.org_overview(auth.engine(), p, org_id))
+
+
 @router.post("/orgs/{org_id}/join-code", response_model=s.JoinCode)
 def rotate_org_code(response: Response, org_id: int = ID(), p: Principal = Depends(TEACHER)) -> s.JoinCode:
     _no_store(response)

@@ -56,6 +56,7 @@ POLICY: dict[tuple[str, str], dict] = {
     ("GET", "/api/v2/orgs/{org_id}"): {"policy": "teacher", "scope": "org"},
     ("POST", "/api/v2/orgs/{org_id}/join-code"): {"policy": "teacher", "scope": "org", "admin": True},
     ("PUT", "/api/v2/orgs/{org_id}/teachers/{user_id}/role"): {"policy": "teacher", "scope": "org", "admin": True},
+    ("GET", "/api/v2/orgs/{org_id}/overview"): {"policy": "teacher", "scope": "org", "admin": True},
     ("GET", "/api/v2/orgs/{org_id}/classes"): {"policy": "teacher", "scope": "org"},
     ("POST", "/api/v2/orgs/{org_id}/classes"): {"policy": "teacher", "scope": "org"},
     ("GET", "/api/v2/classes/{class_id}"): {"policy": "teacher", "scope": "class"},

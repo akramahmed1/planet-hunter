@@ -18,7 +18,7 @@ test("the home page has no door band and no link to the welcome page", async ({ 
   await expect(page.locator('a[href="/welcome"]')).toHaveCount(0);
 });
 
-for (const path of ["/classroom", "/classroom/class/1", "/classroom/hunt/1", "/welcome"]) {
+for (const path of ["/classroom", "/classroom/class/1", "/classroom/hunt/1", "/classroom/school/1", "/welcome"]) {
   test(`${path} is a 404`, async ({ page }) => {
     const res = await page.goto(path);
     expect(res?.status()).toBe(404);
