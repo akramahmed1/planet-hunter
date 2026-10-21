@@ -35,8 +35,8 @@ export default async function SystemPage({ params }: { params: Promise<{ slug: s
           <p className="eyebrow">{res.data.tic}</p>
           <h1>{res.data.target} system</h1>
           <p className="lede">
-            Confirmed planets from the NASA Exoplanet Archive, plus where our pipeline&apos;s signal would orbit. <Tap />
-            the star or a planet for its numbers.
+            Confirmed planets from the NASA Exoplanet Archive, plus where our pipeline&apos;s signal would orbit. <Tap /> the star or a planet for
+            its numbers.
           </p>
           <SystemView system={res.data} />
           <ExplainBox kind="planet" refId={slug} />

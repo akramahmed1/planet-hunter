@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import SourceButton from "@/components/live/SourceButton";
 import { useWebGL } from "@/components/three/hooks";
 import Badge from "@/components/ui/Badge";
@@ -42,12 +42,20 @@ export default function SystemView({ system }: { system: TargetSystem }) {
   const zoneOutside = zone && fit === "planets" && zone.conservative_inner_au > model.extent;
   const picked = selected?.kind === "planet" ? model.planets.find((p) => p.index === selected.index) : null;
   const show3d = view === "3d" && webgl === true;
+  // The flat map is the first paint; the 3D scene covers it once three.js has drawn a frame, so the panel is
+  // never an empty dark box while the 3D code loads.
+  const [sceneReady, setSceneReady] = useState(false);
+  useEffect(() => {
+    if (!show3d) setSceneReady(false);
+  }, [show3d]);
   const props = { model, starColor, selected, onPick: setSelected };
 
   return (
     <div className="solar">
       <div className="solar-viewport" data-heavy-gl={show3d ? "" : undefined}>
-        {show3d ? <SystemScene3D {...props} /> : <SystemMap2D {...props} />}
+        {!(show3d && sceneReady) && <SystemMap2D {...props} />}
+        {show3d && <SystemScene3D {...props} ready={sceneReady} onReady={() => setSceneReady(true)} />}
+        {show3d && !sceneReady && <p className="scene-loading" role="status">Loading the 3D view</p>}
       </div>
       <p className="muted" data-testid="system-note">
         Orbit sizes and shapes are to scale. Which way each orbit points, and where each planet is along it, are not

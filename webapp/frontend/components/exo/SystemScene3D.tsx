@@ -58,13 +58,16 @@ export default function SystemScene3D({
   starColor,
   selected,
   onPick,
+  ready,
+  onReady,
 }: {
   model: SystemModel;
   starColor: string;
   selected: Pick | null;
   onPick: (p: Pick) => void;
+  ready: boolean;
+  onReady: () => void;
 }) {
-  const [ready, setReady] = useState(false);
   const E = model.extent;
   const dot = E * 0.025;
   const tap = (e: ThreeEvent<MouseEvent>, p: Pick) => {
@@ -75,7 +78,7 @@ export default function SystemScene3D({
   return (
     <div className={ready ? "scene-3d scene-3d--ready" : "scene-3d"} data-testid="system-3d" data-ready={ready}
       role="img" aria-label="3D view of the planetary system. Use the buttons below to choose a body.">
-      <Canvas frameloop="demand" dpr={[1, 2]} camera={{ fov: 50 }} onCreated={() => requestAnimationFrame(() => setReady(true))}>
+      <Canvas frameloop="demand" dpr={[1, 2]} camera={{ fov: 50 }} onCreated={() => requestAnimationFrame(onReady)}>
         <Controls extent={E} />
         {z && (
           <>

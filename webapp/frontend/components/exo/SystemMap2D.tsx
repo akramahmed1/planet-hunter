@@ -25,6 +25,9 @@ export default function SystemMap2D({
 }) {
   const E = model.extent;
   const dot = E * 0.025;
+  // An invisible circle around each body so its tap target is at least 24 px on a phone (WCAG 2.2 AA), the same
+  // size the Solar System map uses.
+  const hitR = E * 0.08;
   const key = (e: KeyboardEvent, p: Pick) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
@@ -51,6 +54,7 @@ export default function SystemMap2D({
       <g role="button" tabIndex={0} aria-label="The star" className="map-body" data-testid="system-star"
         aria-pressed={selected?.kind === "star" || undefined}
         onClick={() => onPick({ kind: "star" })} onKeyDown={(e) => key(e, { kind: "star" })}>
+        <circle r={hitR} fill="transparent" />
         <circle r={Math.max(model.starRadius, dot * 1.6)} fill={starColor} />
       </g>
       {model.planets.map((p) => {
@@ -61,7 +65,7 @@ export default function SystemMap2D({
             aria-pressed={on || undefined} data-testid={`system-planet-${p.index}`}
             onClick={() => onPick({ kind: "planet", index: p.index })}
             onKeyDown={(e) => key(e, { kind: "planet", index: p.index })}>
-            <circle cx={x} cy={-y} r={dot * 2.2} fill="transparent" />
+            <circle cx={x} cy={-y} r={hitR} fill="transparent" />
             {on && <circle cx={x} cy={-y} r={dot * 1.9} fill="none" stroke="var(--ion-strong)" strokeWidth={2}
               vectorEffect="non-scaling-stroke" />}
             <circle cx={x} cy={-y} r={dot} fill={p.signal ? "var(--flare)" : "var(--ion)"} />
