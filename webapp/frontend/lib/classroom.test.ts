@@ -2,7 +2,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { visibleNav } from "../components/shell/nav.ts";
-import { assignmentHref, endOfDay, formatDue, glanceParts, gradeText, needsSignIn, schoolTotals } from "./classroom.ts";
+import { assignmentHref, endOfDay, formatDue, glanceParts, gradeText, needsSignIn, planStatus, schoolTotals, studentPlan } from "./classroom.ts";
 
 describe("classroom helpers", () => {
   it("sends each assignment kind to the right page", () => {
@@ -72,5 +72,38 @@ describe("class and school glance", () => {
     assert.deepEqual(t, { classes: 3, students: 15, assignments: 5, expected: 51, completed: 33, percentDone: 65,
       nextDue: "2026-10-22T10:00:00Z" });
     assert.deepEqual(schoolTotals([]), { classes: 0, students: 0, assignments: 0, expected: 0, completed: 0, percentDone: null, nextDue: null });
+  });
+});
+
+const NOW = new Date("2026-10-22T12:00:00Z");
+const A = (id: number, kind: "lesson" | "quiz" | "hunt", due: string | null, result: null | { score: number; max_score: number; done: boolean }) =>
+  ({ id, kind, ref: "x", title: `T${id}`, due_at: due, result: result && { score: result.score, max_score: result.max_score, completed_at: result.done ? "2026-10-20T00:00:00Z" : null } });
+
+describe("student plan", () => {
+  it("says where each assignment stands", () => {
+    assert.equal(planStatus(A(1, "quiz", null, null), NOW), "new");
+    assert.equal(planStatus(A(1, "quiz", "2026-10-30T00:00:00Z", { score: 1, max_score: 3, done: false }), NOW), "started");
+    assert.equal(planStatus(A(1, "quiz", "2026-10-30T00:00:00Z", { score: 3, max_score: 3, done: true }), NOW), "done");
+    assert.equal(planStatus(A(1, "quiz", "2026-10-01T00:00:00Z", null), NOW), "overdue");
+    assert.equal(planStatus(A(1, "quiz", "2026-10-01T00:00:00Z", { score: 3, max_score: 3, done: true }), NOW), "done"); // finished late is still finished
+  });
+
+  it("puts overdue first, then soonest due, then no due date, and counts progress", () => {
+    const items = [A(1, "lesson", null, null), A(2, "quiz", "2026-10-25T00:00:00Z", null), A(3, "quiz", "2026-10-01T00:00:00Z", null),
+      A(4, "hunt", "2026-10-23T00:00:00Z", { score: 80, max_score: 100, done: true }), A(5, "lesson", "2026-10-24T00:00:00Z", { score: 2, max_score: 2, done: true })];
+    const p = studentPlan(items, NOW);
+    assert.deepEqual([p.total, p.done, p.percent], [5, 2, 40]);
+    assert.equal(p.next?.id, 3); // overdue before anything else
+    assert.deepEqual(p.todo.map((a) => a.id), [2, 1]); // the rest, soonest first, no due date last; the next one is not repeated
+    assert.deepEqual(p.hunts.map((a) => a.id), [4]);
+    assert.deepEqual(p.finished.map((a) => a.id), [5]); // hunts are shown with the hunts, not here
+  });
+
+  it("handles no assignments and a next-up that is a hunt", () => {
+    assert.deepEqual(studentPlan([], NOW), { total: 0, done: 0, percent: null, next: null, todo: [], hunts: [], finished: [] });
+    const p = studentPlan([A(1, "hunt", "2026-10-23T00:00:00Z", null), A(2, "quiz", "2026-10-26T00:00:00Z", null)], NOW);
+    assert.equal(p.next?.id, 1);
+    assert.deepEqual(p.todo.map((a) => a.id), [2]);
+    assert.deepEqual(p.hunts.map((a) => a.id), [1]);
   });
 });

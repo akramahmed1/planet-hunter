@@ -71,3 +71,39 @@ export function schoolTotals(classes: Glance[]) {
     nextDue: dues[0] ?? null,
   };
 }
+
+type PlanItem = { id: number; kind: AssignmentKind; ref: string; title: string; due_at: string | null;
+  result: { score: number; max_score: number; completed_at: string | null } | null };
+
+export type PlanStatus = "new" | "started" | "done" | "overdue";
+
+/** Where one assignment stands for a student. "Overdue" means past its due date and not finished. */
+export function planStatus(a: PlanItem, now: Date): PlanStatus {
+  if (a.result?.completed_at) return "done";
+  if (a.due_at && new Date(a.due_at).getTime() < now.getTime()) return "overdue";
+  return a.result ? "started" : "new";
+}
+
+function dueOrder(a: PlanItem, b: PlanItem): number {
+  const x = a.due_at ? new Date(a.due_at).getTime() : Infinity;
+  const y = b.due_at ? new Date(b.due_at).getTime() : Infinity;
+  return x - y || a.id - b.id;
+}
+
+/**
+ * A student's home from their assignments: progress, the one to do next (soonest due first, past due ones first of
+ * all), the rest to do, hunts with their best points, and what is finished. Counts only; nothing is guessed.
+ */
+export function studentPlan<T extends PlanItem>(items: T[], now: Date) {
+  const open = items.filter((a) => planStatus(a, now) !== "done").sort(dueOrder);
+  const done = items.length - open.length;
+  return {
+    total: items.length,
+    done,
+    percent: items.length > 0 ? Math.round((100 * done) / items.length) : null,
+    next: open[0] ?? null,
+    todo: open.filter((a) => a.kind !== "hunt").slice(open[0] && open[0].kind !== "hunt" ? 1 : 0),
+    hunts: items.filter((a) => a.kind === "hunt").sort(dueOrder),
+    finished: items.filter((a) => a.kind !== "hunt" && planStatus(a, now) === "done").sort(dueOrder),
+  };
+}
