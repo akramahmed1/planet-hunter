@@ -9,6 +9,7 @@ import {
   scanSummarySentence,
   type CandidatesResponse,
 } from "@/lib/api";
+import { count } from "@/lib/plural";
 
 export const metadata: Metadata = {
   title: "Hunt",
@@ -39,7 +40,7 @@ export default async function CandidatesPage() {
         {scanSummarySentence(summary)} Tap any target for the full readout.
       </p>
       <p className="muted">
-        Scan run: {run.run_date}. {run.sectors_per_target} sectors per target.
+        Scan run: {run.run_date}. {count(run.sectors_per_target, "sector")} per target.
         Periods searched: {run.search_period_min_d} to {run.search_period_max_d}{" "}
         days. {honesty}
       </p>

@@ -7,6 +7,7 @@ import type { LessonResponse } from "@/lib/api-v2";
 import { correctCount, hasBadge, markStep, recordAnswer } from "@/lib/learn";
 import QuizQuestion from "./QuizQuestion";
 import { useProgress } from "./useProgress";
+import { count } from "@/lib/plural";
 
 /** A lesson: its steps one at a time with Back and Next, then the quiz and the badge. */
 export default function LessonPlayer({ lesson, startAtQuiz = false }: { lesson: LessonResponse; startAtQuiz?: boolean }) {
@@ -64,7 +65,7 @@ export default function LessonPlayer({ lesson, startAtQuiz = false }: { lesson: 
         <section aria-labelledby="quiz-h" className="lesson-quiz" data-testid="lesson-quiz">
           <h2 id="quiz-h" ref={headingRef} tabIndex={-1}>Quiz</h2>
           <p className="muted" data-testid="quiz-score" aria-live="polite">
-            {ready ? `${right} of ${keys.length} answered right so far.` : `${keys.length} questions.`} You can try
+            {ready ? `${right} of ${keys.length} answered right so far.` : `${count(keys.length, "question")}.`} You can try
             again as many times as you like.
           </p>
           {lesson.questions.map((q, i) => (

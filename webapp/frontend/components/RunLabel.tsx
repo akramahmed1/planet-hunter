@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
+import { count } from "@/lib/plural";
 
 const WHY =
   "Planet Hunter ran the same pipeline twice. The validation run on TOI 700 used 4 TESS sectors; the batch scan of " +
@@ -12,7 +13,7 @@ export default function RunLabel({ kind, sectors, date }: { kind: "validation" |
   const [open, setOpen] = useState(false);
   const id = useId();
   const name = kind === "validation" ? "Validation run" : kind === "batch" ? "Batch scan" : "Your scan";
-  const text = [name, `${sectors} sector${sectors === 1 ? "" : "s"}`, date].filter(Boolean).join(" · ");
+  const text = [name, count(sectors, "sector"), date].filter(Boolean).join(" · ");
   return (
     <span className="run-label" data-testid="run-label">
       <span>{text}</span>

@@ -13,6 +13,7 @@ import {
   scanSummarySentence,
   type OverviewResponse,
 } from "@/lib/api";
+import { count, noun } from "@/lib/plural";
 
 export const dynamic = "force-dynamic";
 
@@ -49,7 +50,7 @@ export default async function Home() {
 
       <div className="btn-row">
         <ButtonLink href="/candidates" variant="primary">
-          {summary ? `See all ${summary.count} candidates` : "See the candidates"}
+          {summary ? `See all ${count(summary.count, "candidate")}` : "See the candidates"}
         </ButtonLink>
         <ButtonLink href="/method" variant="ghost">
           How it works
@@ -126,13 +127,13 @@ export default async function Home() {
         {overview && summary && validation ? (
           <>
             <div className="stat-grid">
-              <Stat value={validation.sectors} label="validation sectors" />
-              <Stat value={summary.count} label="targets scanned" />
-              <Stat value={summary.by_classification["clean-recovery"]} label="clean recoveries" />
-              <Stat value={summary.by_classification.ambiguous} label="ambiguous signals" />
+              <Stat value={validation.sectors} label={noun(validation.sectors, "validation sector")} />
+              <Stat value={summary.count} label={noun(summary.count, "target scanned", "targets scanned")} />
+              <Stat value={summary.by_classification["clean-recovery"]} label={noun(summary.by_classification["clean-recovery"], "clean recovery", "clean recoveries")} />
+              <Stat value={summary.by_classification.ambiguous} label={noun(summary.by_classification.ambiguous, "ambiguous signal")} />
             </div>
             <p className="muted">
-              Scan of {numberWord(summary.count)} targets on {overview.run.run_date}.{" "}
+              Scan of {numberWord(summary.count)} {noun(summary.count, "target")} on {overview.run.run_date}.{" "}
               {scanSummarySentence(summary)} See the full list on the candidates
               page.
             </p>
