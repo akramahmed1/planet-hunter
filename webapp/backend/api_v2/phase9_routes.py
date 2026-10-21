@@ -17,7 +17,7 @@ from billing import plans
 from billing import stripe as billing
 from classroom import auth, security
 from classroom.auth import TEACHER, Principal
-from explain import grounding, model, service
+from explain import grounding, model, service, spend
 
 router = APIRouter(prefix="/api/v2", tags=["v2"])
 log = logging.getLogger("planet-hunter.phase9")
@@ -33,6 +33,16 @@ def _id():
 def explain_status(response: Response) -> s.ExplainStatus:
     response.headers["Cache-Control"] = "no-store"
     ok, why = model.configured()
+    if ok:
+        eng = db.engine()
+        if eng is not None:
+            try:
+                paused = spend.status(eng)
+            except Exception:  # noqa: BLE001 - the ledger being unreachable must not break the status page
+                log.exception("explainer spend status could not be read")
+                paused = None
+            if paused is not None and paused.paused:
+                return s.ExplainStatus(enabled=False, reason=paused.reason, model=None, paused=True)
     return s.ExplainStatus(enabled=ok, reason=None if ok else why,
                            model=(model.current().name if ok else None))
 
@@ -65,6 +75,14 @@ def explain(body: s.ExplainRequest, request: Request, response: Response) -> s.E
     except grounding.NotFound as exc:
         raise HTTPException(404, str(exc))
 
+    try:
+        paused = spend.status(eng)
+    except Exception:  # noqa: BLE001
+        log.exception("explainer spend status could not be read")
+        raise HTTPException(503, "the explainer cannot check its budget right now")
+    if paused.paused:  # quiet: no rate-limit counts are used up while it is paused
+        raise HTTPException(503, paused.reason or spend.PAUSED_MESSAGE)
+
     p = auth.optional_principal(request)
     person = (f"session:{p.session_id}" if p else f"ip:{security.requester_key(auth.client_ip(request))}")
     class_key = f"{p.org_id}:{p.class_id}" if p and p.kind == "student" else None
@@ -80,7 +98,12 @@ def explain(body: s.ExplainRequest, request: Request, response: Response) -> s.E
     except service.Limited as exc:
         raise HTTPException(429, str(exc), headers={"Retry-After": "3600"})
     try:
-        out = service.explain(model.current(), grounding.grounding_for(item), question)
+        out = service.explain_metered(eng, model.current(), grounding.grounding_for(item), question)
+    except spend.CapReached as exc:
+        raise HTTPException(503, str(exc))
+    except spend.UnknownPrice as exc:
+        log.error("%s", exc)
+        raise HTTPException(503, "the explainer is not set up for this model yet")
     except model.ModelError as exc:
         raise HTTPException(503, str(exc))
     return s.ExplainResponse(known=out.known, answer=out.answer,

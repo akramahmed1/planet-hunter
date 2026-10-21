@@ -12,6 +12,8 @@ import re
 from dataclasses import dataclass
 from typing import Protocol
 
+from explain.spend import Usage
+
 # The answer every model must return; the service checks it again before showing it.
 ANSWER_SCHEMA = {
     "type": "object",
@@ -31,10 +33,20 @@ class Reply:
     answer: str
     citations: list[str]
     model: str
+    usage: Usage | None = None  # what the provider billed, from its own response
 
 
 class ModelError(Exception):
-    """The model could not answer (refusal, bad output, API failure)."""
+    """The model could not answer (refusal, bad output, API failure).
+
+    `usage` and `model` are set when the provider did answer (so it billed tokens) but the answer was unusable:
+    the spend ledger still counts that call.
+    """
+
+    def __init__(self, message: str, usage: Usage | None = None, model: str | None = None):
+        super().__init__(message)
+        self.usage = usage
+        self.model = model
 
 
 class Model(Protocol):
@@ -80,17 +92,29 @@ class AnthropicModel:
             raise ModelError(f"the explainer service returned {exc.status_code}") from exc
         except a.APIConnectionError as exc:
             raise ModelError("the explainer service could not be reached") from exc
+        usage = _usage_of(response)
         if response.stop_reason == "refusal":
-            raise ModelError("the explainer declined to answer this question")
+            raise ModelError("the explainer declined to answer this question", usage, response.model)
         if response.stop_reason == "max_tokens":
-            raise ModelError("the explainer's answer was cut off")
+            raise ModelError("the explainer's answer was cut off", usage, response.model)
         text = next((b.text for b in response.content if b.type == "text"), "")
         try:
             data = json.loads(text)
             return Reply(known=bool(data["known"]), answer=str(data["answer"]),
-                         citations=[str(c) for c in data["citations"]], model=response.model)
+                         citations=[str(c) for c in data["citations"]], model=response.model, usage=usage)
         except (ValueError, KeyError, TypeError) as exc:
-            raise ModelError("the explainer returned an answer in the wrong shape") from exc
+            raise ModelError("the explainer returned an answer in the wrong shape", usage, response.model) from exc
+
+
+def _usage_of(response) -> Usage:
+    """Token counts as the provider reported them. Missing fields count as zero."""
+    u = getattr(response, "usage", None)
+    return Usage(
+        input_tokens=int(getattr(u, "input_tokens", 0) or 0),
+        output_tokens=int(getattr(u, "output_tokens", 0) or 0),
+        cache_read_tokens=int(getattr(u, "cache_read_input_tokens", 0) or 0),
+        cache_write_tokens=int(getattr(u, "cache_creation_input_tokens", 0) or 0),
+    )
 
 
 class FakeModel:
@@ -128,9 +152,18 @@ class FakeModel:
                         continue
                     shown = json.dumps(value) if not isinstance(value, str) else value
                     shown = re.sub(r"\s+", " ", shown)[:200]
-                    return Reply(known=True, answer=f"From this page's data: {shown}.", citations=[path],
-                                 model=self.name)
-        return Reply(known=False, answer="Not known from this page's data.", citations=[], model=self.name)
+                    answer = f"From this page's data: {shown}."
+                    return Reply(known=True, answer=answer, citations=[path], model=self.name,
+                                 usage=self._usage(system, grounding_json, question, answer))
+        answer = "Not known from this page's data."
+        return Reply(known=False, answer=answer, citations=[], model=self.name,
+                     usage=self._usage(system, grounding_json, question, answer))
+
+    @staticmethod
+    def _usage(system: str, grounding_json: str, question: str, answer: str) -> Usage:
+        """A made-up but proportional count (4 characters a token), so the ledger is exercised without a key."""
+        return Usage(input_tokens=(len(system) + len(grounding_json) + len(question)) // 4,
+                     output_tokens=max(1, len(answer) // 4))
 
 
 def configured() -> tuple[bool, str]:

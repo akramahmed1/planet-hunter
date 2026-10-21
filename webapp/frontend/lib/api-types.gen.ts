@@ -1539,6 +1539,11 @@ export interface components {
             enabled: boolean;
             /** Model */
             model: string | null;
+            /**
+             * Paused
+             * @default false
+             */
+            paused: boolean;
             /** Reason */
             reason: string | null;
         };

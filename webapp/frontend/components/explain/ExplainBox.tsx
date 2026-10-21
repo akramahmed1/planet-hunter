@@ -22,6 +22,15 @@ export default function ExplainBox({ kind, refId }: { kind: Kind; refId: string 
     apiV2Get<ExplainStatus>("/api/v2/explain/status").then((r) => r.ok && setStatus(r.data));
   }, []);
 
+  if (status?.paused) {
+    // On, but this month's budget is used up: say so quietly instead of vanishing.
+    return (
+      <section className="card explain" aria-labelledby={`${id}-h`} data-testid="explain-paused">
+        <h2 id={`${id}-h`} className="card-title">What am I looking at?</h2>
+        <p className="muted">The explainer is paused until next month to keep its running cost in check. Everything else on this page works.</p>
+      </section>
+    );
+  }
   if (!status?.enabled) return null;
   return (
     <section className="card explain" aria-labelledby={`${id}-h`} data-testid="explain">
