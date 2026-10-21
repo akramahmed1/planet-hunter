@@ -689,6 +689,40 @@ class OrgDetail(_Strict):
     teachers: list[OrgTeacher]
 
 
+class OverviewTeacher(_Strict):
+    user_id: int
+    display_name: str
+    role: Literal["org_admin", "teacher"]
+    classes: int
+    students: int
+
+
+class OverviewClass(_Strict):
+    id: int
+    name: str
+    created_at: dt.datetime
+    teacher: str | None
+    students: int
+    assignments: int
+
+
+class OverviewTotals(_Strict):
+    teachers: int
+    admins: int
+    classes: int
+    students: int
+    assignments: int
+    unassigned_classes: int
+
+
+class OrgOverview(_Strict):
+    id: int
+    name: str
+    totals: OverviewTotals
+    teachers: list[OverviewTeacher]
+    classes: list[OverviewClass]
+
+
 class RoleChange(_Strict):
     role: Literal["org_admin", "teacher"]
 

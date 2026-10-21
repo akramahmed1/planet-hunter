@@ -311,6 +311,9 @@ function OrgPanel({ orgId }: { orgId: number }) {
     <section className="card" aria-labelledby={`org-${orgId}`} data-testid="org-panel">
       <p className="eyebrow">{org.role === "org_admin" ? "You are an admin" : "Teacher"}</p>
       <h2 id={`org-${orgId}`} className="card-title">{org.name}</h2>
+      {org.role === "org_admin" && (
+        <p><Link href={`/classroom/school/${orgId}`} data-testid="school-overview-link">School overview</Link></p>
+      )}
       {org.join_code && (
         <p className="muted small">
           Other teachers join with code <code className="code-chip" data-testid="org-code-value">{org.join_code}</code>.

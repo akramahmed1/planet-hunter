@@ -453,6 +453,35 @@ def org_detail(eng: Engine, p: Principal, org_id: int) -> dict:
             "teachers": [dict(m) for m in members]}
 
 
+def org_overview(eng: Engine, p: Principal, org_id: int) -> dict:
+    """What an organization admin sees of the whole school: teachers with their roles and how many classes and students
+    each created, every class with its teacher, and totals. Read only, counted inside this organization, admins only.
+    No email addresses: the admin sees names, not contact details. A class whose creator left shows as unassigned."""
+    _admin(p, org_id)
+    with eng.connect() as c:
+        o = c.execute(text("select id, name from organizations where id = :o"), {"o": org_id}).mappings().one()
+        teachers = c.execute(text("""
+            select u.id as user_id, u.display_name, m.role,
+              (select count(*) from classes k where k.org_id = m.org_id and k.created_by = u.id) as classes,
+              (select count(*) from class_members cm join classes k on k.org_id = cm.org_id and k.id = cm.class_id
+                where k.org_id = m.org_id and k.created_by = u.id) as students
+            from memberships m join users u on u.id = m.user_id
+            where m.org_id = :o order by (m.role = 'org_admin') desc, lower(u.display_name), u.id"""),
+                             {"o": org_id}).mappings().all()
+        classes = c.execute(text("""
+            select k.id, k.name, k.created_at, u.display_name as teacher,
+              (select count(*) from class_members cm where cm.org_id = k.org_id and cm.class_id = k.id) as students,
+              (select count(*) from assignments a where a.org_id = k.org_id and a.class_id = k.id) as assignments
+            from classes k left join users u on u.id = k.created_by
+            where k.org_id = :o order by k.created_at, k.id"""), {"o": org_id}).mappings().all()
+    return {"id": o["id"], "name": o["name"],
+            "totals": {"teachers": len(teachers), "admins": sum(1 for t in teachers if t["role"] == "org_admin"),
+                       "classes": len(classes), "students": sum(k["students"] for k in classes),
+                       "assignments": sum(k["assignments"] for k in classes),
+                       "unassigned_classes": sum(1 for k in classes if k["teacher"] is None)},
+            "teachers": [dict(t) for t in teachers], "classes": [dict(k) for k in classes]}
+
+
 def rotate_org_code(eng: Engine, p: Principal, org_id: int) -> str:
     _admin(p, org_id)
     with eng.begin() as c:

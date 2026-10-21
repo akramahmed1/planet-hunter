@@ -1096,6 +1096,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v2/orgs/{org_id}/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Org Overview
+         * @description The whole school for its admins: teachers, classes and totals. Read only.
+         */
+        get: operations["org_overview_api_v2_orgs__org_id__overview_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v2/orgs/{org_id}/teachers/{user_id}/role": {
         parameters: {
             query?: never;
@@ -2222,6 +2242,18 @@ export interface components {
             /** Code */
             code: string;
         };
+        /** OrgOverview */
+        OrgOverview: {
+            /** Classes */
+            classes: components["schemas"]["OverviewClass"][];
+            /** Id */
+            id: number;
+            /** Name */
+            name: string;
+            /** Teachers */
+            teachers: components["schemas"]["OverviewTeacher"][];
+            totals: components["schemas"]["OverviewTotals"];
+        };
         /** OrgRole */
         OrgRole: {
             /** Name */
@@ -2246,6 +2278,24 @@ export interface components {
             /** User Id */
             user_id: number;
         };
+        /** OverviewClass */
+        OverviewClass: {
+            /** Assignments */
+            assignments: number;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Id */
+            id: number;
+            /** Name */
+            name: string;
+            /** Students */
+            students: number;
+            /** Teacher */
+            teacher: string | null;
+        };
         /** OverviewResponse */
         OverviewResponse: {
             /** Honesty */
@@ -2253,6 +2303,37 @@ export interface components {
             run: components["schemas"]["RunInfo"];
             summary: components["schemas"]["Summary"];
             validation: components["schemas"]["Validation"];
+        };
+        /** OverviewTeacher */
+        OverviewTeacher: {
+            /** Classes */
+            classes: number;
+            /** Display Name */
+            display_name: string;
+            /**
+             * Role
+             * @enum {string}
+             */
+            role: "org_admin" | "teacher";
+            /** Students */
+            students: number;
+            /** User Id */
+            user_id: number;
+        };
+        /** OverviewTotals */
+        OverviewTotals: {
+            /** Admins */
+            admins: number;
+            /** Assignments */
+            assignments: number;
+            /** Classes */
+            classes: number;
+            /** Students */
+            students: number;
+            /** Teachers */
+            teachers: number;
+            /** Unassigned Classes */
+            unassigned_classes: number;
         };
         /** PeriodogramResponse */
         PeriodogramResponse: {
@@ -4765,6 +4846,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["JoinCode"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    org_overview_api_v2_orgs__org_id__overview_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OrgOverview"];
                 };
             };
             /** @description Validation Error */
