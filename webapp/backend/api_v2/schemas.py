@@ -580,6 +580,18 @@ class ResetPassword(_Strict):
     password: str = Field(min_length=1, max_length=200)
 
 
+class DeleteAccount(_Strict):
+    password: str = Field(min_length=1, max_length=200)
+    delete_school: bool = False
+
+
+class AccountDeleted(_Strict):
+    ok: bool
+    schools_deleted: int
+    classes_deleted: int
+    students_deleted: int
+
+
 class VerifyEmail(_Strict):
     token: str = Field(min_length=20, max_length=200)
 

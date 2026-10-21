@@ -199,6 +199,73 @@ def finish_email_verification(eng: Engine, token: str) -> None:
             audit(c, org, row[0], "email.verify", f"user:{row[0]}")
 
 
+# ---------- deleting a teacher account (T19) ----------
+
+def delete_teacher_account(eng: Engine, user_id: int, *, delete_school: bool) -> dict:
+    """Erase a teacher. Where they are the only teacher of a school or group, the school, its classes, students,
+    assignments and results go too, but only with `delete_school=True` (otherwise Conflict says what would be lost).
+    A school with other teachers needs another admin first, and a school with a paid plan must cancel it first.
+    Returns counts only. Everything happens in one transaction: it all goes or none of it does."""
+    with eng.begin() as c:
+        mine = c.execute(text("select org_id, role from memberships where user_id = :u order by org_id for update"),
+                         {"u": user_id}).all()
+        email = c.execute(text("select email from users where id = :u"), {"u": user_id}).scalar()
+        if email is None:
+            raise NotFound("no such account")
+        sole, summary = [], {"schools_deleted": 0, "students_deleted": 0, "classes_deleted": 0}
+        for org, role in mine:
+            c.execute(text("select 1 from memberships where org_id = :o for update"), {"o": org})
+            others = c.execute(text("select count(*) from memberships where org_id = :o and user_id <> :u"),
+                               {"o": org, "u": user_id}).scalar_one()
+            if others == 0:
+                sole.append(org)
+            elif role == "org_admin" and c.execute(text(
+                    "select count(*) from memberships where org_id = :o and role = 'org_admin' and user_id <> :u"),
+                    {"o": org, "u": user_id}).scalar_one() == 0:
+                name = c.execute(text("select name from organizations where id = :o"), {"o": org}).scalar()
+                raise Conflict(f"You are the only admin of {name}. Make another teacher an admin first, then delete "
+                               "your account.")
+        counts = {}
+        for org in sole:
+            name = c.execute(text("select name from organizations where id = :o"), {"o": org}).scalar()
+            paid = c.execute(text("""select 1 from org_plans where org_id = :o and plan <> 'free'
+                                     and stripe_subscription is not null and status not in ('canceled', 'incomplete_expired')"""),
+                             {"o": org}).first()
+            if paid:
+                raise Conflict(f"{name} has a paid plan. Cancel the plan first, then delete your account.")
+            counts[org] = (name,
+                           c.execute(text("select count(*) from class_members where org_id = :o"), {"o": org}).scalar_one(),
+                           c.execute(text("select count(*) from classes where org_id = :o"), {"o": org}).scalar_one())
+        if counts and not delete_school:
+            def many(n: int, one: str, more: str) -> str:
+                return f"{n} {one if n == 1 else more}"
+            lines = "; ".join(f"{n} ({many(k, 'class', 'classes')}, {many(m, 'student', 'students')})"
+                              for n, m, k in counts.values())
+            raise Conflict(f"You are the only teacher in {lines}. Deleting your account also deletes that school or "
+                           "group with all its classes, students and results. Confirm to continue.")
+        for org, (_, students, classes) in counts.items():
+            c.execute(text("delete from sessions where member_id in (select id from class_members where org_id = :o)"),
+                      {"o": org})
+            c.execute(text("delete from organizations where id = :o"), {"o": org})  # cascades to everything in it
+            # Nothing about the school's people stays behind: the audit rows (they hold nicknames) go too, leaving
+            # one plain record that a deletion happened, with counts only.
+            c.execute(text("delete from audit_log where org_id = :o"), {"o": org})
+            audit(c, org, None, "org.delete", f"org:{org}", {"students": students, "classes": classes})
+            summary["schools_deleted"] += 1
+            summary["students_deleted"] += students
+            summary["classes_deleted"] += classes
+        for org, _role in mine:
+            if org not in counts:
+                audit(c, org, None, "teacher.delete", f"user:{user_id}")
+        # sign-in counters and rate-limit rows that mention this address or account
+        c.execute(text("delete from auth_failures where key in (:a, :b, :c)"),
+                  {"a": f"login:email:{email.lower()}", "b": f"forgot:email:{email.lower()}",
+                   "c": f"verify-resend:user:{user_id}"})
+        end_all_sessions(c, user_id=user_id)
+        c.execute(text("delete from users where id = :u"), {"u": user_id})  # cascades: memberships, resets, verifications
+    return summary
+
+
 def create_org(eng: Engine, p: Principal, name: str) -> int:
     with eng.begin() as c:
         org = c.execute(text("insert into organizations (name, join_code) values (:n, :c) returning id"),

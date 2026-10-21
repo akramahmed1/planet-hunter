@@ -42,7 +42,54 @@ export default function ClassroomHome() {
       </p>
       {me.kind === "teacher" && !me.email_verified && <VerifyBanner email={me.email} />}
       {me.kind === "teacher" ? <TeacherHome orgs={me.orgs} onChange={load} /> : <StudentAssignments />}
+      {me.kind === "teacher" && <DeleteAccount onDeleted={() => setMe(null)} />}
     </>
+  );
+}
+
+/** Delete the teacher's account. If they are the only teacher of a school, the answer asks them to confirm that the
+ * school and its students go too. */
+function DeleteAccount({ onDeleted }: { onDeleted: () => void }) {
+  const [password, setPassword] = useState("");
+  const [alsoSchool, setAlsoSchool] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [needsConfirm, setNeedsConfirm] = useState(false);
+  return (
+    <details className="card" data-testid="delete-account">
+      <summary>Delete my account</summary>
+      <form onSubmit={async (e) => {
+        e.preventDefault();
+        setBusy(true);
+        setError(null);
+        const r = await apiV2Post<{ ok: boolean }>("/api/v2/auth/teacher/delete-account",
+          { password, delete_school: alsoSchool });
+        setBusy(false);
+        if (r.ok) return onDeleted();
+        setNeedsConfirm(r.status === 409 && r.error.includes("Confirm to continue"));
+        setError(r.error);
+      }}>
+        <p className="muted small">This removes your account for good. Type your password to confirm.</p>
+        <div className="field">
+          <label htmlFor="delete-password" className="field-label">Password</label>
+          <input id="delete-password" className="select" type="password" value={password}
+            onChange={(e) => setPassword(e.target.value)} required maxLength={200} autoComplete="current-password"
+            data-testid="delete-password" />
+        </div>
+        {error && <p className="error-box" role="alert" data-testid="delete-error">{error}</p>}
+        {needsConfirm && (
+          <label className="check-row">
+            <input type="checkbox" checked={alsoSchool} onChange={(e) => setAlsoSchool(e.target.checked)}
+              data-testid="delete-school" />{" "}
+            Yes, also delete the school or group with all its classes, students and results
+          </label>
+        )}
+        <div className="btn-row">
+          <button type="submit" className="btn btn--ghost" disabled={busy || (needsConfirm && !alsoSchool)}
+            data-testid="delete-submit">{busy ? "One moment..." : "Delete my account"}</button>
+        </div>
+      </form>
+    </details>
   );
 }
 

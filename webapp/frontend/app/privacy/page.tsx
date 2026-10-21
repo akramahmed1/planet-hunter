@@ -45,7 +45,13 @@ export default function PrivacyPage() {
       <h2>Exporting and deleting</h2>
       <p>
         A teacher can export everything stored about a class, delete a class with all its students and results, or
-        remove a single student.
+        remove a single student. A teacher can delete their own account at any time from the Classroom page after
+        typing their password. If they are the only teacher of a school or group, they are asked to confirm that the
+        school or group goes too, with its classes, students and results. When a school or group is deleted we also
+        delete its audit log entries, which hold student nicknames, and keep one plain record that a deletion
+        happened, with counts only. A parent, guardian or school that wants a student's data deleted can ask the
+        teacher, or write to us at the contact address once one is published here, and we follow the written
+        process in our data deletion document.
       </p>
       <h2>Ages</h2>
       <p>
