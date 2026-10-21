@@ -127,7 +127,8 @@ jobs:
         run: |
           npm ci
           npm run build
-          nohup npm run start -- --port 3000 > /tmp/frontend.log 2>&1 &
+          # PH_ERROR_TEST lets /error-check throw, so the error page is tested for real (it is a 404 otherwise).
+          PH_ERROR_TEST=1 nohup npm run start -- --port 3000 > /tmp/frontend.log 2>&1 &
           for i in $(seq 1 60); do curl -sf http://127.0.0.1:3000 > /dev/null && break; sleep 1; done
       - name: Backend QA suite
         run: python webapp/qa/qa_backend.py http://127.0.0.1:8000

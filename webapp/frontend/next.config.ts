@@ -33,6 +33,10 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [{ source: "/api/v2/:path*", destination: `${API_BASE}/api/v2/:path*` }];
   },
+  // The nav label is "Hunt" but the section lives at /candidates, so people type /hunt.
+  async redirects() {
+    return [{ source: "/hunt", destination: "/candidates", permanent: true }];
+  },
   async headers() {
     return [
       {
