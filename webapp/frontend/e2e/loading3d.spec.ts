@@ -31,3 +31,25 @@ test("the TESS 3D model shows a loading note until it is ready", async ({ page }
   await expect(page.getByTestId("tess-model")).toHaveAttribute("data-model", /nasa|procedural/, { timeout: 30_000 });
   await expect(page.locator(".tess-model-wrap").getByRole("status")).toHaveCount(0);
 });
+
+// The flat map is the only view without WebGL, and the first thing seen while 3D loads: its bodies must be
+// big enough to hit with a finger (24 px is the WCAG 2.2 AA minimum; planets sit close together, so no larger).
+test("the flat exoplanet map has tap targets of at least 24 px", async ({ page }, info) => {
+  test.skip(info.project.name !== "mobile", "a phone-size check");
+  await page.goto("/exoplanets/toi-700");
+  const toggle = page.getByRole("radio", { name: "Flat map view" });
+  if (await toggle.count()) await page.locator("label.toggle-option", { hasText: "Map" }).first().click();
+  const map = page.getByTestId("system-map");
+  await expect(map).toBeVisible();
+  const sizes = await map.locator("g[role=button]").evaluateAll((els) =>
+    els.map((e) => {
+      const r = e.getBoundingClientRect();
+      return `${e.getAttribute("aria-label")} ${Math.round(r.width)}x${Math.round(r.height)}`;
+    }),
+  );
+  expect(sizes.length).toBeGreaterThanOrEqual(5);
+  for (const s of sizes) {
+    const [w, h] = s.split(" ").pop()!.split("x").map(Number);
+    expect(Math.min(w, h), `tap target ${s}`).toBeGreaterThanOrEqual(23.5);
+  }
+});
