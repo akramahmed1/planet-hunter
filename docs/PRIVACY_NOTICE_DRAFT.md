@@ -41,6 +41,13 @@ or a hash of the IP address, for up to one day, to slow down guessing.
 
 A teacher can export everything stored about a class and its students, and delete a class
 with all its students and results. A teacher can remove a single student and their results.
+A teacher can delete their own account at any time after typing their password. If they are
+the only teacher of a school or group, they are asked to confirm that the school or group
+goes too, with its classes, students and results. A school with a paid plan must cancel the
+plan first. When a school or group is deleted, its audit log entries (which hold student
+nicknames) are deleted as well and one plain record that a deletion happened is kept, with
+counts only. A parent, guardian or school can also ask us to delete a student's data; the
+steps and the time we commit to are in `docs/DATA_DELETION.md`.
 
 ## Ages
 
@@ -52,6 +59,11 @@ account and do not keep your answer.
 - Wording of the age question and of the under-13 message; whether a school-consent path is
   needed before launch.
 - Whether teachers' school email addresses need any further notice.
-- Retention: how long a deleted class's audit-log entries are kept (currently indefinitely,
-  with nicknames in the entries).
+- Retention: when a single student is removed or a single class is deleted, the audit-log
+  entries about it are kept indefinitely and include the nickname (deleting a whole school
+  removes them). Decide whether those entries should also be scrubbed, and after how long.
+- Whether deletion requests from parents or guardians must be answered within a set number
+  of days, and what identity check we may ask for (see `docs/DATA_DELETION.md`).
+- Backups: deleted data stays in database backups until they roll off (the hosting provider's
+  backup period; see the process document). Is that wording acceptable?
 - FERPA and state student-privacy laws for US schools.

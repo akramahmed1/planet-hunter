@@ -222,6 +222,24 @@ def teacher_reset(body: s.ResetPassword, request: Request, response: Response) -
     return s.Ok(ok=True)
 
 
+@router.post("/auth/teacher/delete-account", response_model=s.AccountDeleted)
+def teacher_delete_account(body: s.DeleteAccount, request: Request, response: Response,
+                           p: Principal = Depends(TEACHER)) -> s.AccountDeleted:
+    """Delete the signed-in teacher's account after re-checking the password. See docs/DATA_DELETION.md."""
+    _no_store(response)
+    eng = auth.engine()
+    key = f"login:email:{(p.email or '').lower()}"
+    _limit(eng, key, 10, 15, "Too many tries for this account. Wait 15 minutes.")
+    _uid, pw_hash = data.user_for_login(eng, (p.email or "").lower())
+    if _uid != p.user_id or not security.verify_secret(pw_hash, body.password):
+        data.record_failure(eng, key)
+        raise HTTPException(401, "That password is not right.")
+    with _errors():
+        out = data.delete_teacher_account(eng, p.user_id, delete_school=body.delete_school)
+    auth.end_session(eng, request, response)
+    return s.AccountDeleted(ok=True, **out)
+
+
 @router.post("/auth/student/join", response_model=s.Ok, status_code=201)
 def student_join(body: s.StudentJoin, request: Request, response: Response) -> s.Ok:
     """Join a class with its code, a nickname and a PIN. No email and no real name."""

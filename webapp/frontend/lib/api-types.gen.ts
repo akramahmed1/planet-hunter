@@ -215,6 +215,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v2/auth/teacher/delete-account": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Teacher Delete Account
+         * @description Delete the signed-in teacher's account after re-checking the password. See docs/DATA_DELETION.md.
+         */
+        post: operations["teacher_delete_account_api_v2_auth_teacher_delete_account_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v2/auth/teacher/forgot": {
         parameters: {
             query?: never;
@@ -1211,6 +1231,17 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** AccountDeleted */
+        AccountDeleted: {
+            /** Classes Deleted */
+            classes_deleted: number;
+            /** Ok */
+            ok: boolean;
+            /** Schools Deleted */
+            schools_deleted: number;
+            /** Students Deleted */
+            students_deleted: number;
+        };
         /** AnswerRequest */
         AnswerRequest: {
             /** Choice */
@@ -1495,6 +1526,16 @@ export interface components {
              * @enum {string}
              */
             status: "connected" | "not_configured" | "unavailable";
+        };
+        /** DeleteAccount */
+        DeleteAccount: {
+            /**
+             * Delete School
+             * @default false
+             */
+            delete_school: boolean;
+            /** Password */
+            password: string;
         };
         /** Distance */
         Distance: {
@@ -3062,6 +3103,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Ok"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    teacher_delete_account_api_v2_auth_teacher_delete_account_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DeleteAccount"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AccountDeleted"];
                 };
             };
             /** @description Validation Error */
