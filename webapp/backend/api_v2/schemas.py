@@ -571,6 +571,15 @@ class TeacherLogin(_Strict):
     password: str = Field(min_length=1, max_length=200)
 
 
+class ForgotPassword(_Strict):
+    email: str = Field(min_length=3, max_length=254)
+
+
+class ResetPassword(_Strict):
+    token: str = Field(min_length=20, max_length=200)
+    password: str = Field(min_length=1, max_length=200)
+
+
 class StudentJoin(BirthMonth):
     class_code: str = Field(min_length=4, max_length=20)
     nickname: str = Field(min_length=1, max_length=24)

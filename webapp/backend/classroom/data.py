@@ -117,6 +117,44 @@ def user_for_login(eng: Engine, email: str) -> tuple[int | None, str | None]:
     return (r[0], r[1]) if r else (None, None)
 
 
+# ---------- forgotten passwords (T17) ----------
+
+RESET_MINUTES = 60
+
+
+def start_password_reset(eng: Engine, email: str) -> tuple[str, str] | None:
+    """Make a single use token for this email's account. Returns (token, display_name), or None when there is no
+    such account. Any earlier unused token for the account stops working, so only the newest link is live."""
+    with eng.begin() as c:
+        r = c.execute(text("select id, display_name from users where lower(email) = :e"), {"e": email}).first()
+        if r is None:
+            return None
+        token = security.new_token()
+        c.execute(text("delete from password_resets where user_id = :u and used_at is null"), {"u": r[0]})
+        c.execute(text("""insert into password_resets (user_id, token_hash, expires_at)
+                          values (:u, :h, now() + make_interval(mins => :m))"""),
+                  {"u": r[0], "h": security.token_hash(token), "m": RESET_MINUTES})
+        c.execute(text("delete from password_resets where expires_at < now() - interval '1 day'"))
+        return token, r[1]
+
+
+def finish_password_reset(eng: Engine, token: str, new_password: str) -> None:
+    """Spend the token, set the new password and sign the teacher out everywhere. The token is claimed with one
+    UPDATE ... RETURNING, so two requests with the same token cannot both succeed."""
+    pw_hash = security.hash_secret(new_password)
+    with eng.begin() as c:
+        uid = c.execute(text("""update password_resets set used_at = now()
+                                where token_hash = :h and used_at is null and expires_at > now()
+                                returning user_id"""), {"h": security.token_hash(token)}).scalar()
+        if uid is None:
+            raise Invalid("That reset link is not valid any more. Ask for a new one.")
+        c.execute(text("update users set password_hash = :h where id = :u"), {"h": pw_hash, "u": uid})
+        c.execute(text("delete from password_resets where user_id = :u and used_at is null"), {"u": uid})
+        end_all_sessions(c, user_id=uid)
+        for (org,) in c.execute(text("select org_id from memberships where user_id = :u"), {"u": uid}):
+            audit(c, org, uid, "password.reset", f"user:{uid}")
+
+
 def create_org(eng: Engine, p: Principal, name: str) -> int:
     with eng.begin() as c:
         org = c.execute(text("insert into organizations (name, join_code) values (:n, :c) returning id"),

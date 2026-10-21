@@ -46,9 +46,10 @@ flow in the production environment):
 | backend | `EMAIL_PROVIDER` | `resend` (default, the one real sender). `memory` is for tests only and must never be set in production. With nothing configured no email is sent and callers are told so |
 | backend | `EMAIL_API_KEY` | Resend API key. Railway variable only, never in code or chat. Create it with sending access only |
 | backend | `EMAIL_FROM` | Sender, for example `Planet Hunter <hello@yourdomain>`. The domain must be verified at Resend (SPF and DKIM records) or mail lands in spam. Names the provider in the privacy notice as a processor |
+| backend | `APP_BASE_URL` | Public address of the website, for example `https://planethunter.example` (no path, no trailing slash). Password reset emails link to `<APP_BASE_URL>/classroom/reset#token=...`. If unset or not https (http only for localhost) no reset email is sent |
 | backend | `ANTHROPIC_API_KEY` | added by Akram in Railway, never in chat or git |
 
-Not set in production (defaults are the safe values): `AUTH_SIGNUPS_PER_HOUR`,
+Not set in production (defaults are the safe values): `AUTH_SIGNUPS_PER_HOUR`, `AUTH_FORGOT_PER_HOUR`,
 `WRITE_LIMIT_PER_MINUTE`, `BILLING_ENABLED`, `EXPLAINER_FAKE`. Live Stripe keys are
 refused by the code until a later change allows them.
 

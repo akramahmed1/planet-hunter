@@ -215,6 +215,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v2/auth/teacher/forgot": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Teacher Forgot
+         * @description Ask for a reset link. The answer is the same whether or not the address has an account, and the email is
+         *     sent after the answer, so neither the words nor the timing tell a stranger which addresses are registered.
+         */
+        post: operations["teacher_forgot_api_v2_auth_teacher_forgot_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v2/auth/teacher/login": {
         parameters: {
             query?: never;
@@ -226,6 +247,26 @@ export interface paths {
         put?: never;
         /** Teacher Login */
         post: operations["teacher_login_api_v2_auth_teacher_login_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v2/auth/teacher/reset": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Teacher Reset
+         * @description Choose a new password with the emailed token. Signs the teacher out everywhere; they sign in again.
+         */
+        post: operations["teacher_reset_api_v2_auth_teacher_reset_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1555,6 +1596,11 @@ export interface components {
             /** Classroom */
             classroom: boolean;
         };
+        /** ForgotPassword */
+        ForgotPassword: {
+            /** Email */
+            email: string;
+        };
         /** GradeCell */
         GradeCell: {
             /** Completed At */
@@ -2126,6 +2172,13 @@ export interface components {
             unit: string;
             /** Value */
             value: number;
+        };
+        /** ResetPassword */
+        ResetPassword: {
+            /** Password */
+            password: string;
+            /** Token */
+            token: string;
         };
         /** RoleChange */
         RoleChange: {
@@ -2975,6 +3028,39 @@ export interface operations {
             };
         };
     };
+    teacher_forgot_api_v2_auth_teacher_forgot_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ForgotPassword"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     teacher_login_api_v2_auth_teacher_login_post: {
         parameters: {
             query?: never;
@@ -2985,6 +3071,39 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["TeacherLogin"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    teacher_reset_api_v2_auth_teacher_reset_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ResetPassword"];
             };
         };
         responses: {

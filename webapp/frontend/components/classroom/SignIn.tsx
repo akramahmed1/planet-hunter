@@ -158,8 +158,54 @@ function StudentForms({ onDone }: { onDone: () => void }) {
   );
 }
 
+/** Ask for a reset link. The reply is the same whether or not the address has an account. */
+function ForgotForm({ onBack }: { onBack: () => void }) {
+  const [email, setEmail] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [sent, setSent] = useState(false);
+  return (
+    <form className="card form-card" data-testid="forgot-form" onSubmit={async (e) => {
+      e.preventDefault();
+      setBusy(true);
+      setError(null);
+      const r = await apiV2Post<{ ok: boolean }>("/api/v2/auth/teacher/forgot", { email });
+      setBusy(false);
+      if (r.ok) setSent(true);
+      else setError(r.error);
+    }}>
+      <h2 className="card-title">Forgot your password?</h2>
+      {sent ? (
+        <p role="status" data-testid="forgot-sent">
+          If that address has a teacher account, we have emailed a link to choose a new password. The link works once
+          and expires in an hour. Check your spam folder if it does not arrive.
+        </p>
+      ) : (
+        <>
+          <p className="muted small">Enter your teacher email and we will send you a link. Students: ask your teacher to
+            reset your PIN.</p>
+          <Field label="Email">
+            {(id) => <input id={id} className="select" type="email" value={email}
+              onChange={(e) => setEmail(e.target.value)} required maxLength={254} autoComplete="email"
+              data-testid="forgot-email" />}
+          </Field>
+        </>
+      )}
+      <div className="btn-row">
+        {!sent && (
+          <button type="submit" className="btn btn--primary" disabled={busy} data-testid="forgot-submit">
+            {busy ? "One moment..." : "Send the link"}
+          </button>
+        )}
+        <button type="button" className="btn btn--ghost" onClick={onBack}>Back to sign in</button>
+      </div>
+      {error && <p className="error-box" role="alert" data-testid="form-error">{error}</p>}
+    </form>
+  );
+}
+
 function TeacherForms({ onDone }: { onDone: () => void }) {
-  const [mode, setMode] = useState<"login" | "signup">("login");
+  const [mode, setMode] = useState<"login" | "signup" | "forgot">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -172,6 +218,7 @@ function TeacherForms({ onDone }: { onDone: () => void }) {
   const blocked = mode === "signup" && (ageBlocked() || error?.includes("13 and up"));
 
   if (blocked) return <AgeBlocked />;
+  if (mode === "forgot") return <ForgotForm onBack={() => setMode("login")} />;
   return (
     <form className="card form-card" data-testid="teacher-form" onSubmit={(e) => {
       e.preventDefault();
@@ -236,6 +283,10 @@ function TeacherForms({ onDone }: { onDone: () => void }) {
         <button type="button" className="btn btn--ghost" onClick={() => setMode(mode === "login" ? "signup" : "login")}>
           {mode === "login" ? "Create an account" : "I have an account"}
         </button>
+        {mode === "login" && (
+          <button type="button" className="btn btn--ghost" onClick={() => setMode("forgot")}
+            data-testid="forgot-link">Forgot your password?</button>
+        )}
       </div>
       {error && <p className="error-box" role="alert" data-testid="form-error">{error}</p>}
     </form>

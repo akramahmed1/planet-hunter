@@ -9,17 +9,20 @@ from __future__ import annotations
 import csv
 import datetime as dt
 import io
+import logging
 import os
 from contextlib import contextmanager
 from dataclasses import replace
 
-from fastapi import APIRouter, Depends, HTTPException, Path, Request, Response
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Path, Request, Response
 from fastapi.responses import JSONResponse
 
 from api_v2 import schemas as s
+import mailer
 from classroom import auth, data, flags, security
 from classroom.auth import STUDENT, TEACHER, Principal
 
+log = logging.getLogger("planethunter.classroom")
 router = APIRouter(prefix="/api/v2", tags=["v2"], dependencies=[Depends(flags.require_classroom)])
 
 
@@ -32,6 +35,7 @@ NO_STORE = {"Cache-Control": "no-store"}
 # Sign-ups per IP per hour. The test environments raise it, since every browser test there
 # comes from one address.
 SIGNUPS_PER_HOUR = int(os.environ.get("AUTH_SIGNUPS_PER_HOUR", "10"))
+FORGOT_PER_HOUR = int(os.environ.get("AUTH_FORGOT_PER_HOUR", "10"))
 AGE_MESSAGE = ("Planet Hunter accounts are for people aged 13 and up. You can still explore everything on the "
                "site without an account.")
 
@@ -108,6 +112,66 @@ def teacher_login(body: s.TeacherLogin, request: Request, response: Response) ->
         raise HTTPException(401, "That email and password do not match an account.")
     data.clear_failures(eng, f"login:email:{email}")
     auth.start_session(eng, request, response, user_id=uid)
+    return s.Ok(ok=True)
+
+
+def _reset_base() -> str | None:
+    """Where the emailed link points: the public address of the website (not of the API)."""
+    base = os.environ.get("APP_BASE_URL", "").strip().rstrip("/")
+    return base if base.startswith(("https://", "http://localhost", "http://127.0.0.1")) else None
+
+
+def _send_reset_email(email: str, token: str, name: str) -> None:
+    base = _reset_base()
+    if base is None:
+        log.warning("password reset email not sent: APP_BASE_URL is not set")
+        return
+    # The token sits after the # so browsers never send it to any server or in a Referer header.
+    link = f"{base}/classroom/reset#token={token}"
+    mailer.send(email, "Choose a new Planet Hunter password",
+                f"Hello {name},\n\nSomeone asked to reset the password for your Planet Hunter teacher account. "
+                f"To choose a new one, open this link within {data.RESET_MINUTES} minutes:\n\n{link}\n\n"
+                "The link works once. If you did not ask for this, ignore this email: your password has not "
+                "changed.\n")
+
+
+@router.post("/auth/teacher/forgot", response_model=s.Ok, status_code=202)
+def teacher_forgot(body: s.ForgotPassword, request: Request, response: Response, tasks: BackgroundTasks) -> s.Ok:
+    """Ask for a reset link. The answer is the same whether or not the address has an account, and the email is
+    sent after the answer, so neither the words nor the timing tell a stranger which addresses are registered."""
+    auth.check_csrf(request)
+    eng = auth.engine()
+    _no_store(response)
+    ip = security.requester_key(auth.client_ip(request))
+    email = security.normal_email(body.email)
+    _limit(eng, f"forgot:ip:{ip}", FORGOT_PER_HOUR, 60, "Too many reset requests from here. Try again in an hour.")
+    if email is None:
+        raise HTTPException(422, "That does not look like an email address.")
+    _limit(eng, f"forgot:email:{email}", 3, 60, "Too many reset requests for this address. Try again in an hour.")
+    data.record_failure(eng, f"forgot:ip:{ip}", f"forgot:email:{email}")  # counts requests, not only failures
+    made = data.start_password_reset(eng, email)
+    if made is not None:
+        tasks.add_task(_send_reset_email, email, made[0], made[1])
+    return s.Ok(ok=True)
+
+
+@router.post("/auth/teacher/reset", response_model=s.Ok)
+def teacher_reset(body: s.ResetPassword, request: Request, response: Response) -> s.Ok:
+    """Choose a new password with the emailed token. Signs the teacher out everywhere; they sign in again."""
+    auth.check_csrf(request)
+    eng = auth.engine()
+    _no_store(response)
+    ip = security.requester_key(auth.client_ip(request))
+    _limit(eng, f"reset:ip:{ip}", 20, 15, "Too many tries from here. Wait 15 minutes.")
+    problem = security.password_problem(body.password)
+    if problem:
+        raise HTTPException(422, problem)
+    try:
+        with _errors():
+            data.finish_password_reset(eng, body.token, body.password)
+    except HTTPException:
+        data.record_failure(eng, f"reset:ip:{ip}")
+        raise
     return s.Ok(ok=True)
 
 
