@@ -109,6 +109,7 @@
 
   /* shell */
   --topbar-h: 56px;
+  --strip-h: 28px;
   --tabbar-h: 64px;
 }
 
@@ -2739,6 +2740,74 @@ html.cosmos-on body::after {
 @media (min-width: 768px) {
   .depth-row {
     grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* The status strip under the top bar (T29): fixed height from the first paint, so nothing moves when it fills in. */
+.statusstrip {
+  height: var(--strip-h);
+  border-bottom: 1px solid var(--hairline);
+  background: rgba(7, 11, 23, 0.86);
+  font-size: var(--step--2);
+  color: var(--ink-dim);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.statusstrip-inner {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  height: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.strip-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  min-width: 0;
+}
+
+.strip-label {
+  color: var(--ink-faint);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+}
+
+.strip-clock {
+  display: inline-block;
+  min-width: 8ch;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+.strip-fresh {
+  flex: 1 1 auto;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.strip-label--short {
+  display: none;
+}
+
+.strip-coords {
+  display: none;
+}
+
+@media (min-width: 560px) {
+  .strip-coords {
+    display: inline-flex;
+  }
+}
+
+@media (max-width: 559px) {
+  .strip-label--short {
+    display: inline;
   }
 }
 

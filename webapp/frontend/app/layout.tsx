@@ -6,6 +6,7 @@ import UnitsProvider from "@/components/UnitsProvider";
 import CosmosLoader from "@/components/shell/CosmosLoader";
 import Footer from "@/components/shell/Footer";
 import TabBar from "@/components/shell/TabBar";
+import StatusStrip from "@/components/shell/StatusStrip";
 import TopBar from "@/components/shell/TopBar";
 import "./globals.css";
 
@@ -62,6 +63,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <CosmosLoader />
         <UnitsProvider>
           <TopBar classroom={classroom} />
+          <StatusStrip />
           <main id="main" className="page" tabIndex={-1}>
             {children}
             <Footer />
