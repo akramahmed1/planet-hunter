@@ -21,6 +21,11 @@ export const NAV: NavItem[] = [
   { href: "/classroom", label: "Classroom", icon: "classroom" },
 ];
 
+/** The sections to show. Classroom appears only when the server has it switched on (CLASSROOM_ENABLED). */
+export function visibleNav(classroom: boolean): NavItem[] {
+  return classroom ? NAV : NAV.filter((n) => n.icon !== "classroom");
+}
+
 /** The four sections that get their own phone tab; the rest live under More. */
 export const TAB_HREFS = ["/", "/solar-system", "/exoplanets", "/candidates"];
 

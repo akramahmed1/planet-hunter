@@ -20,7 +20,7 @@ export default defineConfig({
   projects: [
     {
       name: "mobile",
-      testIgnore: /down\.spec|screenshots\.spec/,
+      testIgnore: /down\.spec|classroom-off\.spec|screenshots\.spec/,
       use: {
         browserName: "chromium",
         viewport: { width: 375, height: 812 },
@@ -31,7 +31,7 @@ export default defineConfig({
     },
     {
       name: "desktop",
-      testIgnore: /down\.spec|screenshots\.spec/,
+      testIgnore: /down\.spec|classroom-off\.spec|screenshots\.spec/,
       use: { browserName: "chromium", viewport: { width: 1280, height: 800 } },
     },
     // Screenshots for review (e2e/screenshots.spec.ts): a Pixel-class phone in Chrome and a laptop.
@@ -58,13 +58,14 @@ export default defineConfig({
         ]
       : []),
     // Every live source down: a second backend whose upstream calls all fail, and a second server
-    // rendering from it (e2e/down.spec.ts). Not run against a deployed site.
+    // rendering from it (e2e/down.spec.ts). That backend also has Classroom switched OFF, so the same server
+    // proves the off state in the browser (e2e/classroom-off.spec.ts). Not run against a deployed site.
     ...(remote
       ? []
       : [
           {
             name: "upstream-down",
-            testMatch: /down\.spec/,
+            testMatch: /down\.spec|classroom-off\.spec/,
             use: {
               browserName: "chromium" as const,
               baseURL: "http://127.0.0.1:3001",
@@ -80,7 +81,7 @@ export default defineConfig({
           command: "python3 -m uvicorn app:app --port 8000",
           cwd: "../backend",
           // Answer external requests with the saved real samples, so tests never hit the network.
-          env: { PH_OFFLINE_FIXTURES: "1" },
+          env: { PH_OFFLINE_FIXTURES: "1", CLASSROOM_ENABLED: "1" },
           url: "http://127.0.0.1:8000/api/health",
           reuseExistingServer: true,
           timeout: 60_000,
@@ -89,7 +90,7 @@ export default defineConfig({
           command: "python3 -m uvicorn app:app --port 8001",
           cwd: "../backend",
           // No database (so no shared cache) and every upstream call fails.
-          env: { PH_OFFLINE_FIXTURES: "down", DATABASE_URL: "" },
+          env: { PH_OFFLINE_FIXTURES: "down", DATABASE_URL: "", CLASSROOM_ENABLED: "0" },
           url: "http://127.0.0.1:8001/api/health",
           reuseExistingServer: true,
           timeout: 60_000,

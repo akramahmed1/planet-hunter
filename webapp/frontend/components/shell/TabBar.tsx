@@ -5,14 +5,15 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import Sheet from "@/components/ui/Sheet";
 import Icon from "./Icon";
-import { NAV, TAB_HREFS, isActive } from "./nav";
+import { TAB_HREFS, isActive, visibleNav } from "./nav";
 
-const TABS = NAV.filter((n) => TAB_HREFS.includes(n.href));
-const MORE = NAV.filter((n) => !TAB_HREFS.includes(n.href));
 
 /** Phone navigation: four section tabs plus More, fixed to the bottom. */
-export default function TabBar() {
+export default function TabBar({ classroom }: { classroom: boolean }) {
   const pathname = usePathname() ?? "/";
+  const nav = visibleNav(classroom);
+  const TABS = nav.filter((n) => TAB_HREFS.includes(n.href));
+  const MORE = nav.filter((n) => !TAB_HREFS.includes(n.href));
   const [moreOpen, setMoreOpen] = useState(false);
   const moreActive = MORE.some((n) => isActive(n, pathname));
 

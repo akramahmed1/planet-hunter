@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
+import { getFeatures } from "@/lib/features";
 import { siteUrl } from "@/lib/site";
 import UnitsProvider from "@/components/UnitsProvider";
 import CosmosLoader from "@/components/shell/CosmosLoader";
@@ -50,7 +51,8 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const { classroom } = await getFeatures();
   return (
     <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable}`}>
       <body>
@@ -59,12 +61,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </a>
         <CosmosLoader />
         <UnitsProvider>
-          <TopBar />
+          <TopBar classroom={classroom} />
           <main id="main" className="page" tabIndex={-1}>
             {children}
             <Footer />
           </main>
-          <TabBar />
+          <TabBar classroom={classroom} />
         </UnitsProvider>
       </body>
     </html>

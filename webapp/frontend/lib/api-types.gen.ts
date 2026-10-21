@@ -529,6 +529,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v2/features": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Features
+         * @description Switches the frontend needs to know about. Short cache: a flip shows up within a minute.
+         */
+        get: operations["features_api_v2_features_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v2/health": {
         parameters: {
             query?: never;
@@ -1521,6 +1541,14 @@ export interface components {
             model: string | null;
             /** Reason */
             reason: string | null;
+        };
+        /**
+         * Features
+         * @description Which optional parts of the site are switched on, so the frontend shows only what works.
+         */
+        Features: {
+            /** Classroom */
+            classroom: boolean;
         };
         /** GradeCell */
         GradeCell: {
@@ -3518,6 +3546,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ExplainStatus"];
+                };
+            };
+        };
+    };
+    features_api_v2_features_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Features"];
                 };
             };
         };

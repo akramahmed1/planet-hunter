@@ -3,11 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BrandMark } from "./Icon";
-import { NAV, isActive } from "./nav";
+import { isActive, visibleNav } from "./nav";
 import UnitsButton from "./UnitsControls";
 
-export default function TopBar() {
+export default function TopBar({ classroom }: { classroom: boolean }) {
   const pathname = usePathname() ?? "/";
+  const nav = visibleNav(classroom);
   return (
     <header className="topbar">
       <div className="topbar-inner">
@@ -17,7 +18,7 @@ export default function TopBar() {
         </Link>
         <nav className="topnav" aria-label="Primary">
           <ul className="topnav-list">
-            {NAV.map((item) => (
+            {nav.map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
