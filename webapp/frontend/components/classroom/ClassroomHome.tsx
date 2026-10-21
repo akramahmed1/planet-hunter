@@ -6,7 +6,7 @@ import Badge from "@/components/ui/Badge";
 import ErrorState from "@/components/ui/ErrorState";
 import Skeleton from "@/components/ui/Skeleton";
 import { apiV2Post, apiV2Send, type ClassSummary, type Me, type OrgBilling, type OrgDetail, type StudentHome } from "@/lib/api-v2";
-import { assignmentHref, formatDue, glanceParts, schoolTotals } from "@/lib/classroom";
+import { assignmentHref, formatDue, glanceParts, planStatus, schoolTotals, studentPlan } from "@/lib/classroom";
 import { announceRole } from "@/lib/role";
 import SignIn from "./SignIn";
 
@@ -366,27 +366,74 @@ function StudentAssignments() {
   }, []);
   if (error) return <ErrorState title="Your assignments could not be loaded." detail={error} />;
   if (!home) return <Skeleton height="6rem" />;
+  const plan = studentPlan(home.assignments, new Date());
   return (
     <section className="card" aria-labelledby="my-h" data-testid="student-home">
       <p className="eyebrow">{home.class.name}</p>
-      <h2 id="my-h" className="card-title">Your assignments</h2>
-      {home.assignments.length === 0 ? <p className="muted">Nothing assigned yet.</p> : (
-        <ul className="assignment-list">
-          {home.assignments.map((a) => (
-            <li key={a.id} data-testid="my-assignment">
-              <Link href={assignmentHref(a)}>{a.title}</Link>
-              <span className="muted small">{a.due_at ? ` · due ${formatDue(a.due_at)}` : ""}</span>{" "}
-              {a.result ? (
-                <Badge tone={a.result.completed_at ? "clean" : "info"}>
-                  {a.result.completed_at ? "Done" : "Started"}: {a.result.score} of {a.result.max_score}
-                </Badge>
-              ) : <Badge tone="outline">Not started</Badge>}
-            </li>
-          ))}
-        </ul>
+      <h2 id="my-h" className="card-title">Hi, {home.nickname}</h2>
+      {plan.total === 0 ? <p className="muted">Nothing assigned yet. Your teacher will add work here.</p> : (
+        <>
+          <p data-testid="progress">
+            <strong>{plan.done} of {plan.total}</strong> done ({plan.percent}%)
+          </p>
+          <progress className="bar" max={plan.total} value={plan.done} aria-label="Assignments finished"
+            data-testid="progress-bar" />
+          {plan.next && (
+            <div className="next-up" data-testid="my-assignment">
+              <p className="eyebrow">Next up</p>
+              <p className="next-up-title">{plan.next.title}</p>
+              <StudentStatus a={plan.next} />
+              <p><Link href={assignmentHref(plan.next)} className="btn btn--primary btn--sm" data-testid="next-up-go"
+                aria-label={`${plan.next.result ? "Keep going" : "Start"}: ${plan.next.title}`}>
+                {plan.next.result ? "Keep going" : "Start"}</Link></p>
+            </div>
+          )}
+          {plan.todo.length > 0 && (
+            <>
+              <h3 className="sub-h">Still to do</h3>
+              <ul className="assignment-list">{plan.todo.map((a) => <StudentRow key={a.id} a={a} />)}</ul>
+            </>
+          )}
+          {plan.hunts.length > 0 && (
+            <>
+              <h3 className="sub-h">My hunts</h3>
+              <ul className="assignment-list" data-testid="my-hunts">{plan.hunts.map((a) => <StudentRow key={a.id} a={a} hunt />)}</ul>
+            </>
+          )}
+          {plan.finished.length > 0 && (
+            <>
+              <h3 className="sub-h">Finished</h3>
+              <ul className="assignment-list" data-testid="finished">{plan.finished.map((a) => <StudentRow key={a.id} a={a} />)}</ul>
+            </>
+          )}
+        </>
       )}
-      <p className="muted small">Quiz scores count the questions you got right on the first try.</p>
+      <p className="muted small">Quiz scores count the questions you got right on the first try. A hunt keeps your best try.</p>
     </section>
+  );
+}
+
+function StudentStatus({ a, hunt = false }: { a: StudentHome["assignments"][number]; hunt?: boolean }) {
+  const status = planStatus(a, new Date());
+  const r = a.result;
+  return (
+    <span className="muted small">
+      {a.due_at ? ` due ${formatDue(a.due_at)} ` : ""}
+      {status === "overdue" && <Badge tone="marginal">Past due</Badge>}{" "}
+      {r ? (
+        <Badge tone={r.completed_at ? "clean" : "info"}>
+          {r.completed_at ? (hunt ? "Best" : "Done") : "Started"}: {r.score} of {r.max_score}
+        </Badge>
+      ) : <Badge tone="outline">Not started</Badge>}
+    </span>
+  );
+}
+
+function StudentRow({ a, hunt = false }: { a: StudentHome["assignments"][number]; hunt?: boolean }) {
+  return (
+    <li data-testid="my-assignment">
+      <Link href={assignmentHref(a)}>{a.title}</Link> <StudentStatus a={a} hunt={hunt} />
+    </li>
   );
 }
 
