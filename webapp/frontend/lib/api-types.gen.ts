@@ -215,6 +215,86 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v2/auth/teacher/2fa/disable": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Two Factor Disable
+         * @description Turn it off. Needs the password and a current code (or a recovery code), so a stolen session is not enough.
+         */
+        post: operations["two_factor_disable_api_v2_auth_teacher_2fa_disable_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v2/auth/teacher/2fa/enable": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Two Factor Enable
+         * @description Prove the app works with one code. Returns ten recovery codes, shown only this once.
+         */
+        post: operations["two_factor_enable_api_v2_auth_teacher_2fa_enable_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v2/auth/teacher/2fa/recovery-codes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Two Factor New Recovery Codes
+         * @description Replace the recovery codes (the old ones stop working). Needs the password and a current code.
+         */
+        post: operations["two_factor_new_recovery_codes_api_v2_auth_teacher_2fa_recovery_codes_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v2/auth/teacher/2fa/setup": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Two Factor Setup
+         * @description Start two-step setup: a new secret for the authenticator app. Nothing is required at sign-in until /enable.
+         */
+        post: operations["two_factor_setup_api_v2_auth_teacher_2fa_setup_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v2/auth/teacher/delete-account": {
         parameters: {
             query?: never;
@@ -267,6 +347,26 @@ export interface paths {
         put?: never;
         /** Teacher Login */
         post: operations["teacher_login_api_v2_auth_teacher_login_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v2/auth/teacher/login/2fa": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Teacher Login 2Fa
+         * @description Second step: the ticket from the password step plus a code from the authenticator app, or a recovery code.
+         */
+        post: operations["teacher_login_2fa_api_v2_auth_teacher_login_2fa_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1529,6 +1629,8 @@ export interface components {
         };
         /** DeleteAccount */
         DeleteAccount: {
+            /** Code */
+            code?: string | null;
             /**
              * Delete School
              * @default false
@@ -1948,6 +2050,29 @@ export interface components {
             /** Time Btjd */
             time_btjd: number[];
         };
+        /**
+         * LoginResult
+         * @description `needs_2fa` means the password was right but the teacher has two-step sign-in on: no session exists yet, and
+         *     `challenge` must be sent back with a code to /auth/teacher/login/2fa.
+         */
+        LoginResult: {
+            /** Challenge */
+            challenge?: string | null;
+            /**
+             * Needs 2Fa
+             * @default false
+             */
+            needs_2fa: boolean;
+            /** Ok */
+            ok: boolean;
+        };
+        /** LoginTwoFactor */
+        LoginTwoFactor: {
+            /** Challenge */
+            challenge: string;
+            /** Code */
+            code: string;
+        };
         /** Me */
         Me: {
             /** Me */
@@ -1982,6 +2107,8 @@ export interface components {
             kind: "teacher";
             /** Orgs */
             orgs: components["schemas"]["OrgRole"][];
+            /** Two Factor */
+            two_factor: boolean;
         };
         /** MethodResponse */
         MethodResponse: {
@@ -2255,6 +2382,13 @@ export interface components {
             unit: string;
             /** Value */
             value: number;
+        };
+        /** RecoveryCodes */
+        RecoveryCodes: {
+            /** Ok */
+            ok: boolean;
+            /** Recovery Codes */
+            recovery_codes: string[];
         };
         /** ResetPassword */
         ResetPassword: {
@@ -2701,6 +2835,25 @@ export interface components {
             /** Timestamp */
             timestamp: number;
         };
+        /** TwoFactorCode */
+        TwoFactorCode: {
+            /** Code */
+            code: string;
+        };
+        /** TwoFactorProof */
+        TwoFactorProof: {
+            /** Code */
+            code: string;
+            /** Password */
+            password: string;
+        };
+        /** TwoFactorSetup */
+        TwoFactorSetup: {
+            /** Otpauth Uri */
+            otpauth_uri: string;
+            /** Secret */
+            secret: string;
+        };
         /** Unavailable */
         Unavailable: {
             /** Message */
@@ -3116,6 +3269,125 @@ export interface operations {
             };
         };
     };
+    two_factor_disable_api_v2_auth_teacher_2fa_disable_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TwoFactorProof"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    two_factor_enable_api_v2_auth_teacher_2fa_enable_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TwoFactorCode"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecoveryCodes"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    two_factor_new_recovery_codes_api_v2_auth_teacher_2fa_recovery_codes_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TwoFactorProof"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecoveryCodes"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    two_factor_setup_api_v2_auth_teacher_2fa_setup_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TwoFactorSetup"];
+                };
+            };
+        };
+    };
     teacher_delete_account_api_v2_auth_teacher_delete_account_post: {
         parameters: {
             query?: never;
@@ -3192,6 +3464,39 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["TeacherLogin"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LoginResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    teacher_login_2fa_api_v2_auth_teacher_login_2fa_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LoginTwoFactor"];
             };
         };
         responses: {

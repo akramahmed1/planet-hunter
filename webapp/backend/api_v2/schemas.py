@@ -582,6 +582,7 @@ class ResetPassword(_Strict):
 
 class DeleteAccount(_Strict):
     password: str = Field(min_length=1, max_length=200)
+    code: str | None = Field(default=None, max_length=32)  # required when two-step sign-in is on
     delete_school: bool = False
 
 
@@ -590,6 +591,38 @@ class AccountDeleted(_Strict):
     schools_deleted: int
     classes_deleted: int
     students_deleted: int
+
+
+class LoginResult(_Strict):
+    """`needs_2fa` means the password was right but the teacher has two-step sign-in on: no session exists yet, and
+    `challenge` must be sent back with a code to /auth/teacher/login/2fa."""
+    ok: bool
+    needs_2fa: bool = False
+    challenge: str | None = None
+
+
+class LoginTwoFactor(_Strict):
+    challenge: str = Field(min_length=20, max_length=200)
+    code: str = Field(min_length=6, max_length=32)
+
+
+class TwoFactorSetup(_Strict):
+    secret: str
+    otpauth_uri: str
+
+
+class TwoFactorCode(_Strict):
+    code: str = Field(min_length=6, max_length=32)
+
+
+class TwoFactorProof(_Strict):
+    password: str = Field(min_length=1, max_length=200)
+    code: str = Field(min_length=6, max_length=32)
+
+
+class RecoveryCodes(_Strict):
+    ok: bool
+    recovery_codes: list[str]
 
 
 class VerifyEmail(_Strict):
@@ -619,6 +652,7 @@ class MeTeacher(_Strict):
     display_name: str
     email: str
     email_verified: bool
+    two_factor: bool
     orgs: list[OrgRole]
 
 

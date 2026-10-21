@@ -113,6 +113,10 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+  /* A control scrolled or focused into view must land clear of the sticky top bar and, on phones, the fixed tab bar
+     (WCAG 2.2 "Focus Not Obscured"). */
+  scroll-padding-top: calc(var(--topbar-h) + var(--sp-3));
+  scroll-padding-bottom: calc(var(--tabbar-h) + var(--sp-4) + env(safe-area-inset-bottom));
 }
 
 html,
@@ -1635,6 +1639,10 @@ table.data-table {
 
   .tabbar {
     display: none;
+  }
+
+  html {
+    scroll-padding-bottom: var(--sp-4);
   }
 }
 

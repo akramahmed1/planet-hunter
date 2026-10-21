@@ -158,6 +158,38 @@ function StudentForms({ onDone }: { onDone: () => void }) {
   );
 }
 
+/** Second step after a right password: a code from the authenticator app, or a recovery code. */
+function SecondStep({ challenge, onDone, onBack }: { challenge: string; onDone: () => void; onBack: () => void }) {
+  const [code, setCode] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  return (
+    <form className="card form-card" data-testid="second-step-form" onSubmit={async (e) => {
+      e.preventDefault();
+      setBusy(true);
+      setError(null);
+      const r = await apiV2Post<{ ok: boolean }>("/api/v2/auth/teacher/login/2fa", { challenge, code });
+      setBusy(false);
+      if (r.ok) onDone();
+      else setError(r.error);
+    }}>
+      <h2 className="card-title">Enter your code</h2>
+      <Field label="Code from your authenticator app" hint="Six digits. Lost your phone? Type one of your recovery codes instead.">
+        {(id, hintId) => <input id={id} className="select" value={code} onChange={(e) => setCode(e.target.value)}
+          aria-describedby={hintId} inputMode="text" autoComplete="one-time-code" spellCheck={false} required
+          maxLength={32} data-testid="second-step-code" />}
+      </Field>
+      <div className="btn-row">
+        <button type="submit" className="btn btn--primary" disabled={busy} data-testid="second-step-submit">
+          {busy ? "One moment..." : "Sign in"}
+        </button>
+        <button type="button" className="btn btn--ghost" onClick={onBack}>Start again</button>
+      </div>
+      {error && <p className="error-box" role="alert" data-testid="form-error">{error}</p>}
+    </form>
+  );
+}
+
 /** Ask for a reset link. The reply is the same whether or not the address has an account. */
 function ForgotForm({ onBack }: { onBack: () => void }) {
   const [email, setEmail] = useState("");
@@ -215,15 +247,30 @@ function TeacherForms({ onDone }: { onDone: () => void }) {
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
   const { busy, error, run } = useSubmit(onDone);
+  const [challenge, setChallenge] = useState<string | null>(null);
+  const [loginBusy, setLoginBusy] = useState(false);
+  const [loginError, setLoginError] = useState<string | null>(null);
   const blocked = mode === "signup" && (ageBlocked() || error?.includes("13 and up"));
 
+  async function login() {
+    setLoginBusy(true);
+    setLoginError(null);
+    const r = await apiV2Post<{ ok: boolean; needs_2fa?: boolean; challenge?: string | null }>(
+      "/api/v2/auth/teacher/login", { email, password });
+    setLoginBusy(false);
+    if (!r.ok) return setLoginError(r.error);
+    if (r.data.needs_2fa && r.data.challenge) return setChallenge(r.data.challenge);
+    onDone();
+  }
+
   if (blocked) return <AgeBlocked />;
+  if (challenge) return <SecondStep challenge={challenge} onDone={onDone} onBack={() => { setChallenge(null); setPassword(""); }} />;
   if (mode === "forgot") return <ForgotForm onBack={() => setMode("login")} />;
   return (
     <form className="card form-card" data-testid="teacher-form" onSubmit={(e) => {
       e.preventDefault();
       if (mode === "login") {
-        run("/api/v2/auth/teacher/login", { email, password });
+        login();
       } else {
         run("/api/v2/auth/teacher/signup", {
           email, password, display_name: name, birth_month: Number(month), birth_year: Number(year),
@@ -277,8 +324,8 @@ function TeacherForms({ onDone }: { onDone: () => void }) {
         </>
       )}
       <div className="btn-row">
-        <button type="submit" className="btn btn--primary" disabled={busy} data-testid="teacher-submit">
-          {busy ? "One moment..." : mode === "login" ? "Sign in" : "Create account"}
+        <button type="submit" className="btn btn--primary" disabled={busy || loginBusy} data-testid="teacher-submit">
+          {busy || loginBusy ? "One moment..." : mode === "login" ? "Sign in" : "Create account"}
         </button>
         <button type="button" className="btn btn--ghost" onClick={() => setMode(mode === "login" ? "signup" : "login")}>
           {mode === "login" ? "Create an account" : "I have an account"}
@@ -288,7 +335,7 @@ function TeacherForms({ onDone }: { onDone: () => void }) {
             data-testid="forgot-link">Forgot your password?</button>
         )}
       </div>
-      {error && <p className="error-box" role="alert" data-testid="form-error">{error}</p>}
+      {(error ?? loginError) && <p className="error-box" role="alert" data-testid="form-error">{error ?? loginError}</p>}
     </form>
   );
 }
