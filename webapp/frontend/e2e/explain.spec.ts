@@ -36,3 +36,28 @@ test("a question the data cannot answer gets 'not known'", async ({ page, reques
   await box.getByTestId("explain-ask").click();
   await expect(page.getByTestId("explain-answer")).toContainText("Not known from this page's data.");
 });
+
+// When the month's spend cap is used up the server reports paused: the box stays, says so quietly, and offers no form.
+test("a paused explainer says so instead of vanishing", async ({ page }) => {
+  await page.route("**/api/v2/explain/status", (route) =>
+    route.fulfill({
+      json: { enabled: false, paused: true, model: null,
+              reason: "The explainer is paused until next month to keep its running cost in check. Everything else works." },
+    }),
+  );
+  await page.goto("/candidates/toi-700");
+  const box = page.getByTestId("explain-paused");
+  await expect(box).toContainText("paused until next month");
+  await expect(box.getByRole("heading", { name: "What am I looking at?" })).toBeVisible();
+  await expect(page.getByTestId("explain-question")).toHaveCount(0);
+  await expect(page.getByTestId("explain-ask")).toHaveCount(0);
+});
+
+test("a switched-off explainer still shows nothing", async ({ page }) => {
+  await page.route("**/api/v2/explain/status", (route) =>
+    route.fulfill({ json: { enabled: false, paused: false, model: null, reason: "The explainer is switched off on this server." } }),
+  );
+  await page.goto("/candidates/toi-700");
+  await expect(page.getByTestId("explain")).toHaveCount(0);
+  await expect(page.getByTestId("explain-paused")).toHaveCount(0);
+});

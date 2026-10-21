@@ -753,6 +753,8 @@ class ExplainStatus(_Strict):
     enabled: bool
     reason: str | None
     model: str | None
+    # True when the explainer is on but has used its monthly budget (it returns by itself next month).
+    paused: bool = False
 
 
 class ExplainRequest(_Strict):

@@ -21,6 +21,7 @@ from sqlalchemy import text
 from sqlalchemy.engine import Engine
 
 from explain.grounding import resolve
+from explain import spend
 from explain.model import Model, ModelError
 
 MAX_QUESTION = 300
@@ -90,9 +91,38 @@ def check(reply_known: bool, answer: str, citations: list[str], grounding: dict,
     return Explanation(known=True, answer=answer, citations=resolved, model=model)
 
 
+MAX_OUTPUT_TOKENS = 2048  # the output allowance model.AnthropicModel asks for; the spend reservation assumes it all
+
+
 def explain(model: Model, grounding: dict, question: str) -> Explanation:
     q = clean_question(question)
     reply = model.answer(SYSTEM, json.dumps(grounding, separators=(",", ":"), sort_keys=True), q)
+    return check(reply.known, reply.answer, reply.citations, grounding, reply.model)
+
+
+def explain_metered(eng: Engine, model: Model, grounding: dict, question: str) -> Explanation:
+    """`explain`, with the call counted against the monthly spend cap (spend.py).
+
+    Raises spend.CapReached before any call is made when the month's budget is used up, spend.UnknownPrice for a
+    model whose price is not known, ModelError when the model fails (after counting whatever it billed).
+    """
+    q = clean_question(question)
+    grounding_json = json.dumps(grounding, separators=(",", ":"), sort_keys=True)
+    worst = spend.worst_case_usd(model.name, len(SYSTEM) + len(grounding_json) + len(q), MAX_OUTPUT_TOKENS)
+    row = spend.reserve(eng, model.name, worst)
+    try:
+        reply = model.answer(SYSTEM, grounding_json, q)
+    except ModelError as exc:
+        # An answer the provider billed but we could not use still costs money; a failure before any answer does not.
+        if exc.usage is not None:
+            spend.settle(eng, row, exc.model or model.name, exc.usage)
+        else:
+            spend.release(eng, row)
+        raise
+    except BaseException:
+        spend.release(eng, row)
+        raise
+    spend.settle(eng, row, reply.model or model.name, reply.usage or spend.Usage())
     return check(reply.known, reply.answer, reply.citations, grounding, reply.model)
 
 
@@ -121,4 +151,4 @@ def take(eng: Engine, person: str, class_key: str | None) -> None:
         c.execute(text("delete from usage_events where at < now() - interval '2 days'"))
 
 
-__all__ = ["Explanation", "Limited", "ModelError", "NOT_KNOWN", "explain", "take", "check", "clean_question"]
+__all__ = ["Explanation", "Limited", "ModelError", "NOT_KNOWN", "explain", "explain_metered", "take", "check", "clean_question"]

@@ -7,6 +7,7 @@ from fastapi.testclient import TestClient
 
 import app as backend
 from explain import evals, grounding, model, service
+from explain.spend import Usage
 from tests.test_scan_queue import engine  # noqa: F401
 from tests.test_v2 import needs_db
 
@@ -87,6 +88,8 @@ def test_the_anthropic_model_sends_data_in_the_user_turn_and_handles_refusals(mo
         def create(**kwargs):
             calls.append(kwargs)
             return SimpleNamespace(stop_reason=stop_reason, model=kwargs["model"],
+                                   usage=SimpleNamespace(input_tokens=1200, output_tokens=40,
+                                                         cache_read_input_tokens=5, cache_creation_input_tokens=300),
                                    content=[SimpleNamespace(type="thinking", thinking=""),
                                             SimpleNamespace(type="text", text=text)])
         return create
@@ -94,7 +97,9 @@ def test_the_anthropic_model_sends_data_in_the_user_turn_and_handles_refusals(mo
     monkeypatch.setattr(m._client.beta.messages, "create",
                         respond("end_turn", json.dumps({"known": True, "answer": "16 days", "citations": ["item.period_d"]})))
     reply = m.answer(service.SYSTEM, '{"item":{}}', "period?")
-    assert reply == model.Reply(True, "16 days", ["item.period_d"], "claude-opus-5-5")
+    # The provider's token counts travel with the reply, for the spend ledger.
+    assert reply == model.Reply(True, "16 days", ["item.period_d"], "claude-opus-5-5",
+                                usage=Usage(input_tokens=1200, output_tokens=40, cache_read_tokens=5, cache_write_tokens=300))
     sent = calls[0]
     assert sent["model"] == "claude-opus-5-5" and sent["fallbacks"] == "default"
     assert sent["output_config"]["format"]["schema"] == model.ANSWER_SCHEMA
@@ -104,17 +109,21 @@ def test_the_anthropic_model_sends_data_in_the_user_turn_and_handles_refusals(mo
     assert user == ['<grounding>\n{"item":{}}\n</grounding>', "<question>\nperiod?\n</question>"]
 
     monkeypatch.setattr(m._client.beta.messages, "create", respond("refusal", ""))
-    with pytest.raises(model.ModelError, match="declined"):
+    with pytest.raises(model.ModelError, match="declined") as refused:
         m.answer(service.SYSTEM, "{}", "q")
+    # A refusal or a malformed answer was still billed, so the error carries the usage for the ledger.
+    assert refused.value.usage == Usage(input_tokens=1200, output_tokens=40, cache_read_tokens=5, cache_write_tokens=300)
+    assert refused.value.model == "claude-opus-5-5"
     monkeypatch.setattr(m._client.beta.messages, "create", respond("end_turn", "not json"))
-    with pytest.raises(model.ModelError, match="wrong shape"):
+    with pytest.raises(model.ModelError, match="wrong shape") as bad:
         m.answer(service.SYSTEM, "{}", "q")
+    assert bad.value.usage is not None and bad.value.usage.input_tokens == 1200
 
 
 def test_switched_off_by_default(monkeypatch):
     monkeypatch.delenv("EXPLAINER_ENABLED", raising=False)
     with TestClient(backend.app) as c:
-        assert c.get("/api/v2/explain/status").json() == {"enabled": False, "model": None,
+        assert c.get("/api/v2/explain/status").json() == {"enabled": False, "model": None, "paused": False,
                                                          "reason": "The explainer is switched off on this server."}
         r = c.post("/api/v2/explain", json={"kind": "candidate", "ref": "toi-700", "question": "period?"})
         assert r.status_code == 503
