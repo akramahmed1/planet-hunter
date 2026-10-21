@@ -80,6 +80,18 @@ def bls_search(time, flux, period_min=PERIOD_MIN, period_max=PERIOD_MAX, n_perio
     return np.asarray(res.period), np.asarray(res.power), sig
 
 
+# The flattening window is a length of time, not a number of cadences. 1001 two-minute cadences (about 33 hours)
+# is what the batch scan and the validation used. A 20-second sector (TOI 270, sector 30) flattened with 1001
+# cadences gets a 5.6 hour window, which partly erases a 1 to 2 hour transit: depth 3,474 ppm fell to 1,414 ppm.
+FLATTEN_SECONDS = 1001 * 120
+
+
+def flatten_window_length(cadence_s: float) -> int:
+    """Odd number of cadences covering FLATTEN_SECONDS (1001 for 2-minute data)."""
+    n = int(round(FLATTEN_SECONDS / max(cadence_s, 1.0)))
+    return max(101, n | 1)
+
+
 def phase_fold(time, period, t0):
     """Phase in days, centered on the transit: in [-P/2, P/2)."""
     return ((np.asarray(time) - t0 + 0.5 * period) % period) - 0.5 * period
