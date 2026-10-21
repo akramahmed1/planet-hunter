@@ -19,6 +19,8 @@
   --space-700: #18233f;
   --line: #1f2b47;
   --line-strong: #31406a;
+  /* The edge of a form field: 3:1 or better against every surface it sits on (WCAG 1.4.11). */
+  --field-border: #5f6fa0;
 
   /* text */
   --ink: #eef1fa;
@@ -1222,7 +1224,7 @@ img {
   min-height: 36px;
   padding: 0 var(--sp-3);
   border-radius: var(--r-pill);
-  border: 1px solid var(--line-strong);
+  border: 1px solid var(--field-border);
   background: var(--space-900);
   color: var(--ink);
   font: inherit;
