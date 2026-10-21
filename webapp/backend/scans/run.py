@@ -14,7 +14,7 @@ import numpy as np
 
 from pipeline import crossmatch as xm
 from pipeline import vetting
-from pipeline.core import bin_time_series, bls_search, downsample_peaks
+from pipeline.core import bin_time_series, bls_search, downsample_peaks, flatten_window_length
 
 from scans.presets import PIPELINE_VERSION, PRESETS  # noqa: F401  (re-exported)
 
@@ -79,11 +79,19 @@ def scan(tic_id: int, params: dict, progress=lambda msg: None, catalogs=None) ->
     if lcs is None or len(lcs) == 0:
         raise Transient("download returned nothing")
     progress("cleaning and flattening the light curve")
-    lc = lcs.stitch().remove_nans().remove_outliers(sigma=5)
+    # Each sector is cleaned and flattened on its own, with a window set in hours: sectors can have different
+    # cadences (2 minutes, or 20 seconds), and a window counted in cadences would be far shorter at 20 seconds.
+    import lightkurve as lk
+
+    parts = []
+    for one in lcs:
+        one = one.remove_nans().normalize().remove_outliers(sigma=5)
+        cadence_s = float(np.median(np.diff(one.time.value))) * 86400.0
+        parts.append(one.flatten(window_length=flatten_window_length(cadence_s)))
+    lc = lk.LightCurveCollection(parts).stitch()
     if len(lc) < 500:
         raise NoData(f"only {len(lc)} usable points")
-    flat = lc.flatten(window_length=1001)
-    t, f = flat.time.value, flat.flux.value
+    t, f = lc.time.value, lc.flux.value
     progress("searching for repeating dips (BLS)")
     d0, d1, nd = params["durations"]
     periods, power, sig = bls_search(t, f, params["period_min"], params["period_max"], params["n_periods"],
@@ -105,8 +113,8 @@ def scan(tic_id: int, params: dict, progress=lambda msg: None, catalogs=None) ->
               "depth_ppm": round(sig.depth_ppm, 1), "snr": round(sig.snr, 2), "power": sig.power}
     source = {"name": "NASA TESS SPOC light curves (PDCSAP) from MAST, via lightkurve",
               "url": "https://archive.stsci.edu/missions-and-data/tess", "fetched_at": fetched}
-    processing = ("Stitched, NaNs removed, 5-sigma outliers removed, flattened with a 1001-cadence window "
-                  "(lightkurve), as in candidate_scan.py.")
+    processing = ("Each sector: NaNs removed, normalized, 5-sigma outliers removed, flattened with a window of about "
+                  "33 hours (1001 two-minute cadences, scaled for other cadences; lightkurve); then stitched.")
     run = {
         "pipeline_version": PIPELINE_VERSION, "sectors": sectors, "n_cadences": int(len(lc)),
         "lightcurve": {"source": source, "processing": processing,
