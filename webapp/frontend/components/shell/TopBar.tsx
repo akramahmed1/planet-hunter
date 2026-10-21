@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BrandMark } from "./Icon";
+import { useRole } from "@/lib/role";
 import { isActive, visibleNav } from "./nav";
 import UnitsButton from "./UnitsControls";
 
 export default function TopBar({ classroom }: { classroom: boolean }) {
   const pathname = usePathname() ?? "/";
-  const nav = visibleNav(classroom);
+  const nav = visibleNav(classroom, useRole(classroom));
   return (
     <header className="topbar">
       <div className="topbar-inner">

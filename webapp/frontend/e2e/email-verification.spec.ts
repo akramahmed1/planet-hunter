@@ -38,3 +38,28 @@ test("verify page with a wrong link says so and removes the token from the addre
   await expect(page.getByTestId("verify-failed")).toContainText("not valid any more");
   expect(page.url()).not.toContain("token");
 });
+
+test("a long school email address does not stretch the page sideways", async ({ page }) => {
+  // Real addresses such as firstname.lastname@district.k12.state.us are long and have no spaces to wrap at.
+  const email = `firstname.lastname.of.a.long.name${unique()}@a-district-with-a-long-name.k12.example.org`;
+  await page.goto("/classroom");
+  await page.getByRole("radio", { name: "I'm a teacher" }).check();
+  await page.getByRole("button", { name: "Create an account" }).click();
+  await page.getByTestId("teacher-name").fill("Ms Longname");
+  await page.getByTestId("teacher-email").fill(email);
+  await page.getByTestId("teacher-password").fill("correct horse battery");
+  await page.getByTestId("org-name").fill(`Long Address High ${unique()}`);
+  await page.getByTestId("birth-month").selectOption("3");
+  await page.getByTestId("birth-year").selectOption("1985");
+  await page.getByTestId("teacher-submit").click();
+  await expect(page.getByTestId("verify-banner")).toContainText(email);
+  // Compare with the screen's real width: on a phone the browser widens window.innerWidth to fit overflowing content.
+  const width = page.viewportSize()!.width;
+  const over = await page.evaluate((w) => ({
+    scroll: document.documentElement.scrollWidth,
+    wide: [...document.querySelectorAll("main *")].filter((e) => e.getBoundingClientRect().right > w + 1)
+      .map((e) => `${e.tagName}.${e.className}`),
+  }), width);
+  expect(over.wide).toEqual([]);
+  expect(over.scroll).toBeLessThanOrEqual(width);
+});
