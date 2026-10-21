@@ -6,7 +6,7 @@ import Badge from "@/components/ui/Badge";
 import ErrorState from "@/components/ui/ErrorState";
 import Skeleton from "@/components/ui/Skeleton";
 import { apiV2Post, apiV2Send, type ClassSummary, type Me, type OrgBilling, type OrgDetail, type StudentHome } from "@/lib/api-v2";
-import { assignmentHref, formatDue } from "@/lib/classroom";
+import { assignmentHref, formatDue, glanceParts, schoolTotals } from "@/lib/classroom";
 import { announceRole } from "@/lib/role";
 import SignIn from "./SignIn";
 
@@ -272,6 +272,21 @@ function TeacherHome({ orgs, onChange }: { orgs: { org_id: number; name: string;
   );
 }
 
+/** The school at a glance: totals of what the server counted for its classes. Nothing is estimated. */
+function Glance({ classes }: { classes: ClassSummary[] }) {
+  if (classes.length === 0) return null;
+  const t = schoolTotals(classes);
+  return (
+    <dl className="glance" data-testid="school-glance">
+      <div><dt>Classes</dt><dd data-testid="glance-classes">{t.classes}</dd></div>
+      <div><dt>Students</dt><dd data-testid="glance-students">{t.students}</dd></div>
+      <div><dt>Work handed in</dt>
+        <dd data-testid="glance-done">{t.expected > 0 ? `${t.completed} of ${t.expected} (${t.percentDone}%)` : "Nothing assigned yet"}</dd></div>
+      <div><dt>Next due</dt><dd data-testid="glance-due">{t.nextDue ? formatDue(t.nextDue) : "Nothing due"}</dd></div>
+    </dl>
+  );
+}
+
 function OrgPanel({ orgId }: { orgId: number }) {
   const [org, setOrg] = useState<OrgDetail | null>(null);
   const [classes, setClasses] = useState<ClassSummary[] | null>(null);
@@ -301,13 +316,14 @@ function OrgPanel({ orgId }: { orgId: number }) {
           Other teachers join with code <code className="code-chip" data-testid="org-code-value">{org.join_code}</code>.
         </p>
       )}
+      <Glance classes={classes} />
       <h3 className="sub-h">Classes</h3>
       {classes.length === 0 ? <p className="muted">No classes yet.</p> : (
         <ul className="class-list">
           {classes.map((k) => (
             <li key={k.id}>
               <Link href={`/classroom/class/${k.id}`} data-testid="class-link">{k.name}</Link>{" "}
-              <span className="muted small">{k.students} {k.students === 1 ? "student" : "students"} · code{" "}
+              <span className="muted small" data-testid="class-glance">{glanceParts(k).join(" · ")} · code{" "}
                 <code className="code-chip">{k.join_code}</code></span>
             </li>
           ))}

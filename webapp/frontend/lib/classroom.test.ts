@@ -2,7 +2,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { visibleNav } from "../components/shell/nav.ts";
-import { assignmentHref, endOfDay, formatDue, gradeText, needsSignIn } from "./classroom.ts";
+import { assignmentHref, endOfDay, formatDue, glanceParts, gradeText, needsSignIn, schoolTotals } from "./classroom.ts";
 
 describe("classroom helpers", () => {
   it("sends each assignment kind to the right page", () => {
@@ -47,5 +47,30 @@ describe("navigation", () => {
     assert.equal(visibleNav(false).some((n) => n.href === "/classroom"), false);
     // Everything else stays, in the same order.
     assert.deepEqual(visibleNav(false).map((n) => n.href), visibleNav(true).map((n) => n.href).filter((h) => h !== "/classroom"));
+  });
+});
+
+const K = { students: 12, assignments: 4, expected: 48, completed: 30, average_percent: 83, next_due: "2026-10-24T22:00:00Z" };
+
+describe("class and school glance", () => {
+  it("lists only facts the server counted, in order, with plain plurals", () => {
+    assert.deepEqual(glanceParts(K, "UTC"), ["12 students", "4 assignments", "30 of 48 done", "average 83%", "next due Oct 24, 10:00 PM"]);
+    assert.deepEqual(glanceParts({ ...K, students: 1, assignments: 1, expected: 1, completed: 0, average_percent: null, next_due: null }),
+      ["1 student", "1 assignment", "0 of 1 done"]);
+  });
+
+  it("says plainly when nothing is assigned or nobody has joined", () => {
+    assert.deepEqual(glanceParts({ ...K, assignments: 0, expected: 0, completed: 0, average_percent: null, next_due: null }),
+      ["12 students", "no assignments yet"]);
+    assert.deepEqual(glanceParts({ ...K, students: 0, expected: 0, completed: 0, average_percent: null, next_due: null }),
+      ["0 students", "4 assignments"]);
+  });
+
+  it("adds up a school and picks the soonest due date; no work expected means no percentage", () => {
+    const t = schoolTotals([K, { ...K, students: 3, assignments: 1, expected: 3, completed: 3, next_due: "2026-10-22T10:00:00Z" },
+      { ...K, students: 0, assignments: 0, expected: 0, completed: 0, average_percent: null, next_due: null }]);
+    assert.deepEqual(t, { classes: 3, students: 15, assignments: 5, expected: 51, completed: 33, percentDone: 65,
+      nextDue: "2026-10-22T10:00:00Z" });
+    assert.deepEqual(schoolTotals([]), { classes: 0, students: 0, assignments: 0, expected: 0, completed: 0, percentDone: null, nextDue: null });
   });
 });
