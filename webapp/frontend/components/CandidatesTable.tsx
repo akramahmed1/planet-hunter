@@ -10,6 +10,7 @@ import {
   type Candidate,
   type Classification,
 } from "@/lib/api";
+import { noun } from "@/lib/plural";
 
 type SortKey = "rank" | "period_d" | "depth_ppm" | "snr";
 
@@ -93,7 +94,7 @@ export default function CandidatesTable({
 
       <div className="list-toolbar">
         <p className="muted" style={{ margin: 0 }} aria-live="polite">
-          {rows.length} of {candidates.length} candidate signals shown.
+          {rows.length} of {candidates.length} {noun(candidates.length, "candidate signal")} shown.
         </p>
         <label className="select-label">
           Sort by
@@ -148,7 +149,7 @@ export default function CandidatesTable({
       <div className="table-wrap">
         <table className="data-table">
           <caption>
-            {rows.length} of {candidates.length} candidate signals shown.
+            {rows.length} of {candidates.length} {noun(candidates.length, "candidate signal")} shown.
             Select a column header to sort.
           </caption>
           <thead>

@@ -5,7 +5,7 @@ import { join } from "node:path";
 // list is right both locally and against staging.
 const results = JSON.parse(
   readFileSync(join(__dirname, "..", "..", "backend", "data", "results.json"), "utf8"),
-) as { candidates: { slug: string; target: string; period_d: number }[] };
+) as { candidates: { slug: string; target: string; period_d: number; classification: string }[] };
 
 export const CANDIDATES = results.candidates;
 
