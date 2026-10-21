@@ -29,6 +29,13 @@ def mail(monkeypatch):
     mailer.outbox.clear()
 
 
+def signed_up(mail, email, org):
+    """A teacher, with the verification email their signup sent cleared out of the test mailbox."""
+    t = teacher(email, org=org)
+    mail.clear()
+    return t
+
+
 def forgot(c, email):
     return c.post("/api/v2/auth/teacher/forgot", json={"email": email}, headers=H)
 
@@ -50,7 +57,7 @@ def login(email, password):
 
 @needs_db
 def test_the_answer_is_the_same_for_a_known_and_an_unknown_address(engine, mail):  # noqa: F811
-    t = teacher("reset1@school.example", org="Reset School")
+    t = signed_up(mail, "reset1@school.example", "Reset School")
     with TestClient(backend.app) as c:
         known, unknown = forgot(c, "reset1@school.example"), forgot(c, "nobody@school.example")
     assert known.status_code == unknown.status_code == 202
@@ -62,7 +69,7 @@ def test_the_answer_is_the_same_for_a_known_and_an_unknown_address(engine, mail)
 
 @needs_db
 def test_the_full_flow_changes_the_password_once_and_signs_out_everywhere(engine, mail):  # noqa: F811
-    t = teacher("reset2@school.example", org="Reset School 2")
+    t = signed_up(mail, "reset2@school.example", "Reset School 2")
     assert t.get("/api/v2/auth/me").json()["me"] is not None
     with TestClient(backend.app) as c:
         forgot(c, "Reset2@School.example")
@@ -83,7 +90,7 @@ def test_the_full_flow_changes_the_password_once_and_signs_out_everywhere(engine
 
 @needs_db
 def test_only_the_newest_link_works(engine, mail):  # noqa: F811
-    t = teacher("reset3@school.example", org="Reset School 3")
+    t = signed_up(mail, "reset3@school.example", "Reset School 3")
     with TestClient(backend.app) as c:
         forgot(c, "reset3@school.example")
         forgot(c, "reset3@school.example")
@@ -96,7 +103,7 @@ def test_only_the_newest_link_works(engine, mail):  # noqa: F811
 
 @needs_db
 def test_an_expired_token_is_refused(engine, mail):  # noqa: F811
-    t = teacher("reset4@school.example", org="Reset School 4")
+    t = signed_up(mail, "reset4@school.example", "Reset School 4")
     with TestClient(backend.app) as c:
         forgot(c, "reset4@school.example")
         tok = token_in(mail[0])
@@ -109,7 +116,7 @@ def test_an_expired_token_is_refused(engine, mail):  # noqa: F811
 
 @needs_db
 def test_the_token_is_stored_only_as_a_hash(engine, mail):  # noqa: F811
-    t = teacher("reset5@school.example", org="Reset School 5")
+    t = signed_up(mail, "reset5@school.example", "Reset School 5")
     with TestClient(backend.app) as c:
         forgot(c, "reset5@school.example")
     tok = token_in(mail[0])
@@ -121,7 +128,7 @@ def test_the_token_is_stored_only_as_a_hash(engine, mail):  # noqa: F811
 
 @needs_db
 def test_a_weak_new_password_or_a_wrong_token_changes_nothing(engine, mail):  # noqa: F811
-    t = teacher("reset6@school.example", org="Reset School 6")
+    t = signed_up(mail, "reset6@school.example", "Reset School 6")
     with TestClient(backend.app) as c:
         forgot(c, "reset6@school.example")
         tok = token_in(mail[0])
@@ -133,7 +140,7 @@ def test_a_weak_new_password_or_a_wrong_token_changes_nothing(engine, mail):  # 
 
 @needs_db
 def test_requests_are_rate_limited_per_address_and_per_caller(engine, mail):  # noqa: F811
-    t = teacher("reset7@school.example", org="Reset School 7")
+    t = signed_up(mail, "reset7@school.example", "Reset School 7")
     with TestClient(backend.app) as c:
         codes = [forgot(c, "reset7@school.example").status_code for _ in range(5)]
     assert codes[:3] == [202, 202, 202] and codes[3:] == [429, 429]
@@ -175,7 +182,7 @@ def test_a_bad_address_and_a_missing_csrf_header_are_refused(engine):  # noqa: F
 
 @needs_db
 def test_the_email_has_no_dashes_that_break_copying_and_names_the_expiry(engine, mail):  # noqa: F811
-    t = teacher("reset10@school.example", org="Reset School 10")
+    t = signed_up(mail, "reset10@school.example", "Reset School 10")
     with TestClient(backend.app) as c:
         forgot(c, "reset10@school.example")
     body = mail[0]["text"]

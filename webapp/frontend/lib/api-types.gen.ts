@@ -293,6 +293,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v2/auth/teacher/verify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Teacher Verify
+         * @description Confirm an address with the emailed token. No sign-in needed: the token is the proof.
+         */
+        post: operations["teacher_verify_api_v2_auth_teacher_verify_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v2/auth/teacher/verify/resend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Teacher Verify Resend
+         * @description Send the confirmation email again to the signed-in teacher. Three a day.
+         */
+        post: operations["teacher_verify_resend_api_v2_auth_teacher_verify_resend_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v2/billing/plans": {
         parameters: {
             query?: never;
@@ -1892,6 +1932,8 @@ export interface components {
             display_name: string;
             /** Email */
             email: string;
+            /** Email Verified */
+            email_verified: boolean;
             /**
              * Kind
              * @constant
@@ -2693,6 +2735,11 @@ export interface components {
             /** Error Type */
             type: string;
         };
+        /** VerifyEmail */
+        VerifyEmail: {
+            /** Token */
+            token: string;
+        };
         /** VettingRow */
         VettingRow: {
             /** Explanation */
@@ -3156,6 +3203,59 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    teacher_verify_api_v2_auth_teacher_verify_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VerifyEmail"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    teacher_verify_resend_api_v2_auth_teacher_verify_resend_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
                 };
             };
         };
