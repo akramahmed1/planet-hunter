@@ -7,6 +7,7 @@ import ErrorState from "@/components/ui/ErrorState";
 import Skeleton from "@/components/ui/Skeleton";
 import { apiV2Post, apiV2Send, type ClassSummary, type Me, type OrgBilling, type OrgDetail, type StudentHome } from "@/lib/api-v2";
 import { assignmentHref, formatDue } from "@/lib/classroom";
+import { announceRole } from "@/lib/role";
 import SignIn from "./SignIn";
 
 /** /classroom: sign in, then the teacher's classes or the student's assignments. */
@@ -25,6 +26,10 @@ export default function ClassroomHome({ who }: { who?: "teacher" | "student" }) 
   useEffect(() => {
     load();
   }, [load]);
+  // Keep the navigation's words in step with who is signed in (sign in, sign out, account deleted).
+  useEffect(() => {
+    if (me !== undefined) announceRole(me === null ? null : me.kind);
+  }, [me]);
 
   async function logout() {
     await apiV2Send("POST", "/api/v2/auth/logout", {});

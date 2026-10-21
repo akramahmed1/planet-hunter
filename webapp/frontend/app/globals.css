@@ -616,6 +616,7 @@ img {
 /* ---------- callouts (honesty banners) ---------- */
 
 .callout {
+  overflow-wrap: anywhere; /* a long unbroken value (an email address) wraps instead of stretching the page */
   border: 1px solid var(--line);
   border-left: 3px solid var(--flare);
   border-radius: var(--r-md);
