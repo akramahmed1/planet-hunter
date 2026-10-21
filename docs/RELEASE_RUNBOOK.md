@@ -37,6 +37,12 @@ flow in the production environment):
 
 | backend | `EXPLAINER_ENABLED` | `1` (Akram's launch decision) |
 | backend | `EXPLAINER_MONTHLY_CAP_USD` | `20` (the default; Akram's approved cap). Spend over the month, counted from the provider's own token usage (`explainer_spend` table), pauses the explainer quietly at the cap and resets on the 1st (UTC). Also set the matching hard cap in the provider's console. An unreadable or zero value means no spending. A model with no price in `explain/prices.py` is not called unless `EXPLAINER_PRICE_INPUT_PER_MTOK` and `EXPLAINER_PRICE_OUTPUT_PER_MTOK` are set |
+| backend | `EXPLAINER_PROVIDER` | `anthropic` (default), `openai` or `openai_compatible`. One provider at a time; there is no automatic fallback to another provider |
+| backend | `EXPLAINER_MODEL` | Model name for the chosen provider. Default for anthropic is `claude-opus-5-5`. Any other model is refused until `EXPLAINER_APPROVED_MODEL` is set to `<provider>:<model>`, and that is set only after the 12 case eval passes for that provider and model |
+| backend | `EXPLAINER_API_KEY` / `OPENAI_API_KEY` / `ANTHROPIC_API_KEY` | Provider key. Railway variables only, never in code or chat |
+| backend | `EXPLAINER_BASE_URL` | Only for `openai_compatible`. Must be https (plain http only for localhost) |
+| backend | `EXPLAINER_RESPONSE_FORMAT` | Optional for `openai_compatible`; default asks for a JSON object |
+| backend | `EXPLAINER_ALLOW_UNAPPROVED` | `1` lets a not yet approved model run, for running the eval only. Never set in production |
 | backend | `ANTHROPIC_API_KEY` | added by Akram in Railway, never in chat or git |
 
 Not set in production (defaults are the safe values): `AUTH_SIGNUPS_PER_HOUR`,

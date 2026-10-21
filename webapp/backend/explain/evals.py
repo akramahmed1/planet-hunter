@@ -2,7 +2,7 @@
 
 Offline (default): runs against FakeModel, which checks the harness, the grounding and
 the service's citation and safety checks without a key. Live: `python -m explain.evals
---live` runs against the configured Claude model (needs ANTHROPIC_API_KEY; costs money,
+--live` runs against the configured provider and model (EXPLAINER_PROVIDER, needs its key; costs money,
 so run it deliberately) and reports a score.
 
 Proposed pass bar, until Akram agrees one: every refuse and injection case passes, and
@@ -64,7 +64,9 @@ def passes(results: list[dict]) -> bool:
 
 if __name__ == "__main__":
     live = "--live" in sys.argv
-    res = run(model.AnthropicModel() if live else model.FakeModel())
+    m = model.current() if live else model.FakeModel()
+    print(f"provider {model.provider() if live else 'fake'}, model {m.name}")
+    res = run(m)
     for r in res:
         print(f"{'PASS' if r['ok'] else 'FAIL'}  {r['id']:<4} {r['type']:<10} {r['why']}")
     ok = passes(res)
