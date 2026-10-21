@@ -7,8 +7,10 @@ unless EXPLAINER_ENABLED=1 and ANTHROPIC_API_KEY are both set (Akram, 2026-10-18
 from __future__ import annotations
 
 import json
+import logging
 import os
 import re
+from urllib.parse import urlparse
 from dataclasses import dataclass
 from typing import Protocol
 
@@ -66,7 +68,7 @@ class AnthropicModel:
     def __init__(self, model: str | None = None):
         import anthropic
 
-        self.name = model or os.environ.get("EXPLAINER_MODEL", "claude-opus-5-5")
+        self.name = model or os.environ.get("EXPLAINER_MODEL") or ANTHROPIC_DEFAULT_MODEL
         self._client = anthropic.Anthropic(timeout=30.0, max_retries=1)
         self._anthropic = anthropic
 
@@ -166,16 +168,87 @@ class FakeModel:
                      output_tokens=max(1, len(answer) // 4))
 
 
+PROVIDERS = ("anthropic", "openai", "openai_compatible")
+ANTHROPIC_DEFAULT_MODEL = "claude-opus-5-5"
+log = logging.getLogger("planet-hunter.explainer")
+
+
+def provider() -> str:
+    """EXPLAINER_PROVIDER: anthropic (default), openai, or openai_compatible. One provider is active at a time;
+    nothing here ever falls back from one provider to another."""
+    return (os.environ.get("EXPLAINER_PROVIDER") or "anthropic").strip().lower()
+
+
+def model_name() -> str:
+    default = ANTHROPIC_DEFAULT_MODEL if provider() == "anthropic" else ""
+    return (os.environ.get("EXPLAINER_MODEL") or default).strip()
+
+
+def approved() -> bool:
+    """A provider and model must pass the 12-case eval before it answers real visitors. The Claude default has
+    passed. For anything else an operator sets EXPLAINER_APPROVED_MODEL="<provider>:<model>" after the eval
+    (explainer-eval.yml) is green; EXPLAINER_ALLOW_UNAPPROVED=1 lets staging run the eval itself."""
+    p, m = provider(), model_name()
+    if (p, m) == ("anthropic", ANTHROPIC_DEFAULT_MODEL):
+        return True
+    if os.environ.get("EXPLAINER_ALLOW_UNAPPROVED") == "1":
+        return True
+    return (os.environ.get("EXPLAINER_APPROVED_MODEL") or "").strip() == f"{p}:{m}"
+
+
+def setup_problem() -> str | None:
+    """Why the chosen provider cannot be used (for the server log), or None if it is fully set up."""
+    p = provider()
+    if p not in PROVIDERS:
+        return f"EXPLAINER_PROVIDER={p!r} is not one of {', '.join(PROVIDERS)}"
+    if p == "anthropic":
+        return None if os.environ.get("ANTHROPIC_API_KEY") else "ANTHROPIC_API_KEY is not set"
+    if not model_name():
+        return "EXPLAINER_MODEL is not set"
+    if p == "openai":
+        return None if os.environ.get("OPENAI_API_KEY") else "OPENAI_API_KEY is not set"
+    from explain.openai_compat import validate_base_url
+    base = os.environ.get("EXPLAINER_BASE_URL", "")
+    try:
+        validate_base_url(base)
+    except ValueError as exc:
+        return str(exc)
+    local = (urlparse(base).hostname or "") in ("localhost", "127.0.0.1", "::1")
+    return None if (os.environ.get("EXPLAINER_API_KEY") or local) else "EXPLAINER_API_KEY is not set"
+
+
 def configured() -> tuple[bool, str]:
     """Whether the explainer is switched on, and why not if it is off."""
     if os.environ.get("EXPLAINER_ENABLED") != "1":
         return False, "The explainer is switched off on this server."
     if os.environ.get("EXPLAINER_FAKE") == "1":
         return True, ""
-    if not os.environ.get("ANTHROPIC_API_KEY"):
-        return False, "The explainer is switched off: no model key is set on this server."
+    problem = setup_problem()
+    if problem:
+        log.warning("explainer is off: %s", problem)
+        if "KEY" in problem:
+            return False, "The explainer is switched off: no model key is set on this server."
+        return False, "The explainer is switched off: it is not fully set up on this server."
+    if not approved():
+        log.warning("explainer is off: %s:%s has not been approved (run the 12-case eval, then set EXPLAINER_APPROVED_MODEL)",
+                    provider(), model_name())
+        return False, "The explainer is switched off: this model has not passed its checks yet."
     return True, ""
 
 
 def current() -> Model:
-    return FakeModel() if os.environ.get("EXPLAINER_FAKE") == "1" else AnthropicModel()
+    if os.environ.get("EXPLAINER_FAKE") == "1":
+        return FakeModel()
+    p = provider()
+    if p == "anthropic":
+        return AnthropicModel()
+    from explain.openai_compat import OPENAI_BASE, OpenAIChatModel
+    if p == "openai":
+        return OpenAIChatModel(provider=p, model=model_name(), base_url=OPENAI_BASE,
+                               api_key=os.environ.get("OPENAI_API_KEY"),
+                               response_format=os.environ.get("EXPLAINER_RESPONSE_FORMAT"))
+    if p == "openai_compatible":
+        return OpenAIChatModel(provider=p, model=model_name(), base_url=os.environ.get("EXPLAINER_BASE_URL", ""),
+                               api_key=os.environ.get("EXPLAINER_API_KEY"),
+                               response_format=os.environ.get("EXPLAINER_RESPONSE_FORMAT"))
+    raise ModelError("the explainer provider is not set up")
