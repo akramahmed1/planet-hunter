@@ -26,6 +26,7 @@ export const ROUTES = [
   `/scan/${SCAN_ID}`,
   "/learn",
   "/learn/transits",
+  "/welcome",
   "/classroom",
   "/privacy",
   "/design-system",

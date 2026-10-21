@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useId, useState, type ReactNode } from "react";
+import { useEffect, useId, useState, type ReactNode } from "react";
+import { readDoor } from "@/lib/door";
 import Toggle from "@/components/ui/Toggle";
 import { apiV2Post } from "@/lib/api-v2";
 
@@ -62,8 +63,14 @@ function BirthFields({ month, year, onMonth, onYear }: { month: string; year: st
   );
 }
 
-export default function SignIn({ onSignedIn }: { onSignedIn: () => void }) {
-  const [who, setWho] = useState<Who>("student");
+export default function SignIn({ onSignedIn, initialWho }: { onSignedIn: () => void; initialWho?: Who }) {
+  const [who, setWho] = useState<Who>(initialWho ?? "student");
+  // With no ?as= in the address, the door chosen last time (a display preference only) picks the starting form.
+  useEffect(() => {
+    if (initialWho) return;
+    const d = readDoor();
+    if (d === "teacher" || d === "student") setWho(d);
+  }, [initialWho]);
   return (
     <div className="signin">
       <Toggle legend="Who are you?" options={WHO_OPTIONS} value={who} onChange={setWho} />

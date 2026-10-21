@@ -10,7 +10,7 @@ import { assignmentHref, formatDue } from "@/lib/classroom";
 import SignIn from "./SignIn";
 
 /** /classroom: sign in, then the teacher's classes or the student's assignments. */
-export default function ClassroomHome() {
+export default function ClassroomHome({ who }: { who?: "teacher" | "student" }) {
   const [me, setMe] = useState<Me["me"] | undefined>(undefined);
   const [error, setError] = useState<string | null>(null);
   const load = useCallback(async () => {
@@ -33,7 +33,7 @@ export default function ClassroomHome() {
 
   if (error) return <ErrorState title="Classroom could not be loaded." detail={error} />;
   if (me === undefined) return <Skeleton height="8rem" />;
-  if (me === null) return <SignIn onSignedIn={load} />;
+  if (me === null) return <SignIn onSignedIn={load} initialWho={who} />;
   return (
     <>
       <p className="signed-in muted" data-testid="signed-in">
