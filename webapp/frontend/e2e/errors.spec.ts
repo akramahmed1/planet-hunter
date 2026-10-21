@@ -8,7 +8,13 @@ test("/hunt lands on the candidates page", async ({ page }) => {
 });
 
 test("an unknown address gets a branded 404 with ways forward", async ({ page }) => {
-  for (const path of ["/no-such-page", "/candidates/not-a-real-candidate", "/classroom/class/not-a-number"]) {
+  for (const path of [
+    "/no-such-page",
+    "/candidates/not-a-real-candidate",
+    "/exoplanets/not-a-real-system",
+    "/classroom/class/not-a-number",
+    "/learn/not-a-lesson",
+  ]) {
     const res = await page.goto(path);
     expect(res?.status(), path).toBe(404);
     await expect(page.getByRole("heading", { level: 1 }), path).toHaveText("We could not find that page");

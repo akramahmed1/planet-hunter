@@ -3,8 +3,10 @@ import { notFound } from "next/navigation";
 import ClassroomHome from "@/components/classroom/ClassroomHome";
 import { getFeatures } from "@/lib/features";
 
-export const metadata: Metadata = { title: "Classroom",
-  description: "Teachers set planet-hunting assignments and students join with a class code." };
+export async function generateMetadata(): Promise<Metadata> {
+  if (!(await getFeatures()).classroom) return { title: "Page not found" };
+  return { title: "Classroom", description: "Teachers set planet-hunting assignments and students join with a class code." };
+}
 
 export const dynamic = "force-dynamic";
 
