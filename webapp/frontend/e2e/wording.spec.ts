@@ -43,3 +43,36 @@ test("instructions say Tap on a phone and Select on a desktop", async ({ page },
   await expect.poll(seen(lede)).toContain(touch ? "tap it to see" : "select it to see");
   await expect.poll(seen(lede)).not.toContain(touch ? "select it" : "tap it");
 });
+
+// T11: the batch scan says how old it is, and BLS power keeps its digits.
+test("the batch scan date comes with its age", async ({ page }) => {
+  await page.goto("/candidates");
+  const run = page.getByTestId("run-label").first();
+  await expect(run).toContainText(/Batch scan · 2 sectors · \d{4}-\d{2}-\d{2} \((today|yesterday|\d+ days ago|about \d+ (months|years?) ago)\)/);
+  await expect(page.getByText(/Scan run: \d{4}-\d{2}-\d{2} \(.+ ago\)|Scan run: \d{4}-\d{2}-\d{2} \((today|yesterday)\)/)).toBeVisible();
+  await page.goto("/");
+  await expect(page.getByText(/Scan of eight targets on \d{4}-\d{2}-\d{2} \(.+\)\./)).toBeVisible();
+});
+
+test("BLS power shows three significant digits, never a bare 0.0", async ({ page }) => {
+  for (const c of CANDIDATES) {
+    await page.goto(`/candidates/${c.slug}`);
+    const dd = page.locator("dt", { hasText: "BLS power" }).locator("xpath=following-sibling::dd[1]");
+    const text = (await dd.innerText()).trim();
+    const shown = text.split(/\s/)[0];
+    expect(shown, `${c.slug} BLS power`).toMatch(/^0\.0*[1-9]\d{0,2}$|^[1-9]\d*(\.\d+)?$/);
+    expect(Number(shown), `${c.slug} BLS power is a real number`).toBeGreaterThan(0);
+  }
+});
+
+test("Find the dip says why the slider starts at 3 days and can start over", async ({ page }) => {
+  await page.goto(`/candidates/${CANDIDATES[0].slug}`);
+  const lab = page.getByTestId("challenge");
+  await expect(lab.getByTestId("start-help")).toContainText("starts at 3 days only because it has to start somewhere");
+  await expect(lab.getByTestId("guess-period")).toHaveText("3.0000 days");
+  await lab.getByRole("button", { name: "+1%" }).click();
+  await expect(lab.getByTestId("guess-period")).not.toHaveText("3.0000 days");
+  await lab.getByTestId("start-over").click();
+  await expect(lab.getByTestId("guess-period")).toHaveText("3.0000 days");
+  await expect(lab.getByTestId("period-slider")).toHaveAttribute("aria-describedby", /.+/);
+});

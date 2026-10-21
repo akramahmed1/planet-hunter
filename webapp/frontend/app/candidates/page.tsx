@@ -11,6 +11,7 @@ import {
 } from "@/lib/api";
 import { count } from "@/lib/plural";
 import Tap from "@/components/ui/Tap";
+import { ageLabel } from "@/lib/time";
 
 export const metadata: Metadata = {
   title: "Hunt",
@@ -41,11 +42,11 @@ export default async function CandidatesPage() {
         {scanSummarySentence(summary)} <Tap /> any target for the full readout.
       </p>
       <p className="muted">
-        Scan run: {run.run_date}. {count(run.sectors_per_target, "sector")} per target.
+        Scan run: {run.run_date} ({ageLabel(run.run_date)}). {count(run.sectors_per_target, "sector")} per target.
         Periods searched: {run.search_period_min_d} to {run.search_period_max_d}{" "}
         days. {honesty}
       </p>
-      <p><RunLabel kind="batch" sectors={run.sectors_per_target} date={run.run_date} /></p>
+      <p><RunLabel kind="batch" sectors={run.sectors_per_target} date={run.run_date} age={ageLabel(run.run_date)} /></p>
       <CandidatesTable candidates={candidates} />
       <p>
         <Link href="/scan" className="btn btn--primary">Scan any TESS star yourself</Link>

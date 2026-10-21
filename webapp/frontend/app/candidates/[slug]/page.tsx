@@ -18,6 +18,8 @@ import {
   type HealthResponse,
   type OverviewResponse,
 } from "@/lib/api";
+import { formatPower } from "@/lib/power";
+import { ageLabel } from "@/lib/time";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -85,7 +87,7 @@ export default async function CandidateDetailPage({
         <Card title="Measured numbers">
           {overview.ok && (
             <p>
-              <RunLabel kind="batch" sectors={overview.data.run.sectors_per_target} date={overview.data.run.run_date} />
+              <RunLabel kind="batch" sectors={overview.data.run.sectors_per_target} date={overview.data.run.run_date} age={ageLabel(overview.data.run.run_date)} />
             </p>
           )}
           <dl className="kv">
@@ -105,7 +107,10 @@ export default async function CandidateDetailPage({
             <dt>SNR</dt>
             <dd className="num">{candidate.snr.toFixed(1)}</dd>
             <dt>BLS power</dt>
-            <dd className="num">{candidate.bls_power}</dd>
+            <dd className="num">
+              {formatPower(lc.ok ? lc.data.signal.power : candidate.bls_power || null)}
+              <span className="muted small" style={{ display: "block" }}>unitless, compare within one scan only</span>
+            </dd>
             <dt>Cadences</dt>
             <dd className="num">
               {candidate.n_cadences.toLocaleString("en-US")}
