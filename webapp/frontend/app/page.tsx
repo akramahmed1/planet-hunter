@@ -1,4 +1,6 @@
 import RunLabel from "@/components/RunLabel";
+import DoorBand from "@/components/welcome/DoorBand";
+import { getFeatures } from "@/lib/features";
 import { Suspense } from "react";
 import ApiError from "@/components/ApiError";
 import LiveTiles from "@/components/live/LiveTiles";
@@ -29,9 +31,11 @@ export default async function Home() {
   const validation = overview?.validation ?? null;
   const summary = overview?.summary ?? null;
   const plotSrc = plotImageUrl(validation?.plot_url ?? null);
+  const { classroom } = await getFeatures();
 
   return (
     <div className="hero">
+      {classroom && <DoorBand />}
       <p className="eyebrow">Real NASA telescope data</p>
       <h1>Planet Hunter</h1>
       <p className="lede">
