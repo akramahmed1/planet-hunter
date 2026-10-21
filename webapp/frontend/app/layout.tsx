@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
+import { siteUrl } from "@/lib/site";
 import UnitsProvider from "@/components/UnitsProvider";
 import CosmosLoader from "@/components/shell/CosmosLoader";
 import Footer from "@/components/shell/Footer";
@@ -29,6 +30,7 @@ const mono = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: siteUrl(),
   title: {
     default: "Planet Hunter - Candidate exoplanet signals from public TESS data",
     template: "%s - Planet Hunter",

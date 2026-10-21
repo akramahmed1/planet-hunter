@@ -32,6 +32,7 @@ flow in the production environment):
 | worker (new) | start command `python -m scans.worker`, `DATABASE_URL`, `SCAN_TIME_LIMIT_S=900`, `SCAN_MEMORY_LIMIT_MB=3000` | |
 | refresh (cron, check it exists in production) | `DATABASE_URL`, `NASA_API_KEY`, start `python -m live.refresh`, schedule `13 6 * * *` | |
 | frontend | `NEXT_PUBLIC_API_BASE` | the production backend URL |
+| frontend | `NEXT_PUBLIC_SITE_URL` | the public site address, for share cards (or give the service a public domain; the build fails on Railway if neither exists) |
 
 | backend | `EXPLAINER_ENABLED` | `1` (Akram's launch decision) |
 | backend | `ANTHROPIC_API_KEY` | added by Akram in Railway, never in chat or git |
