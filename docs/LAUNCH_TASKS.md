@@ -94,7 +94,7 @@ If a task fails its tests twice, stop and ask Akram whether to fix it, move it t
 | T49 | FREEZE: no new features. Full launch gate (`docs/HANDOVER.md`) on one release-candidate commit; real-phone pass by Akram; residual-risk list; written approval | M |
 
 ## Counts and order of risk
-Easy: 12. Medium: 24. Hard: 8 (T17, T20, T27, T30, T31, T35, T39, T40, T41 are the hard ones; T41 depends on T16).
+Easy: 10. Medium: 30. Hard: 9 (T17, T20, T27, T30, T31, T35, T39, T40, T41; T41 depends on T16). 49 tasks in total.
 Hard tasks each start with a short design note in the PR (data, failure modes, rollback) and get a second look before merge.
 Cut rule: if a Hard task is not green by the freeze date, it moves to v2.1 instead of delaying launch.
 
