@@ -1,3 +1,4 @@
+import Link from "next/link";
 import RunLabel from "@/components/RunLabel";
 import DoorBand from "@/components/welcome/DoorBand";
 import { getFeatures } from "@/lib/features";
@@ -69,6 +70,21 @@ export default async function Home() {
         <Suspense fallback={<TilesSkeleton />}>
           <LiveTiles />
         </Suspense>
+      </section>
+
+      <section aria-labelledby="start-heading">
+        <h2 id="start-heading">Where to start</h2>
+        <ul className="start-grid" data-testid="start-here">
+          <li><Link href="/candidates" className="start-card">
+            <strong>Hunt for planets</strong>
+            <span>Find the dip in real TESS data and see how the pipeline scored it.</span></Link></li>
+          <li><Link href="/solar-system" className="start-card">
+            <strong>Fly the solar system</strong>
+            <span>See where the planets are today, to scale.</span></Link></li>
+          <li><Link href="/learn" className="start-card">
+            <strong>Take a lesson</strong>
+            <span>Short lessons with quizzes. No account needed.</span></Link></li>
+        </ul>
       </section>
 
       <section aria-labelledby="proof-heading">

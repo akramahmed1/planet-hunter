@@ -1055,6 +1055,99 @@ img {
 
 /* ---------- live tiles ---------- */
 
+/* Mission control status and the start cards on the home page (T26). */
+.mission {
+  margin: var(--sp-3) 0;
+  padding: var(--sp-3) var(--sp-4);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--space-850);
+}
+
+.mission-head {
+  margin: 0 0 var(--sp-2);
+  font-weight: 600;
+}
+
+.mission-list {
+  display: grid;
+  gap: var(--sp-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mission-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--sp-2);
+  overflow-wrap: anywhere;
+}
+
+.mission-dot {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background: #6fd08c;
+  align-self: center;
+  flex: none;
+}
+
+.mission-item--stale .mission-dot {
+  background: #f0b45a;
+}
+
+.mission-item--down .mission-dot {
+  background: transparent;
+  border: 2px solid #ff8a8a;
+}
+
+.mission-name {
+  font-weight: 600;
+}
+
+@media (min-width: 768px) {
+  .mission-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.start-grid {
+  display: grid;
+  gap: var(--sp-3);
+  margin: var(--sp-3) 0;
+  padding: 0;
+  list-style: none;
+}
+
+.start-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  height: 100%;
+  padding: var(--sp-4);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: linear-gradient(180deg, rgba(17, 26, 48, 0.95), rgba(11, 17, 34, 0.95));
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.start-card:hover {
+  border-color: #7cc4ff;
+}
+
+.start-card span {
+  color: var(--ink-dim);
+}
+
+@media (min-width: 768px) {
+  .start-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 /* The student's home (T25). */
 .bar {
   display: block;
