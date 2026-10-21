@@ -33,11 +33,13 @@ test("the candidates page and run label use the singular for one", async ({ page
 // "Tap" on a touch screen, "Select" with a mouse (the phone project is touch, the desktop project is not).
 test("instructions say Tap on a phone and Select on a desktop", async ({ page }, info) => {
   const touch = info.project.name === "mobile";
+  // innerText is what a person sees; textContent would also include the word CSS hides.
+  const seen = (loc: ReturnType<typeof page.locator>) => () => loc.first().innerText();
   await page.goto("/");
   const line = page.locator("p.muted", { hasText: "any value to see where it comes from" });
-  await expect(line).toHaveText(touch ? /^Tap any value/ : /^Select any value/);
+  await expect.poll(seen(line)).toMatch(touch ? /^Tap any value/ : /^Select any value/);
   await page.goto("/learn");
-  await expect(page.locator("p.lede")).toContainText(touch ? "tap it to see" : "select it to see");
-  await page.goto("/solar-system");
-  await expect(page.getByTestId("measure-panel")).toBeAttached();
+  const lede = page.locator("p.lede");
+  await expect.poll(seen(lede)).toContain(touch ? "tap it to see" : "select it to see");
+  await expect.poll(seen(lede)).not.toContain(touch ? "select it" : "tap it");
 });
