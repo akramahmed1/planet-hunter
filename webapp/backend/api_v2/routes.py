@@ -5,11 +5,19 @@ import os
 from fastapi import APIRouter, Response
 
 import db
-from api_v2.schemas import DatabaseStatus, V2HealthResponse
+from classroom import flags
+from api_v2.schemas import DatabaseStatus, Features, V2HealthResponse
 
 VERSION = "2.0.0-dev"
 
 router = APIRouter(prefix="/api/v2", tags=["v2"])
+
+
+@router.get("/features", response_model=Features)
+def features(response: Response) -> Features:
+    """Switches the frontend needs to know about. Short cache: a flip shows up within a minute."""
+    response.headers["Cache-Control"] = "public, max-age=30"
+    return Features(classroom=flags.classroom_enabled())
 
 
 @router.get("/health", response_model=V2HealthResponse)

@@ -21,6 +21,11 @@ class DatabaseStatus(_Strict):
     latency_ms: float | None
 
 
+class Features(_Strict):
+    """Which optional parts of the site are switched on, so the frontend shows only what works."""
+    classroom: bool
+
+
 class V2HealthResponse(_Strict):
     status: Literal["ok", "degraded"]
     service: str

@@ -5,6 +5,7 @@ import type { components } from "@/lib/api-types.gen";
 
 export type Schemas = components["schemas"];
 export type V2Health = Schemas["V2HealthResponse"];
+export type Features = Schemas["Features"];
 export type Quantity = Schemas["Quantity"];
 export type SourceRef = Schemas["SourceRef"];
 export type Iss = Schemas["IssResponse"];

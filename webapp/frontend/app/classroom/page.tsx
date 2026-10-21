@@ -1,10 +1,15 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import ClassroomHome from "@/components/classroom/ClassroomHome";
+import { getFeatures } from "@/lib/features";
 
 export const metadata: Metadata = { title: "Classroom",
   description: "Teachers set planet-hunting assignments and students join with a class code." };
 
-export default function ClassroomPage() {
+export const dynamic = "force-dynamic";
+
+export default async function ClassroomPage() {
+  if (!(await getFeatures()).classroom) notFound();
   return (
     <div className="page">
       <p className="eyebrow">For teachers and students</p>

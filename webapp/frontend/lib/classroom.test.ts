@@ -1,6 +1,7 @@
 // Classroom helpers.
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
+import { visibleNav } from "../components/shell/nav.ts";
 import { assignmentHref, endOfDay, formatDue, gradeText, needsSignIn } from "./classroom.ts";
 
 describe("classroom helpers", () => {
@@ -37,5 +38,14 @@ describe("classroom helpers", () => {
     assert.equal(needsSignIn("this needs a student account"), true);
     assert.equal(needsSignIn("no such class"), false);
     assert.equal(needsSignIn("Failed to fetch"), false);
+  });
+});
+
+describe("navigation", () => {
+  it("shows Classroom only when the server has it switched on", () => {
+    assert.equal(visibleNav(true).some((n) => n.href === "/classroom"), true);
+    assert.equal(visibleNav(false).some((n) => n.href === "/classroom"), false);
+    // Everything else stays, in the same order.
+    assert.deepEqual(visibleNav(false).map((n) => n.href), visibleNav(true).map((n) => n.href).filter((h) => h !== "/classroom"));
   });
 });

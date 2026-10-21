@@ -17,10 +17,10 @@ from fastapi import APIRouter, Depends, HTTPException, Path, Request, Response
 from fastapi.responses import JSONResponse
 
 from api_v2 import schemas as s
-from classroom import auth, data, security
+from classroom import auth, data, flags, security
 from classroom.auth import STUDENT, TEACHER, Principal
 
-router = APIRouter(prefix="/api/v2", tags=["v2"])
+router = APIRouter(prefix="/api/v2", tags=["v2"], dependencies=[Depends(flags.require_classroom)])
 
 
 def ID():

@@ -20,7 +20,7 @@ from sqlalchemy import text
 from sqlalchemy.engine import Engine
 
 import db
-from classroom import security
+from classroom import flags, security
 
 COOKIE = "ph_session"
 AGE_BLOCK_COOKIE = "ph_age_block"
@@ -124,7 +124,7 @@ def optional_principal(request: Request) -> Principal | None:
     """The caller if signed in, else None. For public endpoints that do more for students."""
     token = request.cookies.get(COOKIE)
     eng = db.engine()
-    if not token or eng is None:
+    if not token or eng is None or not flags.classroom_enabled():
         return None
     p = load(eng, token)
     if p is not None:
@@ -140,6 +140,7 @@ class Auth:
         self.kinds = kinds
 
     def __call__(self, request: Request) -> Principal:
+        flags.require_classroom()
         token = request.cookies.get(COOKIE)
         if not token:
             raise HTTPException(401, "sign in first")

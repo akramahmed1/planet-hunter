@@ -28,6 +28,7 @@ flow in the production environment):
 | backend | `DATABASE_URL` | `${{Postgres.DATABASE_URL}}` (production Postgres) |
 | backend | `ALLOWED_ORIGINS` | the production frontend URL |
 | backend | `NASA_API_KEY` | Akram's key (already set for v1) |
+| backend | `CLASSROOM_ENABLED` | leave UNSET (off) in production until the attorney-reviewed privacy notice exists; `1` in staging. Off: every classroom route answers 404 and the site hides Classroom |
 | backend | pre-deploy command | `alembic upgrade head` |
 | worker (new) | start command `python -m scans.worker`, `DATABASE_URL`, `SCAN_TIME_LIMIT_S=900`, `SCAN_MEMORY_LIMIT_MB=3000` | |
 | refresh (cron, check it exists in production) | `DATABASE_URL`, `NASA_API_KEY`, start `python -m live.refresh`, schedule `13 6 * * *` | |
