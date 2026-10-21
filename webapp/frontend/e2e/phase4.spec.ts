@@ -50,7 +50,7 @@ test("a system view shows the habitable zone and opens planet and star cards", a
   await expect(star.getByTestId("star-distance")).toHaveText(/light years$/);
   await page.keyboard.press("Escape");
 
-  await page.getByRole("button", { name: "d", exact: true }).click();
+  await page.getByRole("group", { name: "Choose a body" }).getByRole("button", { name: "TOI-700 d", exact: true }).click();
   const d = page.getByRole("dialog", { name: "TOI-700 d" });
   await expect(d.getByText("Confirmed planet")).toBeVisible();
   await expect(d.getByText("Average distance is inside the conservative zone")).toBeVisible();

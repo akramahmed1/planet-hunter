@@ -19,8 +19,8 @@ import Tap from "@/components/ui/Tap";
 const SystemScene3D = dynamic(() => import("./SystemScene3D"), { ssr: false });
 
 const FIT_OPTIONS = [
-  { value: "planets" as const, label: "Planets", title: "Fit the planets" },
-  { value: "zone" as const, label: "With zone", title: "Fit the planets and the habitable zone" },
+  { value: "planets" as const, label: "Planets", title: "Planets: fit the planets" },
+  { value: "zone" as const, label: "With zone", title: "With zone: fit the planets and the habitable zone" },
 ];
 const VIEW_OPTIONS = [
   { value: "3d" as const, label: "3D", title: "3D view" },
@@ -70,7 +70,7 @@ export default function SystemView({ system }: { system: TargetSystem }) {
           <button key={p.index} type="button" className="btn btn--sm"
             aria-pressed={selected?.kind === "planet" && selected.index === p.index}
             onClick={() => setSelected({ kind: "planet", index: p.index })} data-testid={`pick-planet-${p.index}`}>
-            {p.signal ? "Our signal" : p.planet.name.replace(system.host, "").trim() || p.planet.name}
+            {p.signal ? "Our signal" : p.planet.name}
           </button>
         ))}
       </div>
