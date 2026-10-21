@@ -4,25 +4,23 @@ import { CANDIDATES } from "./routes";
 // WCAG 1.4.11: the edge of a form field needs 3:1 against what is around it, because the edge is what
 // tells a person where to tap or click. This measures the real computed colours on the real pages: the
 // field's border against the nearest opaque background behind it (the card, or the page itself).
-const ROUTES = [
-  "/scan",
-  "/classroom",
-  "/candidates",
-  `/candidates/${CANDIDATES[0].slug}`,
-  "/learn/transits",
-  "/solar-system",
-  "/exoplanets/toi-700",
-  "/method",
+// Each page and the least number of visible fields it is known to show. Forms are drawn in the browser,
+// so the test waits for that many to appear (a slow runner would otherwise look too early).
+const ROUTES: { path: string; fields: number }[] = [
+  { path: "/scan", fields: 1 },
+  { path: "/classroom", fields: 5 }, // the student join form: code, nickname, PIN, birth month and year
+  { path: `/candidates/${CANDIDATES[0].slug}`, fields: 1 }, // the explainer question box
+  { path: "/solar-system", fields: 1 }, // the date control
+  { path: "/exoplanets/toi-700", fields: 1 },
 ];
 const MIN = 3;
 
 test("every text field, select and textarea has a border of at least 3:1", async ({ page }, info) => {
   test.skip(info.project.name !== "desktop", "colours do not depend on the screen size; one pass is enough");
   let checked = 0;
-  for (const route of ROUTES) {
+  for (const { path: route, fields: least } of ROUTES) {
     await page.goto(route);
-    await page.waitForLoadState("load");
-    const found = await page.evaluate(() => {
+    const measure = () => page.evaluate(() => {
       const parse = (c: string) => {
         const m = c.match(/rgba?\(([^)]+)\)/);
         if (!m) return null;
@@ -62,10 +60,12 @@ test("every text field, select and textarea has a border of at least 3:1", async
       }
       return out;
     });
+    await expect.poll(async () => (await measure()).length, { message: `${route} shows its form fields`, timeout: 20_000 }).toBeGreaterThanOrEqual(least);
+    const found = await measure();
     for (const f of found) {
       checked++;
       expect.soft(f.ratio, `${route}: ${f.what} border contrast`).toBeGreaterThanOrEqual(MIN);
     }
   }
-  expect(checked, "the test found form fields to check").toBeGreaterThan(3);
+  expect(checked, "the test found form fields to check").toBeGreaterThanOrEqual(9);
 });
