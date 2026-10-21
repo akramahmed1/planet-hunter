@@ -137,6 +137,20 @@ jobs:
       - name: Playwright (phone + desktop, with axe accessibility checks)
         working-directory: webapp/frontend
         run: npx playwright test
+      - name: Screenshots (Pixel-class phone 390x844 and laptop 1440x900, every route)
+        working-directory: webapp/frontend
+        env:
+          SCREENSHOTS: "1"
+          SHOT_LABEL: ci
+        run: npx playwright test --project=screenshots-phone --project=screenshots-laptop
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: webapp/frontend/screenshots
+          retention-days: 14
+          if-no-files-found: ignore
       - name: Lighthouse mobile budget (accessibility, best practices, page weight)
         working-directory: webapp/frontend
         run: |
