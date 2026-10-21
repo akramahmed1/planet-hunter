@@ -7,6 +7,7 @@ import type { Position } from "@/lib/api-v2";
 import { addDays, BODY_NAMES, clampDate, daysBetween, separation, type SceneBodyId } from "@/lib/solar";
 import type { TourStop } from "@/lib/tour";
 import { formatDistance, formatLightTime } from "@/lib/units";
+import Tap from "@/components/ui/Tap";
 
 export function MeasurePanel({
   picks,
@@ -26,8 +27,8 @@ export function MeasurePanel({
   return (
     <section className="card solar-panel" aria-labelledby="measure-h" data-testid="measure-panel">
       <h2 id="measure-h" className="card-title">Measure</h2>
-      {!a && <p>Tap a body, then tap a second one to see the distance between them.</p>}
-      {a && !b && <p>{BODY_NAMES[a]} selected. Now tap a second body.</p>}
+      {!a && <p><Tap /> a body, then <Tap lower /> a second one to see the distance between them.</p>}
+      {a && !b && <p>{BODY_NAMES[a]} selected. Now <Tap lower /> a second body.</p>}
       {pa && pb && (() => {
         const s = separation([pa.x_au, pa.y_au, pa.z_au], [pb.x_au, pb.y_au, pb.z_au]);
         const note =

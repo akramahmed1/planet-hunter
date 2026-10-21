@@ -2406,3 +2406,10 @@ html.cosmos-on body::after {
     line-height: 44px;
   }
 }
+
+/* "Tap" on a touch screen, "Select" with a mouse or trackpad (components/ui/Tap.tsx). */
+.t-touch { display: none; }
+@media (pointer: coarse) {
+  .t-touch { display: inline; }
+  .t-pointer { display: none; }
+}

@@ -29,3 +29,15 @@ test("the candidates page and run label use the singular for one", async ({ page
   await expect(page.getByText(/\b1 sectors\b/)).toHaveCount(0);
   await expect(page.getByText(/\b1 candidate signals\b/)).toHaveCount(0);
 });
+
+// "Tap" on a touch screen, "Select" with a mouse (the phone project is touch, the desktop project is not).
+test("instructions say Tap on a phone and Select on a desktop", async ({ page }, info) => {
+  const touch = info.project.name === "mobile";
+  await page.goto("/");
+  const line = page.locator("p.muted", { hasText: "any value to see where it comes from" });
+  await expect(line).toHaveText(touch ? /^Tap any value/ : /^Select any value/);
+  await page.goto("/learn");
+  await expect(page.locator("p.lede")).toContainText(touch ? "tap it to see" : "select it to see");
+  await page.goto("/solar-system");
+  await expect(page.getByTestId("measure-panel")).toBeAttached();
+});

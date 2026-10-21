@@ -10,6 +10,7 @@ import {
   type CandidatesResponse,
 } from "@/lib/api";
 import { count } from "@/lib/plural";
+import Tap from "@/components/ui/Tap";
 
 export const metadata: Metadata = {
   title: "Hunt",
@@ -37,7 +38,7 @@ export default async function CandidatesPage() {
       <h1>Candidate signals</h1>
       <p className="lede">
         {numberWord(summary.count, true)} targets, one strongest signal each.{" "}
-        {scanSummarySentence(summary)} Tap any target for the full readout.
+        {scanSummarySentence(summary)} <Tap /> any target for the full readout.
       </p>
       <p className="muted">
         Scan run: {run.run_date}. {count(run.sectors_per_target, "sector")} per target.

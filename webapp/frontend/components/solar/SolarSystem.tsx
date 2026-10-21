@@ -19,6 +19,7 @@ import { BodySheet, DeepSpaceSheet } from "./BodySheet";
 import { buildModel, type Mode, type Zoom } from "./model";
 import OrbitMap2D from "./OrbitMap2D";
 import { DateControl, MeasurePanel, TourPanel } from "./Panels";
+import Tap from "@/components/ui/Tap";
 
 type View = "3d" | "map";
 
@@ -35,8 +36,8 @@ const VIEW_OPTIONS = [
   { value: "map" as const, label: "Map", title: "Flat map view" },
 ];
 const MODE_OPTIONS = [
-  { value: "explore" as const, label: "Explore", title: "Explore: tap a body for its card" },
-  { value: "measure" as const, label: "Measure", title: "Measure: tap two bodies" },
+  { value: "explore" as const, label: "Explore", title: "Explore: select a body for its card" },
+  { value: "measure" as const, label: "Measure", title: "Measure: select two bodies" },
   { value: "tour" as const, label: "Tour", title: "Tour from the Sun to Neptune" },
 ];
 
@@ -170,7 +171,7 @@ export default function SolarSystem({
       }} />
 
       {mode === "explore" && (
-        <p className="muted">Tap a planet for its card, or tap empty space to see how cold space is.</p>
+        <p className="muted"><Tap /> a planet for its card, or <Tap lower /> empty space to see how cold space is.</p>
       )}
       {mode === "measure" && (
         <MeasurePanel picks={picks} positions={posMap} date={data.date} onClear={() => setPicks([])} />
