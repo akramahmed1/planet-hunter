@@ -19,7 +19,7 @@ from fastapi.responses import JSONResponse
 
 from api_v2 import schemas as s
 import mailer
-from classroom import auth, data, flags, security
+from classroom import auth, data, flags, security, totp
 from classroom.auth import STUDENT, TEACHER, Principal
 
 log = logging.getLogger("planethunter.classroom")
@@ -100,8 +100,8 @@ def teacher_signup(body: s.TeacherSignup, request: Request, response: Response, 
     return s.Ok(ok=True)
 
 
-@router.post("/auth/teacher/login", response_model=s.Ok)
-def teacher_login(body: s.TeacherLogin, request: Request, response: Response) -> s.Ok:
+@router.post("/auth/teacher/login", response_model=s.LoginResult)
+def teacher_login(body: s.TeacherLogin, request: Request, response: Response) -> s.LoginResult:
     auth.check_csrf(request)
     eng = auth.engine()
     _no_store(response)
@@ -114,8 +114,100 @@ def teacher_login(body: s.TeacherLogin, request: Request, response: Response) ->
         data.record_failure(eng, f"login:email:{email}", f"login:ip:{ip}")
         raise HTTPException(401, "That email and password do not match an account.")
     data.clear_failures(eng, f"login:email:{email}")
+    if data.two_factor_enabled(eng, uid):
+        # Right password, but no session until the second step is done.
+        return s.LoginResult(ok=True, needs_2fa=True, challenge=data.make_login_challenge(eng, uid))
+    auth.start_session(eng, request, response, user_id=uid)
+    return s.LoginResult(ok=True)
+
+
+@router.post("/auth/teacher/login/2fa", response_model=s.Ok)
+def teacher_login_2fa(body: s.LoginTwoFactor, request: Request, response: Response) -> s.Ok:
+    """Second step: the ticket from the password step plus a code from the authenticator app, or a recovery code."""
+    auth.check_csrf(request)
+    eng = auth.engine()
+    _no_store(response)
+    ip = security.requester_key(auth.client_ip(request))
+    _limit(eng, f"2fa:ip:{ip}", 30, 15, "Too many sign-in tries from here. Wait 15 minutes.")
+    uid = data.redeem_login_challenge(eng, body.challenge, body.code)
+    if uid is None:
+        data.record_failure(eng, f"2fa:ip:{ip}")
+        raise HTTPException(401, "That code did not work, or the sign-in took too long. Start again with your password.")
     auth.start_session(eng, request, response, user_id=uid)
     return s.Ok(ok=True)
+
+
+def _two_factor_limit(eng, p: Principal) -> str:
+    key = f"2fa:user:{p.user_id}"
+    _limit(eng, key, 10, 15, "Too many tries. Wait 15 minutes.")
+    return key
+
+
+def _check_password(eng, p: Principal, password: str) -> None:
+    key = f"login:email:{(p.email or '').lower()}"
+    _limit(eng, key, 10, 15, "Too many tries for this account. Wait 15 minutes.")
+    uid, pw_hash = data.user_for_login(eng, (p.email or "").lower())
+    if uid != p.user_id or not security.verify_secret(pw_hash, password):
+        data.record_failure(eng, key)
+        raise HTTPException(401, "That password is not right.")
+
+
+@router.post("/auth/teacher/2fa/setup", response_model=s.TwoFactorSetup)
+def two_factor_setup(response: Response, p: Principal = Depends(TEACHER)) -> s.TwoFactorSetup:
+    """Start two-step setup: a new secret for the authenticator app. Nothing is required at sign-in until /enable."""
+    _no_store(response)
+    with _errors():
+        secret, email = data.begin_two_factor(auth.engine(), p.user_id)
+    return s.TwoFactorSetup(secret=secret, otpauth_uri=totp.otpauth_uri(secret, email))
+
+
+@router.post("/auth/teacher/2fa/enable", response_model=s.RecoveryCodes)
+def two_factor_enable(body: s.TwoFactorCode, response: Response, p: Principal = Depends(TEACHER)) -> s.RecoveryCodes:
+    """Prove the app works with one code. Returns ten recovery codes, shown only this once."""
+    _no_store(response)
+    eng = auth.engine()
+    key = _two_factor_limit(eng, p)
+    try:
+        with _errors():
+            codes = data.enable_two_factor(eng, p.user_id, body.code)
+    except HTTPException as exc:
+        if exc.status_code == 422:
+            data.record_failure(eng, key)
+        raise
+    return s.RecoveryCodes(ok=True, recovery_codes=codes)
+
+
+@router.post("/auth/teacher/2fa/disable", response_model=s.Ok)
+def two_factor_disable(body: s.TwoFactorProof, response: Response, p: Principal = Depends(TEACHER)) -> s.Ok:
+    """Turn it off. Needs the password and a current code (or a recovery code), so a stolen session is not enough."""
+    _no_store(response)
+    eng = auth.engine()
+    key = _two_factor_limit(eng, p)
+    _check_password(eng, p, body.password)
+    try:
+        with _errors():
+            data.disable_two_factor(eng, p.user_id, body.code)
+    except HTTPException:
+        data.record_failure(eng, key)
+        raise
+    return s.Ok(ok=True)
+
+
+@router.post("/auth/teacher/2fa/recovery-codes", response_model=s.RecoveryCodes)
+def two_factor_new_recovery_codes(body: s.TwoFactorProof, response: Response,
+                                  p: Principal = Depends(TEACHER)) -> s.RecoveryCodes:
+    """Replace the recovery codes (the old ones stop working). Needs the password and a current code."""
+    _no_store(response)
+    eng = auth.engine()
+    key = _two_factor_limit(eng, p)
+    _check_password(eng, p, body.password)
+    try:
+        with _errors():
+            codes = data.new_recovery_codes_for(eng, p.user_id, body.code)
+    except HTTPException:
+        data.record_failure(eng, key)
+        raise
+    return s.RecoveryCodes(ok=True, recovery_codes=codes)
 
 
 def _reset_base() -> str | None:
@@ -228,12 +320,12 @@ def teacher_delete_account(body: s.DeleteAccount, request: Request, response: Re
     """Delete the signed-in teacher's account after re-checking the password. See docs/DATA_DELETION.md."""
     _no_store(response)
     eng = auth.engine()
-    key = f"login:email:{(p.email or '').lower()}"
-    _limit(eng, key, 10, 15, "Too many tries for this account. Wait 15 minutes.")
-    _uid, pw_hash = data.user_for_login(eng, (p.email or "").lower())
-    if _uid != p.user_id or not security.verify_secret(pw_hash, body.password):
-        data.record_failure(eng, key)
-        raise HTTPException(401, "That password is not right.")
+    _check_password(eng, p, body.password)
+    if data.two_factor_enabled(eng, p.user_id):
+        key = _two_factor_limit(eng, p)
+        if not body.code or not data.spend_second_step(eng, p.user_id, body.code):
+            data.record_failure(eng, key)
+            raise HTTPException(401, "Enter a current code from your authenticator app, or a recovery code.")
     with _errors():
         out = data.delete_teacher_account(eng, p.user_id, delete_school=body.delete_school)
     auth.end_session(eng, request, response)
@@ -300,7 +392,8 @@ def me(request: Request, response: Response) -> s.Me:
     if p.kind == "teacher":
         orgs = [s.OrgRole(org_id=o, name=data.org_detail(eng, p, o)["name"], role=r) for o, r in sorted(p.roles.items())]
         return s.Me(me=s.MeTeacher(kind="teacher", display_name=p.display_name, email=p.email,
-                                                  email_verified=data.email_verified(eng, p.user_id), orgs=orgs))
+                                                  email_verified=data.email_verified(eng, p.user_id),
+                                                  two_factor=data.two_factor_enabled(eng, p.user_id), orgs=orgs))
     home = data.student_assignments(eng, p)
     return s.Me(me=s.MeStudent(kind="student", nickname=p.nickname, class_id=p.class_id,
                                class_name=home["class"]["name"]))

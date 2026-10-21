@@ -42,15 +42,120 @@ export default function ClassroomHome() {
       </p>
       {me.kind === "teacher" && !me.email_verified && <VerifyBanner email={me.email} />}
       {me.kind === "teacher" ? <TeacherHome orgs={me.orgs} onChange={load} /> : <StudentAssignments />}
-      {me.kind === "teacher" && <DeleteAccount onDeleted={() => setMe(null)} />}
+      {me.kind === "teacher" && <TwoFactor on={me.two_factor} onChange={load} />}
+      {me.kind === "teacher" && <DeleteAccount twoFactor={me.two_factor} onDeleted={() => setMe(null)} />}
     </>
+  );
+}
+
+/** Optional two-step sign-in: set up with an authenticator app, save recovery codes, turn off or renew codes. */
+function TwoFactor({ on, onChange }: { on: boolean; onChange: () => void }) {
+  const [setup, setSetup] = useState<{ secret: string; otpauth_uri: string } | null>(null);
+  const [codes, setCodes] = useState<string[] | null>(null);
+  const [code, setCode] = useState("");
+  const [password, setPassword] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [saved, setSaved] = useState(false);
+
+  async function call<T>(path: `/api/v2/${string}`, body: unknown): Promise<T | null> {
+    setBusy(true);
+    setError(null);
+    const r = await apiV2Post<T>(path, body);
+    setBusy(false);
+    if (r.ok) return r.data;
+    setError(r.error);
+    return null;
+  }
+
+  return (
+    <details className="card" data-testid="two-factor">
+      <summary>Two-step sign-in {on ? "(on)" : "(off)"}</summary>
+      {codes ? (
+        <div data-testid="recovery-codes">
+          <p>Save these recovery codes somewhere safe, such as a password manager. Each works once if you lose your
+            phone. We cannot show them again.</p>
+          <ul className="recovery-list">{codes.map((c) => <li key={c}><code>{c}</code></li>)}</ul>
+          <label className="check-row">
+            <input type="checkbox" checked={saved} onChange={(e) => setSaved(e.target.checked)}
+              data-testid="codes-saved" />{" "}I have saved my recovery codes
+          </label>
+          <div className="btn-row">
+            <button type="button" className="btn btn--primary" disabled={!saved}
+              onClick={() => { setCodes(null); setSetup(null); setSaved(false); setCode(""); onChange(); }}
+              data-testid="codes-done">Done</button>
+          </div>
+        </div>
+      ) : !on && !setup ? (
+        <div>
+          <p className="muted small">Adds a six digit code from an authenticator app to your password. Recommended
+            for anyone who sees student names.</p>
+          <div className="btn-row">
+            <button type="button" className="btn btn--primary" disabled={busy} data-testid="two-factor-start"
+              onClick={async () => setSetup(await call("/api/v2/auth/teacher/2fa/setup", {}))}>Set it up</button>
+          </div>
+        </div>
+      ) : !on && setup ? (
+        <form onSubmit={async (e) => {
+          e.preventDefault();
+          const r = await call<{ recovery_codes: string[] }>("/api/v2/auth/teacher/2fa/enable", { code });
+          if (r) setCodes(r.recovery_codes);
+        }}>
+          <p>1. In an authenticator app (Google Authenticator, 1Password, Authy or similar), add an account with this
+            key:</p>
+          <p><code data-testid="two-factor-secret">{setup.secret}</code></p>
+          <p className="small"><a href={setup.otpauth_uri}>Open it in an authenticator app on this device</a></p>
+          <div className="field">
+            <label htmlFor="tf-code" className="field-label">2. Type the six digit code the app shows</label>
+            <input id="tf-code" className="select" value={code} onChange={(e) => setCode(e.target.value)} required
+              inputMode="numeric" autoComplete="one-time-code" maxLength={12} data-testid="two-factor-code" />
+          </div>
+          <div className="btn-row">
+            <button type="submit" className="btn btn--primary" disabled={busy} data-testid="two-factor-enable">
+              {busy ? "One moment..." : "Turn on"}</button>
+          </div>
+        </form>
+      ) : (
+        <form onSubmit={(e) => e.preventDefault()}>
+          <p className="muted small">Two-step sign-in is on. To change it, type your password and a current code (or a
+            recovery code).</p>
+          <div className="field">
+            <label htmlFor="tf-pw" className="field-label">Password</label>
+            <input id="tf-pw" className="select" type="password" value={password}
+              onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" maxLength={200}
+              data-testid="two-factor-password" />
+          </div>
+          <div className="field">
+            <label htmlFor="tf-code2" className="field-label">Code</label>
+            <input id="tf-code2" className="select" value={code} onChange={(e) => setCode(e.target.value)}
+              autoComplete="one-time-code" maxLength={32} data-testid="two-factor-code" />
+          </div>
+          <div className="btn-row">
+            <button type="button" className="btn btn--ghost" disabled={busy || !password || !code}
+              data-testid="two-factor-new-codes" onClick={async () => {
+                const r = await call<{ recovery_codes: string[] }>("/api/v2/auth/teacher/2fa/recovery-codes",
+                  { password, code });
+                if (r) { setCodes(r.recovery_codes); setPassword(""); setCode(""); }
+              }}>Get new recovery codes</button>
+            <button type="button" className="btn btn--ghost" disabled={busy || !password || !code}
+              data-testid="two-factor-off" onClick={async () => {
+                if (await call("/api/v2/auth/teacher/2fa/disable", { password, code })) {
+                  setPassword(""); setCode(""); onChange();
+                }
+              }}>Turn off</button>
+          </div>
+        </form>
+      )}
+      {error && <p className="error-box" role="alert" data-testid="two-factor-error">{error}</p>}
+    </details>
   );
 }
 
 /** Delete the teacher's account. If they are the only teacher of a school, the answer asks them to confirm that the
  * school and its students go too. */
-function DeleteAccount({ onDeleted }: { onDeleted: () => void }) {
+function DeleteAccount({ onDeleted, twoFactor }: { onDeleted: () => void; twoFactor: boolean }) {
   const [password, setPassword] = useState("");
+  const [code, setCode] = useState("");
   const [alsoSchool, setAlsoSchool] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -63,7 +168,7 @@ function DeleteAccount({ onDeleted }: { onDeleted: () => void }) {
         setBusy(true);
         setError(null);
         const r = await apiV2Post<{ ok: boolean }>("/api/v2/auth/teacher/delete-account",
-          { password, delete_school: alsoSchool });
+          { password, delete_school: alsoSchool, ...(twoFactor ? { code } : {}) });
         setBusy(false);
         if (r.ok) return onDeleted();
         setNeedsConfirm(r.status === 409 && r.error.includes("Confirm to continue"));
@@ -77,6 +182,13 @@ function DeleteAccount({ onDeleted }: { onDeleted: () => void }) {
             data-testid="delete-password" />
         </div>
         {error && <p className="error-box" role="alert" data-testid="delete-error">{error}</p>}
+        {twoFactor && (
+          <div className="field">
+            <label htmlFor="delete-code" className="field-label">Code from your authenticator app</label>
+            <input id="delete-code" className="select" value={code} onChange={(e) => setCode(e.target.value)} required
+              maxLength={32} autoComplete="one-time-code" spellCheck={false} data-testid="delete-code" />
+          </div>
+        )}
         {needsConfirm && (
           <label className="check-row">
             <input type="checkbox" checked={alsoSchool} onChange={(e) => setAlsoSchool(e.target.checked)}

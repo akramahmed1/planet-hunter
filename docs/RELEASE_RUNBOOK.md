@@ -47,6 +47,7 @@ flow in the production environment):
 | backend | `EMAIL_API_KEY` | Resend API key. Railway variable only, never in code or chat. Create it with sending access only |
 | backend | `EMAIL_FROM` | Sender, for example `Planet Hunter <hello@yourdomain>`. The domain must be verified at Resend (SPF and DKIM records) or mail lands in spam. Names the provider in the privacy notice as a processor |
 | backend | `APP_BASE_URL` | Public address of the website, for example `https://planethunter.example` (no path, no trailing slash). Password reset emails link to `<APP_BASE_URL>/classroom/reset#token=...`. If unset or not https (http only for localhost) no reset email is sent |
+| backend | `TOTP_ENCRYPTION_KEY` | 32 random bytes in base64 (`openssl rand -base64 32`). Encrypts teachers' authenticator secrets in the database (AES-256-GCM). Set it once, only in Railway, and keep a copy in the team password manager: **if it is lost or changed, every teacher who turned on two-step sign-in is locked out until an operator clears their setting** (see below). Without it, teachers cannot turn two-step on and sign-in is unchanged |
 | backend | `ANTHROPIC_API_KEY` | added by Akram in Railway, never in chat or git |
 
 Not set in production (defaults are the safe values): `AUTH_SIGNUPS_PER_HOUR`, `AUTH_FORGOT_PER_HOUR`,
@@ -93,3 +94,21 @@ renames a column does it in two releases (stop using it, then drop it).
 The v2 frontend still reads v1 endpoints: `/api/candidates`, `/api/candidates/{slug}`,
 `/api/overview`, `/api/validation`, `/api/method`, `/api/health` and the plot images under
 `/api/plots/`. They stay for at least one release after v2 is live, with a deprecation note in the API docs; removing them is a separate PR once the frontend reads v2 only.
+
+## Two-step sign-in: a teacher is locked out (operator steps)
+
+A teacher who has lost both their phone and their recovery codes cannot sign in. Only the repository owner does this,
+after checking who they are by a route other than the account email (for example through the school's admin), on the
+production database, in a transaction:
+
+```sql
+begin;
+update users set totp_secret_enc = null, totp_enabled_at = null, totp_last_step = null where id = :USER;
+delete from recovery_codes where user_id = :USER;
+delete from login_challenges where user_id = :USER;
+commit;
+```
+
+The teacher then signs in with their password and can set two-step up again. Note the date and who asked in the private
+deletion and access log.
+

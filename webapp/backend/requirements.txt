@@ -13,3 +13,5 @@ lightkurve==2.5.1
 argon2-cffi==25.1.0
 # The explainer's model client (Phase 9); used only when the explainer is switched on.
 anthropic==1.14.0
+# Encrypting teachers' authenticator secrets at rest (launch task T20).
+cryptography>=44,<51

@@ -122,6 +122,7 @@ def test_the_anthropic_model_sends_data_in_the_user_turn_and_handles_refusals(mo
 
 def test_switched_off_by_default(monkeypatch):
     monkeypatch.delenv("EXPLAINER_ENABLED", raising=False)
+    monkeypatch.delenv("EXPLAINER_FAKE", raising=False)  # the browser tests export it; this test is about a bare server
     with TestClient(backend.app) as c:
         assert c.get("/api/v2/explain/status").json() == {"enabled": False, "model": None, "paused": False,
                                                          "reason": "The explainer is switched off on this server."}

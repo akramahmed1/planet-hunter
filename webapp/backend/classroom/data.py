@@ -14,7 +14,7 @@ from sqlalchemy.exc import IntegrityError
 
 import data_store
 from billing import plans
-from classroom import security
+from classroom import security, totp
 from classroom.auth import Principal, end_all_sessions
 
 
@@ -197,6 +197,145 @@ def finish_email_verification(eng: Engine, token: str) -> None:
             raise Invalid("That verification link is not valid any more. Sign in and ask for a new one.")
         for (org,) in c.execute(text("select org_id from memberships where user_id = :u"), {"u": row[0]}):
             audit(c, org, row[0], "email.verify", f"user:{row[0]}")
+
+
+# ---------- two-step sign-in (T20) ----------
+
+CHALLENGE_MINUTES = 5
+CHALLENGE_TRIES = 5
+
+
+def two_factor_enabled(eng: Engine, user_id: int) -> bool:
+    with eng.connect() as c:
+        return c.execute(text("select totp_enabled_at is not null from users where id = :u"),
+                         {"u": user_id}).scalar() is True
+
+
+def begin_two_factor(eng: Engine, user_id: int) -> tuple[str, str]:
+    """Make (or replace a pending) secret for the teacher. Returns (secret, email). Nothing changes at sign-in until
+    `enable_two_factor` proves the app works."""
+    if not totp.available():
+        raise Invalid("Two-step sign-in is not switched on for this site yet.")
+    with eng.begin() as c:
+        r = c.execute(text("select email, totp_enabled_at from users where id = :u for update"), {"u": user_id}).first()
+        if r is None:
+            raise NotFound("no such account")
+        if r[1] is not None:
+            raise Conflict("Two-step sign-in is already on. Turn it off first to set it up again.")
+        secret = totp.new_secret()
+        c.execute(text("update users set totp_secret_enc = :s, totp_last_step = null where id = :u"),
+                  {"s": totp.seal(secret, user_id), "u": user_id})
+        return secret, r[0]
+
+
+def _store_recovery_codes(c: Connection, user_id: int) -> list[str]:
+    codes = totp.new_recovery_codes()
+    c.execute(text("delete from recovery_codes where user_id = :u"), {"u": user_id})
+    for code in codes:
+        c.execute(text("insert into recovery_codes (user_id, code_hash) values (:u, :h)"),
+                  {"u": user_id, "h": totp.recovery_hash(code)})
+    return codes
+
+
+def enable_two_factor(eng: Engine, user_id: int, code: str) -> list[str]:
+    """Turn it on once the teacher types a right code from the new secret. Returns the recovery codes, shown once."""
+    with eng.begin() as c:
+        r = c.execute(text("select totp_secret_enc, totp_enabled_at from users where id = :u for update"),
+                      {"u": user_id}).first()
+        if r is None or r[0] is None:
+            raise Invalid("Start the setup first.")
+        if r[1] is not None:
+            raise Conflict("Two-step sign-in is already on.")
+        secret = totp.unseal(r[0], user_id)
+        step = totp.check(secret, code, None) if secret else None
+        if step is None:
+            raise Invalid("That code is not right. Check the time on your phone and try the next code.")
+        c.execute(text("update users set totp_enabled_at = now(), totp_last_step = :s where id = :u"),
+                  {"s": step, "u": user_id})
+        codes = _store_recovery_codes(c, user_id)
+        for (org,) in c.execute(text("select org_id from memberships where user_id = :u"), {"u": user_id}):
+            audit(c, org, user_id, "two_factor.enable", f"user:{user_id}")
+        return codes
+
+
+def _spend_code(c: Connection, user_id: int, code: str) -> bool:
+    """True if `code` is a right authenticator code (once) or an unused recovery code (spent now). The account row
+    is locked so two requests cannot spend the same code."""
+    r = c.execute(text("select totp_secret_enc, totp_last_step from users where id = :u and totp_enabled_at is not null "
+                       "for update"), {"u": user_id}).first()
+    if r is None or r[0] is None:
+        return False
+    secret = totp.unseal(r[0], user_id)
+    step = totp.check(secret, code, r[1]) if secret else None
+    if step is not None:
+        c.execute(text("update users set totp_last_step = :s where id = :u"), {"s": step, "u": user_id})
+        return True
+    if len(totp.normal_recovery(code)) == 16:
+        done = c.execute(text("""update recovery_codes set used_at = now()
+                                 where user_id = :u and code_hash = :h and used_at is null"""),
+                         {"u": user_id, "h": totp.recovery_hash(code)}).rowcount
+        return bool(done)
+    return False
+
+
+def spend_second_step(eng: Engine, user_id: int, code: str) -> bool:
+    """For actions that need a fresh proof (such as deleting the account): True if the code is right, now spent."""
+    with eng.begin() as c:
+        return _spend_code(c, user_id, code)
+
+
+def disable_two_factor(eng: Engine, user_id: int, code: str) -> None:
+    with eng.begin() as c:
+        if not _spend_code(c, user_id, code):
+            raise Invalid("That code is not right.")
+        c.execute(text("""update users set totp_secret_enc = null, totp_enabled_at = null, totp_last_step = null
+                          where id = :u"""), {"u": user_id})
+        c.execute(text("delete from recovery_codes where user_id = :u"), {"u": user_id})
+        c.execute(text("delete from login_challenges where user_id = :u"), {"u": user_id})
+        for (org,) in c.execute(text("select org_id from memberships where user_id = :u"), {"u": user_id}):
+            audit(c, org, user_id, "two_factor.disable", f"user:{user_id}")
+
+
+def new_recovery_codes_for(eng: Engine, user_id: int, code: str) -> list[str]:
+    with eng.begin() as c:
+        if not _spend_code(c, user_id, code):
+            raise Invalid("That code is not right.")
+        return _store_recovery_codes(c, user_id)
+
+
+def recovery_codes_left(eng: Engine, user_id: int) -> int:
+    with eng.connect() as c:
+        return c.execute(text("select count(*) from recovery_codes where user_id = :u and used_at is null"),
+                         {"u": user_id}).scalar_one()
+
+
+def make_login_challenge(eng: Engine, user_id: int) -> str:
+    token = security.new_token()
+    with eng.begin() as c:
+        c.execute(text("delete from login_challenges where user_id = :u or expires_at < now()"), {"u": user_id})
+        c.execute(text("""insert into login_challenges (user_id, token_hash, expires_at)
+                          values (:u, :h, now() + make_interval(mins => :m))"""),
+                  {"u": user_id, "h": security.token_hash(token), "m": CHALLENGE_MINUTES})
+    return token
+
+
+def redeem_login_challenge(eng: Engine, token: str, code: str) -> int | None:
+    """The user id if the ticket is live and the code is right (the ticket is then spent), else None. A wrong code
+    counts against the ticket, which is burned after `CHALLENGE_TRIES`. The count is committed even on failure."""
+    with eng.begin() as c:
+        row = c.execute(text("""select id, user_id, attempts from login_challenges
+                                where token_hash = :h and expires_at > now() for update"""),
+                        {"h": security.token_hash(token)}).first()
+        if row is None:
+            return None
+        if row[2] >= CHALLENGE_TRIES:
+            c.execute(text("delete from login_challenges where id = :i"), {"i": row[0]})
+            return None
+        if _spend_code(c, row[1], code):
+            c.execute(text("delete from login_challenges where id = :i"), {"i": row[0]})
+            return row[1]
+        c.execute(text("update login_challenges set attempts = attempts + 1 where id = :i"), {"i": row[0]})
+        return None
 
 
 # ---------- deleting a teacher account (T19) ----------
