@@ -4,6 +4,8 @@ import { defineConfig } from "@playwright/test";
 // up, as in CI). Set PW_BASE_URL to test a deployed site such as staging.
 const remote = process.env.PW_BASE_URL;
 const baseURL = remote ?? "http://127.0.0.1:3000";
+// Screenshot projects only exist when asked for (SCREENSHOTS=1), so the normal run stays as fast as before.
+const shots = !!process.env.SCREENSHOTS;
 
 export default defineConfig({
   testDir: "./e2e",
@@ -18,7 +20,7 @@ export default defineConfig({
   projects: [
     {
       name: "mobile",
-      testIgnore: /down\.spec/,
+      testIgnore: /down\.spec|screenshots\.spec/,
       use: {
         browserName: "chromium",
         viewport: { width: 375, height: 812 },
@@ -29,9 +31,32 @@ export default defineConfig({
     },
     {
       name: "desktop",
-      testIgnore: /down\.spec/,
+      testIgnore: /down\.spec|screenshots\.spec/,
       use: { browserName: "chromium", viewport: { width: 1280, height: 800 } },
     },
+    // Screenshots for review (e2e/screenshots.spec.ts): a Pixel-class phone in Chrome and a laptop.
+    ...(shots
+      ? [
+          {
+            name: "screenshots-phone",
+            testMatch: /screenshots\.spec/,
+            use: {
+              browserName: "chromium" as const,
+              viewport: { width: 390, height: 844 },
+              deviceScaleFactor: 3,
+              isMobile: true,
+              hasTouch: true,
+              userAgent:
+                "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.36",
+            },
+          },
+          {
+            name: "screenshots-laptop",
+            testMatch: /screenshots\.spec/,
+            use: { browserName: "chromium" as const, viewport: { width: 1440, height: 900 } },
+          },
+        ]
+      : []),
     // Every live source down: a second backend whose upstream calls all fail, and a second server
     // rendering from it (e2e/down.spec.ts). Not run against a deployed site.
     ...(remote

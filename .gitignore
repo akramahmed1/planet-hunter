@@ -16,3 +16,4 @@ webapp/qa/screenshots/
 webapp/frontend/test-results/
 webapp/frontend/playwright-report/
 webapp/frontend/*.tsbuildinfo
+webapp/frontend/screenshots/
