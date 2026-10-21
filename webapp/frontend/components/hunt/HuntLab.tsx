@@ -6,6 +6,7 @@ import type { LightCurveResponse, PeriodogramResponse } from "@/lib/api-v2";
 import { foldBinned, foldWindow, phaseOf, scoreGuess, type Score } from "@/lib/hunt";
 import UPlotChart from "./UPlotChart";
 
+const START_DAYS = 3; // where the slider begins: arbitrary, and the page says so
 const P_MIN = 0.5;
 const P_MAX = 30;
 const STEPS = 20000; // about 0.02% per step
@@ -27,13 +28,14 @@ export default function HuntLab({ lc, pg, answerPeriod, classification }: {
   classification: string;
 }) {
   const [xRange, setXRange] = useState<[number, number] | null>(null);
-  const [step, setStep] = useState(toStep(3));
+  const [step, setStep] = useState(toStep(START_DAYS));
   // "Fold there" sets the pipeline's exact period; the slider only reaches steps about 0.02% apart.
-  const [exactPeriod, setExactPeriod] = useState<number | null>(null);
+  const [exactPeriod, setExactPeriod] = useState<number | null>(START_DAYS); // exactly 3.0000, not the nearest slider step
   const [score, setScore] = useState<Score | null>(null);
   const [revealed, setRevealed] = useState(false);
   const [whole, setWhole] = useState(false);
   const sliderId = useId();
+  const helpId = useId();
   const period = exactPeriod ?? toPeriod(step);
   const t0 = lc.signal.t0_btjd;
 
@@ -102,10 +104,15 @@ export default function HuntLab({ lc, pg, answerPeriod, classification }: {
           A planet dips the light once every orbit. Fold the light curve at the right period and all the dips stack
           into one. Slide to find it.
         </p>
+        <p className="muted" id={helpId} data-testid="start-help">
+          The slider starts at {START_DAYS} days only because it has to start somewhere; that is not a hint. The dips
+          line up only when the period is right to within a fraction of a percent. Look at the periodogram below for
+          tall peaks, slide toward one, then sharpen with the 0.1% buttons.
+        </p>
         <label htmlFor={sliderId} className="select-label">
           Period: <span className="mono" data-testid="guess-period">{period.toFixed(4)} days</span>
         </label>
-        <input id={sliderId} type="range" min={0} max={STEPS} value={step} onChange={(e) => {
+        <input id={sliderId} type="range" min={0} max={STEPS} value={step} aria-describedby={helpId} onChange={(e) => {
           setExactPeriod(null);
           setStep(Number(e.target.value));
           setScore(null);
@@ -115,6 +122,11 @@ export default function HuntLab({ lc, pg, answerPeriod, classification }: {
           <button type="button" className="btn btn--sm" onClick={() => nudge(0.001)}>+0.1%</button>
           <button type="button" className="btn btn--sm" onClick={() => nudge(-0.01)}>−1%</button>
           <button type="button" className="btn btn--sm" onClick={() => nudge(0.01)}>+1%</button>
+          <button type="button" className="btn btn--sm btn--ghost" data-testid="start-over" onClick={() => {
+            setExactPeriod(START_DAYS);
+            setStep(toStep(START_DAYS));
+            setScore(null);
+          }}>Start over at {START_DAYS} days</button>
         </div>
         <label className="toggle-inline">
           <input type="checkbox" checked={whole} onChange={(e) => setWhole(e.target.checked)} /> Show the whole orbit

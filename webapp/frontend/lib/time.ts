@@ -19,3 +19,21 @@ export function formatLocal(iso: string, timeZone?: string): string {
 export function localDate(now: Date = new Date(), timeZone?: string): string {
   return new Intl.DateTimeFormat("en-CA", { timeZone, year: "numeric", month: "2-digit", day: "2-digit" }).format(now);
 }
+
+/**
+ * How old a calendar date is, in words: "today", "yesterday", "12 days ago", "about 2 months ago".
+ * Both dates are read as UTC calendar days, so the answer does not depend on the reader's time zone.
+ */
+export function ageLabel(date: string, now: Date = new Date()): string {
+  const then = Date.parse(`${date.slice(0, 10)}T00:00:00Z`);
+  if (Number.isNaN(then)) return "";
+  const today = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+  const days = Math.round((today - then) / 86_400_000);
+  if (days < 0) return "";
+  if (days === 0) return "today";
+  if (days === 1) return "yesterday";
+  if (days < 60) return `${days} days ago`;
+  if (days < 365) return `about ${Math.round(days / 30)} months ago`;
+  const years = Math.round(days / 365);
+  return `about ${years} ${years === 1 ? "year" : "years"} ago`;
+}
