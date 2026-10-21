@@ -850,6 +850,8 @@ img {
   background: var(--space-850);
   color: var(--ink);
   box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.6);
+  /* A sheet is drawn inside the top bar, which does not wrap its text; the sheet's own text must. */
+  white-space: normal;
 }
 
 .sheet[open] {
@@ -1134,6 +1136,17 @@ img {
   cursor: pointer;
   border-radius: var(--r-sm);
   overflow-wrap: anywhere;
+}
+
+/* The button sits in running text, so the line stays as it is; an invisible margin makes the target 24 px or more
+   tall at every screen size (WCAG 2.2 AA). Phones grow it further, see the max-width: 640px block. */
+.source-btn {
+  position: relative;
+}
+.source-btn::after {
+  content: "";
+  position: absolute;
+  inset: -4px -4px;
 }
 
 .source-btn:hover .source-btn-icon {
