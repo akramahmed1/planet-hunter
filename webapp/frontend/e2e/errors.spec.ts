@@ -14,6 +14,7 @@ test("an unknown address gets a branded 404 with ways forward", async ({ page })
     "/exoplanets/not-a-real-system",
     "/classroom/class/not-a-number",
     "/learn/not-a-lesson",
+    "/scan/999999",
   ]) {
     const res = await page.goto(path);
     expect(res?.status(), path).toBe(404);

@@ -16,7 +16,8 @@ async function getLesson(slug: string) {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const res = await getLesson((await params).slug);
-  const title = res?.ok ? res.data.title : "Lesson";
+  if (res === null || (!res.ok && (res.status === 404 || res.status === 422))) return { title: "Page not found" };
+  const title = res.ok ? res.data.title : "Lesson";
   return { title, description: `Lesson: ${title}. A short read with a quiz.` };
 }
 
