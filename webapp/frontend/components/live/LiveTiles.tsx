@@ -2,7 +2,9 @@ import { apiV2Get, type Apod, type ExoplanetsLatest, type Iss, type SpaceWeather
 import ApodImage from "./ApodImage";
 import IssTile from "./IssTile";
 import LocalTime from "@/components/LocalTime";
+import MissionStatus from "./MissionStatus";
 import SourceButton from "./SourceButton";
+import { sourceState, type SourceStatus } from "@/lib/status";
 
 function Unavailable({ id, title, message }: { id: string; title: string; message: string }) {
   return (
@@ -36,7 +38,16 @@ export default async function LiveTiles() {
     apiV2Get<SpaceWeather>("/api/v2/space-weather"),
   ]);
 
+  const status: SourceStatus[] = [
+    { name: "Space station position", state: sourceState({ ok: iss.ok, stale: iss.ok && iss.data.stale }), fetchedAt: iss.ok ? iss.data.fetched_at : null },
+    { name: "Picture of the day", state: sourceState({ ok: apod.ok, stale: apod.ok && apod.data.stale }), fetchedAt: apod.ok ? apod.data.fetched_at : null },
+    { name: "Exoplanet archive", state: sourceState({ ok: exo.ok, stale: exo.ok && exo.data.stale }), fetchedAt: exo.ok ? exo.data.fetched_at : null },
+    { name: "Space weather", state: sourceState({ ok: weather.ok, stale: weather.ok && weather.data.stale }), fetchedAt: weather.ok ? weather.data.fetched_at : null },
+  ];
+
   return (
+    <>
+    <MissionStatus items={status} />
     <div className="tile-grid">
       <IssTile initial={iss.ok ? iss.data : null} />
 
@@ -120,5 +131,6 @@ export default async function LiveTiles() {
         </article>
       )}
     </div>
+    </>
   );
 }

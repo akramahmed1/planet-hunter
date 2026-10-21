@@ -27,3 +27,11 @@ test("the home page says what is unavailable instead of leaving gaps", async ({ 
     await expect(live.getByRole("article", { name: t }).getByText("Unavailable", { exact: true })).toBeVisible();
   await expect(live.getByTestId("weather-quiet")).toBeVisible();
 });
+
+test("mission control says plainly that no live source is answering, and the rest of the home page still works", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.getByTestId("mission-state")).toHaveText(["Unavailable", "Unavailable", "Unavailable", "Unavailable"]);
+  await expect(page.getByTestId("mission-headline")).toHaveText("No live source is answering right now. The rest of the site still works.");
+  await expect(page.getByTestId("start-here").getByRole("link")).toHaveCount(3);
+  await expect(page.getByRole("link", { name: /See all|See the candidates/ })).toBeVisible();
+});
