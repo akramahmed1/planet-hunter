@@ -1,9 +1,17 @@
 name: CI
 
+# What runs where (agreed with Akram, 2026-10-22):
+#  - A pull request into v2 runs every check except that the browser tests are the ones the pull request adds or
+#    changes, plus the core list in webapp/frontend/e2e/CORE_SPECS.
+#  - The full browser suite and the screenshots run after every merge to v2, on any pull request into main (the
+#    release), on a push to main, on a daily schedule once this file is on the default branch, and when started by hand.
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, v2]
+  schedule:
+    - cron: "17 3 * * *"
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -105,12 +113,38 @@ jobs:
       CLASSROOM_ENABLED: "1"
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # the changed test files are found by comparing with the base branch
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
+          cache: npm # npm ci was taking up to 7 minutes on a cold runner
+          cache-dependency-path: webapp/frontend/package-lock.json
+      - name: Choose the browser tests for this run
+        id: pick
+        env:
+          EVENT: ${{ github.event_name }}
+          BASE: ${{ github.base_ref }}
+        run: |
+          if [ "$EVENT" != "pull_request" ] || [ "$BASE" = "main" ]; then
+            echo "mode=full" >> "$GITHUB_OUTPUT"
+            echo "Full browser suite ($EVENT, base '$BASE')."
+          else
+            cd webapp/frontend
+            git fetch --no-tags origin "$BASE"
+            specs=$( { grep -v '^#' e2e/CORE_SPECS | grep -v '^$'; \
+              git diff --name-only "origin/$BASE" HEAD -- 'webapp/frontend/e2e/*.spec.ts' | sed 's#.*/##'; } | sort -u )
+            list=""
+            for f in $specs; do
+              if [ -f "e2e/$f" ]; then list="$list e2e/$f"; else echo "::warning::$f is listed or changed but does not exist (deleted?)"; fi
+            done
+            echo "mode=subset" >> "$GITHUB_OUTPUT"
+            echo "specs=$list" >> "$GITHUB_OUTPUT"
+            echo "Core and changed browser tests only:$list"
+          fi
       - name: Make a throwaway key for two-step sign-in tests
         run: echo "TOTP_ENCRYPTION_KEY=$(openssl rand -base64 32)" >> "$GITHUB_ENV"
       - name: Start backend
@@ -142,8 +176,10 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Playwright (phone + desktop, with axe accessibility checks)
         working-directory: webapp/frontend
-        run: npx playwright test
+        run: |
+          if [ "${{ steps.pick.outputs.mode }}" = "full" ]; then npx playwright test; else npx playwright test ${{ steps.pick.outputs.specs }}; fi
       - name: Screenshots (Pixel-class phone 390x844 and laptop 1440x900, every route)
+        if: steps.pick.outputs.mode == 'full'
         working-directory: webapp/frontend
         env:
           SCREENSHOTS: "1"
