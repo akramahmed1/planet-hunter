@@ -76,9 +76,11 @@ test("a trail builds up behind the station, and Follow toggles", async ({ page }
   // Dashed line (ahead) and a solid trail (behind) are both drawn.
   await expect(page.getByTestId("iss-map").locator("path.leaflet-interactive[stroke-dasharray]").first()).toBeAttached();
   await expect(page.getByTestId("iss-map").locator("path.leaflet-interactive:not([stroke-dasharray])")).not.toHaveCount(0);
+  await page.clock.runFor(100); // the page clock is frozen: let it draw a frame so the button counts as steady
   await follow.click();
   await expect(follow).toHaveAttribute("aria-pressed", "false");
   await expect(follow).toHaveText("Follow the station");
+  await page.clock.runFor(100);
   await follow.click();
   await expect(follow).toHaveAttribute("aria-pressed", "true");
 });
