@@ -178,13 +178,17 @@ jobs:
         run: python webapp/qa/qa_backend.py http://127.0.0.1:8000
       - name: Frontend QA suite
         run: python webapp/qa/qa_frontend.py http://127.0.0.1:3000 http://127.0.0.1:8000
-      - name: Install Playwright browser
+      # One install for every browser this run needs, with a time limit: a stuck system-package download once held this
+      # step for 40 minutes, and the limit makes that fail fast so it can simply be run again.
+      - name: Install Playwright browsers
+        timeout-minutes: 15
         working-directory: webapp/frontend
-        run: npx playwright install --with-deps chromium
-      - name: Install Firefox and WebKit
-        if: steps.pick.outputs.cross == '1'
-        working-directory: webapp/frontend
-        run: npx playwright install --with-deps firefox webkit
+        run: |
+          if [ "${{ steps.pick.outputs.cross }}" = "1" ]; then
+            npx playwright install --with-deps chromium firefox webkit
+          else
+            npx playwright install --with-deps chromium
+          fi
       - name: Playwright (phone + desktop, with axe accessibility checks)
         working-directory: webapp/frontend
         run: |
