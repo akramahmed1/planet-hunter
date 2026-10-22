@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import CountUp from "./CountUp";
 
 /** One headline number with its label, and optionally where it comes from. */
 export default function Stat({
@@ -12,7 +13,7 @@ export default function Stat({
 }) {
   return (
     <div className="stat">
-      <span className="stat-value">{value}</span>
+      <span className="stat-value">{typeof value === "number" ? <CountUp value={value} /> : value}</span>
       <span className="stat-label">{label}</span>
       {hint && <span className="stat-hint">{hint}</span>}
     </div>

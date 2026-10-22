@@ -1,4 +1,5 @@
 import { apiV2Get, type Apod, type ExoplanetsLatest, type Iss, type SpaceWeather } from "@/lib/api-v2";
+import CountUp from "@/components/ui/CountUp";
 import ApodImage from "./ApodImage";
 import IssTile from "./IssTile";
 import LocalTime from "@/components/LocalTime";
@@ -90,7 +91,7 @@ export default async function LiveTiles() {
           <SourceButton label="Confirmed exoplanets" source={exo.data.confirmed_count.source}
             kind={exo.data.confirmed_count.kind} fetchedAt={exo.data.fetched_at} stale={exo.data.stale}
             note={exo.data.confirmed_count.note}>
-            <span className="tile-value mono">{exo.data.confirmed_count.value.toLocaleString("en-US")}</span>
+            <span className="tile-value mono"><CountUp value={exo.data.confirmed_count.value} grouped /></span>
           </SourceButton>
           <p className="tile-sub">
             {exo.data.latest.length > 0
