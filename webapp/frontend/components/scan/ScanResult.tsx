@@ -1,5 +1,6 @@
 "use client";
 
+import CsvDownload from "@/components/ui/CsvDownload";
 import { useEffect, useState } from "react";
 import ExplainBox from "@/components/explain/ExplainBox";
 import HuntLab from "@/components/hunt/HuntLab";
@@ -74,6 +75,17 @@ export default function ScanResult({ id, initial }: { id: number; initial: ScanS
               <dt>SNR</dt><dd className="num">{sig.snr.toFixed(1)}</dd>
               <dt>Sectors</dt><dd className="num">{(scan.sectors ?? []).join(", ")}</dd>
             </dl>
+            <CsvDownload
+              label="Download this result (CSV)"
+              fileParts={[name, "scan"]}
+              note="One row: the signal and what each vetting check said."
+              rows={() => [
+                ["tic_id", "target", "period_d", "depth_ppm", "duration_d", "snr", "label", "label_status", "sectors",
+                  ...sig.vetting.map((v) => `vetting_${v.id}`)],
+                [scan.tic_id, name, sig.period_d, sig.depth_ppm, sig.duration_d, sig.snr, sig.crossmatch.label_text,
+                  sig.label_status, (scan.sectors ?? []).join(" "), ...sig.vetting.map((v) => v.status)],
+              ]}
+            />
             <p>
               <Badge tone="info">{sig.crossmatch.label_text}</Badge>{" "}
               <span className="muted" data-testid="label-status">({sig.label_status})</span>

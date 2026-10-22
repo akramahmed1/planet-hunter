@@ -9,11 +9,21 @@ Status: draft, written for launch task T19. Not legal advice and not reviewed by
 |---|---|---|
 | Teacher | email, password hash, display name, role in each school, 13+ confirmation time, email confirmation time, classes and assignments they made | tables `users`, `memberships`, `classes`, `assignments` |
 | Student | nickname, PIN hash, join time, 13+ confirmation time, assignment results | tables `class_members`, `submissions` |
+| Either | Learn progress kept with the account so it follows them across devices: lesson names, question names, how many tries, one badge time (no free text, no name) | table `learn_progress` |
 | Either | a session cookie hash (up to 30 days), counters of failed sign-ins keyed by hashes, an audit log of roles, removals, deletions and exports | tables `sessions`, `auth_failures`, `audit_log` |
 | Teacher (temporary) | password reset and email confirmation tokens, as hashes (1 hour and 48 hours) | `password_resets`, `email_verifications` |
 
 No student email, real name, birth date, phone number or address is ever collected. The explainer sends no personal
 data to its AI provider (page data and the typed question only).
+
+## How long Learn progress is kept (launch task T39)
+
+- It is deleted with its owner: removing a student, deleting a class or deleting a teacher account removes the row
+  (the table cascades from `users` and `class_members`). The operator steps below remove it for a student because it
+  goes with `class_members`.
+- A row that nobody has touched for **24 months** is deleted when the server starts (`purge_stale_progress`).
+  **ASK**: is 24 months right, or should it be shorter (for example one school year plus summer)?
+- Signed-out visitors keep progress only in their own browser; we never see it.
 
 ## Who can delete what, by themselves
 

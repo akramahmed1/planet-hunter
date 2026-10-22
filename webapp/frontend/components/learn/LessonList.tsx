@@ -14,7 +14,7 @@ const STATUS: Record<LessonStatus, { text: string; tone: "clean" | "info" | "out
 
 /** Every lesson with this device's progress, and the badges earned so far. */
 export default function LessonList({ lessons }: { lessons: LessonSummary[] }) {
-  const { progress, ready } = useProgress();
+  const { progress, ready, sync } = useProgress();
   const earned = badges(progress, lessons.map((l) => l.slug));
   const names = lessons.filter((l) => earned.includes(l.slug)).map((l) => l.badge.name);
 
@@ -31,7 +31,11 @@ export default function LessonList({ lessons }: { lessons: LessonSummary[] }) {
             {names.map((n) => <li key={n}><Badge tone="clean">{n}</Badge></li>)}
           </ul>
         )}
-        <p className="muted small">Progress is kept on this device only. Nothing is sent to us.</p>
+        <p className="muted small" data-testid="progress-where">
+          {sync === "local"
+            ? "Progress is kept on this device only. Nothing is sent to us."
+            : "Progress is kept on this device and in your account, so it follows you to your other devices. It holds lesson names, question names, how many tries, and when a badge was earned, nothing else."}
+        </p>
       </section>
       <ol className="lesson-list" data-testid="lesson-list">
         {lessons.map((l, i) => {

@@ -11,7 +11,7 @@ import { count } from "@/lib/plural";
 
 /** A lesson: its steps one at a time with Back and Next, then the quiz and the badge. */
 export default function LessonPlayer({ lesson, startAtQuiz = false }: { lesson: LessonResponse; startAtQuiz?: boolean }) {
-  const { progress, update, ready, saved } = useProgress();
+  const { progress, update, ready, saved, sync } = useProgress();
   const [index, setIndex] = useState(startAtQuiz ? lesson.steps.length : 0);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const moved = useRef(false);
@@ -87,6 +87,13 @@ export default function LessonPlayer({ lesson, startAtQuiz = false }: { lesson: 
             </ul>
           </section>
         </section>
+      )}
+
+      {sync !== "local" && (
+        <p className="muted small" role="status" data-testid="sync-note">
+          {sync === "synced" ? "Your progress is saved to your account, so it is here on your other devices too."
+            : "Saving your progress to your account..."}
+        </p>
       )}
 
       {!saved && (

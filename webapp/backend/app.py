@@ -58,6 +58,12 @@ def sync_lessons() -> None:
         log.info("lessons synced: %d written", n)
     except Exception as exc:  # noqa: BLE001 - startup must not fail on the database
         log.warning("lessons not synced: %s", exc)
+    try:
+        gone = store.purge_stale_progress(eng)
+        if gone:
+            log.info("learn progress untouched for 24 months removed: %d", gone)
+    except Exception as exc:  # noqa: BLE001 - the table may not exist yet on an older database
+        log.warning("stale learn progress not purged: %s", exc)
 
 
 @asynccontextmanager

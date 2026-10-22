@@ -129,3 +129,40 @@ def get_question(eng: Engine, slug: str, key: str) -> dict | None:
         choices = c.execute(text("select text, correct, explanation from choices where question_id = :q "
                                  "order by position"), {"q": q["id"]}).mappings().all()
     return {**dict(q), "choices": [dict(ch) for ch in choices]}
+
+
+# ---------- progress that follows a signed-in person (launch task T39) ----------
+
+def get_progress(eng: Engine, *, user_id: int | None, member_id: int | None) -> dict:
+    """The stored progress for one person (empty when there is none)."""
+    from learn import progress
+
+    with eng.connect() as c:
+        row = c.execute(text("select doc from learn_progress where user_id is not distinct from :u "
+                             "and member_id is not distinct from :m"), {"u": user_id, "m": member_id}).first()
+    return progress.validate(row[0]) if row else dict(progress.EMPTY)
+
+
+def merge_progress(eng: Engine, doc: dict, *, user_id: int | None, member_id: int | None) -> dict:
+    """Combine `doc` (already validated) with what is stored, save the result and return it."""
+    from learn import progress
+
+    with eng.begin() as c:
+        row = c.execute(text("select doc from learn_progress where user_id is not distinct from :u "
+                             "and member_id is not distinct from :m for update"), {"u": user_id, "m": member_id}).first()
+        merged = progress.merge(progress.validate(row[0]), doc) if row else doc
+        if row is None:
+            c.execute(text("insert into learn_progress (user_id, member_id, doc) values (:u, :m, cast(:d as jsonb))"),
+                      {"u": user_id, "m": member_id, "d": json.dumps(merged)})
+        elif merged != progress.validate(row[0]):
+            c.execute(text("update learn_progress set doc = cast(:d as jsonb), updated_at = now() "
+                           "where user_id is not distinct from :u and member_id is not distinct from :m"),
+                      {"u": user_id, "m": member_id, "d": json.dumps(merged)})
+    return merged
+
+
+def purge_stale_progress(eng: Engine, months: int = 24) -> int:
+    """Delete progress nobody has touched for `months` months. Returns how many rows went."""
+    with eng.begin() as c:
+        return c.execute(text("delete from learn_progress where updated_at < now() - make_interval(months => :m)"),
+                         {"m": months}).rowcount

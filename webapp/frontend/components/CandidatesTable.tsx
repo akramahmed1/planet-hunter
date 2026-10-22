@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import CsvDownload from "@/components/ui/CsvDownload";
 import ClassificationBadge from "@/components/ClassificationBadge";
 import EmptyState from "@/components/ui/EmptyState";
 import {
@@ -115,6 +116,17 @@ export default function CandidatesTable({
           </select>
         </label>
       </div>
+
+      <CsvDownload
+        label={`Download these ${rows.length} (CSV)`}
+        fileParts={["candidates"]}
+        note="Candidate signals, not discoveries."
+        rows={() => [
+          ["rank", "target", "tic", "classification", "label", "period_d", "duration_d", "depth_ppm", "snr", "bls_power", "n_cadences"],
+          ...rows.map((c) => [c.rank, c.target, c.tic, c.classification, c.classification_label, c.period_d, c.duration_d,
+            c.depth_ppm, c.snr, c.bls_power, c.n_cadences]),
+        ]}
+      />
 
       <ul className="cand-cards" aria-label="Candidate signals">
         {rows.map((c) => (

@@ -1,5 +1,7 @@
 // Learn progress and number parsing.
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { describe, it } from "node:test";
 import {
   badges,
@@ -7,9 +9,11 @@ import {
   EMPTY,
   hasBadge,
   markStep,
+  mergeProgress,
   parse,
   parseNumber,
   recordAnswer,
+  sameProgress,
   status,
   toleranceText,
 } from "./learn.ts";
@@ -80,3 +84,41 @@ describe("numbers", () => {
     assert.equal(toleranceText(3, "ppm"), "Answers within 3 ppm count as right.");
   });
 });
+
+describe("syncing progress between devices", () => {
+  const cases = JSON.parse(readFileSync(join(import.meta.dirname, "..", "..", "backend", "tests", "fixtures", "learn_merge_cases.json"), "utf8"));
+
+  it("joins progress exactly as the server does (60 cases made by the server's own code)", () => {
+    assert.equal(cases.length, 60);
+    for (const c of cases) assert.deepEqual(mergeProgress(c.a, c.b), c.merged);
+  });
+
+  it("is commutative, associative and idempotent, and never loses progress", () => {
+    for (let i = 0; i < cases.length - 2; i++) {
+      const [a, b, c] = [cases[i].a, cases[i + 1].b, cases[i + 2].a];
+      assert.deepEqual(mergeProgress(a, b), mergeProgress(b, a));
+      assert.deepEqual(mergeProgress(mergeProgress(a, b), c), mergeProgress(a, mergeProgress(b, c)));
+      assert.deepEqual(mergeProgress(a, a), mergeProgress(a, a));
+      assert.ok(sameProgress(mergeProgress(a, EMPTY), a));
+      const m = mergeProgress(a, b);
+      for (const [slug, l] of Object.entries(a.lessons) as [string, { stepsSeen: number }][]) {
+        assert.ok(m.lessons[slug].stepsSeen >= l.stepsSeen);
+      }
+    }
+  });
+
+  it("an old copy cannot take away a badge or a correct answer", () => {
+    const newer = recordAnswer(recordAnswer(EMPTY, "x", "a", true, KEYS, NOW), "x", "b", true, KEYS, NOW);
+    const older = markStep(EMPTY, "x", 0);
+    const m = mergeProgress(older, newer);
+    assert.ok(hasBadge(m, "x"));
+    assert.equal(correctCount(m, "x", KEYS), 2);
+    assert.ok(sameProgress(m, mergeProgress(newer, older)));
+  });
+
+  it("tells copies apart only by what they hold", () => {
+    assert.ok(sameProgress(EMPTY, { version: 1, lessons: {} }));
+    assert.ok(!sameProgress(EMPTY, markStep(EMPTY, "x", 2)));
+  });
+});
+

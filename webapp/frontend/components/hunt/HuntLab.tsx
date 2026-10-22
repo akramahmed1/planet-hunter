@@ -4,6 +4,7 @@ import { useId, useMemo, useState } from "react";
 import SourceButton from "@/components/live/SourceButton";
 import type { LightCurveResponse, PeriodogramResponse } from "@/lib/api-v2";
 import { foldBinned, foldWindow, phaseOf, scoreGuess, snapToPeak, transitWindows, type Score } from "@/lib/hunt";
+import CsvDownload from "@/components/ui/CsvDownload";
 import UPlotChart from "./UPlotChart";
 
 const START_DAYS = 3; // where the slider begins: arbitrary, and the page says so
@@ -101,6 +102,12 @@ export default function HuntLab({ lc, pg, answerPeriod, classification }: {
         </p>
         <UPlotChart data={lcData} series={LC_SERIES} xLabel="Time (BTJD days)" yLabel="ppm" xRange={xRange}
           onXRange={setXRange} bands={bands} ariaLabel={`Light curve of ${lc.target}`} testId="lc-chart" />
+        <CsvDownload
+          label="Download the light curve (CSV)"
+          fileParts={[lc.target, "light curve"]}
+          note={`${lc.time_btjd.length.toLocaleString("en-US")} points, time in BTJD days, flux in ppm from normal.`}
+          rows={() => [["time_btjd", "flux_ppm"], ...lc.time_btjd.map((t, i) => [t, lc.flux_ppm[i]])]}
+        />
         <div className="btn-row">
           <button type="button" className="btn btn--sm" onClick={() => zoom(0.5)}>Zoom in</button>
           <button type="button" className="btn btn--sm" onClick={() => zoom(2)}>Zoom out</button>
