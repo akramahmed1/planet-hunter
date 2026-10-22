@@ -180,6 +180,30 @@ test("without WebGL the flat map is shown and everything still works", async ({ 
   await expect(page.getByRole("dialog", { name: "Jupiter" })).toBeVisible();
 });
 
+// The flat map is what people see without WebGL and before the 3D view has drawn. On a short phone held sideways it is
+// about 260 px across; every body must still be a finger-sized target there (24 px, the WCAG 2.2 minimum used on maps).
+test("without WebGL every body on the flat map is a big enough target on a short phone", async ({ page }) => {
+  await page.setViewportSize({ width: 400, height: 370 });
+  await page.addInitScript(() => {
+    const original = HTMLCanvasElement.prototype.getContext;
+    // @ts-expect-error: narrowing the overloads is not useful in a test stub
+    HTMLCanvasElement.prototype.getContext = function (type: string, ...rest: unknown[]) {
+      if (type.startsWith("webgl") || type === "experimental-webgl") return null;
+      return (original as (...a: unknown[]) => unknown).call(this, type, ...rest);
+    };
+  });
+  await page.goto("/solar-system");
+  await expect(page.getByTestId("orbit-map")).toBeVisible();
+  const sizes = await page.locator("[data-testid^='map-body-']").evaluateAll((els) =>
+    els.map((e) => {
+      const r = e.getBoundingClientRect();
+      return `${e.getAttribute("data-testid")} ${Math.round(r.width)}x${Math.round(r.height)} ${Math.min(r.width, r.height) >= 23.5}`;
+    }),
+  );
+  expect(sizes.length).toBeGreaterThan(5);
+  expect(sizes.filter((s) => s.endsWith("false")), "bodies smaller than 24 px").toEqual([]);
+});
+
 test("the 3D view loads after first paint and responds to taps", async ({ page }) => {
   await page.goto("/solar-system");
   // First paint is the map; three.js arrives afterwards.

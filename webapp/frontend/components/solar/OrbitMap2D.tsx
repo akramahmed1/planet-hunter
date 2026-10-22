@@ -34,7 +34,8 @@ export default function OrbitMap2D({
   // Close up: the view is centred on the body and wide enough to keep the Sun and the neighbouring orbits in it.
   const half = target ? Math.min(E, Math.max(E * 0.05, Math.hypot(target[0], target[1]) * 1.3)) : E;
   const k = half / E; // dots and labels shrink with the view, so they keep the size they have in the whole map
-  const hitR = E * 0.08 * k;
+  // 9.5% of the map across: still 24 px at the smallest map we draw (about 260 px, a short phone held sideways).
+  const hitR = E * 0.095 * k;
   const font = E * 0.042 * k;
   const cx = target ? target[0] : 0;
   const cy = target ? target[1] : 0;
