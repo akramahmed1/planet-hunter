@@ -27,6 +27,9 @@ it as you go; tick items off when fixed and say how it was verified.
 ## Known issues and loose ends
 - [ ] One unexplained failure: `solar.spec` "switching units updates the card" failed once on desktop in a full local run
       and then passed 3 of 3 alone and in the next full run. Error not captured. Watch CI; if it ever repeats, capture it.
+- [ ] One more unexplained failure, seen once in a full local run for T30: `phone.spec` "400x370 /exoplanets/toi-700 ...
+      tap targets" found the orbit map's bodies at 21x21 px (under 44). It passed 3 of 3 alone, and the page was not
+      changed by T30. Likely the map measured before it finished sizing under load. Watch CI; if it repeats, capture it.
 - [ ] Candidate page: the small "i" button next to "Batch scan ... (12 days ago)" wraps to its own line on a phone
       (from the T11 age label). Cosmetic.
 - [ ] T05a: `sharp` high severity npm audit finding (easy fix). T05b: `postcss` and `next` need Next 16 (design note and a
@@ -35,6 +38,9 @@ it as you go; tick items off when fixed and say how it was verified.
 - [ ] Teacher home has no per-student drill down or charts (the class page keeps its gradebook).
 - [ ] Forgot password: a known address does slightly more database work than an unknown one before replying (milliseconds;
       the email itself is sent after the reply). Residual risk, logged under T17.
+- [ ] Home globe (T30) is stylised: a grid and the real day and night sides, no continents. A real Earth picture (NASA
+      Blue Marble, public domain, with attribution) needs a network that can reach NASA; add it then, as an extra layer
+      that falls back to the stylised globe.
 - [ ] Local test tooling notes (not product): Postgres used to stop when its lock file was deleted by hand (fixed in my
       scripts); a `pgrep -f` pattern must never appear in its own command line.
 

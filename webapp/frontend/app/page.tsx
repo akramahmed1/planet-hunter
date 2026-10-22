@@ -1,5 +1,6 @@
 import Link from "next/link";
 import RunLabel from "@/components/RunLabel";
+import EarthHero from "@/components/hero/EarthHero";
 import DoorBand from "@/components/welcome/DoorBand";
 import { getFeatures } from "@/lib/features";
 import { Suspense } from "react";
@@ -37,6 +38,8 @@ export default async function Home() {
   return (
     <div className="hero">
       {classroom && <DoorBand />}
+      <div className="hero-head">
+      <div className="hero-copy">
       <p className="eyebrow">Real NASA telescope data</p>
       <h1>Planet Hunter</h1>
       <p className="lede">
@@ -45,6 +48,9 @@ export default async function Home() {
         mean a binary star, starspots, or instrument noise. This site shows
         what the search found and labels each one honestly.
       </p>
+      </div>
+      <EarthHero />
+      </div>
 
       <div className="callout" role="note">
         <p>
