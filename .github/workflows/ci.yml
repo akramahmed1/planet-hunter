@@ -5,6 +5,7 @@ name: CI
 #    changes, plus the core list in webapp/frontend/e2e/CORE_SPECS.
 #  - Firefox and WebKit run the main flows (e2e/CROSS_BROWSER_SPECS) whenever the full suite runs, and on a pull request
 #    that changes their setup.
+#  - A pull request that changes webapp/frontend/package.json or package-lock.json runs the full suite too.
 #  - The full browser suite and the screenshots run after every merge to v2, on any pull request into main (the
 #    release), on a push to main, on a daily schedule once this file is on the default branch, and when started by hand.
 on:
@@ -131,7 +132,13 @@ jobs:
           EVENT: ${{ github.event_name }}
           BASE: ${{ github.base_ref }}
         run: |
-          if [ "$EVENT" != "pull_request" ] || [ "$BASE" = "main" ]; then
+          deps=no
+          if [ "$EVENT" = "pull_request" ] && [ "$BASE" != "main" ]; then
+            git fetch --no-tags origin "$BASE"
+            # A change to the frontend's packages (a framework upgrade, say) can break anything: run everything.
+            if git diff --name-only "origin/$BASE" HEAD | grep -qE '^webapp/frontend/(package\.json|package-lock\.json)$'; then deps=yes; fi
+          fi
+          if [ "$EVENT" != "pull_request" ] || [ "$BASE" = "main" ] || [ "$deps" = yes ]; then
             echo "mode=full" >> "$GITHUB_OUTPUT"
             echo "cross=1" >> "$GITHUB_OUTPUT"
             echo "Full browser suite ($EVENT, base '$BASE')."
