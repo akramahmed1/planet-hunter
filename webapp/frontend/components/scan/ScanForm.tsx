@@ -1,12 +1,14 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useId, useState } from "react";
+import { useId, useRef, useState } from "react";
 import { apiV2Post, type ScanCreated } from "@/lib/api-v2";
 
 export default function ScanForm() {
   const router = useRouter();
-  const [target, setTarget] = useState("");
+  // Read from the box when the form is sent, not from state: text typed before the page finished loading is on the
+  // screen but was never seen by React, and the person is right to expect it to be sent.
+  const box = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const inputId = useId();
@@ -14,6 +16,7 @@ export default function ScanForm() {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
+    const target = box.current?.value ?? "";
     if (!target.trim()) {
       setError("Enter a star to scan.");
       return;
@@ -29,7 +32,7 @@ export default function ScanForm() {
   return (
     <form onSubmit={submit} className="card scan-form" data-testid="scan-form">
       <label htmlFor={inputId} className="select-label">Star to scan</label>
-      <input id={inputId} className="select" value={target} onChange={(e) => setTarget(e.target.value)}
+      <input id={inputId} ref={box} className="select" defaultValue=""
         placeholder="TIC 150428135 or TOI 700" aria-describedby={hintId} maxLength={40}
         autoComplete="off" spellCheck={false} data-testid="scan-target" />
       <p id={hintId} className="muted small">

@@ -51,6 +51,14 @@ it as you go; tick items off when fixed and say how it was verified.
 - [ ] Local test tooling notes (not product): Postgres used to stop when its lock file was deleted by hand (fixed in my
       scripts); a `pgrep -f` pattern must never appear in its own command line.
 
+## Found by the Firefox and WebKit tests (T45)
+- [ ] Text typed before the page's scripts finish loading is lost by every form that keeps its text only in React
+      state (found on the scan form, fixed there; see QA_LOG "T45 result 3"). The same pattern is in the sign-in,
+      sign-up, password reset, class and assignment forms, the quiz number box, the explainer question, the save-scan
+      label and the search box. On a slow phone a person can type, press the button and be told to enter something.
+      Fix each the same way (read the box when the form is sent) with a "typed before the scripts loaded" test per form
+      (the scan test is the pattern). Do this before the freeze.
+
 ## Always before the freeze (T49)
 - [ ] Full launch gate on one release candidate commit (`docs/HANDOVER.md`), real phone pass by Akram, residual risk list,
       written approval. PR #18 stays unmerged until then.

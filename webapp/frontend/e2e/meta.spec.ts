@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 import { CANDIDATES, ROUTES } from "./routes";
 
 test("every route has its own title and description, and the shared images and icon are served", async ({ page, request }, info) => {
-  test.skip(info.project.name !== "desktop", "one pass is enough");
+  test.skip(!info.project.name.startsWith("desktop"), "one pass is enough");
   const titles = new Map<string, string>();
   const descs = new Map<string, string>();
   for (const route of [...ROUTES, `/candidates/${CANDIDATES[1].slug}`, "/exoplanets/toi-270"]) {
@@ -26,7 +26,7 @@ test("every route has its own title and description, and the shared images and i
 });
 
 test("share-card images are absolute URLs on the real site, never localhost when deployed", async ({ page }, info) => {
-  test.skip(info.project.name !== "desktop", "one pass is enough");
+  test.skip(!info.project.name.startsWith("desktop"), "one pass is enough");
   const remote = process.env.PW_BASE_URL;
   for (const route of ["/", "/candidates", "/method"]) {
     await page.goto(route);
