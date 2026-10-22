@@ -1,13 +1,13 @@
 """Phase 7: lessons and quiz answers. Lessons are synced from content/lessons/ into Postgres."""
 from __future__ import annotations
 
-from fastapi import APIRouter, HTTPException, Path, Request, Response
+from fastapi import APIRouter, Depends, HTTPException, Path, Request, Response
 
 import db
 from api_v2 import schemas as s
 from classroom import auth as classroom_auth
 from classroom import data as classroom_data
-from learn import grading, store
+from learn import grading, progress, store
 
 router = APIRouter(prefix="/api/v2", tags=["v2"])
 NO_DB = {503: {"description": "Lessons need the database, which is not configured or not reachable"}}
@@ -62,3 +62,33 @@ def answer(body: s.AnswerRequest, request: Request, response: Response, slug: st
     return s.AnswerResult(question=body.question, correct=g.correct, explanation=g.explanation,
                           source=s.SourceRef(**q["source"]), correct_choice=g.correct_choice,
                           choice_explanation=g.choice_explanation, answer=g.answer, tolerance=g.tolerance, unit=g.unit)
+
+
+PROGRESS_CACHE = "no-store"
+
+
+def _owner(p) -> dict:
+    return {"user_id": p.user_id, "member_id": None} if p.kind == "teacher" else {"user_id": None, "member_id": p.member_id}
+
+
+@router.get("/me/learn-progress", response_model=s.LearnProgress, response_model_exclude_none=True, responses={**NO_DB, 401: {"description": "Not signed in"}})
+def my_learn_progress(response: Response, p=Depends(classroom_auth.ANYONE)) -> s.LearnProgress:
+    """The signed-in person's Learn progress, so a second device can pick up where the first left off."""
+    response.headers["Cache-Control"] = PROGRESS_CACHE
+    return s.LearnProgress(**store.get_progress(_engine(), **_owner(p)))
+
+
+@router.put("/me/learn-progress", response_model=s.LearnProgress, response_model_exclude_none=True, responses={**NO_DB, 401: {"description": "Not signed in"},
+            422: {"description": "Not valid progress"}})
+def put_my_learn_progress(body: s.LearnProgress, response: Response, p=Depends(classroom_auth.ANYONE)) -> s.LearnProgress:
+    """Merge this device's progress into the account's and return the combined result.
+
+    Nothing is ever overwritten: the stored copy and the sent copy are joined (the most progress of either wins),
+    so an old device cannot erase newer work.
+    """
+    try:
+        doc = progress.validate(body.model_dump(exclude_none=True))
+    except progress.BadProgress as exc:
+        raise HTTPException(422, str(exc))
+    response.headers["Cache-Control"] = PROGRESS_CACHE
+    return s.LearnProgress(**store.merge_progress(_engine(), doc, **_owner(p)))

@@ -1,4 +1,4 @@
-// Learn progress, stored on this device (Phase 7). Phase 8 moves it to the account once one exists.
+// Learn progress, stored on this device (Phase 7) and, for a signed-in person, kept in step with their account (T39).
 //
 // Shape: per lesson, the steps seen and, per question, whether it was ever answered
 // correctly and how many tries it took. A lesson's badge is earned when every one of
@@ -128,4 +128,31 @@ export function parseNumber(input: string): number | null {
 export function toleranceText(tolerance: number, unit: string): string {
   const t = Number.isInteger(tolerance) ? String(tolerance) : String(Number(tolerance.toPrecision(3)));
   return `Answers within ${t} ${unit} count as right.`;
+}
+
+/**
+ * Combine two copies of the same person's progress: the most progress either has. Commutative, associative and
+ * idempotent (the same join the server applies, backend/learn/progress.py), so devices that sync in any order, any
+ * number of times, end up with the same thing, and an old copy can never take progress away.
+ */
+export function mergeProgress(a: Progress, b: Progress): Progress {
+  const lessons: Record<string, LessonProgress> = {};
+  for (const slug of [...new Set([...Object.keys(a.lessons), ...Object.keys(b.lessons)])].sort()) {
+    const la = a.lessons[slug] ?? { stepsSeen: 0, questions: {} };
+    const lb = b.lessons[slug] ?? { stepsSeen: 0, questions: {} };
+    const questions: Record<string, QuestionProgress> = {};
+    for (const k of [...new Set([...Object.keys(la.questions), ...Object.keys(lb.questions)])].sort()) {
+      const qa = la.questions[k];
+      const qb = lb.questions[k];
+      questions[k] = qa && qb ? { correct: qa.correct || qb.correct, tries: Math.max(qa.tries, qb.tries) } : { ...(qa ?? qb) };
+    }
+    const badgeAt = la.badgeAt && lb.badgeAt ? (la.badgeAt < lb.badgeAt ? la.badgeAt : lb.badgeAt) : (la.badgeAt ?? lb.badgeAt);
+    lessons[slug] = { stepsSeen: Math.max(la.stepsSeen, lb.stepsSeen), questions, ...(badgeAt ? { badgeAt } : {}) };
+  }
+  return { version: 1, lessons };
+}
+
+/** True when two copies hold exactly the same progress. */
+export function sameProgress(a: Progress, b: Progress): boolean {
+  return JSON.stringify(mergeProgress(a, a)) === JSON.stringify(mergeProgress(b, b));
 }

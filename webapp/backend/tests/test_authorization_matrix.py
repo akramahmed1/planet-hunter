@@ -28,6 +28,7 @@ ROUTER_MODULES = ["routes", "live_routes", "phase4_routes", "phase5_routes", "sc
                   "classroom_routes", "phase9_routes"]
 
 # policy: "public" anyone may call (rate limited or harmless), "teacher" / "student" need that kind of sign-in,
+# "any" needs a sign-in of either kind (each person only ever reaches their own row),
 # "stripe" is called by Stripe and proved by its signature. scope says which resource the URL names: "org", "class",
 # "assignment" (a teacher outside that school gets 404, as if it did not exist), or None. admin: organization admins only.
 # csrf: whether the route must refuse a request without the X-PH-CSRF header.
@@ -35,6 +36,8 @@ POLICY: dict[tuple[str, str], dict] = {
     ("POST", "/api/v2/scans"): {"policy": "public", "csrf": False, "why": "queues a public scan; rate limited per caller, no account effect"},
     ("POST", "/api/v2/explain"): {"policy": "public", "csrf": False, "why": "public explainer; rate limited and spend capped, no account effect"},
     ("POST", "/api/v2/lessons/{slug}/answers"): {"policy": "public", "csrf": "when_signed_in", "why": "anyone may answer; a signed-in student's answer counts, so the CSRF header is then required"},
+    ("GET", "/api/v2/me/learn-progress"): {"policy": "any", "scope": None},
+    ("PUT", "/api/v2/me/learn-progress"): {"policy": "any", "scope": None},
     ("POST", "/api/v2/billing/webhook"): {"policy": "stripe", "csrf": False, "why": "Stripe's signature is the proof"},
     ("POST", "/api/v2/auth/teacher/signup"): {"policy": "public", "csrf": True},
     ("POST", "/api/v2/auth/teacher/login"): {"policy": "public", "csrf": True},
@@ -76,6 +79,7 @@ POLICY: dict[tuple[str, str], dict] = {
 }
 
 BODIES = {
+    "/api/v2/me/learn-progress": {"version": 1, "lessons": {}},
     "/api/v2/auth/teacher/2fa/enable": {"code": "123456"},
     "/api/v2/auth/teacher/2fa/disable": {"password": "x", "code": "123456"},
     "/api/v2/auth/teacher/2fa/recovery-codes": {"password": "x", "code": "123456"},
@@ -136,6 +140,8 @@ def test_every_route_that_writes_or_needs_sign_in_has_a_stated_access_rule():
         rule = POLICY[key]["policy"]
         if rule in ("teacher", "student"):
             assert kind == rule, f"{method} {path} is meant for {rule} but declares {kind}"
+        elif rule == "any":
+            assert kind == "teacher+student", f"{method} {path} is meant for any signed-in person but declares {kind}"
         else:
             assert kind is None, f"{method} {path} is listed as {rule} but declares a sign-in check ({kind})"
     stale = set(POLICY) - seen
@@ -156,6 +162,7 @@ def fingerprint(engine) -> dict:
         "orgs": "select id, name, join_code from organizations order by id",
         "memberships": "select org_id, user_id, role from memberships order by org_id, user_id",
         "classes": "select id, org_id, name, join_code from classes order by id",
+        "learn_progress": "select user_id, member_id, doc from learn_progress order by id",
         "members": "select id, class_id, nickname, pin_hash from class_members order by id",
         "assignments": "select id, class_id, kind, ref from assignments order by id",
         "submissions": "select * from submissions order by 1, 2",
@@ -201,7 +208,7 @@ def call(client, method, path, ids, headers=H):
 
 
 def protected():
-    return [(m, p, POLICY[(m, p)]) for (m, p) in sorted(POLICY) if POLICY[(m, p)]["policy"] in ("teacher", "student")]
+    return [(m, p, POLICY[(m, p)]) for (m, p) in sorted(POLICY) if POLICY[(m, p)]["policy"] in ("teacher", "student", "any")]
 
 
 @needs_db
@@ -218,6 +225,8 @@ def test_nobody_signed_in_is_refused_everywhere_that_needs_sign_in(world, engine
 def test_the_wrong_kind_of_account_is_refused(world, engine):  # noqa: F811
     before = fingerprint(engine)
     for m, p, rule in protected():
+        if rule["policy"] == "any":
+            continue  # both kinds are allowed in; the anonymous test above covers the refusal
         wrong = world["student"] if rule["policy"] == "teacher" else world["a"]
         r = call(wrong, m, p, world["ids"])
         assert r.status_code == 403, (m, p, rule["policy"], r.status_code)

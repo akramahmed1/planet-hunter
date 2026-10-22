@@ -12,6 +12,11 @@ ask who you are. Your settings (units) and lesson progress are kept in your own 
 the day from the services named on each page (OpenStreetMap, CDS Aladin, NASA), which receive
 your IP address as part of loading them.
 
+Signed in with a teacher or student account, your lesson progress is also kept with your account so it follows you to
+your other devices. It holds lesson names, question names, how many tries you took and when a badge was earned, nothing
+else. It is deleted when your account (or your class) is deleted, and when it has not been used for 24 months
+(**ASK**: attorney and Akram to confirm the period).
+
 ## Teacher accounts
 
 We store: your email address, a hash of your password (Argon2id, never the password), the

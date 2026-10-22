@@ -933,6 +933,33 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v2/me/learn-progress": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * My Learn Progress
+         * @description The signed-in person's Learn progress, so a second device can pick up where the first left off.
+         */
+        get: operations["my_learn_progress_api_v2_me_learn_progress_get"];
+        /**
+         * Put My Learn Progress
+         * @description Merge this device's progress into the account's and return the combined result.
+         *
+         *     Nothing is ever overwritten: the stored copy and the sent copy are joined (the most progress of either wins),
+         *     so an old device cannot erase newer work.
+         */
+        put: operations["put_my_learn_progress_api_v2_me_learn_progress_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v2/missions": {
         parameters: {
             query?: never;
@@ -1958,6 +1985,21 @@ export interface components {
             /** Join Code */
             join_code: string;
         };
+        /**
+         * LearnProgress
+         * @description Learn progress for the signed-in person: the version 1 shape the browser keeps on its own.
+         */
+        LearnProgress: {
+            /** Lessons */
+            lessons: {
+                [key: string]: components["schemas"]["LessonProgress"];
+            };
+            /**
+             * Version
+             * @constant
+             */
+            version: 1;
+        };
         /** LessonBadge */
         LessonBadge: {
             /** Name */
@@ -1982,6 +2024,23 @@ export interface components {
             href: string;
             /** Label */
             label: string;
+        };
+        /** LessonProgress */
+        LessonProgress: {
+            /** Badgeat */
+            badgeAt?: string | null;
+            /**
+             * Questions
+             * @default {}
+             */
+            questions: {
+                [key: string]: components["schemas"]["QuestionProgress"];
+            };
+            /**
+             * Stepsseen
+             * @default 0
+             */
+            stepsSeen: number;
         };
         /** LessonQuestion */
         LessonQuestion: {
@@ -2473,6 +2532,13 @@ export interface components {
             unit: string;
             /** Value */
             value: number;
+        };
+        /** QuestionProgress */
+        QuestionProgress: {
+            /** Correct */
+            correct: boolean;
+            /** Tries */
+            tries: number;
         };
         /** RecoveryCodes */
         RecoveryCodes: {
@@ -4553,6 +4619,85 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
                 };
+            };
+        };
+    };
+    my_learn_progress_api_v2_me_learn_progress_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LearnProgress"];
+                };
+            };
+            /** @description Not signed in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Lessons need the database, which is not configured or not reachable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    put_my_learn_progress_api_v2_me_learn_progress_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LearnProgress"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LearnProgress"];
+                };
+            };
+            /** @description Not signed in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Not valid progress */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Lessons need the database, which is not configured or not reachable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

@@ -539,6 +539,23 @@ class AnswerRequest(_Strict):
     value: float | None = None
 
 
+class QuestionProgress(_Strict):
+    correct: bool
+    tries: int
+
+
+class LessonProgress(_Strict):
+    stepsSeen: int = 0
+    questions: dict[str, QuestionProgress] = {}
+    badgeAt: str | None = None
+
+
+class LearnProgress(_Strict):
+    """Learn progress for the signed-in person: the version 1 shape the browser keeps on its own."""
+    version: Literal[1]
+    lessons: dict[str, LessonProgress]
+
+
 class AnswerResult(_Strict):
     question: str
     correct: bool
