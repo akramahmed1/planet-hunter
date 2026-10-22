@@ -146,6 +146,51 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* ---------- watermark (T33) ---------- */
+
+/* The brand mark, very faint, tilting slowly in the corner behind the page. Decoration only. */
+.watermark {
+  position: fixed;
+  right: -8vmin;
+  bottom: calc(var(--tabbar-h) - 6vmin);
+  width: min(72vmin, 560px);
+  aspect-ratio: 1 / 1;
+  color: var(--ion);
+  opacity: 0.045;
+  pointer-events: none;
+  z-index: -1;
+}
+.watermark svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.watermark-tilt {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  transform: rotate(-20deg);
+  animation: watermark-tilt 90s ease-in-out infinite alternate;
+}
+@keyframes watermark-tilt {
+  from {
+    transform: rotate(-26deg);
+  }
+  to {
+    transform: rotate(-14deg);
+  }
+}
+@media (min-width: 900px) {
+  .watermark {
+    bottom: -8vmin;
+  }
+}
+/* Off, not merely still, for less motion; also off in high contrast mode and on paper. */
+@media (prefers-reduced-motion: reduce), (forced-colors: active), print {
+  .watermark {
+    display: none;
+  }
+}
+
 /* ---------- base ---------- */
 
 *,
