@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useReducedMotion, useWebGL } from "@/components/three/hooks";
 import Toggle from "@/components/ui/Toggle";
 import { UnitsToggles } from "@/components/shell/UnitsControls";
@@ -12,13 +12,14 @@ import {
   type Position,
   type PositionsResponse,
 } from "@/lib/api-v2";
-import { BODY_NAMES, clampDate, SCENE_BODIES, type Scale, type SceneBodyId } from "@/lib/solar";
+import { PLAY_SPEEDS, positionsAfter, startPlay, type PlaySpeedId, type PlayStart } from "@/lib/orbitPlay";
+import { addDays, BODY_NAMES, clampDate, daysBetween, scalePoint, SCENE_BODIES, type Scale, type SceneBodyId } from "@/lib/solar";
 import { localDate } from "@/lib/time";
 import { buildTour, TOUR_ORDER } from "@/lib/tour";
 import { BodySheet, DeepSpaceSheet } from "./BodySheet";
 import { buildModel, type Mode, type Zoom } from "./model";
 import OrbitMap2D from "./OrbitMap2D";
-import { DateControl, MeasurePanel, TourPanel } from "./Panels";
+import { DateControl, MeasurePanel, PlayControls, TourPanel } from "./Panels";
 import Tap from "@/components/ui/Tap";
 
 type View = "3d" | "map";
@@ -73,10 +74,18 @@ export default function SolarSystem({
   const [tourIndex, setTourIndex] = useState(0);
   const [sceneReady, setSceneReady] = useState(false);
   const reducedMotion = useReducedMotion();
+  // Orbit play: planets move along their drawn orbit paths by elapsed time. `sim` holds where each started and how many
+  // days have passed; once play stops, the exact positions for the stopped date load and replace it.
+  const [playing, setPlaying] = useState(false);
+  const [speedId, setSpeedId] = useState<PlaySpeedId>("week");
+  const [sim, setSim] = useState<{ days: number; startDate: string; start: PlayStart } | null>(null);
+  const simRef = useRef(sim);
+  simRef.current = sim;
+  const [zoomTo, setZoomTo] = useState<SceneBodyId | null>(null);
 
   // Fetch positions for a new date, after the slider settles.
   useEffect(() => {
-    if (date === data.date) return;
+    if (date === data.date || playing) return;
     const ctrl = new AbortController();
     const t = setTimeout(async () => {
       const r = await apiV2Get<PositionsResponse>(`/api/v2/positions?date=${date}`, { signal: ctrl.signal });
@@ -92,7 +101,7 @@ export default function SolarSystem({
       clearTimeout(t);
       ctrl.abort();
     };
-  }, [date, data.date]);
+  }, [date, data.date, playing]);
 
   const bodyMap = useMemo(() => Object.fromEntries(bodies.map((b) => [b.id, b])), [bodies]);
   const posMap = useMemo(
@@ -100,18 +109,73 @@ export default function SolarSystem({
     [data],
   );
   const tour = useMemo(() => buildTour(bodyMap), [bodyMap]);
-  const model = useMemo(() => buildModel(data, orbits, scale, zoom), [data, orbits, scale, zoom]);
+  const baseModel = useMemo(() => buildModel(data, orbits, scale, zoom), [data, orbits, scale, zoom]);
+  const simActive = sim !== null && (playing || date !== data.date) && !loadError;
+  const model = useMemo(() => {
+    if (!simActive || !sim) return baseModel;
+    const moved = new Map(positionsAfter(sim.start, sim.days).map((b) => [b.id, b.p]));
+    return {
+      ...baseModel,
+      bodies: baseModel.bodies.map((b) => (moved.has(b.id) ? { id: b.id, p: scalePoint(moved.get(b.id)!, scale) } : b)),
+    };
+  }, [simActive, sim, baseModel, scale]);
+  useEffect(() => {
+    if (!playing && sim && !simActive) setSim(null);
+  }, [playing, sim, simActive]);
+
+  const lastDate = initial.valid_to;
+  useEffect(() => {
+    if (!playing || !simRef.current) return;
+    const { startDate, start } = simRef.current;
+    const perSecond = PLAY_SPEEDS.find((x) => x.id === speedId)!.days;
+    const room = daysBetween(startDate, lastDate);
+    let days = simRef.current.days;
+    let last = performance.now();
+    let painted = 0;
+    let raf = 0;
+    const tick = (now: number) => {
+      days += (Math.min(now - last, 100) / 1000) * perSecond; // a tab that was in the background does not jump ahead
+      last = now;
+      if (days >= room) {
+        setSim({ days: room, startDate, start });
+        setDate(lastDate);
+        setPlaying(false); // the end of the dates this page can show
+        return;
+      }
+      if (now - painted >= 33) { // about 30 frames a second is plenty for dots on an orbit
+        painted = now;
+        setSim({ days, startDate, start });
+        setDate(addDays(startDate, Math.floor(days)));
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [playing, speedId, lastDate]);
+
+  const canPlay = mode !== "measure" && date === data.date && !loadError;
+  function togglePlay() {
+    if (playing) {
+      setPlaying(false);
+      return;
+    }
+    const positions = Object.fromEntries(data.bodies.map((b) => [b.id, [b.x_au, b.y_au, b.z_au]]));
+    setSim({ days: 0, startDate: data.date, start: startPlay(orbits.orbits, positions) });
+    setPlaying(true);
+  }
 
   const tourId = TOUR_ORDER[tourIndex];
   const highlight = mode === "measure" ? picks : mode === "tour" ? [tourId] : selected ? [selected] : [];
   const line = mode === "measure" && picks.length === 2 ? ([picks[0], picks[1]] as [SceneBodyId, SceneBodyId]) : null;
-  const focus = mode === "tour" ? tourId : null;
+  const closeUp = mode === "explore" && zoomTo !== null;
+  const focus = mode === "tour" ? tourId : closeUp ? zoomTo : null;
 
   const onPick = useCallback(
     (id: SceneBodyId) => {
       if (mode === "measure") {
         setPicks((p) => (p.length >= 2 ? [id] : p[0] === id ? p : [...p, id]));
       } else {
+        setPlaying(false); // a card shows the distances for one date, so stop the clock first
         setSelected(id);
       }
     },
@@ -125,7 +189,7 @@ export default function SolarSystem({
   useEffect(() => {
     if (!show3d) setSceneReady(false); // coming back to 3D shows the map again until the scene has drawn
   }, [show3d]);
-  const viewProps = { model, highlight, line, onPick, onEmpty };
+  const viewProps = { model, highlight, line, onPick, onEmpty, zoomTo: closeUp ? zoomTo : null };
 
   return (
     <div className="solar">
@@ -133,7 +197,7 @@ export default function SolarSystem({
         {/* The map is the first paint; the 3D view covers it once three.js has drawn a frame. */}
         {!(show3d && sceneReady) && <OrbitMap2D {...viewProps} />}
         {show3d && (
-          <Scene3D {...viewProps} focus={focus} reducedMotion={reducedMotion} ready={sceneReady}
+          <Scene3D {...viewProps} focus={focus} closeUp={closeUp} reducedMotion={reducedMotion} ready={sceneReady}
             onReady={() => setSceneReady(true)} />
         )}
         {show3d && !sceneReady && <p className="scene-loading" role="status">Loading the 3D view</p>}
@@ -143,6 +207,17 @@ export default function SolarSystem({
           Your browser cannot show 3D here, so this is a flat map seen from above. Everything else works the same.
         </p>
       )}
+
+      <PlayControls
+        playing={playing}
+        canPlay={canPlay}
+        measuring={mode === "measure"}
+        speed={speedId}
+        onSpeed={setSpeedId}
+        onToggle={togglePlay}
+        zoomedTo={closeUp ? BODY_NAMES[zoomTo!] : null}
+        onZoomOut={() => setZoomTo(null)}
+      />
 
       <p className="muted solar-scale-note" data-testid="scale-note">
         {scale === "true"
@@ -172,6 +247,8 @@ export default function SolarSystem({
       <Toggle legend="Mode" options={MODE_OPTIONS} value={mode} onChange={(m) => {
         setMode(m);
         setPicks([]);
+        setZoomTo(null);
+        if (m === "measure") setPlaying(false); // a distance is for one date
       }} />
 
       {mode === "explore" && (
@@ -181,6 +258,7 @@ export default function SolarSystem({
         <MeasurePanel picks={picks} positions={posMap} date={data.date} onClear={() => setPicks([])} />
       )}
       {mode === "tour" && <TourPanel stops={tour} index={tourIndex} onIndex={setTourIndex} />}
+
 
       <div className="solar-controls">
         <Toggle legend="Scale" options={SCALE_OPTIONS} value={scale} onChange={setScale} />
@@ -193,8 +271,11 @@ export default function SolarSystem({
         today={today}
         from={initial.valid_from}
         to={initial.valid_to}
-        loading={date !== data.date && !loadError}
-        onDate={setDate}
+        loading={date !== data.date && !loadError && !playing}
+        onDate={(d) => {
+          setPlaying(false); // choosing a date by hand stops the play
+          setDate(d);
+        }}
       />
       {loadError && (
         <p className="error-box" role="alert">
@@ -219,6 +300,10 @@ export default function SolarSystem({
         positions={posMap}
         date={data.date}
         onClose={() => setSelected(null)}
+        onZoom={(id) => {
+          setSelected(null);
+          setZoomTo(id);
+        }}
       />
       <DeepSpaceSheet open={deepSpace} onClose={() => setDeepSpace(false)} />
     </div>

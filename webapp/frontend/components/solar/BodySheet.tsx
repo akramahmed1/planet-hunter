@@ -60,6 +60,7 @@ export function BodySheet({
   positions,
   date,
   onClose,
+  onZoom,
 }: {
   id: SceneBodyId | null;
   body: Body | null;
@@ -67,6 +68,7 @@ export function BodySheet({
   positions: Record<string, Position>;
   date: string;
   onClose: () => void;
+  onZoom?: (id: SceneBodyId) => void;
 }) {
   const { temp, distance } = useUnits();
   const open = id !== null && body !== null;
@@ -81,6 +83,11 @@ export function BodySheet({
         <p className="muted">
           Distances for <span className="mono nowrap">{date}</span>. <Tap /> any value for its source.
         </p>
+        {onZoom && id && id !== "sun" && (
+          <button type="button" className="btn btn--sm" onClick={() => onZoom(id)} data-testid="zoom-to">
+            Zoom to {BODY_NAMES[id]}
+          </button>
+        )}
         <dl className="kv kv--text body-kv" data-testid="body-sheet">
           {body.temperatures.map((t) => (
             <Row key={t.label} label={t.label}>
