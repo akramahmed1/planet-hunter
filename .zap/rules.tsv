@@ -1,2 +1,8 @@
-# Rules we accepted on purpose (rule id, action, reason). Empty until the first report is triaged.
-# Format: <rule id>	<IGNORE|WARN|FAIL>	<reason>
+# Rules accepted on purpose after reading the first staging report (2026-10-22). Format: rule id, action, reason.
+10055	IGNORE	CSP script-src and style-src 'unsafe-inline': Next.js writes inline scripts and styles into every page; removing it needs per-request nonces (dynamic rendering of every page). Everything else in the policy is tight (see next.config.ts). Revisit after launch.
+90003	IGNORE	Sub Resource Integrity: the pages load the pinned Aladin Lite script from CDS on request; an integrity hash would break on any change at CDS and the version is already pinned. Same-origin scripts are not affected.
+90004	IGNORE	Cross-Origin-Embedder-Policy: setting it would block the sky tiles (CDS) and map tiles (OpenStreetMap) the pages embed.
+90005	IGNORE	Cross-Origin-Opener-Policy / Sec-Fetch headers: low value for a site with no pop-up sign-in; revisit with COOP same-origin after the real-phone pass.
+10096	IGNORE	Timestamp disclosure (Unix): numbers in the page that look like times (build data); not secret.
+10049	IGNORE	Non-storable content: pages are rendered per request on purpose (live data).
+10015	IGNORE	Cache-control directives on /classroom and /scan: per-request pages, no sensitive data cached shared.

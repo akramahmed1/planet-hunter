@@ -28,6 +28,8 @@ export const CSP = [
 ].join("; ");
 
 const nextConfig: NextConfig = {
+  // The ZAP scan flagged the X-Powered-By: Next.js header; it tells an attacker nothing they need us to say.
+  poweredByHeader: false,
   // The browser reaches the API through this origin, so the classroom session cookie is
   // first-party (the frontend and backend hosts are different sites on Railway).
   async rewrites() {

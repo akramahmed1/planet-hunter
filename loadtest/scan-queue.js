@@ -33,7 +33,11 @@ export default function (data) {
   });
   const status = http.get(`${BACKEND}/api/v2/scans/${data.id}`);
   check(status, { "status is readable": (r) => r.status === 200 });
-  const bad = http.post(`${BACKEND}/api/v2/scans`, JSON.stringify({ target: "Proxima Centauri" }), { headers: JSON_HEADERS });
+  // 422 is the right answer here, so k6 must not count it as a failed request (it counts every 4xx as one by default).
+  const bad = http.post(`${BACKEND}/api/v2/scans`, JSON.stringify({ target: "Proxima Centauri" }), {
+    headers: JSON_HEADERS,
+    responseCallback: http.expectedStatuses(422),
+  });
   check(bad, { "a bad name is refused": (r) => r.status === 422 });
   sleep(0.5 + Math.random());
 }
