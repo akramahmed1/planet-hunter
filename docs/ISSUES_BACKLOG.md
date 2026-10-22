@@ -27,13 +27,13 @@ it as you go; tick items off when fixed and say how it was verified.
 ## Known issues and loose ends
 - [ ] One unexplained failure: `solar.spec` "switching units updates the card" failed once on desktop in a full local run
       and then passed 3 of 3 alone and in the next full run. Error not captured. Watch CI; if it ever repeats, capture it.
-- [ ] One more unexplained failure, seen once in a full local run for T30: `phone.spec` "400x370 /exoplanets/toi-700 ...
-      tap targets" found the orbit map's bodies at 21x21 px (under 44). It passed 3 of 3 alone, and the page was not
-      changed by T30. Likely the map measured before it finished sizing under load. Watch CI; if it repeats, capture it.
+- [x] Explained and fixed 2026-10-22 (PRs #68 and #69): the flat solar and planetary-system maps had 21 px tap areas on a short
+      phone when the 3D view had not covered them; now 25 px, with tests that fail without the fix. The earlier single failures
+      for solar and phone tap targets are this cause (the solar units one is still unexplained; see the line above).
 - [ ] Candidate page: the small "i" button next to "Batch scan ... (12 days ago)" wraps to its own line on a phone
       (from the T11 age label). Cosmetic.
-- [ ] T05a: `sharp` high severity npm audit finding (easy fix). T05b: `postcss` and `next` need Next 16 (design note and a
-      full test and screenshot pass).
+- [x] T05a and T05b done 2026-10-22 (PR #71): Next 16.4.2, sharp 0.35.5, `npm audit` 0 vulnerabilities, full browser suite
+      green in CI. Cost: about 30 KB more first-load JavaScript.
 - [ ] Teacher two-step sign-in has no QR code (key and phone link only).
 - [ ] Teacher home has no per-student drill down or charts (the class page keeps its gradebook).
 - [ ] Forgot password: a known address does slightly more database work than an unknown one before replying (milliseconds;
