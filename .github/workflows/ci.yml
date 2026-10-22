@@ -66,8 +66,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-          cache: npm # npm ci was taking up to 7 minutes on a cold runner
-          cache-dependency-path: webapp/frontend/package-lock.json
           cache: npm
           cache-dependency-path: webapp/frontend/package-lock.json
       - run: pip install -r ../backend/requirements.txt
