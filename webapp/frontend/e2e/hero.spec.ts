@@ -88,7 +88,8 @@ test("if the 3D chunk fails to load the still globe stays", async ({ page }) => 
 
 test("the globe passes the accessibility scan and its words are plain", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByTestId("earth-svg")).toBeVisible();
+  // Once 3D takes over, the still globe is hidden (and so out of the scan); either way its words stay in the page.
+  await expect(page.getByTestId("earth-svg")).toHaveAttribute("aria-label", /^A stylised globe/);
   const axe = await new AxeBuilder({ page }).analyze();
   expect(axe.violations).toEqual([]);
   const label = await page.getByTestId("earth-svg").getAttribute("aria-label");

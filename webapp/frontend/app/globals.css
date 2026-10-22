@@ -129,6 +129,23 @@
   }
 }
 
+/* ---------- motion (T32) ---------- */
+
+/* A page you move to slides up a few pixels as it appears (not the first page of a visit). Movement only, no fade: a half transparent page would fail contrast
+   checks mid-way. It ends with no transform at all, so nothing inside is trapped by a transformed parent afterwards. */
+@keyframes page-enter {
+  from {
+    transform: translateY(10px);
+  }
+}
+.page-enter {
+  animation: page-enter var(--dur) var(--ease-out) backwards;
+}
+.countup {
+  display: inline-block;
+  font-variant-numeric: tabular-nums;
+}
+
 /* ---------- base ---------- */
 
 *,
