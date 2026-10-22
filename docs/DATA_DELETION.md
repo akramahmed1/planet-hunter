@@ -74,6 +74,11 @@ with a paid plan until its Stripe subscription is cancelled.
 
 Write down the date, who asked, what was deleted (counts, not names) and who did it in a private log.
 
+## Watchlist and alerts (T41)
+
+A person's `watchlist` rows, a teacher's `alert_prefs` row and their `alert_sends` rows are deleted with the account
+(cascade). `candidate_snapshots` hold no personal data. Alert emails already sent cannot be recalled.
+
 ## Known limits (honest list)
 
 - Backups keep deleted data until they expire. **ASK**.

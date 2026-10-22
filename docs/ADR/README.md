@@ -11,3 +11,4 @@ ADR that supersedes the old one; don't rewrite history.
 | [0003](0003-postgres-job-queue.md) | Scan jobs use a Postgres table with `SKIP LOCKED` | Accepted |
 | [0004](0004-tenant-isolation.md) | Classroom data is isolated by `org_id`, enforced in one place | Accepted |
 | [0005](0005-age-13-plus.md) | Accounts are for ages 13 and up at launch | Accepted |
+| [0007](0007-watchlist-and-alerts.md) | Watchlist and alert emails | Accepted |

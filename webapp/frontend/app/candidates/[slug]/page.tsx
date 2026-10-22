@@ -8,6 +8,7 @@ import Card from "@/components/ui/Card";
 import ExplainBox from "@/components/explain/ExplainBox";
 import HuntLab from "@/components/hunt/HuntLab";
 import SkyPanel from "@/components/sky/SkyPanel";
+import WatchButton from "@/components/watch/WatchButton";
 import ShareLink from "@/components/ui/ShareLink";
 import EmptyState from "@/components/ui/EmptyState";
 import { apiV2Get, type LightCurveResponse, type PeriodogramResponse, type TargetsResponse } from "@/lib/api-v2";
@@ -84,6 +85,7 @@ export default async function CandidateDetailPage({
         />
       </p>
       <ShareLink path={`/candidates/${candidate.slug}`} title={`${candidate.target}: a candidate signal, not a discovery`} />
+      <WatchButton slug={candidate.slug} name={candidate.target} />
 
       <div className="detail-grid">
         <Card title="Measured numbers">

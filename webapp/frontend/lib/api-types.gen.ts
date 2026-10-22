@@ -141,6 +141,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v2/auth/alerts/unsubscribe": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Alerts Unsubscribe
+         * @description Stop the candidate change emails. No sign-in: the token in the email is the proof, and all it can do is switch them off.
+         */
+        post: operations["alerts_unsubscribe_api_v2_auth_alerts_unsubscribe_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v2/auth/logout": {
         parameters: {
             query?: never;
@@ -896,6 +916,30 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v2/me/alerts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * My Alerts
+         * @description A teacher's email alert setting. Students have no email address, so they have none.
+         */
+        get: operations["my_alerts_api_v2_me_alerts_get"];
+        /**
+         * Set My Alerts
+         * @description Turn the email about new or changed candidates on or off. On needs a confirmed address.
+         */
+        put: operations["set_my_alerts_api_v2_me_alerts_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v2/me/assignments": {
         parameters: {
             query?: never;
@@ -1003,6 +1047,48 @@ export interface paths {
          * @description Take a scan off the list. Taking off one that is not there is fine.
          */
         delete: operations["unsave_scan_api_v2_me_saved_scans__job_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v2/me/watchlist": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * My Watchlist
+         * @description The candidates this person watches, with how each looks in the latest published results.
+         */
+        get: operations["my_watchlist_api_v2_me_watchlist_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v2/me/watchlist/{slug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Am I Watching */
+        get: operations["am_i_watching_api_v2_me_watchlist__slug__get"];
+        /**
+         * Watch Candidate
+         * @description Watch a published candidate. Watching twice is fine.
+         */
+        put: operations["watch_candidate_api_v2_me_watchlist__slug__put"];
+        post?: never;
+        /** Unwatch Candidate */
+        delete: operations["unwatch_candidate_api_v2_me_watchlist__slug__delete"];
         options?: never;
         head?: never;
         patch?: never;
@@ -1436,6 +1522,20 @@ export interface components {
             schools_deleted: number;
             /** Students Deleted */
             students_deleted: number;
+        };
+        /** AlertSettings */
+        AlertSettings: {
+            /** Can Email */
+            can_email: boolean;
+            /** Email Alerts */
+            email_alerts: boolean;
+            /** Email Ready */
+            email_ready: boolean;
+        };
+        /** AlertSettingsUpdate */
+        AlertSettingsUpdate: {
+            /** Email Alerts */
+            email_alerts: boolean;
         };
         /** AnswerRequest */
         AnswerRequest: {
@@ -3114,6 +3214,11 @@ export interface components {
              */
             status: "unavailable";
         };
+        /** Unsubscribe */
+        Unsubscribe: {
+            /** Token */
+            token: string;
+        };
         /** V2HealthResponse */
         V2HealthResponse: {
             /**
@@ -3200,6 +3305,31 @@ export interface components {
             value: {
                 [key: string]: unknown;
             } | null;
+        };
+        /** WatchState */
+        WatchState: {
+            /** Watching */
+            watching: boolean;
+        };
+        /** WatchedCandidate */
+        WatchedCandidate: {
+            /** Classification */
+            classification: string;
+            /** Label */
+            label: string;
+            /** Period D */
+            period_d: number;
+            /** Slug */
+            slug: string;
+            /** Target */
+            target: string;
+        };
+        /** WatchlistResponse */
+        WatchlistResponse: {
+            /** Limit */
+            limit: number;
+            /** Watched */
+            watched: components["schemas"]["WatchedCandidate"][];
         };
     };
     responses: never;
@@ -3391,6 +3521,39 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    alerts_unsubscribe_api_v2_auth_alerts_unsubscribe_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Unsubscribe"];
+            };
+        };
         responses: {
             /** @description Successful Response */
             200: {
@@ -4659,6 +4822,94 @@ export interface operations {
             };
         };
     };
+    my_alerts_api_v2_me_alerts_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AlertSettings"];
+                };
+            };
+            /** @description Not signed in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Needs the database, which is not configured or not reachable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    set_my_alerts_api_v2_me_alerts_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AlertSettingsUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AlertSettings"];
+                };
+            };
+            /** @description Not signed in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Confirm your email address first */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+            /** @description Needs the database, which is not configured or not reachable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     my_assignments_api_v2_me_assignments_get: {
         parameters: {
             query?: never;
@@ -4953,6 +5204,189 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SavedState"];
+                };
+            };
+            /** @description Not signed in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+            /** @description Needs the database, which is not configured or not reachable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    my_watchlist_api_v2_me_watchlist_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WatchlistResponse"];
+                };
+            };
+            /** @description Not signed in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Needs the database, which is not configured or not reachable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    am_i_watching_api_v2_me_watchlist__slug__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WatchState"];
+                };
+            };
+            /** @description Not signed in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+            /** @description Needs the database, which is not configured or not reachable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    watch_candidate_api_v2_me_watchlist__slug__put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WatchState"];
+                };
+            };
+            /** @description Not signed in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description No such candidate */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The list is full */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+            /** @description Needs the database, which is not configured or not reachable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    unwatch_candidate_api_v2_me_watchlist__slug__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WatchState"];
                 };
             };
             /** @description Not signed in */
