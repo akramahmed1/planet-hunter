@@ -8,7 +8,7 @@ import { CANDIDATES } from "./routes";
 type Calls = { fov: number[]; markers: unknown[][]; circles: unknown[][]; catalogs: number; overlays: number; opts: Record<string, unknown> };
 
 async function stubAladin(page: Page, variant: "full" | "bare" | "throws" = "full") {
-  await page.route(/aladin\.cds\.unistra\.fr\/AladinLite\/api\/v3\/[^/]+\/aladin\.js/, (r) =>
+  await page.route(/^https:\/\/aladin\.cds\.unistra\.fr\/AladinLite\/api\/v3\/[^/]+\/aladin\.js$/, (r) =>
     r.fulfill({
       status: 200,
       contentType: "application/javascript",
@@ -95,7 +95,7 @@ test("if the viewer has no overlay calls, or they fail, the sky picture and the 
     await page.getByRole("radio", { name: "5 arcminutes across" }).check();
     await expect(page.getByRole("radio", { name: "5 arcminutes across" })).toBeChecked();
     expect(errors, variant).toEqual([]);
-    await page.unroute(/aladin\.cds\.unistra\.fr\/AladinLite\/api\/v3\/[^/]+\/aladin\.js/);
+    await page.unroute(/^https:\/\/aladin\.cds\.unistra\.fr\/AladinLite\/api\/v3\/[^/]+\/aladin\.js$/);
   }
 });
 

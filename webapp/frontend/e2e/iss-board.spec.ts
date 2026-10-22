@@ -7,7 +7,7 @@ const PNG = Buffer.from(
   "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
   "base64",
 );
-const stubTiles = (page: Page) => page.route(/tile\.openstreetmap\.org/, (r) => r.fulfill({ status: 200, contentType: "image/png", body: PNG }));
+const stubTiles = (page: Page) => page.route(/^https:\/\/tile\.openstreetmap\.org\//, (r) => r.fulfill({ status: 200, contentType: "image/png", body: PNG }));
 
 type Iss = { latitude: number; longitude: number; altitude_km: number; velocity_kmh: number; visibility: string };
 const fetchIss = async (page: Page) => (await (await page.request.get("/api/v2/iss")).json()) as Iss;
