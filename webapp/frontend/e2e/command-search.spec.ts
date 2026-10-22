@@ -52,6 +52,12 @@ test("a query with no match says so, and the box passes axe", async ({ page }) =
 test("Ctrl+K opens and closes it from the keyboard", async ({ page, isMobile }) => {
   test.skip(!!isMobile, "phones have no keyboard shortcut; the button is tested above");
   await page.goto("/");
+  // The shortcut is only listened for once the page has finished loading its scripts; React marks the elements it has
+  // taken over with a `__reactProps$...` property, so wait for that instead of pressing keys into a page that cannot hear.
+  await page.waitForFunction(() => {
+    const el = document.querySelector("[data-testid=cmd-open]");
+    return !!el && Object.keys(el).some((k) => k.startsWith("__reactProps"));
+  });
   await page.keyboard.press("Control+k");
   await expect(page.getByTestId("cmd")).toBeVisible();
   await expect(page.getByTestId("cmd-input")).toBeFocused();
