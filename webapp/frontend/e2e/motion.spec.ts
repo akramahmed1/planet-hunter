@@ -12,7 +12,9 @@ test("a page you move to slides in, the first page of a visit does not, and noth
   await page.getByRole("link", { name: "How it works" }).first().click();
   await expect(page).toHaveURL(/\/method$/);
   expect(await pageAnimation(page)).toBe("page-enter");
-  await page.waitForTimeout(600); // longer than the slide
+  // Wait for the slide itself to finish (not a fixed pause: on a busy machine the first frame can come late, and a
+  // fixed pause once saw the slide still at its start on a full CI run).
+  await page.locator(".page-enter").first().evaluate((el) => Promise.all(el.getAnimations().map((a) => a.finished)));
   const transform = await page.locator(".page-enter").first().evaluate((el) => getComputedStyle(el).transform);
   expect(transform).toBe("none"); // a transformed parent would trap fixed panels inside it
 });
