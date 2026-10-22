@@ -2999,3 +2999,99 @@ html.cosmos-on body::after {
     box-shadow: none;
   }
 }
+
+/* ---------- method pipeline diagram (T34) ---------- */
+
+.pipeline {
+  margin-bottom: var(--sp-5);
+}
+.pipeline-stages {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin: var(--sp-3) 0;
+}
+.pipeline-stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-height: 48px;
+  padding: var(--sp-2) var(--sp-4);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-md);
+  background: var(--space-850);
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out);
+}
+.pipeline-stage:hover {
+  border-color: var(--ion);
+}
+.pipeline-stage[aria-selected="true"] {
+  background: var(--ion-soft);
+  border-color: var(--ion);
+  box-shadow: var(--glow);
+}
+.pipeline-num {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--ion);
+  color: var(--ion-strong);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+}
+.pipeline-stage[aria-selected="true"] .pipeline-num {
+  background: var(--ion);
+  color: var(--space-950);
+}
+/* A short arrow between stages shows the order. */
+.pipeline-stage:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 28px;
+  bottom: calc(-1 * var(--sp-2) - 1px);
+  width: 2px;
+  height: var(--sp-2);
+  background: var(--ion);
+  opacity: 0.6;
+}
+.pipeline-panel {
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: var(--sp-4);
+  background: var(--space-850);
+}
+.pipeline-panel h3 {
+  margin-top: 0;
+}
+.pipeline-panel p:last-child {
+  margin-bottom: 0;
+}
+.pipeline-written {
+  margin-top: var(--sp-5);
+}
+@media (min-width: 900px) {
+  .pipeline-stages {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .pipeline-stage {
+    flex: 1 1 0;
+    min-width: 150px;
+  }
+  .pipeline-stage:not(:last-child)::after {
+    left: auto;
+    right: calc(-1 * var(--sp-2) - 1px);
+    bottom: auto;
+    top: 50%;
+    width: var(--sp-2);
+    height: 2px;
+  }
+}

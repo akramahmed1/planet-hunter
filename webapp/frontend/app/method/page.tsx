@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import ApiError from "@/components/ApiError";
+import PipelineDiagram from "@/components/method/PipelineDiagram";
 import Card from "@/components/ui/Card";
 import { apiGet, type MethodResponse } from "@/lib/api";
 
@@ -53,6 +54,8 @@ export default async function MethodPage() {
 
       <section aria-labelledby="steps-heading">
         <h2 id="steps-heading">The steps</h2>
+        <PipelineDiagram steps={steps} />
+        <h3 className="pipeline-written">The steps, written out</h3>
         <ol className="steps">
           {steps.map((s) => (
             <li key={s.title}>
