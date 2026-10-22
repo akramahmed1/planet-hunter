@@ -63,3 +63,18 @@ test("submitting nothing asks for a star", async ({ page }) => {
   await expect(page.getByTestId("scan-error")).toHaveText("Enter a star to scan.");
   await expect(page).toHaveURL(/\/scan$/);
 });
+
+// A slow phone can show the form before the page's scripts have finished loading. Whatever was typed in that time must
+// still be sent: it is on the screen, so the person believes it is there. (Found as a WebKit-only failure in CI.)
+test("text typed before the page's scripts have loaded is still sent", async ({ page }) => {
+  await page.route("**/_next/static/**/*.js", async (route) => {
+    await new Promise((r) => setTimeout(r, 2500));
+    await route.continue();
+  });
+  await page.goto("/scan", { waitUntil: "domcontentloaded" });
+  await page.getByTestId("scan-target").fill("TIC 150428135");
+  await page.waitForTimeout(5000); // the scripts arrive and the page hydrates
+  await expect(page.getByTestId("scan-target")).toHaveValue("TIC 150428135");
+  await page.getByTestId("scan-submit").click();
+  await expect(page).toHaveURL(/\/scan\/\d+$/);
+});
