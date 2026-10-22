@@ -8,6 +8,7 @@ import Footer from "@/components/shell/Footer";
 import TabBar from "@/components/shell/TabBar";
 import StatusStrip from "@/components/shell/StatusStrip";
 import TopBar from "@/components/shell/TopBar";
+import Watermark from "@/components/shell/Watermark";
 import "./globals.css";
 
 // Fonts are bundled from app/fonts (SIL Open Font License, see the .LICENSE
@@ -61,6 +62,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           Skip to content
         </a>
         <CosmosLoader />
+        <Watermark />
         <UnitsProvider>
           <TopBar classroom={classroom} />
           <StatusStrip />
