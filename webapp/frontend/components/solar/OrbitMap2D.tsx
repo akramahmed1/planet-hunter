@@ -15,20 +15,29 @@ export default function OrbitMap2D({
   line,
   onPick,
   onEmpty,
+  zoomTo = null,
 }: {
   model: SceneModel;
   highlight: SceneBodyId[];
   line: [SceneBodyId, SceneBodyId] | null;
   onPick: (id: SceneBodyId) => void;
   onEmpty: () => void;
+  /** Zoom the map in on this body (zoom to planet). */
+  zoomTo?: SceneBodyId | null;
 }) {
   const E = model.extent;
   // Screen y grows downward; flip so the map matches the usual ecliptic view.
   const xy = (p: readonly number[]) => [p[0], -p[1]] as const;
   const at = Object.fromEntries(model.bodies.map((b) => [b.id, xy(b.p)])) as Record<SceneBodyId, readonly [number, number]>;
   // A 24 px or larger tap target on a phone (the map is about 330 px wide); planets sit close together, so no larger.
-  const hitR = E * 0.08;
-  const font = E * 0.042;
+  const target = zoomTo ? at[zoomTo] : undefined;
+  // Close up: the view is centred on the body and wide enough to keep the Sun and the neighbouring orbits in it.
+  const half = target ? Math.min(E, Math.max(E * 0.05, Math.hypot(target[0], target[1]) * 1.3)) : E;
+  const k = half / E; // dots and labels shrink with the view, so they keep the size they have in the whole map
+  const hitR = E * 0.08 * k;
+  const font = E * 0.042 * k;
+  const cx = target ? target[0] : 0;
+  const cy = target ? target[1] : 0;
 
   function key(e: KeyboardEvent, id: SceneBodyId) {
     if (e.key === "Enter" || e.key === " ") {
@@ -40,7 +49,7 @@ export default function OrbitMap2D({
   return (
     <svg
       className="orbit-map"
-      viewBox={`${-E} ${-E} ${2 * E} ${2 * E}`}
+      viewBox={`${cx - half} ${cy - half} ${2 * half} ${2 * half}`}
       role="group"
       aria-label="Top-down map of the solar system"
       data-testid="orbit-map"
@@ -81,7 +90,7 @@ export default function OrbitMap2D({
       )}
       {model.bodies.filter(({ p }) => Math.hypot(p[0], p[1]) <= E).map(({ id }) => {
         const [x, y] = at[id];
-        const r = markerRadius(id, E);
+        const r = markerRadius(id, E) * k;
         const on = highlight.includes(id);
         return (
           <g
@@ -105,7 +114,7 @@ export default function OrbitMap2D({
             )}
             <circle cx={x} cy={y} r={r} fill={BODY_COLORS[id]} />
             {/* Labels near the Sun would pile up; the inner planets are named in "Inner planets" view. */}
-            {id !== "sun" && Math.hypot(x, y) > E * 0.12 && (
+            {id !== "sun" && Math.hypot(x, y) > E * 0.12 * k && (
               <text x={x + r * 1.6} y={y - r * 1.6} fontSize={font} fill="var(--ink-dim)" aria-hidden="true">
                 {BODY_NAMES[id]}
               </text>

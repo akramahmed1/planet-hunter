@@ -11,7 +11,7 @@ import os
 import re
 import subprocess
 import sys
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 import httpx
@@ -480,6 +480,22 @@ def test_orbits_pass_through_the_computed_positions(client):
         nearest = min(math.dist(pos, p) for p in o["points"])
         # 180 samples: the chord gap is at most about pi * r / 180 for a near-circular orbit.
         assert nearest < 2 * math.pi * r / 180, body_id
+
+
+def test_orbit_samples_are_evenly_spaced_in_time_not_rounded_to_days():
+    # Mercury's 88 day orbit has 180 samples, about half a day apart: rounding them to whole days made repeats.
+    pts = positions.orbit_path("mercury", 87.969)
+    assert len({tuple(p) for p in pts}) == 180
+    # And a sample is exactly the computed position for its instant, so a body can be moved along the path by time.
+    assert positions.computed_position_jd("earth", positions.julian_day(SAMPLE_TIME.date())) == \
+        positions.computed_position("earth", SAMPLE_TIME.date())
+    # A quarter of an orbit later along the path is the position a quarter of a period later (within the chord gap).
+    period = 365.256
+    path = positions.orbit_path("earth", period)
+    start_jd = positions.julian_day(date(2000, 1, 1)) - period / 2  # the window is centred on J2000
+    for k in (0, 45, 90, 135):
+        want = positions.computed_position_jd("earth", start_jd + period * k / 180)
+        assert math.dist(path[k], want) < 1e-9
 
 
 def test_orbit_periods_come_from_nssdca(client):

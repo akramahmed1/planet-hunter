@@ -2021,6 +2021,22 @@ table.data-table {
   font-size: var(--step--1);
   pointer-events: none;
 }
+.solar-play {
+  display: grid;
+  gap: var(--sp-2);
+}
+.solar-play-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--sp-3) var(--sp-4);
+}
+.solar-play .toggle {
+  margin: 0;
+}
+.solar-play p {
+  margin: 0;
+}
 .body-picker {
   display: flex;
   flex-wrap: wrap;

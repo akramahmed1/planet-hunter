@@ -31,9 +31,13 @@ def julian_day(d: date) -> float:
 
 
 def kepler_position(body_id: str, d: date) -> tuple[float, float, float]:
+    return kepler_position_jd(body_id, julian_day(d))
+
+
+def kepler_position_jd(body_id: str, jd: float) -> tuple[float, float, float]:
     row = reference.kepler()["bodies"][KEPLER_NAMES[body_id]]
     el, rate = row["elements"], row["rates_per_century"]
-    T = (julian_day(d) - 2451545.0) / 36525.0
+    T = (jd - 2451545.0) / 36525.0
     a, e, inc, L, varpi, node = (el[k] + rate[k] * T for k in
                                  ("a_au", "e", "i_deg", "L_deg", "long_peri_deg", "long_node_deg"))
     omega = varpi - node
@@ -59,8 +63,11 @@ def kepler_position(body_id: str, d: date) -> tuple[float, float, float]:
 
 
 def pluto_position(d: date) -> tuple[float, float, float]:
+    return pluto_position_jd(julian_day(d))
+
+
+def pluto_position_jd(jd: float) -> tuple[float, float, float]:
     rows = reference.pluto()["rows"]
-    jd = julian_day(d)
     if not rows[0][0] <= jd <= rows[-1][0]:
         raise ValueError("date outside the Pluto table")
     i = bisect_left([r[0] for r in rows], jd)
@@ -72,11 +79,16 @@ def pluto_position(d: date) -> tuple[float, float, float]:
 
 
 def computed_position(body_id: str, d: date) -> tuple[float, float, float]:
+    return computed_position_jd(body_id, julian_day(d))
+
+
+def computed_position_jd(body_id: str, jd: float) -> tuple[float, float, float]:
+    """The same positions for any instant (a Julian day), not only for the start of a calendar day."""
     if body_id == "sun":
         return (0.0, 0.0, 0.0)
     if body_id == "pluto":
-        return pluto_position(d)
-    return kepler_position(body_id, d)
+        return pluto_position_jd(jd)
+    return kepler_position_jd(body_id, jd)
 
 
 def valid_range() -> tuple[date, date]:
@@ -114,5 +126,7 @@ def orbit_path(body_id: str, period_days: float, samples: int = 180) -> list[tup
         raise ValueError(f"{body_id}'s period is longer than the valid date range")
     start = J2000.toordinal() - period_days / 2
     start = min(max(start, lo.toordinal()), hi.toordinal() - period_days)
-    days = [start + period_days * k / samples for k in range(samples)]
-    return [computed_position(body_id, date.fromordinal(round(d))) for d in days]
+    # Evenly spaced in time to the instant (not rounded to whole days): the home page's play mode moves bodies along
+    # this path by elapsed time, so Mercury's 88 day orbit must not be quantised to whole days.
+    offset = julian_day(date.fromordinal(J2000.toordinal())) - J2000.toordinal()
+    return [computed_position_jd(body_id, start + period_days * k / samples + offset) for k in range(samples)]

@@ -4,7 +4,9 @@ import { useEffect, useId, useState } from "react";
 import SourceButton from "@/components/live/SourceButton";
 import { useUnits } from "@/components/UnitsProvider";
 import type { Position } from "@/lib/api-v2";
+import { PLAY_SPEEDS, type PlaySpeedId } from "@/lib/orbitPlay";
 import { addDays, BODY_NAMES, clampDate, daysBetween, separation, type SceneBodyId } from "@/lib/solar";
+import Toggle from "@/components/ui/Toggle";
 import type { TourStop } from "@/lib/tour";
 import { formatDistance, formatLightTime } from "@/lib/units";
 import Tap from "@/components/ui/Tap";
@@ -183,5 +185,52 @@ export function DateControl({
         <span className="muted mono">{to.slice(0, 4)}</span>
       </div>
     </div>
+  );
+}
+
+export function PlayControls({
+  playing,
+  canPlay,
+  measuring,
+  speed,
+  onSpeed,
+  onToggle,
+  zoomedTo,
+  onZoomOut,
+}: {
+  playing: boolean;
+  canPlay: boolean;
+  measuring: boolean;
+  speed: PlaySpeedId;
+  onSpeed: (s: PlaySpeedId) => void;
+  onToggle: () => void;
+  zoomedTo: string | null;
+  onZoomOut: () => void;
+}) {
+  return (
+    <section className="solar-play" aria-label="Orbit play" data-testid="play-controls">
+      <div className="solar-play-row">
+        <button type="button" className="btn btn--primary" onClick={onToggle} disabled={!playing && !canPlay}
+          data-testid="play-toggle">
+          {playing ? "Pause" : "Play the orbits"}
+        </button>
+        {zoomedTo && (
+          <button type="button" className="btn" onClick={onZoomOut} data-testid="zoom-out">
+            Zoom out from {zoomedTo}
+          </button>
+        )}
+        <Toggle legend="Speed (time a second)" options={PLAY_SPEEDS.map((x) => ({ value: x.id, label: x.short, title: x.label }))}
+          value={speed} onChange={onSpeed} />
+      </div>
+      <p className="muted" data-testid="play-note">
+        {measuring
+          ? "Play is off while you measure, because a distance is for one date."
+          : playing
+            ? "Each planet follows its orbit path. Pause to load the exact positions for the date shown."
+            : zoomedTo
+              ? `Zoomed to ${zoomedTo}. Play to watch it travel round the Sun.`
+              : "Play moves the date forward and the planets along their orbits."}
+      </p>
+    </section>
   );
 }
