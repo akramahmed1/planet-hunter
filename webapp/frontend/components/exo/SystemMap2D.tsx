@@ -27,7 +27,8 @@ export default function SystemMap2D({
   const dot = E * 0.025;
   // An invisible circle around each body so its tap target is at least 24 px on a phone (WCAG 2.2 AA), the same
   // size the Solar System map uses.
-  const hitR = E * 0.08;
+  // 9.5% of the map across: 24 px at the smallest map we draw (about 260 px, a short phone held sideways).
+  const hitR = E * 0.095;
   const key = (e: KeyboardEvent, p: Pick) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();

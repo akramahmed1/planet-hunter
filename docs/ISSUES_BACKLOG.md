@@ -52,12 +52,12 @@ it as you go; tick items off when fixed and say how it was verified.
       scripts); a `pgrep -f` pattern must never appear in its own command line.
 
 ## Found by the Firefox and WebKit tests (T45)
-- [ ] Text typed before the page's scripts finish loading is lost by every form that keeps its text only in React
-      state (found on the scan form, fixed there; see QA_LOG "T45 result 3"). The same pattern is in the sign-in,
-      sign-up, password reset, class and assignment forms, the quiz number box, the explainer question, the save-scan
-      label and the search box. On a slow phone a person can type, press the button and be told to enter something.
-      Fix each the same way (read the box when the form is sent) with a "typed before the scripts loaded" test per form
-      (the scan test is the pattern). Do this before the freeze.
+- [x] Checked 2026-10-22: the "text typed before the scripts loaded is lost" bug can only happen to a form that is already
+      in the page's first HTML. Only the scan form was (fixed, with a test). The sign-in, sign-up, reset, class, assignment,
+      explainer, quiz and save forms are drawn after the page has loaded, so there is nothing to type into earlier (checked by
+      fetching each page's raw HTML: no form fields, only the unit radios and the closed search box). I tried a global fix
+      and removed it: a test showed the sign-in form never had the problem. Rule for new forms: if a form is drawn on the
+      server, read its box when it is sent (as the scan form now does).
 
 ## Always before the freeze (T49)
 - [ ] Full launch gate on one release candidate commit (`docs/HANDOVER.md`), real phone pass by Akram, residual risk list,
