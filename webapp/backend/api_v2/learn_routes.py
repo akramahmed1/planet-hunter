@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException, Path, Request, Response
 
 import db
 from api_v2 import schemas as s
+from api_v2.owner import owner
 from classroom import auth as classroom_auth
 from classroom import data as classroom_data
 from learn import grading, progress, store
@@ -67,15 +68,11 @@ def answer(body: s.AnswerRequest, request: Request, response: Response, slug: st
 PROGRESS_CACHE = "no-store"
 
 
-def _owner(p) -> dict:
-    return {"user_id": p.user_id, "member_id": None} if p.kind == "teacher" else {"user_id": None, "member_id": p.member_id}
-
-
 @router.get("/me/learn-progress", response_model=s.LearnProgress, response_model_exclude_none=True, responses={**NO_DB, 401: {"description": "Not signed in"}})
 def my_learn_progress(response: Response, p=Depends(classroom_auth.ANYONE)) -> s.LearnProgress:
     """The signed-in person's Learn progress, so a second device can pick up where the first left off."""
     response.headers["Cache-Control"] = PROGRESS_CACHE
-    return s.LearnProgress(**store.get_progress(_engine(), **_owner(p)))
+    return s.LearnProgress(**store.get_progress(_engine(), **owner(p)))
 
 
 @router.put("/me/learn-progress", response_model=s.LearnProgress, response_model_exclude_none=True, responses={**NO_DB, 401: {"description": "Not signed in"},
@@ -91,4 +88,4 @@ def put_my_learn_progress(body: s.LearnProgress, response: Response, p=Depends(c
     except progress.BadProgress as exc:
         raise HTTPException(422, str(exc))
     response.headers["Cache-Control"] = PROGRESS_CACHE
-    return s.LearnProgress(**store.merge_progress(_engine(), doc, **_owner(p)))
+    return s.LearnProgress(**store.merge_progress(_engine(), doc, **owner(p)))

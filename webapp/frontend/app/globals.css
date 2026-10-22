@@ -3109,3 +3109,23 @@ html.cosmos-on body::after {
 .share-link .select {
   min-width: min(100%, 22rem);
 }
+
+/* ---------- saved scans (T40) ---------- */
+
+/* The usual label never wraps (it sits beside a control); this one is a sentence above the field. */
+.save-scan .select-label {
+  display: block;
+  white-space: normal;
+}
+.save-scan .select {
+  width: 100%;
+  max-width: 28rem;
+  box-sizing: border-box;
+}
+.my-scans {
+  list-style: none;
+  margin: var(--sp-4) 0;
+  padding: 0;
+  display: grid;
+  gap: var(--sp-3);
+}

@@ -556,6 +556,62 @@ class LearnProgress(_Strict):
     lessons: dict[str, LessonProgress]
 
 
+class SavedScan(_Strict):
+    scan_id: int
+    label: str | None
+    saved_at: dt.datetime
+    status: Literal["queued", "running", "succeeded", "failed"]
+    tic_id: int
+    toi: str | None
+    period_d: float | None
+    snr: float | None
+
+
+class SavedScansResponse(_Strict):
+    scans: list[SavedScan]
+    limit: int
+
+
+class SaveScanRequest(_Strict):
+    label: str | None = Field(default=None, max_length=200)
+
+
+class SavedState(_Strict):
+    saved: bool
+    label: str | None = None
+
+
+class WatchedCandidate(_Strict):
+    slug: str
+    target: str
+    classification: str
+    label: str
+    period_d: float
+
+
+class WatchlistResponse(_Strict):
+    watched: list[WatchedCandidate]
+    limit: int
+
+
+class WatchState(_Strict):
+    watching: bool
+
+
+class AlertSettings(_Strict):
+    email_alerts: bool
+    can_email: bool  # the teacher's address is confirmed
+    email_ready: bool  # the server can send email at all
+
+
+class AlertSettingsUpdate(_Strict):
+    email_alerts: bool
+
+
+class Unsubscribe(_Strict):
+    token: str = Field(min_length=20, max_length=200)
+
+
 class AnswerResult(_Strict):
     question: str
     correct: bool

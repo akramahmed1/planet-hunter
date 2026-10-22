@@ -53,7 +53,8 @@ def test_every_classroom_route_declares_the_shared_dependency():
     open_routes = {"/api/v2/auth/teacher/signup", "/api/v2/auth/teacher/login", "/api/v2/auth/teacher/forgot",
                    "/api/v2/auth/teacher/reset", "/api/v2/auth/teacher/verify", "/api/v2/auth/teacher/login/2fa",
                    "/api/v2/auth/student/join",
-                   "/api/v2/auth/student/login", "/api/v2/auth/logout", "/api/v2/auth/me"}
+                   "/api/v2/auth/student/login", "/api/v2/auth/logout", "/api/v2/auth/me",
+                   "/api/v2/auth/alerts/unsubscribe"}
     routes = [r for r in classroom_routes.router.routes if isinstance(r, APIRoute)]
     assert len(routes) > 20
     for r in routes:

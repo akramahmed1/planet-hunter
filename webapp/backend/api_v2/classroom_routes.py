@@ -242,6 +242,21 @@ def _send_verify_email(email: str, token: str, name: str) -> None:
                 "you did not make an account, ignore this email.\n")
 
 
+@router.post("/auth/alerts/unsubscribe", response_model=s.Ok)
+def alerts_unsubscribe(body: s.Unsubscribe, request: Request, response: Response) -> s.Ok:
+    """Stop the candidate change emails. No sign-in: the token in the email is the proof, and all it can do is switch them off."""
+    auth.check_csrf(request)
+    eng = auth.engine()
+    _no_store(response)
+    ip = security.requester_key(auth.client_ip(request))
+    _limit(eng, f"unsub:ip:{ip}", 30, 15, "Too many tries from here. Wait 15 minutes.")
+    from watch import store as watch_store
+    if not watch_store.unsubscribe(eng, body.token):
+        data.record_failure(eng, f"unsub:ip:{ip}")
+        raise HTTPException(400, "This link is not valid. Sign in and turn the emails off from your settings instead.")
+    return s.Ok(ok=True)
+
+
 @router.post("/auth/teacher/verify", response_model=s.Ok)
 def teacher_verify(body: s.VerifyEmail, request: Request, response: Response) -> s.Ok:
     """Confirm an address with the emailed token. No sign-in needed: the token is the proof."""

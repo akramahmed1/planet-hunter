@@ -72,3 +72,10 @@ account and do not keep your answer.
 - Backups: deleted data stays in database backups until they roll off (the hosting provider's
   backup period; see the process document). Is that wording acceptable?
 - FERPA and state student-privacy laws for US schools.
+
+## Watchlist and alert emails (T41)
+
+- Signed-in teachers and students can keep a list of up to 20 candidates they watch. Teachers with a confirmed email
+  can opt in to email alerts about new candidates and changes to watched ones. Alerts are off until the teacher turns
+  them on, contain no student information, and each email has a link to turn them off. Wording to be reviewed.
+- We record which alert emails were sent to whom (to avoid sending twice). This goes when the account is deleted.

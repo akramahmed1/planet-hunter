@@ -1,5 +1,6 @@
 "use client";
 
+import SaveScan from "./SaveScan";
 import CsvDownload from "@/components/ui/CsvDownload";
 import { useEffect, useState } from "react";
 import ExplainBox from "@/components/explain/ExplainBox";
@@ -60,6 +61,8 @@ export default function ScanResult({ id, initial }: { id: number; initial: ScanS
           <p className="muted small">The last try failed ({scan.error}); it will try again.</p>
         )}
       </div>
+
+      <SaveScan id={id} />
 
       {sig && (
         <>
