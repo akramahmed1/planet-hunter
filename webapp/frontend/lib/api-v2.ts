@@ -9,6 +9,7 @@ export type Features = Schemas["Features"];
 export type Quantity = Schemas["Quantity"];
 export type SourceRef = Schemas["SourceRef"];
 export type Iss = Schemas["IssResponse"];
+export type SavedScans = Schemas["SavedScansResponse"];
 export type Apod = Schemas["ApodResponse"];
 export type SpaceWeather = Schemas["SpaceWeatherResponse"];
 export type ExoplanetsLatest = Schemas["ExoplanetsLatestResponse"];

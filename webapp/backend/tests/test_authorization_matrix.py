@@ -25,7 +25,7 @@ from tests.test_scan_queue import engine  # noqa: F401
 from tests.test_v2 import needs_db
 
 ROUTER_MODULES = ["routes", "live_routes", "phase4_routes", "phase5_routes", "scan_routes", "learn_routes",
-                  "classroom_routes", "phase9_routes"]
+                  "classroom_routes", "phase9_routes", "account_routes"]
 
 # policy: "public" anyone may call (rate limited or harmless), "teacher" / "student" need that kind of sign-in,
 # "any" needs a sign-in of either kind (each person only ever reaches their own row),
@@ -38,6 +38,10 @@ POLICY: dict[tuple[str, str], dict] = {
     ("POST", "/api/v2/lessons/{slug}/answers"): {"policy": "public", "csrf": "when_signed_in", "why": "anyone may answer; a signed-in student's answer counts, so the CSRF header is then required"},
     ("GET", "/api/v2/me/learn-progress"): {"policy": "any", "scope": None},
     ("PUT", "/api/v2/me/learn-progress"): {"policy": "any", "scope": None},
+    ("GET", "/api/v2/me/saved-scans"): {"policy": "any", "scope": None},
+    ("GET", "/api/v2/me/saved-scans/{job_id}"): {"policy": "any", "scope": None},
+    ("PUT", "/api/v2/me/saved-scans/{job_id}"): {"policy": "any", "scope": None},
+    ("DELETE", "/api/v2/me/saved-scans/{job_id}"): {"policy": "any", "scope": None},
     ("POST", "/api/v2/billing/webhook"): {"policy": "stripe", "csrf": False, "why": "Stripe's signature is the proof"},
     ("POST", "/api/v2/auth/teacher/signup"): {"policy": "public", "csrf": True},
     ("POST", "/api/v2/auth/teacher/login"): {"policy": "public", "csrf": True},
@@ -80,6 +84,7 @@ POLICY: dict[tuple[str, str], dict] = {
 
 BODIES = {
     "/api/v2/me/learn-progress": {"version": 1, "lessons": {}},
+    "/api/v2/me/saved-scans/{job_id}": {"label": "x"},
     "/api/v2/auth/teacher/2fa/enable": {"code": "123456"},
     "/api/v2/auth/teacher/2fa/disable": {"password": "x", "code": "123456"},
     "/api/v2/auth/teacher/2fa/recovery-codes": {"password": "x", "code": "123456"},
@@ -163,6 +168,7 @@ def fingerprint(engine) -> dict:
         "memberships": "select org_id, user_id, role from memberships order by org_id, user_id",
         "classes": "select id, org_id, name, join_code from classes order by id",
         "learn_progress": "select user_id, member_id, doc from learn_progress order by id",
+        "saved_scans": "select user_id, member_id, job_id, label from saved_scans order by id",
         "members": "select id, class_id, nickname, pin_hash from class_members order by id",
         "assignments": "select id, class_id, kind, ref from assignments order by id",
         "submissions": "select * from submissions order by 1, 2",
@@ -189,7 +195,7 @@ def world(two_orgs, engine):  # noqa: F811
     s2 = student(k2["join_code"], "Quark")
     admin_id = next(t["user_id"] for t in a.get(f"/api/v2/orgs/{org_a}").json()["teachers"] if t["display_name"] == "ada")
     ids = {"org_id": org_a, "class_id": k1["id"], "member_id": two_orgs["member"], "assignment_id": two_orgs["assignment"]["id"],
-           "user_id": admin_id, "slug": "distances-and-light-time"}
+           "user_id": admin_id, "slug": "distances-and-light-time", "job_id": 1}
     yield {**two_orgs, "plain": plain, "k2": k2, "hunt2": hunt2, "s2": s2, "ids": ids}
     for c in (plain, s2):
         c.__exit__(None, None, None)

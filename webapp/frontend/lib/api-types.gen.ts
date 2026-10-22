@@ -960,6 +960,54 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v2/me/saved-scans": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * My Saved Scans
+         * @description The signed-in person's saved scans, newest first.
+         */
+        get: operations["my_saved_scans_api_v2_me_saved_scans_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v2/me/saved-scans/{job_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Is Scan Saved
+         * @description Whether this scan is in the signed-in person's list (so the scan page can show Save or Saved).
+         */
+        get: operations["is_scan_saved_api_v2_me_saved_scans__job_id__get"];
+        /**
+         * Save Scan
+         * @description Add a scan to the list (or change its label). Saving twice is fine.
+         */
+        put: operations["save_scan_api_v2_me_saved_scans__job_id__put"];
+        post?: never;
+        /**
+         * Unsave Scan
+         * @description Take a scan off the list. Taking off one that is not there is fine.
+         */
+        delete: operations["unsave_scan_api_v2_me_saved_scans__job_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v2/missions": {
         parameters: {
             query?: never;
@@ -2576,6 +2624,50 @@ export interface components {
             sectors_per_target: number;
             /** Source Csv */
             source_csv: string;
+        };
+        /** SaveScanRequest */
+        SaveScanRequest: {
+            /** Label */
+            label?: string | null;
+        };
+        /** SavedScan */
+        SavedScan: {
+            /** Label */
+            label: string | null;
+            /** Period D */
+            period_d: number | null;
+            /**
+             * Saved At
+             * Format: date-time
+             */
+            saved_at: string;
+            /** Scan Id */
+            scan_id: number;
+            /** Snr */
+            snr: number | null;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "queued" | "running" | "succeeded" | "failed";
+            /** Tic Id */
+            tic_id: number;
+            /** Toi */
+            toi: string | null;
+        };
+        /** SavedScansResponse */
+        SavedScansResponse: {
+            /** Limit */
+            limit: number;
+            /** Scans */
+            scans: components["schemas"]["SavedScan"][];
+        };
+        /** SavedState */
+        SavedState: {
+            /** Label */
+            label?: string | null;
+            /** Saved */
+            saved: boolean;
         };
         /** ScanCreated */
         ScanCreated: {
@@ -4693,6 +4785,193 @@ export interface operations {
                 content?: never;
             };
             /** @description Lessons need the database, which is not configured or not reachable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    my_saved_scans_api_v2_me_saved_scans_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedScansResponse"];
+                };
+            };
+            /** @description Not signed in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Needs the database, which is not configured or not reachable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    is_scan_saved_api_v2_me_saved_scans__job_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                job_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedState"];
+                };
+            };
+            /** @description Not signed in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+            /** @description Needs the database, which is not configured or not reachable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    save_scan_api_v2_me_saved_scans__job_id__put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                job_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveScanRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedState"];
+                };
+            };
+            /** @description Not signed in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description No such scan */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The list is full */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+            /** @description Needs the database, which is not configured or not reachable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    unsave_scan_api_v2_me_saved_scans__job_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                job_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedState"];
+                };
+            };
+            /** @description Not signed in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+            /** @description Needs the database, which is not configured or not reachable */
             503: {
                 headers: {
                     [name: string]: unknown;

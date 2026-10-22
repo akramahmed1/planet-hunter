@@ -556,6 +556,31 @@ class LearnProgress(_Strict):
     lessons: dict[str, LessonProgress]
 
 
+class SavedScan(_Strict):
+    scan_id: int
+    label: str | None
+    saved_at: dt.datetime
+    status: Literal["queued", "running", "succeeded", "failed"]
+    tic_id: int
+    toi: str | None
+    period_d: float | None
+    snr: float | None
+
+
+class SavedScansResponse(_Strict):
+    scans: list[SavedScan]
+    limit: int
+
+
+class SaveScanRequest(_Strict):
+    label: str | None = Field(default=None, max_length=200)
+
+
+class SavedState(_Strict):
+    saved: bool
+    label: str | None = None
+
+
 class AnswerResult(_Strict):
     question: str
     correct: bool

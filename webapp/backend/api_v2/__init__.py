@@ -1,4 +1,5 @@
 """The /api/v2 API. Additive only: v1 endpoints in app.py keep their shapes (ADR 0001)."""
+from api_v2.account_routes import router as account_router
 from api_v2.classroom_routes import router as classroom_router
 from api_v2.learn_routes import router as learn_router
 from api_v2.phase9_routes import router as phase9_router
@@ -8,4 +9,4 @@ from api_v2.phase5_routes import router as phase5_router
 from api_v2.scan_routes import router as scan_router
 from api_v2.routes import router
 
-__all__ = ["router", "live_router", "phase4_router", "phase5_router", "scan_router", "learn_router", "classroom_router", "phase9_router"]
+__all__ = ["router", "live_router", "phase4_router", "phase5_router", "scan_router", "learn_router", "classroom_router", "phase9_router", "account_router"]
