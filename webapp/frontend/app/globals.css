@@ -3095,3 +3095,17 @@ html.cosmos-on body::after {
     height: 2px;
   }
 }
+
+/* ---------- downloads and share links (T38) ---------- */
+
+.csv-download,
+.share-link {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2) var(--sp-3);
+  margin: var(--sp-3) 0;
+}
+.share-link .select {
+  min-width: min(100%, 22rem);
+}
