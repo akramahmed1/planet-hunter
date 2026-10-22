@@ -41,6 +41,10 @@ it as you go; tick items off when fixed and say how it was verified.
 - [ ] Home globe (T30) is stylised: a grid and the real day and night sides, no continents. A real Earth picture (NASA
       Blue Marble, public domain, with attribution) needs a network that can reach NASA; add it then, as an extra layer
       that falls back to the stylised globe.
+- [ ] T36: the sky atlas marker, ring and field of view buttons are tested against a recording stand-in, not the real Aladin
+      Lite (CDS is blocked from my sandbox). Someone must look at one candidate page with the real viewer (phone and laptop)
+      and confirm the ring and marker draw and the buttons change the field. If a call differs in 3.8.2, fix `mark()` in
+      `components/sky/SkyPanel.tsx`.
 - [ ] Local test tooling notes (not product): Postgres used to stop when its lock file was deleted by hand (fixed in my
       scripts); a `pgrep -f` pattern must never appear in its own command line.
 
