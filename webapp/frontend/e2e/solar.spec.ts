@@ -204,6 +204,28 @@ test("without WebGL every body on the flat map is a big enough target on a short
   expect(sizes.filter((s) => s.endsWith("false")), "bodies smaller than 24 px").toEqual([]);
 });
 
+test("without WebGL every body on a planetary system's flat map is a big enough target on a short phone", async ({ page }) => {
+  await page.setViewportSize({ width: 400, height: 370 });
+  await page.addInitScript(() => {
+    const original = HTMLCanvasElement.prototype.getContext;
+    // @ts-expect-error: narrowing the overloads is not useful in a test stub
+    HTMLCanvasElement.prototype.getContext = function (type: string, ...rest: unknown[]) {
+      if (type.startsWith("webgl") || type === "experimental-webgl") return null;
+      return (original as (...a: unknown[]) => unknown).call(this, type, ...rest);
+    };
+  });
+  await page.goto("/exoplanets/toi-700");
+  await expect(page.getByTestId("system-map")).toBeVisible();
+  const sizes = await page.locator("[data-testid='system-star'], [data-testid^='system-planet-']").evaluateAll((els) =>
+    els.map((e) => {
+      const r = e.getBoundingClientRect();
+      return `${e.getAttribute("data-testid")} ${Math.round(r.width)}x${Math.round(r.height)} ${Math.min(r.width, r.height) >= 23.5}`;
+    }),
+  );
+  expect(sizes.length).toBeGreaterThan(2);
+  expect(sizes.filter((s) => s.endsWith("false")), "bodies smaller than 24 px").toEqual([]);
+});
+
 test("the 3D view loads after first paint and responds to taps", async ({ page }) => {
   await page.goto("/solar-system");
   // First paint is the map; three.js arrives afterwards.
