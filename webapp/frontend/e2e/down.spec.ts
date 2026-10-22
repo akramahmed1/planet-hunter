@@ -35,3 +35,11 @@ test("mission control says plainly that no live source is answering, and the res
   await expect(page.getByTestId("start-here").getByRole("link")).toHaveCount(3);
   await expect(page.getByRole("link", { name: /See all|See the candidates/ })).toBeVisible();
 });
+
+test("the status strip keeps its clock and says plainly that the ISS position is unavailable", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.getByTestId("strip-clock")).toHaveText(/^\d\d:\d\d:\d\d$/);
+  await expect(page.getByTestId("strip-fresh")).toHaveText("ISS position unavailable right now");
+  await expect(page.getByTestId("strip-iss")).toHaveCount(0);
+  expect(await page.getByTestId("status-strip").evaluate((e) => e.getBoundingClientRect().height)).toBe(28);
+});
