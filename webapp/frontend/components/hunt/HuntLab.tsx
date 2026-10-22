@@ -3,7 +3,7 @@
 import { useId, useMemo, useState } from "react";
 import SourceButton from "@/components/live/SourceButton";
 import type { LightCurveResponse, PeriodogramResponse } from "@/lib/api-v2";
-import { foldBinned, foldWindow, phaseOf, scoreGuess, type Score } from "@/lib/hunt";
+import { foldBinned, foldWindow, phaseOf, scoreGuess, snapToPeak, transitWindows, type Score } from "@/lib/hunt";
 import UPlotChart from "./UPlotChart";
 
 const START_DAYS = 3; // where the slider begins: arbitrary, and the page says so
@@ -57,6 +57,18 @@ export default function HuntLab({ lc, pg, answerPeriod, classification }: {
   }, [lc, period, t0, whole, half]);
 
   const span = lc.time_btjd[lc.time_btjd.length - 1] - lc.time_btjd[0];
+  // Linked views: the period chosen anywhere shows on the light curve (where a dip would land) and on the periodogram.
+  const bands = useMemo(
+    () => transitWindows(t0, period, lc.signal.duration_d, lc.time_btjd[0], lc.time_btjd[lc.time_btjd.length - 1]),
+    [t0, period, lc],
+  );
+  const pickPeriod = (x: number) => {
+    const p = snapToPeak(pg.period_d, pg.power, x);
+    if (p == null) return;
+    setExactPeriod(p);
+    setStep(toStep(Math.min(P_MAX, Math.max(P_MIN, p))));
+    setScore(null);
+  };
   const zoom = (f: number) => {
     const [a, b] = xRange ?? [lc.time_btjd[0], lc.time_btjd[lc.time_btjd.length - 1]];
     const mid = (a + b) / 2;
@@ -81,14 +93,14 @@ export default function HuntLab({ lc, pg, answerPeriod, classification }: {
         <h2 id="lc-h" className="card-title">The light curve</h2>
         <p className="muted">
           Brightness of {lc.target} over {Math.round(span)} days, in parts per million (ppm) from normal. Drag across
-          the chart to zoom in.{" "}
+          the chart to zoom in. The green bands show where a dip would land at the period you have chosen.{" "}
           <SourceButton label={`${lc.target} light curve`} source={lc.source} kind="measured"
             fetchedAt={lc.fetched_at} note={sourceNote}>
             <span>Source</span>
           </SourceButton>
         </p>
         <UPlotChart data={lcData} series={LC_SERIES} xLabel="Time (BTJD days)" yLabel="ppm" xRange={xRange}
-          onXRange={setXRange} ariaLabel={`Light curve of ${lc.target}`} testId="lc-chart" />
+          onXRange={setXRange} bands={bands} ariaLabel={`Light curve of ${lc.target}`} testId="lc-chart" />
         <div className="btn-row">
           <button type="button" className="btn btn--sm" onClick={() => zoom(0.5)}>Zoom in</button>
           <button type="button" className="btn btn--sm" onClick={() => zoom(2)}>Zoom out</button>
@@ -161,10 +173,11 @@ export default function HuntLab({ lc, pg, answerPeriod, classification }: {
         <h2 id="pg-h" className="card-title">The periodogram</h2>
         <p className="muted">
           The pipeline tries every period from {P_MIN} to {P_MAX} days and scores how well a box-shaped dip fits. The
-          tallest peak (dashed line) is its best guess.
+          tallest peak (dashed line) is its best guess. Tap the chart beside a peak to fold the light curve there; the white
+          line shows the period you have chosen. The slider does the same, one step at a time.
         </p>
         <UPlotChart data={pgData} series={PG_SERIES} xLabel="Period (days)" yLabel="BLS power" yFormat="sci"
-          marker={lc.signal.period_d} ariaLabel={`Periodogram of ${lc.target} with the peak at ${lc.signal.period_d} days`}
+          marker={lc.signal.period_d} guess={period} onPick={pickPeriod} ariaLabel={`Periodogram of ${lc.target} with the peak at ${lc.signal.period_d} days`}
           testId="pg-chart" />
         <p className="muted small">{pg.method}.</p>
       </section>
