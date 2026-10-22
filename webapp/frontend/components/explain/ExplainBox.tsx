@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useState } from "react";
+import { DIP_QUESTION, fieldLabel, hasDip } from "@/lib/explain";
 import { apiV2Get, apiV2Post, type ExplainResponse, type ExplainStatus } from "@/lib/api-v2";
 
 type Kind = "candidate" | "scan" | "planet";
@@ -22,6 +23,15 @@ export default function ExplainBox({ kind, refId }: { kind: Kind; refId: string 
     apiV2Get<ExplainStatus>("/api/v2/explain/status").then((r) => r.ok && setStatus(r.data));
   }, []);
 
+  async function ask(q: string) {
+    setBusy(true);
+    setError(null);
+    const r = await apiV2Post<ExplainResponse>("/api/v2/explain", { kind, ref: refId, question: q });
+    setBusy(false);
+    if (r.ok) setAnswer(r.data);
+    else setError(r.error);
+  }
+
   if (status?.paused) {
     // On, but this month's budget is used up: say so quietly instead of vanishing.
     return (
@@ -35,15 +45,14 @@ export default function ExplainBox({ kind, refId }: { kind: Kind; refId: string 
   return (
     <section className="card explain" aria-labelledby={`${id}-h`} data-testid="explain">
       <h2 id={`${id}-h`} className="card-title">What am I looking at?</h2>
-      <form onSubmit={async (e) => {
-        e.preventDefault();
-        setBusy(true);
-        setError(null);
-        const r = await apiV2Post<ExplainResponse>("/api/v2/explain", { kind, ref: refId, question });
-        setBusy(false);
-        if (r.ok) setAnswer(r.data);
-        else setError(r.error);
-      }}>
+      {hasDip(kind) && (
+        <p>
+          <button type="button" className="btn" disabled={busy} onClick={() => ask(DIP_QUESTION)} data-testid="explain-dip">
+            {busy ? "Thinking..." : "Explain this dip"}
+          </button>
+        </p>
+      )}
+      <form onSubmit={(e) => { e.preventDefault(); ask(question); }}>
         <label htmlFor={`${id}-q`} className="field-label">Ask a question about this page</label>
         <textarea id={`${id}-q`} className="select explain-input" rows={2} maxLength={MAX} value={question}
           onChange={(e) => setQuestion(e.target.value)} placeholder="For example: why is this not called a planet?"
@@ -64,7 +73,10 @@ export default function ExplainBox({ kind, refId }: { kind: Kind; refId: string 
                 <p className="muted small">From these fields:</p>
                 <ul className="explain-cites">
                   {answer.citations.map((c) => (
-                    <li key={c.path}><code>{c.path}</code>: {String(c.value)}</li>
+                    <li key={c.path}>
+                      {fieldLabel(c.path) && <strong>{fieldLabel(c.path)} </strong>}
+                      <code>{c.path}</code>: {String(c.value)}
+                    </li>
                   ))}
                 </ul>
               </>

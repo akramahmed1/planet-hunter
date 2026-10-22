@@ -3129,3 +3129,88 @@ html.cosmos-on body::after {
   display: grid;
   gap: var(--sp-3);
 }
+
+/* ---------- command search (Cmd/Ctrl+K) ---------- */
+
+.cmd-open {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.cmd-kbd {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 0.7rem;
+  color: var(--ink-faint);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-sm, 4px);
+  padding: 0 0.4em;
+}
+
+/* On a phone the button is just the magnifier; the word and the key hint need room a phone does not have. */
+.cmd-open-label,
+.cmd-kbd {
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .cmd-open-label,
+  .cmd-kbd {
+    display: inline;
+  }
+}
+
+.cmd {
+  padding: var(--sp-3) var(--sp-4) var(--sp-4);
+  display: grid;
+  gap: var(--sp-3);
+}
+
+.cmd-input {
+  width: 100%;
+}
+
+.cmd-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+.cmd-item {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  align-items: baseline;
+  padding: var(--sp-3);
+  min-height: 44px;
+  border-radius: var(--r-md, 8px);
+  cursor: pointer;
+}
+
+.cmd-item[aria-selected="true"] {
+  background: rgba(120, 170, 255, 0.14);
+  outline: 1px solid var(--ion-strong);
+}
+
+.cmd-item-main {
+  display: grid;
+  min-width: 0;
+}
+
+.cmd-item-label {
+  font-weight: 600;
+}
+
+.cmd-item-hint {
+  color: var(--ink-faint);
+  font-size: 0.85rem;
+  overflow-wrap: anywhere;
+}
+
+.cmd-item-group {
+  color: var(--ink-faint);
+  font-size: 0.75rem;
+  white-space: nowrap;
+}

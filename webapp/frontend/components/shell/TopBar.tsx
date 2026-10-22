@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { BrandMark } from "./Icon";
 import { useRole } from "@/lib/role";
 import { isActive, visibleNav } from "./nav";
+import CommandPalette from "./CommandPalette";
 import UnitsButton from "./UnitsControls";
 
 export default function TopBar({ classroom }: { classroom: boolean }) {
@@ -39,6 +40,7 @@ export default function TopBar({ classroom }: { classroom: boolean }) {
           </ul>
         </nav>
         <div className="topbar-actions">
+          <CommandPalette classroom={classroom} />
           <UnitsButton />
         </div>
       </div>
