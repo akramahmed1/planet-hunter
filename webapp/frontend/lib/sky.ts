@@ -56,3 +56,24 @@ export function starDisplayColor(teffK: number): string {
   const c = c0.map((v, k) => Math.round(v + f * (c1[k] - v)));
   return `#${c.map((v) => v.toString(16).padStart(2, "0")).join("")}`;
 }
+
+// ---- Sky atlas (launch task T36) ----
+
+/** One TESS camera pixel on the sky, in arcseconds (TESS Instrument Handbook, MAST). */
+export const TESS_PIXEL_ARCSEC = 21;
+/** The ring drawn around the target: 1 arcminute across, so about three TESS pixels. */
+export const RING_DIAMETER_ARCSEC = 60;
+export const RING_RADIUS_DEG = RING_DIAMETER_ARCSEC / 2 / 3600;
+
+export type SkyFov = { id: "1" | "5" | "30" | "120"; label: string; title: string; deg: number };
+/** Field of view choices, in degrees of sky across the picture. 30 arcminutes is where it starts. */
+export const SKY_FOVS: readonly SkyFov[] = [
+  { id: "1", label: "1′", title: "1 arcminute across", deg: 1 / 60 },
+  { id: "5", label: "5′", title: "5 arcminutes across", deg: 5 / 60 },
+  { id: "30", label: "30′", title: "30 arcminutes across", deg: 0.5 },
+  { id: "120", label: "2°", title: "2 degrees across", deg: 2 },
+];
+export const DEFAULT_SKY_FOV = SKY_FOVS[2];
+
+/** How many TESS pixels fit across a stretch of sky of this many arcseconds. */
+export const tessPixelsAcross = (arcsec: number): number => arcsec / TESS_PIXEL_ARCSEC;

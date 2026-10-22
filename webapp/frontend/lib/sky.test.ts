@@ -1,6 +1,9 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { formatDec, formatRa, parsecsToLightYears, starDisplayColor } from "./sky.ts";
+import {
+  DEFAULT_SKY_FOV, formatDec, formatRa, parsecsToLightYears, RING_DIAMETER_ARCSEC, RING_RADIUS_DEG, SKY_FOVS, starDisplayColor,
+  TESS_PIXEL_ARCSEC, tessPixelsAcross,
+} from "./sky.ts";
 
 describe("sky", () => {
   it("formats TOI-700's TIC position (RA 97.0967866, Dec -65.5793115)", () => {
@@ -24,3 +27,20 @@ describe("sky", () => {
     assert.match(starDisplayColor(5772), /^#[0-9a-f]{6}$/);
   });
 });
+
+describe("sky atlas", () => {
+  it("offers four fields of view from 1 arcminute to 2 degrees, starting at 30 arcminutes", () => {
+    assert.deepEqual(SKY_FOVS.map((f) => f.deg), [1 / 60, 5 / 60, 0.5, 2]);
+    assert.equal(DEFAULT_SKY_FOV.deg, 0.5); // the same field the viewer has always opened with
+    assert.ok(SKY_FOVS.every((f, i, a) => i === 0 || f.deg > a[i - 1].deg));
+    assert.ok(SKY_FOVS.every((f) => !/[–—]/.test(f.title + f.label)));
+  });
+
+  it("the ring is 1 arcminute across and covers about three TESS pixels", () => {
+    assert.equal(TESS_PIXEL_ARCSEC, 21);
+    assert.equal(RING_DIAMETER_ARCSEC, 60);
+    assert.ok(Math.abs(RING_RADIUS_DEG * 3600 - 30) < 1e-9); // radius is 30 arcseconds
+    assert.ok(Math.abs(tessPixelsAcross(RING_DIAMETER_ARCSEC) - 2.857) < 0.001);
+  });
+});
+
