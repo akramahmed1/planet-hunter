@@ -89,3 +89,44 @@ export function foldWindow(time: number[], flux: number[], period: number, t0: n
   const binOf = (ph: number) => med[Math.min(nBins - 1, Math.floor(((ph + halfWidth) / (2 * halfWidth)) * nBins))];
   return { x: order.map((i) => xs[i]), y: order.map((i) => ys[i]), median: order.map((i) => binOf(xs[i])) };
 }
+
+/**
+ * Where a tap on the periodogram lands: the period of the tallest point within `reach` (a fraction, 2% by default) of the
+ * tapped period. A fingertip is wider than a peak, so tapping beside a peak means that peak. Periods must be sorted
+ * ascending, as the API sends them. Returns null for an empty periodogram.
+ */
+export function snapToPeak(periods: number[], power: number[], at: number, reach = 0.02): number | null {
+  if (!periods.length) return null;
+  const lo = at * (1 - reach), hi = at * (1 + reach);
+  let a = 0, b = periods.length; // first index with period >= lo
+  while (a < b) {
+    const m = (a + b) >> 1;
+    if (periods[m] < lo) a = m + 1;
+    else b = m;
+  }
+  let best = -1;
+  for (let i = a; i < periods.length && periods[i] <= hi; i++) {
+    if (best < 0 || power[i] > power[best]) best = i;
+  }
+  if (best >= 0) return periods[best];
+  // Nothing inside the reach (a sparse grid): the nearest point.
+  const i = Math.min(periods.length - 1, a);
+  return i > 0 && at - periods[i - 1] < periods[i] - at ? periods[i - 1] : periods[i];
+}
+
+/**
+ * The stretches of time where a transit would fall if the period were `period`: one per orbit, `duration` days wide and
+ * centred on t0 + k * period, clipped to the data. At most `cap` are returned (a very short period over a long span would
+ * paint the whole chart), keeping the ones nearest the start.
+ */
+export function transitWindows(t0: number, period: number, duration: number, tMin: number, tMax: number, cap = 400): { from: number; to: number }[] {
+  if (!(period > 0) || !(duration > 0)) return [];
+  const out: { from: number; to: number }[] = [];
+  let k = Math.ceil((tMin - duration / 2 - t0) / period);
+  for (; out.length < cap; k++) {
+    const c = t0 + k * period;
+    if (c - duration / 2 > tMax) break;
+    out.push({ from: Math.max(tMin, c - duration / 2), to: Math.min(tMax, c + duration / 2) });
+  }
+  return out;
+}

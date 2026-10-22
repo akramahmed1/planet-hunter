@@ -20,6 +20,9 @@ export default function UPlotChart({
   xRange,
   onXRange,
   marker,
+  guess,
+  bands,
+  onPick,
   ariaLabel,
   testId,
   yFormat,
@@ -32,6 +35,12 @@ export default function UPlotChart({
   xRange?: [number, number] | null;
   onXRange?: (r: [number, number]) => void;
   marker?: number | null;
+  /** A second, solid marker: where the viewer's own period guess sits on this chart. */
+  guess?: number | null;
+  /** Shaded stretches of the x axis (for example where a transit would fall at the guessed period). */
+  bands?: { from: number; to: number }[];
+  /** Called with the x value under a tap or click that was not a drag. */
+  onPick?: (x: number) => void;
   ariaLabel: string;
   testId?: string;
   /** "sci" shows small values like 2.1e-4 instead of rounding them to 0. */
@@ -42,6 +51,12 @@ export default function UPlotChart({
   const [failed, setFailed] = useState(false);
   const markerRef = useRef(marker);
   markerRef.current = marker;
+  const guessRef = useRef(guess);
+  guessRef.current = guess;
+  const bandsRef = useRef(bands);
+  bandsRef.current = bands;
+  const pickRef = useRef(onPick);
+  pickRef.current = onPick;
 
   useEffect(() => {
     let disposed = false;
@@ -87,21 +102,56 @@ export default function UPlotChart({
               }
             },
           ],
-          draw: [
+          // Bands go behind the data, so a dip is never hidden by its own shading.
+          drawClear: [
             (u) => {
-              const m = markerRef.current;
-              if (m == null) return;
-              const x = u.valToPos(m, "x", true);
+              const list = bandsRef.current;
+              if (!list?.length) return;
               const ctx = u.ctx;
               ctx.save();
-              ctx.strokeStyle = "#ffb547";
-              ctx.lineWidth = 2 * devicePixelRatio;
-              ctx.setLineDash([6, 4]);
-              ctx.beginPath();
-              ctx.moveTo(x, u.bbox.top);
-              ctx.lineTo(x, u.bbox.top + u.bbox.height);
-              ctx.stroke();
+              ctx.fillStyle = "rgba(79, 224, 176, 0.38)";
+              for (const b of list) {
+                const x0 = u.valToPos(b.from, "x", true);
+                const x1 = u.valToPos(b.to, "x", true);
+                // At least a hair wide, or a short transit on a long chart would vanish.
+                ctx.fillRect(x0, u.bbox.top, Math.max(x1 - x0, 3 * devicePixelRatio), u.bbox.height);
+              }
               ctx.restore();
+            },
+          ],
+          draw: [
+            (u) => {
+              const line = (v: number | null | undefined, color: string, dash: number[]) => {
+                if (v == null) return;
+                const x = u.valToPos(v, "x", true);
+                const ctx = u.ctx;
+                ctx.save();
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 2 * devicePixelRatio;
+                ctx.setLineDash(dash.map((d) => d * devicePixelRatio));
+                ctx.beginPath();
+                ctx.moveTo(x, u.bbox.top);
+                ctx.lineTo(x, u.bbox.top + u.bbox.height);
+                ctx.stroke();
+                ctx.restore();
+              };
+              line(markerRef.current, "#ffb547", [6, 4]);
+              line(guessRef.current, "#eef1fa", []);
+            },
+          ],
+          ready: [
+            (u) => {
+              // A tap that did not move is a pick; a drag is a zoom, handled by uPlot itself.
+              let down: { x: number; y: number } | null = null;
+              u.over.addEventListener("pointerdown", (e) => { down = { x: e.clientX, y: e.clientY }; });
+              u.over.addEventListener("pointerup", (e) => {
+                if (!down || !pickRef.current) return;
+                const moved = Math.hypot(e.clientX - down.x, e.clientY - down.y);
+                down = null;
+                if (moved > 5) return;
+                const r = u.over.getBoundingClientRect();
+                pickRef.current(u.posToVal(e.clientX - r.left, "x"));
+              });
             },
           ],
         },
@@ -136,7 +186,7 @@ export default function UPlotChart({
     if (!u) return;
     if (xRange) u.setScale("x", { min: xRange[0], max: xRange[1] });
     u.redraw();
-  }, [xRange, marker]);
+  }, [xRange, marker, guess, bands]);
 
   if (failed) {
     return (
@@ -146,5 +196,6 @@ export default function UPlotChart({
       </p>
     );
   }
-  return <div ref={box} className="uplot-box" role="img" aria-label={ariaLabel} data-testid={testId} />;
+  return <div ref={box} className="uplot-box" role="img" aria-label={ariaLabel} data-testid={testId}
+    data-guess={guess ?? undefined} data-bands={bands?.length} />;
 }
