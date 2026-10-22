@@ -42,6 +42,13 @@ POLICY: dict[tuple[str, str], dict] = {
     ("GET", "/api/v2/me/saved-scans/{job_id}"): {"policy": "any", "scope": None},
     ("PUT", "/api/v2/me/saved-scans/{job_id}"): {"policy": "any", "scope": None},
     ("DELETE", "/api/v2/me/saved-scans/{job_id}"): {"policy": "any", "scope": None},
+    ("GET", "/api/v2/me/watchlist"): {"policy": "any", "scope": None},
+    ("GET", "/api/v2/me/watchlist/{slug}"): {"policy": "any", "scope": None},
+    ("PUT", "/api/v2/me/watchlist/{slug}"): {"policy": "any", "scope": None},
+    ("DELETE", "/api/v2/me/watchlist/{slug}"): {"policy": "any", "scope": None},
+    ("GET", "/api/v2/me/alerts"): {"policy": "teacher", "scope": None},
+    ("PUT", "/api/v2/me/alerts"): {"policy": "teacher", "scope": None},
+    ("POST", "/api/v2/auth/alerts/unsubscribe"): {"policy": "public", "csrf": True},
     ("POST", "/api/v2/billing/webhook"): {"policy": "stripe", "csrf": False, "why": "Stripe's signature is the proof"},
     ("POST", "/api/v2/auth/teacher/signup"): {"policy": "public", "csrf": True},
     ("POST", "/api/v2/auth/teacher/login"): {"policy": "public", "csrf": True},
@@ -85,6 +92,7 @@ POLICY: dict[tuple[str, str], dict] = {
 BODIES = {
     "/api/v2/me/learn-progress": {"version": 1, "lessons": {}},
     "/api/v2/me/saved-scans/{job_id}": {"label": "x"},
+    "/api/v2/me/alerts": {"email_alerts": True},
     "/api/v2/auth/teacher/2fa/enable": {"code": "123456"},
     "/api/v2/auth/teacher/2fa/disable": {"password": "x", "code": "123456"},
     "/api/v2/auth/teacher/2fa/recovery-codes": {"password": "x", "code": "123456"},
@@ -112,6 +120,7 @@ PUBLIC_BODIES = {
     "/api/v2/auth/student/join": {"class_code": "ABCD2345", "nickname": "Csrf", "pin": "1234", "birth_month": 3, "birth_year": 2010},
     "/api/v2/auth/student/login": {"class_code": "ABCD2345", "nickname": "Csrf", "pin": "1234"},
     "/api/v2/auth/logout": {},
+    "/api/v2/auth/alerts/unsubscribe": {"token": "t" * 30},
 }
 
 
@@ -169,6 +178,8 @@ def fingerprint(engine) -> dict:
         "classes": "select id, org_id, name, join_code from classes order by id",
         "learn_progress": "select user_id, member_id, doc from learn_progress order by id",
         "saved_scans": "select user_id, member_id, job_id, label from saved_scans order by id",
+        "watchlist": "select user_id, member_id, slug from watchlist order by id",
+        "alert_prefs": "select user_id, email_alerts, unsubscribe_token from alert_prefs order by user_id",
         "members": "select id, class_id, nickname, pin_hash from class_members order by id",
         "assignments": "select id, class_id, kind, ref from assignments order by id",
         "submissions": "select * from submissions order by 1, 2",

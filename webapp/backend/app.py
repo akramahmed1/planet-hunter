@@ -60,6 +60,13 @@ def sync_lessons() -> None:
     except Exception as exc:  # noqa: BLE001 - startup must not fail on the database
         log.warning("lessons not synced: %s", exc)
     try:
+        from watch import runner
+        out = runner.run(eng, data_store.results().candidates)
+        if out["changes"]:
+            log.info("published candidates changed: %s", out)
+    except Exception as exc:  # noqa: BLE001 - the table may not exist yet on an older database
+        log.warning("candidate change check failed: %s", exc)
+    try:
         gone = store.purge_stale_progress(eng)
         if gone:
             log.info("learn progress untouched for 24 months removed: %d", gone)

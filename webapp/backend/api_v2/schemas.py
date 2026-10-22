@@ -581,6 +581,37 @@ class SavedState(_Strict):
     label: str | None = None
 
 
+class WatchedCandidate(_Strict):
+    slug: str
+    target: str
+    classification: str
+    label: str
+    period_d: float
+
+
+class WatchlistResponse(_Strict):
+    watched: list[WatchedCandidate]
+    limit: int
+
+
+class WatchState(_Strict):
+    watching: bool
+
+
+class AlertSettings(_Strict):
+    email_alerts: bool
+    can_email: bool  # the teacher's address is confirmed
+    email_ready: bool  # the server can send email at all
+
+
+class AlertSettingsUpdate(_Strict):
+    email_alerts: bool
+
+
+class Unsubscribe(_Strict):
+    token: str = Field(min_length=20, max_length=200)
+
+
 class AnswerResult(_Strict):
     question: str
     correct: bool
