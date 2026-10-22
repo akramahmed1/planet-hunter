@@ -185,20 +185,19 @@ jobs:
         run: python webapp/qa/qa_backend.py http://127.0.0.1:8000
       - name: Frontend QA suite
         run: python webapp/qa/qa_frontend.py http://127.0.0.1:3000 http://127.0.0.1:8000
-      # One install for every browser this run needs. The system-package part (apt) is sometimes very slow or stuck on
-      # GitHub's runners (10, 13 and then more than 15 minutes in three runs), so each try is cut off after 7 minutes and
-      # tried again (up to three times); a stuck download usually succeeds on the second try.
+      # One install for every browser this run needs. The system-package part (apt) is slow on GitHub's runners (10 to 14
+      # minutes in four runs). It must NOT be cut off and restarted: stopping the script leaves the apt process running and
+      # holding its lock, so every later try fails at once (seen on the run for the Next 16 merge). So: one try, no prompts
+      # possible, and a ceiling that is longer than the slowest run seen.
       - name: Install Playwright browsers
-        timeout-minutes: 25
+        timeout-minutes: 30
         working-directory: webapp/frontend
+        env:
+          DEBIAN_FRONTEND: noninteractive
+          NEEDRESTART_MODE: a
         run: |
           if [ "${{ steps.pick.outputs.cross }}" = "1" ]; then browsers="chromium firefox webkit"; else browsers="chromium"; fi
-          for try in 1 2 3; do
-            if timeout 7m npx playwright install --with-deps $browsers; then exit 0; fi
-            echo "::warning::browser install try $try did not finish in 7 minutes, trying again"
-          done
-          echo "::error::the browsers could not be installed in three tries"
-          exit 1
+          npx playwright install --with-deps $browsers
       - name: Playwright (phone + desktop, with axe accessibility checks)
         working-directory: webapp/frontend
         run: |
