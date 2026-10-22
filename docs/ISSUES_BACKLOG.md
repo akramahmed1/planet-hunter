@@ -45,6 +45,9 @@ it as you go; tick items off when fixed and say how it was verified.
       Lite (CDS is blocked from my sandbox). Someone must look at one candidate page with the real viewer (phone and laptop)
       and confirm the ring and marker draw and the buttons change the field. If a call differs in 3.8.2, fix `mark()` in
       `components/sky/SkyPanel.tsx`.
+- [ ] One more single failure in a full local run (batch B1): `classroom.spec` teacher sign-up on the phone setup, "signed-in"
+      did not appear within 5 s. It passed 3 of 3 alone straight after. Likely the sign-up (password hashing) is slow when
+      several browsers hit the one backend at once; if it ever repeats in CI, raise that wait or find the slow step.
 - [ ] Local test tooling notes (not product): Postgres used to stop when its lock file was deleted by hand (fixed in my
       scripts); a `pgrep -f` pattern must never appear in its own command line.
 
