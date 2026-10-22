@@ -3153,7 +3153,7 @@ html.cosmos-on body::after {
   display: none;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 1400px) {
   .cmd-open-label,
   .cmd-kbd {
     display: inline;
