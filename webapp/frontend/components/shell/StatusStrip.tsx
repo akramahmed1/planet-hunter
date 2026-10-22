@@ -1,10 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { apiV2Get, type Iss } from "@/lib/api-v2";
+import { useIssFeed } from "@/lib/issFeed";
 import { CLOCK_PLACEHOLDER, coordText, freshness, utcClock } from "@/lib/strip";
-
-const POLL_MS = 60_000;
 
 /**
  * A slim line under the top bar: UTC clock, where the ISS is, and how fresh that data is. It has a fixed height from
@@ -13,8 +11,6 @@ const POLL_MS = 60_000;
  */
 export default function StatusStrip() {
   const [now, setNow] = useState<Date | null>(null);
-  const [iss, setIss] = useState<Iss | null | undefined>(undefined); // undefined: not asked yet; null: unavailable
-  const [failedSince, setFailedSince] = useState(false);
 
   useEffect(() => {
     setNow(new Date());
@@ -24,29 +20,7 @@ export default function StatusStrip() {
     return () => clearInterval(clock);
   }, []);
 
-  useEffect(() => {
-    let cancelled = false;
-    let timer: ReturnType<typeof setTimeout> | undefined;
-    async function ask() {
-      if (document.visibilityState === "visible") {
-        const r = await apiV2Get<Iss>("/api/v2/iss");
-        if (cancelled) return;
-        if (r.ok) {
-          setIss(r.data);
-          setFailedSince(false);
-        } else {
-          setIss((prev) => prev ?? null); // keep the last good answer, but say it may be old
-          setFailedSince(true);
-        }
-      }
-      timer = setTimeout(ask, POLL_MS);
-    }
-    ask();
-    return () => {
-      cancelled = true;
-      clearTimeout(timer);
-    };
-  }, []);
+  const { iss, failedSince } = useIssFeed();
 
   const old = Boolean(iss && (iss.stale || failedSince));
   return (
