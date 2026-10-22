@@ -5,6 +5,7 @@ name: CI
 #    changes, plus the core list in webapp/frontend/e2e/CORE_SPECS.
 #  - Firefox and WebKit run the main flows (e2e/CROSS_BROWSER_SPECS) whenever the full suite runs, and on a pull request
 #    that changes their setup.
+#  - A pull request that changes webapp/frontend/package.json or package-lock.json runs the full suite too.
 #  - The full browser suite and the screenshots run after every merge to v2, on any pull request into main (the
 #    release), on a push to main, on a daily schedule once this file is on the default branch, and when started by hand.
 on:
@@ -131,7 +132,13 @@ jobs:
           EVENT: ${{ github.event_name }}
           BASE: ${{ github.base_ref }}
         run: |
-          if [ "$EVENT" != "pull_request" ] || [ "$BASE" = "main" ]; then
+          deps=no
+          if [ "$EVENT" = "pull_request" ] && [ "$BASE" != "main" ]; then
+            git fetch --no-tags origin "$BASE"
+            # A change to the frontend's packages (a framework upgrade, say) can break anything: run everything.
+            if git diff --name-only "origin/$BASE" HEAD | grep -qE '^webapp/frontend/(package\.json|package-lock\.json)$'; then deps=yes; fi
+          fi
+          if [ "$EVENT" != "pull_request" ] || [ "$BASE" = "main" ] || [ "$deps" = yes ]; then
             echo "mode=full" >> "$GITHUB_OUTPUT"
             echo "cross=1" >> "$GITHUB_OUTPUT"
             echo "Full browser suite ($EVENT, base '$BASE')."
@@ -178,17 +185,20 @@ jobs:
         run: python webapp/qa/qa_backend.py http://127.0.0.1:8000
       - name: Frontend QA suite
         run: python webapp/qa/qa_frontend.py http://127.0.0.1:3000 http://127.0.0.1:8000
-      # One install for every browser this run needs, with a time limit: a stuck system-package download once held this
-      # step for 40 minutes, and the limit makes that fail fast so it can simply be run again.
+      # One install for every browser this run needs. The system-package part (apt) is sometimes very slow or stuck on
+      # GitHub's runners (10, 13 and then more than 15 minutes in three runs), so each try is cut off after 7 minutes and
+      # tried again (up to three times); a stuck download usually succeeds on the second try.
       - name: Install Playwright browsers
-        timeout-minutes: 15
+        timeout-minutes: 25
         working-directory: webapp/frontend
         run: |
-          if [ "${{ steps.pick.outputs.cross }}" = "1" ]; then
-            npx playwright install --with-deps chromium firefox webkit
-          else
-            npx playwright install --with-deps chromium
-          fi
+          if [ "${{ steps.pick.outputs.cross }}" = "1" ]; then browsers="chromium firefox webkit"; else browsers="chromium"; fi
+          for try in 1 2 3; do
+            if timeout 7m npx playwright install --with-deps $browsers; then exit 0; fi
+            echo "::warning::browser install try $try did not finish in 7 minutes, trying again"
+          done
+          echo "::error::the browsers could not be installed in three tries"
+          exit 1
       - name: Playwright (phone + desktop, with axe accessibility checks)
         working-directory: webapp/frontend
         run: |

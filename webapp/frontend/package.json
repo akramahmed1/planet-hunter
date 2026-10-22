@@ -2,7 +2,7 @@
   "dependencies": {
     "@react-three/fiber": "9.8.0",
     "leaflet": "1.9.4",
-    "next": "^15.5.27",
+    "next": "^16.4.2",
     "react": "19.1.1",
     "react-dom": "19.1.1",
     "three": "0.186.0",
