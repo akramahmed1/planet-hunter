@@ -48,9 +48,11 @@ export default defineConfig({
     ...(cross
       ? [
           { name: "desktop-firefox", testMatch: crossSpecs, use: { ...devices["Desktop Firefox"], viewport: { width: 1280, height: 800 } } },
-          { name: "desktop-webkit", testMatch: crossSpecs, use: { ...devices["Desktop Safari"], viewport: { width: 1280, height: 800 } } },
+          // WebKit on a Linux CI machine runs the longest flows about 2.5 times slower than Chromium (the Classroom
+          // flow took 11 s in Chromium and 29 to 30 s in WebKit against the 30 s limit), so it gets twice the time.
+          { name: "desktop-webkit", testMatch: crossSpecs, timeout: 60_000, use: { ...devices["Desktop Safari"], viewport: { width: 1280, height: 800 } } },
           // Safari on a phone: touch and the small screen. Firefox has no mobile emulation in Playwright.
-          { name: "mobile-webkit", testMatch: crossSpecs, use: { ...devices["iPhone 13"] } },
+          { name: "mobile-webkit", testMatch: crossSpecs, timeout: 60_000, use: { ...devices["iPhone 13"] } },
         ]
       : []),
     // Screenshots for review (e2e/screenshots.spec.ts): a Pixel-class phone in Chrome and a laptop.
