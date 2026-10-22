@@ -1,0 +1,2 @@
+# Rules we accepted on purpose (rule id, action, reason). Empty until the first report is triaged.
+# Format: <rule id>	<IGNORE|WARN|FAIL>	<reason>

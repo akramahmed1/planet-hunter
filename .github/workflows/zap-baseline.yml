@@ -1,0 +1,71 @@
+name: Security scan (OWASP ZAP baseline, staging)
+
+# T44. Starts by hand (and weekly once this file is on the default branch). It is a PASSIVE scan of STAGING: ZAP
+# browses the site and reads the responses for missing headers, cookie flags and similar; it does not attack or change
+# anything. Never run against production from here. The report is kept as an artifact.
+# Result: the run fails only on a FAIL-level finding. Warnings are listed in the report and in docs/SECURITY_SCAN.md
+# when triaged; rules we accepted on purpose are in .zap/rules.tsv with the reason.
+on:
+  # Also runs when these files change on v2, so it is exercised before the release; if staging is down then it fails at
+  # 'Staging is up', and the run's Re-run button starts it again once staging is back.
+  push:
+    branches: [v2]
+    paths: [".zap/**", ".github/workflows/zap-baseline.yml"]
+  workflow_dispatch:
+  schedule:
+    - cron: "21 5 * * 1"
+
+permissions:
+  contents: read
+
+env:
+  FRONTEND: https://frontend-staging-5fce.up.railway.app
+
+jobs:
+  zap:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Staging is up
+        run: |
+          for i in $(seq 1 10); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "$FRONTEND/")
+            echo "attempt $i: HTTP $code"
+            [ "$code" = 200 ] && exit 0
+            sleep 15
+          done
+          echo "::error::staging did not answer; the scan needs it up"
+          exit 1
+      - name: ZAP baseline scan
+        run: |
+          mkdir -p zap-out && chmod 777 zap-out
+          set +e
+          docker run --rm -v "$PWD/.zap:/zap/wrk/rules:ro" -v "$PWD/zap-out:/zap/wrk/out:rw" \
+            ghcr.io/zaproxy/zaproxy:stable zap-baseline.py \
+            -t "$FRONTEND" -c rules/rules.tsv -r out/report.html -J out/report.json -m 5 -I
+          echo "zap exit code $?"
+          # -I makes warnings and failures not change the exit code; judge the report ourselves.
+          python3 - <<'PY'
+          import json
+          d = json.load(open("zap-out/report.json"))
+          counts = {}
+          for site in d.get("site", []):
+              for a in site.get("alerts", []):
+                  counts.setdefault(a.get("riskdesc", "?").split(" ")[0], []).append(a.get("name"))
+          for risk, names in sorted(counts.items()):
+              print(f"{risk}: {len(names)}")
+              for n in sorted(set(names)):
+                  print("   ", n)
+          high = counts.get("High", [])
+          if high:
+              print("::error::ZAP found High-risk alerts:", ", ".join(sorted(set(high))))
+              raise SystemExit(1)
+          PY
+      - name: Keep the report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-report
+          path: zap-out
+          retention-days: 30
