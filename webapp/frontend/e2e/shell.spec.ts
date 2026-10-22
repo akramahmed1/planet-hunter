@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { CANDIDATES, ROUTES } from "./routes";
 
-const isMobile = (name: string) => name === "mobile";
+const isMobile = (name: string) => name.startsWith("mobile");
 
 test("every page fits the screen width without sideways scrolling", async ({ page }) => {
   for (const route of ROUTES) {

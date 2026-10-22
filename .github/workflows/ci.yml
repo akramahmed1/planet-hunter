@@ -3,6 +3,8 @@ name: CI
 # What runs where (agreed with Akram, 2026-10-22):
 #  - A pull request into v2 runs every check except that the browser tests are the ones the pull request adds or
 #    changes, plus the core list in webapp/frontend/e2e/CORE_SPECS.
+#  - Firefox and WebKit run the main flows (e2e/CROSS_BROWSER_SPECS) whenever the full suite runs, and on a pull request
+#    that changes their setup.
 #  - The full browser suite and the screenshots run after every merge to v2, on any pull request into main (the
 #    release), on a push to main, on a daily schedule once this file is on the default branch, and when started by hand.
 on:
@@ -131,6 +133,7 @@ jobs:
         run: |
           if [ "$EVENT" != "pull_request" ] || [ "$BASE" = "main" ]; then
             echo "mode=full" >> "$GITHUB_OUTPUT"
+            echo "cross=1" >> "$GITHUB_OUTPUT"
             echo "Full browser suite ($EVENT, base '$BASE')."
           else
             cd webapp/frontend
@@ -143,6 +146,10 @@ jobs:
             done
             echo "mode=subset" >> "$GITHUB_OUTPUT"
             echo "specs=$list" >> "$GITHUB_OUTPUT"
+            # Firefox and WebKit run too when this pull request changes how they are set up.
+            if git diff --name-only "origin/$BASE" HEAD | grep -qE 'e2e/CROSS_BROWSER_SPECS|playwright.config.ts|\.github/workflows/ci.yml'; then
+              echo "cross=1" >> "$GITHUB_OUTPUT"
+            fi
             echo "Core and changed browser tests only:$list"
           fi
       - name: Make a throwaway key for two-step sign-in tests
@@ -174,10 +181,20 @@ jobs:
       - name: Install Playwright browser
         working-directory: webapp/frontend
         run: npx playwright install --with-deps chromium
+      - name: Install Firefox and WebKit
+        if: steps.pick.outputs.cross == '1'
+        working-directory: webapp/frontend
+        run: npx playwright install --with-deps firefox webkit
       - name: Playwright (phone + desktop, with axe accessibility checks)
         working-directory: webapp/frontend
         run: |
           if [ "${{ steps.pick.outputs.mode }}" = "full" ]; then npx playwright test; else npx playwright test ${{ steps.pick.outputs.specs }}; fi
+      - name: Playwright in Firefox and WebKit (the main flows, e2e/CROSS_BROWSER_SPECS)
+        if: steps.pick.outputs.cross == '1'
+        working-directory: webapp/frontend
+        env:
+          CROSS_BROWSER: "1"
+        run: npx playwright test --project=desktop-firefox --project=desktop-webkit --project=mobile-webkit
       - name: Screenshots (Pixel-class phone 390x844 and laptop 1440x900, every route)
         if: steps.pick.outputs.mode == 'full'
         working-directory: webapp/frontend

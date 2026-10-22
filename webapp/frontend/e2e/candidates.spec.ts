@@ -4,7 +4,7 @@ import { CANDIDATES } from "./routes";
 const maxPeriod = Math.max(...CANDIDATES.map((c) => c.period_d)).toFixed(4);
 
 test("phone shows candidate cards and hides the table", async ({ page }, info) => {
-  test.skip(info.project.name !== "mobile", "phone layout");
+  test.skip(!info.project.name.startsWith("mobile"), "phone layout");
   await page.goto("/candidates");
   const cards = page.getByRole("list", { name: "Candidate signals" }).getByRole("listitem");
   await expect(cards).toHaveCount(CANDIDATES.length);
@@ -13,7 +13,7 @@ test("phone shows candidate cards and hides the table", async ({ page }, info) =
 });
 
 test("phone sort control orders cards by period", async ({ page }, info) => {
-  test.skip(info.project.name !== "mobile", "phone layout");
+  test.skip(!info.project.name.startsWith("mobile"), "phone layout");
   await page.goto("/candidates");
   await page.getByLabel("Sort by").selectOption("period_d:desc");
   const first = page.getByRole("list", { name: "Candidate signals" }).getByRole("listitem").first();
@@ -21,7 +21,7 @@ test("phone sort control orders cards by period", async ({ page }, info) => {
 });
 
 test("desktop shows a sortable table and hides the cards", async ({ page }, info) => {
-  test.skip(info.project.name !== "desktop", "desktop layout");
+  test.skip(!info.project.name.startsWith("desktop"), "desktop layout");
   await page.goto("/candidates");
   await expect(page.getByRole("list", { name: "Candidate signals" })).toBeHidden();
   const table = page.getByRole("table");

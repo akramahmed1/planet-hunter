@@ -1,4 +1,6 @@
-import { defineConfig } from "@playwright/test";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+import { defineConfig, devices } from "@playwright/test";
 
 // Runs against local servers by default (started below, or reused if already
 // up, as in CI). Set PW_BASE_URL to test a deployed site such as staging.
@@ -6,6 +8,15 @@ const remote = process.env.PW_BASE_URL;
 const baseURL = remote ?? "http://127.0.0.1:3000";
 // Screenshot projects only exist when asked for (SCREENSHOTS=1), so the normal run stays as fast as before.
 const shots = !!process.env.SCREENSHOTS;
+
+// Firefox and WebKit projects only exist when asked for (CROSS_BROWSER=1) and only run the main flows listed in
+// e2e/CROSS_BROWSER_SPECS, so the normal run and a developer's machine need only Chromium.
+const cross = !!process.env.CROSS_BROWSER;
+const crossSpecs = new RegExp(
+  readFileSync(join(__dirname, "e2e", "CROSS_BROWSER_SPECS"), "utf8")
+    .split("\n").map((l) => l.trim()).filter((l) => l && !l.startsWith("#"))
+    .map((f) => f.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|"),
+);
 
 export default defineConfig({
   testDir: "./e2e",
@@ -34,6 +45,14 @@ export default defineConfig({
       testIgnore: /down\.spec|classroom-off\.spec|screenshots\.spec/,
       use: { browserName: "chromium", viewport: { width: 1280, height: 800 } },
     },
+    ...(cross
+      ? [
+          { name: "desktop-firefox", testMatch: crossSpecs, use: { ...devices["Desktop Firefox"], viewport: { width: 1280, height: 800 } } },
+          { name: "desktop-webkit", testMatch: crossSpecs, use: { ...devices["Desktop Safari"], viewport: { width: 1280, height: 800 } } },
+          // Safari on a phone: touch and the small screen. Firefox has no mobile emulation in Playwright.
+          { name: "mobile-webkit", testMatch: crossSpecs, use: { ...devices["iPhone 13"] } },
+        ]
+      : []),
     // Screenshots for review (e2e/screenshots.spec.ts): a Pixel-class phone in Chrome and a laptop.
     ...(shots
       ? [
