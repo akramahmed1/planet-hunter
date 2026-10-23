@@ -14,6 +14,7 @@ COPY scans/ ./scans/
 COPY learn/ ./learn/
 COPY classroom/ ./classroom/
 COPY explain/ ./explain/
+COPY watch/ ./watch/
 COPY billing/ ./billing/
 COPY mailer/ ./mailer/
 COPY content/ ./content/
