@@ -1,0 +1,232 @@
+[1001.2010] Transits and Occultations 
+
+ [link: #content] Skip to main content 
+
+ [link: https://arxiv.org/IgnoreMe] 
+
+ [link: https://arxiv.org/] 
+
+ [link: https://arxiv.org/search] 
+
+ Search
+
+ [link: https://arxiv.org/user/create] Submit 
+ [link: https://info.arxiv.org/about/donate.html] Donate 
+
+ [link: https://arxiv.org/login] Log in 
+
+ Search arXiv 
+
+ Press Enter to search · [link: https://arxiv.org/search/advanced] Advanced search 
+
+--> 
+
+ Astrophysics > Earth and Planetary Astrophysics 
+
+ arXiv:1001.2010 (astro-ph)
+
+ [Submitted on 12 Jan 2010 ( [link: https://arxiv.org/abs/1001.2010v1] v1 ), last revised 24 Sep 2014 (this version, v5)] 
+ Title: Transits and Occultations 
+ Authors: [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Winn,+J+N] Joshua N. Winn View a PDF of the paper titled Transits and Occultations, by Joshua N. Winn 
+ [link: /pdf/1001.2010] View PDF 
+ [link: https://arxiv.org/html/1001.2010v5] HTML (experimental) 
+
+ Abstract: When we are fortunate enough to view an exoplanetary system nearly edge-on, the star and planet periodically eclipse each other. Observations of eclipses (transits and occultations) provide a bonanza of information that cannot be obtained from radial-velocity data alone, such as the relative dimensions of the planet and its host star, as well as the orientation of the planet's orbit relative to the sky plane and relative to the stellar rotation axis. The wavelength-dependence of the eclipse signal gives clues about the the temperature and composition of the planetary atmosphere. Anomalies in the timing or other properties of the eclipses may betray the presence of additional planets or moons. Searching for eclipses is also a productive means of discovering new planets. This chapter reviews the basic geometry and physics of eclipses, and summarizes the knowledge that has been gained through eclipse observations, as well as the information that might be gained in the future.
+
+ Comments: 
+ [25 pg] Chapter of the graduate-level textbook, EXOPLANETS, ed. S. Seager, University of Arizona Press (Tucson, AZ); eq (38) fixed 
+
+ Subjects: 
+
+ Earth and Planetary Astrophysics (astro-ph.EP) 
+
+ Cite as: 
+ [link: https://arxiv.org/abs/1001.2010] arXiv:1001.2010 [astro-ph.EP] 
+
+ (or 
+ [link: https://arxiv.org/abs/1001.2010v5] arXiv:1001.2010v5 [astro-ph.EP] for this version)
+
+ [link: https://doi.org/10.48550/arXiv.1001.2010] https://doi.org/10.48550/arXiv.1001.2010 
+
+ Focus to learn more 
+
+ arXiv-issued DOI via DataCite 
+
+ Submission history From: Joshua N. Winn [ [link: /show-email/50f9034b/1001.2010] view email ] [link: /abs/1001.2010v1] [v1] 
+ Tue, 12 Jan 2010 21:00:29 UTC (800 KB) 
+ [link: /abs/1001.2010v2] [v2] 
+ Thu, 6 May 2010 16:09:36 UTC (811 KB) 
+ [link: /abs/1001.2010v3] [v3] 
+ Thu, 17 Jun 2010 19:09:26 UTC (811 KB) 
+ [link: /abs/1001.2010v4] [v4] 
+ Sun, 20 Mar 2011 18:12:06 UTC (811 KB) 
+ [v5] 
+ Wed, 24 Sep 2014 15:27:26 UTC (812 KB) 
+
+ Full-text links: 
+ Access Paper: 
+
+View a PDF of the paper titled Transits and Occultations, by Joshua N. Winn [link: /pdf/1001.2010] View PDF [link: https://arxiv.org/html/1001.2010v5] HTML (experimental) [link: /src/1001.2010] TeX Source
+
+ [link: http://arxiv.org/licenses/nonexclusive-distrib/1.0/] view license 
+
+ Current browse context: 
+ astro-ph.EP 
+
+ [link: /prevnext?id=1001.2010&function=prev&context=astro-ph.EP] < prev 
+
+   |   
+ [link: /prevnext?id=1001.2010&function=next&context=astro-ph.EP] next > 
+
+ [link: /list/astro-ph.EP/new] new 
+ | 
+ [link: /list/astro-ph.EP/recent] recent 
+ | [link: /list/astro-ph.EP/2010-01] 2010-01 
+
+ Change to browse by:
+
+ [link: /abs/1001.2010?context=astro-ph] astro-ph 
+
+ References & Citations 
+
+ [link: https://ui.adsabs.harvard.edu/abs/arXiv:1001.2010] NASA ADS [link: https://scholar.google.com/scholar_lookup?arxiv_id=1001.2010] Google Scholar 
+ [link: https://api.semanticscholar.org/arXiv:1001.2010] Semantic Scholar 
+
+ export BibTeX citation 
+ Loading... 
+
+ BibTeX formatted citation 
+ × 
+
+ loading... 
+
+ Data provided by: 
+
+ Bookmark [link: http://www.bibsonomy.org/BibtexHandler?requTask=upload&url=https://arxiv.org/abs/1001.2010&description=Transits and Occultations] 
+
+ [link: https://reddit.com/submit?url=https://arxiv.org/abs/1001.2010&title=Transits and Occultations] 
+
+ Bibliographic Tools 
+
+ Bibliographic and Citation Tools 
+
+ Bibliographic Explorer Toggle 
+
+ Bibliographic Explorer ( [link: https://info.arxiv.org/labs/showcase.html#arxiv-bibliographic-explorer] What is the Explorer? ) 
+
+ Connected Papers Toggle 
+
+ Connected Papers ( [link: https://www.connectedpapers.com/about] What is Connected Papers? ) 
+
+ Litmaps Toggle 
+
+ Litmaps ( [link: https://www.litmaps.co/] What is Litmaps? ) 
+
+ scite.ai Toggle 
+
+ scite Smart Citations ( [link: https://www.scite.ai/] What are Smart Citations? ) 
+
+ Code, Data, Media 
+
+ Code, Data and Media Associated with this Article 
+
+ alphaXiv Toggle 
+
+ alphaXiv ( [link: https://alphaxiv.org/] What is alphaXiv? ) 
+
+ Links to Code Toggle 
+
+ CatalyzeX Code Finder for Papers ( [link: https://www.catalyzex.com] What is CatalyzeX? ) 
+
+ DagsHub Toggle 
+
+ DagsHub ( [link: https://dagshub.com/] What is DagsHub? ) 
+
+ GotitPub Toggle 
+
+ Gotit.pub ( [link: http://gotit.pub/faq] What is GotitPub? ) 
+
+ Huggingface Toggle 
+
+ Hugging Face ( [link: https://huggingface.co/huggingface] What is Huggingface? ) 
+
+ ScienceCast Toggle 
+
+ ScienceCast ( [link: https://sciencecast.org/welcome] What is ScienceCast? ) 
+
+ Demos 
+
+ Demos 
+
+ Replicate Toggle 
+
+ Replicate ( [link: https://replicate.com/docs/arxiv/about] What is Replicate? ) 
+
+ Spaces Toggle 
+
+ Hugging Face Spaces ( [link: https://huggingface.co/docs/hub/spaces] What is Spaces? ) 
+
+ Spaces Toggle 
+
+ TXYZ.AI ( [link: https://txyz.ai] What is TXYZ.AI? ) 
+
+ Related Papers 
+
+ Recommenders and Search Tools 
+
+ Link to Influence Flower 
+
+ Influence Flower ( [link: https://influencemap.cmlab.dev/] What are Influence Flowers? ) 
+
+ Core recommender toggle 
+
+ CORE Recommender ( [link: https://core.ac.uk/services/recommender] What is CORE? ) 
+
+ IArxiv recommender toggle 
+
+ IArxiv Recommender 
+ ( [link: https://iarxiv.org/about] What is IArxiv? ) 
+
+ Author 
+ Venue 
+ Institution 
+ Topic 
+
+ About arXivLabs
+
+ arXivLabs: experimental projects with community collaborators 
+ arXivLabs is a framework that allows collaborators to develop and share new arXiv features directly on our website. 
+ Both individuals and organizations that work with arXivLabs have embraced and accepted our values of openness, community, excellence, and user data privacy. arXiv is committed to these values and only works with partners that adhere to them. 
+ Have an idea for a project that will add value for arXiv's community? [link: https://info.arxiv.org/labs/index.html] Learn more about arXivLabs . 
+
+ [link: /auth/show-endorsers/1001.2010] Which authors of this paper are endorsers? |
+ [link: javascript:setMathjaxCookie()] Disable MathJax ( [link: https://info.arxiv.org/help/mathjax.html] What is MathJax? )
+
+ We gratefully acknowledge support from
+ our major funders ,
+ [link: https://info.arxiv.org/about/ourmembers.html] member institutions , ,
+ and all contributors.
+
+ [link: https://info.arxiv.org/about] About 
+ · 
+ [link: https://info.arxiv.org/help] Help 
+ · 
+ [link: https://info.arxiv.org/help/contact.html] Contact 
+ · 
+ [link: https://info.arxiv.org/help/subscribe] Subscribe 
+ · 
+ [link: https://info.arxiv.org/help/license/index.html] Copyright 
+ · 
+ [link: https://info.arxiv.org/help/policies/privacy_policy.html] Privacy 
+ · 
+ [link: https://info.arxiv.org/help/web_accessibility.html] Accessibility 
+ · 
+ [link: https://status.arxiv.org] Operational Status (opens in new tab) 
+
+ Major funding support from 
+
+ [link: https://www.simonsfoundation.org/] 
+
+ [link: https://www.sfi.org.bm/] 
+
+ [link: https://www.schmidtsciences.org/]

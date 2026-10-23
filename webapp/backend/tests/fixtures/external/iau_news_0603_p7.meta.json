@@ -1,0 +1,15 @@
+{
+  "url": "https://www.iau.org/news/pressreleases/detail/iau0603/",
+  "final_url": "https://www.iau.org/news/pressreleases/detail/iau0603/",
+  "status": 404,
+  "https": true,
+  "headers": {
+    "content-type": "text/html; charset=utf-8",
+    "cache-control": "private",
+    "server": "cloudflare",
+    "strict-transport-security": "max-age=2592000; includeSubDomains"
+  },
+  "bytes": 62386,
+  "truncated": false,
+  "fetched_at": "2026-10-18T02:07:28+00:00"
+}

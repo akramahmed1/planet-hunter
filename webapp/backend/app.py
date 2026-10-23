@@ -5,6 +5,7 @@
 # a live MAST scan.
 from __future__ import annotations
 
+import logging
 import os
 from contextlib import asynccontextmanager
 
@@ -13,6 +14,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
 import data_store
+from security_mw import SecurityMiddleware
+from api_v2 import classroom_router as v2_classroom_router
+from api_v2 import learn_router as v2_learn_router
+from api_v2 import live_router as v2_live_router
+from api_v2 import phase4_router as v2_phase4_router
+from api_v2 import phase5_router as v2_phase5_router
+from api_v2 import account_router as v2_account_router
+from api_v2 import phase9_router as v2_phase9_router
+from api_v2 import scan_router as v2_scan_router
+from api_v2 import router as v2_router
 from schemas import (
     Candidate,
     CandidatesResponse,
@@ -23,6 +34,7 @@ from schemas import (
 )
 
 VERSION = "1.1.0"
+log = logging.getLogger("planet-hunter")
 
 
 def allowed_origins() -> list[str]:
@@ -34,20 +46,60 @@ def allowed_origins() -> list[str]:
     return ["http://localhost:3000", "http://127.0.0.1:3000", *extra]
 
 
+def sync_lessons() -> None:
+    """Copy content/lessons/ into Postgres. A missing or unready database only affects /api/v2/lessons."""
+    import db
+    from learn import store
+
+    eng = db.engine()
+    if eng is None:
+        return
+    try:
+        n = store.sync(eng)
+        log.info("lessons synced: %d written", n)
+    except Exception as exc:  # noqa: BLE001 - startup must not fail on the database
+        log.warning("lessons not synced: %s", exc)
+    try:
+        from watch import runner
+        out = runner.run(eng, data_store.results().candidates)
+        if out["changes"]:
+            log.info("published candidates changed: %s", out)
+    except Exception as exc:  # noqa: BLE001 - the table may not exist yet on an older database
+        log.warning("candidate change check failed: %s", exc)
+    try:
+        gone = store.purge_stale_progress(eng)
+        if gone:
+            log.info("learn progress untouched for 24 months removed: %d", gone)
+    except Exception as exc:  # noqa: BLE001 - the table may not exist yet on an older database
+        log.warning("stale learn progress not purged: %s", exc)
+
+
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     data_store.check_integrity()
+    sync_lessons()
     yield
 
 
 app = FastAPI(title="planet-hunter API", version=VERSION, lifespan=lifespan)
 
+app.add_middleware(SecurityMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins(),
-    allow_methods=["GET"],
+    allow_methods=["GET", "POST", "PUT", "DELETE"],
     allow_headers=["*"],
 )
+
+app.include_router(v2_router)
+app.include_router(v2_live_router)
+app.include_router(v2_phase4_router)
+app.include_router(v2_phase5_router)
+app.include_router(v2_scan_router)
+app.include_router(v2_learn_router)
+app.include_router(v2_classroom_router)
+app.include_router(v2_phase9_router)
+app.include_router(v2_account_router)
 
 
 @app.get("/api/health", response_model=HealthResponse)

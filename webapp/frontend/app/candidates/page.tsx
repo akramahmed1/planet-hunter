@@ -1,3 +1,6 @@
+import RunLabel from "@/components/RunLabel";
+import type { Metadata } from "next";
+import Link from "next/link";
 import ApiError from "@/components/ApiError";
 import CandidatesTable from "@/components/CandidatesTable";
 import {
@@ -6,7 +9,14 @@ import {
   scanSummarySentence,
   type CandidatesResponse,
 } from "@/lib/api";
+import { count } from "@/lib/plural";
+import Tap from "@/components/ui/Tap";
+import { ageLabel } from "@/lib/time";
 
+export const metadata: Metadata = {
+  title: "Hunt",
+  description: "Eight stars, one strongest repeating dip each. Candidate signals from public TESS data, never discoveries.",
+};
 export const dynamic = "force-dynamic";
 
 export default async function CandidatesPage() {
@@ -25,17 +35,22 @@ export default async function CandidatesPage() {
 
   return (
     <div>
+      <p className="eyebrow">Hunt</p>
       <h1>Candidate signals</h1>
       <p className="lede">
         {numberWord(summary.count, true)} targets, one strongest signal each.{" "}
-        {scanSummarySentence(summary)} Click any target for the full readout.
+        {scanSummarySentence(summary)} <Tap /> any target for the full readout.
       </p>
       <p className="muted">
-        Scan run: {run.run_date}. {run.sectors_per_target} sectors per target.
+        Scan run: {run.run_date} ({ageLabel(run.run_date)}). {count(run.sectors_per_target, "sector")} per target.
         Periods searched: {run.search_period_min_d} to {run.search_period_max_d}{" "}
         days. {honesty}
       </p>
+      <p><RunLabel kind="batch" sectors={run.sectors_per_target} date={run.run_date} age={ageLabel(run.run_date)} /></p>
       <CandidatesTable candidates={candidates} />
+      <p>
+        <Link href="/scan" className="btn btn--primary">Scan any TESS star yourself</Link>
+      </p>
     </div>
   );
 }
