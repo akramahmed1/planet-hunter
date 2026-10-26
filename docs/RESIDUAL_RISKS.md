@@ -13,12 +13,10 @@ it says what was checked, what was not, and what only you can do. Production is 
   High; load test no failed requests, 95% of answers under 46 ms at about 16 to 23 requests a second.
 
 ## 2. NOT verified, and why
-1. **Staging is half updated.** On the last check (run for commit 0864e09) the staging FRONTEND reported the newest
-   commit but the staging BACKEND still reported `2aaad2e` from 2026-10-20, 48 commits behind. So the new frontend is
-   talking to an old backend, and the strict staging check cannot pass. Either the backend's builds are still blocked or its
-   new build fails; I cannot see Railway from here (the connector needs your sign-in). **You: open the staging `backend`
-   service in Railway, Deployments tab, and tell me what the newest deployment says.** Until staging runs one consistent
-   commit, nothing can honestly be called "verified on staging": every task log says "Staging: NOT verified".
+1. **Staging consistency (resolved 2026-10-26).** The backend had been stuck on `2aaad2e` because its image never copied the
+   `watch` package (`ModuleNotFoundError: No module named 'watch'`), fixed in #75. Railway shows backend, frontend, worker,
+   refresh and Postgres on staging all live, all running `1b65b04`. The strict staging check on `1b65b04` (2026-10-23) failed
+   only on `/api/v2/apod` (NASA 503); see the newest run in the QA log for the re-run.
 2. **No real email has ever been sent** (password reset, email confirmation, alert emails). Needs your Resend account,
    a verified sending domain, `EMAIL_API_KEY`, `EMAIL_FROM`, `APP_BASE_URL`.
 3. **The explainer has only run against the fake model.** It needs your provider key, a matching hard cap in the provider's
@@ -52,8 +50,7 @@ it says what was checked, what was not, and what only you can do. Production is 
   you add a key, and mail sends nothing until configured.
 
 ## 4. Decisions and tasks only you can do
-1. Check the Railway staging backend deployment (point 1 above). Then tell me, or reconnect the Railway connector, and I
-   will re-run the whole staging gate on one commit.
+1. Staging backend deployment: checked and healthy on 2026-10-26 (see section 2, point 1). Decide: wait for NASA or re-run the staging gate by hand.
 2. Rotate every key per `docs/INCIDENT_RAILWAY_2026-10-21.md` and note the date.
 3. Attorney review of the privacy notice, and answers to the ASK items in `docs/DATA_DELETION.md` (24 months of progress
    data, response time, identity check, backup retention, nicknames in the audit log).
