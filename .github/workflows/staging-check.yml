@@ -28,7 +28,8 @@ env:
 
 jobs:
   staging:
-    runs-on: ubuntu-latest
+    # Pinned: ubuntu-latest is now 26.04, which Playwright 1.56.1 cannot install browsers on.
+    runs-on: ubuntu-24.04
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
