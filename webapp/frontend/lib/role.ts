@@ -8,8 +8,31 @@ import { apiV2Send } from "@/lib/api-v2";
 
 const EVENT = "ph-role";
 
+const FRESH_MS = 30_000;
+let cached: { at: number; role: Role } | null = null;
+let inflight: Promise<Role> | null = null;
+
+/**
+ * Who is signed in. The top bar, the tab bar, the watch button and Learn all need to know, so they share one answer
+ * for a short time instead of each asking the server (it used to be three or four calls on every page). Anything
+ * other than a signed-in teacher or student, including Classroom being off or the server being unreachable, is null.
+ */
+export function getRole(): Promise<Role> {
+  if (cached && Date.now() - cached.at < FRESH_MS) return Promise.resolve(cached.role);
+  if (!inflight) {
+    inflight = apiV2Send<unknown>("GET", "/api/v2/auth/me").then((r) => {
+      inflight = null;
+      const role = r.ok ? roleFromMe(r.data) : null;
+      cached = { at: Date.now(), role };
+      return role;
+    });
+  }
+  return inflight;
+}
+
 /** Tell the navigation that the signed-in role changed (sign in, sign out, account deleted). */
 export function announceRole(role: Role): void {
+  cached = { at: Date.now(), role };
   window.dispatchEvent(new CustomEvent<Role>(EVENT, { detail: role }));
 }
 
@@ -24,9 +47,9 @@ export function useSession(enabled: boolean): { role: Role; known: boolean } {
       return;
     }
     let live = true;
-    apiV2Send<unknown>("GET", "/api/v2/auth/me").then((r) => {
+    getRole().then((r) => {
       if (!live) return;
-      if (r.ok) setRole(roleFromMe(r.data));
+      setRole(r);
       setKnown(true);
     });
     const onChange = (e: Event) => {

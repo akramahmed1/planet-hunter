@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { apiV2Send } from "@/lib/api-v2";
+import { getRole } from "@/lib/role";
 import { EMPTY, LEARN_STORAGE_KEY, load, mergeProgress, parse, sameProgress, save, type Progress } from "@/lib/learn";
 
 /** Where this person's progress lives: only here (not signed in), kept with their account, or waiting to reach it. */
@@ -60,8 +61,10 @@ export function useProgress(): {
     current.current = load();
     setProgress(current.current);
     setReady(true);
-    // Ask the account. Not signed in (or Classroom off) answers 401 or 404: then progress stays on this device only.
+    // Ask the account, but only when someone is signed in: a guest (or Classroom being off) keeps progress on this
+    // device only, and does not make a request that is bound to fail.
     (async () => {
+      if (!(await getRole())) return;
       const r = await apiV2Send<unknown>("GET", URL);
       if (!alive.current || !r.ok) return;
       account.current = true;

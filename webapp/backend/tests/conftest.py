@@ -9,3 +9,5 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import os  # noqa: E402
 
 os.environ.setdefault("CLASSROOM_ENABLED", "1")
+# test_v2 reads /openapi.json; tests/test_docs_off.py proves the default (off) separately.
+os.environ.setdefault("API_DOCS", "1")

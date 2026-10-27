@@ -5,6 +5,7 @@ from fastapi import APIRouter, HTTPException, Path, Request, Response
 
 import db
 from api_v2 import schemas as s
+from clientip import client_ip
 from live import http
 from scans import catalogs, queue
 from scans.presets import PRESETS
@@ -24,12 +25,6 @@ def _engine():
     return eng
 
 
-def _client(request: Request) -> str:
-    # Railway's proxy puts the original client first in X-Forwarded-For.
-    fwd = request.headers.get("x-forwarded-for", "")
-    return fwd.split(",")[0].strip() or (request.client.host if request.client else "unknown")
-
-
 @router.post("/scans", response_model=s.ScanCreated, status_code=202, responses={**NO_DB, **LIMITED, **BAD})
 def create_scan(body: s.ScanRequest, request: Request, response: Response) -> s.ScanCreated:
     """Queue a scan of a TESS star by TIC ID or TOI number. A repeat request returns the earlier job."""
@@ -42,7 +37,7 @@ def create_scan(body: s.ScanRequest, request: Request, response: Response) -> s.
     eng = _engine()
     params = {"preset": body.preset, **PRESETS[body.preset]}
     try:
-        job_id, created = queue.enqueue(eng, tic, params, queue.requester_hash(_client(request)), toi)
+        job_id, created = queue.enqueue(eng, tic, params, queue.requester_hash(client_ip(request)), toi)
     except queue.RateLimited as exc:
         raise HTTPException(429, f"Too many scans: {exc}. Try again later.", headers={"Retry-After": "3600"})
     except queue.QueueFull as exc:

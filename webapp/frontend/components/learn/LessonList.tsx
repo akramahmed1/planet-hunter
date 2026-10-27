@@ -33,7 +33,7 @@ export default function LessonList({ lessons }: { lessons: LessonSummary[] }) {
         )}
         <p className="muted small" data-testid="progress-where">
           {sync === "local"
-            ? "Progress is kept on this device only. Nothing is sent to us."
+            ? "Progress is kept on this device only. A quiz answer is sent to our server to be checked, and is not saved for a guest."
             : "Progress is kept on this device and in your account, so it follows you to your other devices. It holds lesson names, question names, how many tries, and when a badge was earned, nothing else."}
         </p>
       </section>
