@@ -30,7 +30,7 @@ jobs:
       - name: Staging is up
         run: |
           for i in $(seq 1 10); do
-            code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "$FRONTEND/")
+            code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "$FRONTEND/" || true)
             echo "attempt $i: HTTP $code"
             [ "$code" = 200 ] && exit 0
             sleep 15
