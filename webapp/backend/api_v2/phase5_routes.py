@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import os
 from functools import lru_cache
 
 from fastapi import APIRouter, HTTPException, Path, Response
@@ -18,10 +19,13 @@ SLUG = Path(..., pattern=r"^[a-z0-9-]{1,40}$")
 
 @lru_cache(maxsize=16)
 def _load(slug: str) -> dict:
-    path = LIGHTCURVES / f"{slug}.json"
-    if not path.is_file():
+    # The route already limits slug to [a-z0-9-]; this keeps _load safe for any caller too.
+    base = os.path.realpath(LIGHTCURVES)
+    path = os.path.realpath(os.path.join(base, f"{slug}.json"))
+    if not path.startswith(base + os.sep) or not os.path.isfile(path):
         raise HTTPException(404, f"no light curve exported for '{slug}'")
-    return json.loads(path.read_text())
+    with open(path, encoding="utf-8") as f:
+        return json.load(f)
 
 
 def _meta(d: dict) -> dict:

@@ -21,6 +21,11 @@ from explain import grounding, model, service, spend
 
 router = APIRouter(prefix="/api/v2", tags=["v2"])
 log = logging.getLogger("planet-hunter.phase9")
+
+
+def _one_line(value: object) -> str:
+    """Make a value safe to put in a log line: no line breaks, so it cannot fake another entry."""
+    return str(value).replace("\r", "").replace("\n", "")
 NOTE = ("Written by an AI model from this page's data and the site's lessons only. Check the cited fields; "
         "if they do not say it, it is not known.")
 
@@ -160,5 +165,5 @@ async def webhook(request: Request) -> dict:
         raise HTTPException(400, f"bad signature: {exc}")
     eng = auth.engine()
     result = billing.apply_event(eng, event)
-    log.info("stripe event %s %s: %s", event.get("id"), event.get("type"), result)
+    log.info("stripe event %s %s: %s", _one_line(event.get("id")), _one_line(event.get("type")), _one_line(result))
     return {"received": True}
