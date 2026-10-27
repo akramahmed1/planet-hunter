@@ -3300,7 +3300,7 @@ html.cosmos-on body::after {
 .hero-head::before {
   content: "";
   position: absolute;
-  inset: -10% -6% -10% 30%;
+  inset: -10% 0 -10% 20%; /* stays inside the page width: a glow past the edge would scroll the page sideways */
   z-index: -1;
   pointer-events: none;
   background:
