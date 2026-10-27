@@ -27,8 +27,10 @@ describe("indexing", () => {
   it("open: the sitemap lists public pages only, on the real origin", () => {
     const urls = sitemapEntries(ORIGIN, { ALLOW_INDEXING: "1" }).map((e) => e.url);
     assert.equal(urls.length, PUBLIC_PATHS.length);
-    assert.ok(urls.every((u) => u.startsWith(ORIGIN)));
-    assert.ok(!urls.some((u) => /classroom|my-|alerts|welcome|scan\//.test(u)));
-    assert.ok(urls.includes("https://planethunter.example/"));
+    const parsed = urls.map((u) => new URL(u));
+    assert.ok(parsed.every((u) => u.origin === new URL(ORIGIN).origin));
+    const paths = parsed.map((u) => u.pathname);
+    assert.ok(!paths.some((p) => /classroom|my-|alerts|welcome|scan\//.test(p)));
+    assert.ok(paths.includes("/"));
   });
 });
