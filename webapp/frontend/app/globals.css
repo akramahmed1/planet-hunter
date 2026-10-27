@@ -411,14 +411,16 @@ img {
   top: 0;
   z-index: 30;
   height: var(--topbar-h);
-  background: rgba(4, 6, 13, 0.72);
-  backdrop-filter: saturate(1.4) blur(14px);
-  -webkit-backdrop-filter: saturate(1.4) blur(14px);
+  /* Nearly solid: the status strip scrolls up underneath, and its text must not show through the logo. */
+  background: rgba(4, 6, 13, 0.94);
+  backdrop-filter: saturate(1.4) blur(18px);
+  -webkit-backdrop-filter: saturate(1.4) blur(18px);
   border-bottom: 1px solid var(--line);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
 }
 
 .topbar-inner {
-  max-width: var(--max-width);
+  max-width: 1480px; /* wider than the page: eight links and three buttons need the room on a laptop */
   height: 100%;
   margin: 0 auto;
   padding: 0 var(--gutter);
@@ -3153,7 +3155,7 @@ html.cosmos-on body::after {
   display: none;
 }
 
-@media (min-width: 1400px) {
+@media (min-width: 1500px) {
   .cmd-open-label,
   .cmd-kbd {
     display: inline;
@@ -3213,4 +3215,165 @@ html.cosmos-on body::after {
   color: var(--ink-faint);
   font-size: 0.75rem;
   white-space: nowrap;
+}
+
+/* The account control in the top bar (sign in, or a small menu with sign out). On a phone it is just the person icon. */
+.acct {
+  position: relative;
+}
+
+.acct-open {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.acct-wait {
+  visibility: hidden;
+}
+
+.acct-label {
+  display: none;
+}
+
+@media (min-width: 1500px) {
+  .acct-label {
+    display: inline;
+  }
+}
+
+.acct-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+  z-index: 60;
+  min-width: 14rem;
+  padding: var(--sp-2);
+  display: grid;
+  gap: 2px;
+  background: var(--glass-solid);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--r-md);
+  box-shadow: var(--depth-3);
+}
+
+.acct-who {
+  margin: 0;
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--step--1);
+  color: var(--ink-faint);
+}
+
+.acct-item {
+  all: unset;
+  box-sizing: border-box;
+  display: block;
+  padding: var(--sp-3);
+  border-radius: var(--r-sm);
+  font-size: var(--step--1);
+  color: var(--ink);
+  cursor: pointer;
+  min-height: 44px;
+}
+
+.acct-item:hover,
+.acct-item:focus-visible {
+  background: var(--ion-soft);
+}
+
+.acct-item:focus-visible {
+  outline: 2px solid var(--ion);
+  outline-offset: -2px;
+}
+
+.acct-item:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+/* Home page polish: a larger globe on a wide screen with a soft glow behind it, a proper "way in" pill, and cards that
+ * lift a little under the pointer (not for people who asked for less motion). */
+.hero-head {
+  position: relative;
+}
+
+.hero-head::before {
+  content: "";
+  position: absolute;
+  inset: -10% -6% -10% 30%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 60% at 62% 48%, rgba(124, 196, 255, 0.16), transparent 70%),
+    radial-gradient(40% 40% at 78% 70%, rgba(150, 130, 255, 0.1), transparent 70%);
+}
+
+@media (min-width: 900px) {
+  .hero-head {
+    grid-template-columns: minmax(0, 1fr) 420px;
+  }
+
+  .earth-hero {
+    width: 420px;
+  }
+}
+
+.door-band {
+  display: inline-block;
+  padding: var(--sp-2) var(--sp-4);
+  min-height: 2.25rem;
+  background: var(--ion-soft);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-pill);
+  color: var(--ink);
+}
+
+.door-band a,
+.door-band .link-btn {
+  color: var(--ion-strong);
+  font-weight: 600;
+}
+
+.start-card {
+  transition: transform var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out);
+}
+
+.start-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--hairline-strong);
+  box-shadow: var(--glow-edge-strong);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .start-card {
+    transition: none;
+  }
+
+  .start-card:hover {
+    transform: none;
+  }
+}
+
+/* Room in the top bar: the account button made it a little too wide at 1024 px and on a 360 px phone. The buttons stay
+ * full size; only the space between things shrinks. */
+@media (max-width: 1199px) {
+  .topbar-inner {
+    gap: var(--sp-2);
+  }
+
+  .topbar-actions .btn--sm {
+    padding-inline: 0.65rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .topbar-actions {
+    gap: var(--sp-1);
+  }
+}
+
+@media (max-width: 380px) {
+  .brand {
+    font-size: var(--step-0);
+  }
 }

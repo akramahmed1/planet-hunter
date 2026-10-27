@@ -3,14 +3,16 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BrandMark } from "./Icon";
-import { useRole } from "@/lib/role";
+import { useSession } from "@/lib/role";
+import AccountMenu from "./AccountMenu";
 import { isActive, visibleNav } from "./nav";
 import CommandPalette from "./CommandPalette";
 import UnitsButton from "./UnitsControls";
 
 export default function TopBar({ classroom }: { classroom: boolean }) {
   const pathname = usePathname() ?? "/";
-  const nav = visibleNav(classroom, useRole(classroom));
+  const { role, known } = useSession(classroom);
+  const nav = visibleNav(classroom, role);
   return (
     <header className="topbar">
       <div className="topbar-inner">
@@ -42,6 +44,7 @@ export default function TopBar({ classroom }: { classroom: boolean }) {
         <div className="topbar-actions">
           <CommandPalette classroom={classroom} />
           <UnitsButton />
+          {classroom && <AccountMenu role={role} known={known} />}
         </div>
       </div>
     </header>

@@ -4,6 +4,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { toVector, wrapLon } from "@/lib/globe";
+import { landDots } from "@/lib/landMask";
 
 export type EarthSceneProps = {
   sun: { lat: number; lon: number };
@@ -34,8 +35,22 @@ function Grid() {
   useEffect(() => () => geometry.dispose(), [geometry]);
   return (
     <lineSegments geometry={geometry}>
-      <lineBasicMaterial color="#7cc4ff" transparent opacity={0.28} />
+      <lineBasicMaterial color="#7cc4ff" transparent opacity={0.14} />
     </lineSegments>
+  );
+}
+
+/** The continents, as a few thousand small dots just above the surface. The far side is hidden by the globe itself. */
+function Land() {
+  const geometry = useMemo(() => {
+    const pts = landDots(1.6).map(([lat, lon]) => new THREE.Vector3(...toVector(lat, lon)).multiplyScalar(1.004));
+    return new THREE.BufferGeometry().setFromPoints(pts);
+  }, []);
+  useEffect(() => () => geometry.dispose(), [geometry]);
+  return (
+    <points geometry={geometry}>
+      <pointsMaterial color="#c4e6ff" size={0.026} sizeAttenuation transparent opacity={0.95} depthWrite={false} />
+    </points>
   );
 }
 
@@ -84,9 +99,15 @@ export default function EarthScene3D({ sun, iss, running, onReady, onLost }: Ear
       <directionalLight position={sunAt} intensity={2.6} color="#fff3dc" />
       <mesh>
         <sphereGeometry args={[1, 64, 48]} />
-        <meshStandardMaterial color="#2a5ba6" roughness={0.9} metalness={0} />
+        <meshStandardMaterial color="#1f58ad" roughness={0.9} metalness={0} />
+      </mesh>
+      {/* A thin glow around the edge: the atmosphere seen from space. */}
+      <mesh>
+        <sphereGeometry args={[1.055, 48, 32]} />
+        <meshBasicMaterial color="#7cc4ff" transparent opacity={0.1} side={THREE.BackSide} depthWrite={false} />
       </mesh>
       <Grid />
+      <Land />
       {issAt && (
         <mesh position={issAt}>
           <sphereGeometry args={[0.022, 16, 16]} />
