@@ -3166,6 +3166,9 @@ html.cosmos-on body::after {
   padding: var(--sp-3) var(--sp-4) var(--sp-4);
   display: grid;
   gap: var(--sp-3);
+  align-content: start;
+  /* A fixed height, so the box does not move up and down as the number of results changes. */
+  min-height: min(60vh, 22rem);
 }
 
 .cmd-input {
@@ -3376,4 +3379,20 @@ html.cosmos-on body::after {
   .brand {
     font-size: var(--step-0);
   }
+}
+
+/* A time that is waiting to switch from UTC to the viewer's own zone is not shown yet, so it never flashes the wrong one.
+ * Without scripts it is shown at once. */
+.local-pending {
+  opacity: 0;
+}
+
+@media (scripting: none) {
+  .local-pending {
+    opacity: 1;
+  }
+}
+
+.hunt-loading {
+  min-height: 14rem; /* about the room the lab takes, so the page does not jump when it arrives */
 }

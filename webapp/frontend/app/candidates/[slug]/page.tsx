@@ -6,7 +6,7 @@ import RunLabel from "@/components/RunLabel";
 import ClassificationBadge from "@/components/ClassificationBadge";
 import Card from "@/components/ui/Card";
 import ExplainBox from "@/components/explain/ExplainBox";
-import HuntLab from "@/components/hunt/HuntLab";
+import HuntLabLoader from "@/components/hunt/HuntLabLoader";
 import SkyPanel from "@/components/sky/SkyPanel";
 import WatchButton from "@/components/watch/WatchButton";
 import ShareLink from "@/components/ui/ShareLink";
@@ -21,7 +21,6 @@ import {
   type OverviewResponse,
 } from "@/lib/api";
 import { formatPower } from "@/lib/power";
-import { ageLabel } from "@/lib/time";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -91,7 +90,7 @@ export default async function CandidateDetailPage({
         <Card title="Measured numbers">
           {overview.ok && (
             <p>
-              <RunLabel kind="batch" sectors={overview.data.run.sectors_per_target} date={overview.data.run.run_date} age={ageLabel(overview.data.run.run_date)} />
+              <RunLabel kind="batch" sectors={overview.data.run.sectors_per_target} date={overview.data.run.run_date} />
             </p>
           )}
           <dl className="kv">
@@ -132,7 +131,7 @@ export default async function CandidateDetailPage({
       {lc.ok && pg.ok && (
         <section aria-labelledby="lab-heading">
           <h2 id="lab-heading">Hunt lab</h2>
-          <HuntLab lc={lc.data} pg={pg.data} answerPeriod={candidate.period_d} classification={candidate.classification} />
+          <HuntLabLoader slug={candidate.slug} answerPeriod={candidate.period_d} classification={candidate.classification} />
         </section>
       )}
 

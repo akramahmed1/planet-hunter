@@ -34,6 +34,7 @@ export default function HuntLab({ lc, pg, answerPeriod, classification }: {
   const [exactPeriod, setExactPeriod] = useState<number | null>(START_DAYS); // exactly 3.0000, not the nearest slider step
   const [score, setScore] = useState<Score | null>(null);
   const [revealed, setRevealed] = useState(false);
+  const [scoredAfterReveal, setScoredAfterReveal] = useState(false);
   const [whole, setWhole] = useState(false);
   const sliderId = useId();
   const helpId = useId();
@@ -154,7 +155,7 @@ export default function HuntLab({ lc, pg, answerPeriod, classification }: {
           xLabel={whole ? "Phase (fraction of the period)" : "Phase near the dip (fraction of the period)"} yLabel="ppm"
           ariaLabel={`Light curve folded at ${period.toFixed(4)} days`} testId="fold-chart" />
         <div className="btn-row">
-          <button type="button" className="btn btn--primary" onClick={() => setScore(scoreGuess(period, answerPeriod))}
+          <button type="button" className="btn btn--primary" onClick={() => { setScore(scoreGuess(period, answerPeriod)); setScoredAfterReveal(revealed); }}
             data-testid="check-guess">Check my period</button>
           <button type="button" className="btn btn--ghost" onClick={() => setRevealed(true)}>Show the answer</button>
         </div>
@@ -162,6 +163,7 @@ export default function HuntLab({ lc, pg, answerPeriod, classification }: {
           {score && (
             <p data-testid="score">
               <strong>{score.points} points.</strong> {score.message}
+              {scoredAfterReveal && " You had looked at the answer first, so this one is practice, not a score."}
             </p>
           )}
           {revealed && (

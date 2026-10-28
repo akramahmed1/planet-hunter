@@ -1,4 +1,5 @@
 import LocalTime from "@/components/LocalTime";
+import RetryButton from "./RetryButton";
 import { headline, STATE_WORDS, type SourceStatus } from "@/lib/status";
 
 /** Mission control at a glance: is each live source answering, and when did it last update? Honest about problems. */
@@ -18,6 +19,12 @@ export default function MissionStatus({ items }: { items: SourceStatus[] }) {
           </li>
         ))}
       </ul>
+      {items.some((i) => i.state !== "live") && (
+        <p className="muted small" data-testid="mission-help">
+          A source that does not answer shows as Unavailable. When we have an earlier good copy we show it and mark it
+          &ldquo;May be out of date&rdquo;. <RetryButton />
+        </p>
+      )}
     </div>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
+import { useAgeLabel } from "@/components/AgeText";
 import { count } from "@/lib/plural";
 
 const WHY =
@@ -9,8 +10,9 @@ const WHY =
   "star can show two close but different numbers. Neither is a discovery.";
 
 /** Says which run a period or depth came from, with an "i" that explains why runs differ. */
-// `age` is worked out on the server ("12 days ago") so it cannot differ between server and browser.
-export default function RunLabel({ kind, sectors, date, age }: { kind: "validation" | "batch" | "scan"; sectors: number; date?: string | null; age?: string }) {
+// The age ("12 days ago") is counted in the viewer's own time zone, in the browser.
+export default function RunLabel({ kind, sectors, date }: { kind: "validation" | "batch" | "scan"; sectors: number; date?: string | null }) {
+  const age = useAgeLabel(date);
   const [open, setOpen] = useState(false);
   const id = useId();
   const name = kind === "validation" ? "Validation run" : kind === "batch" ? "Batch scan" : "Your scan";

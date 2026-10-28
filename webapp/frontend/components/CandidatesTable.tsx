@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import CsvDownload from "@/components/ui/CsvDownload";
 import ClassificationBadge from "@/components/ClassificationBadge";
@@ -11,9 +11,8 @@ import {
   type Candidate,
   type Classification,
 } from "@/lib/api";
+import { firstDir, listStateQuery, parseListState, type SortDir, type SortKey } from "@/lib/listState";
 import { noun } from "@/lib/plural";
-
-type SortKey = "rank" | "period_d" | "depth_ppm" | "snr";
 
 const FILTER_ORDER: Classification[] = [
   "clean-recovery",
@@ -41,8 +40,9 @@ export default function CandidatesTable({
   candidates: Candidate[];
 }) {
   const [sortKey, setSortKey] = useState<SortKey>("rank");
-  const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
+  const [sortDir, setSortDir] = useState<SortDir>("asc");
   const [filter, setFilter] = useState<Classification | "all">("all");
+  const [fromAddress, setFromAddress] = useState(false);
 
   // Only offer filters for classifications that exist in this run.
   const FILTERS = useMemo(() => {
@@ -55,6 +55,21 @@ export default function CandidatesTable({
       })),
     ];
   }, [candidates]);
+
+  // The filter and sort live in the page address, so a view can be shared and survives a reload. They are read once the
+  // page has loaded (the first paint is always the default view), then the address follows every change.
+  useEffect(() => {
+    const s = parseListState(window.location.search, FILTERS.map((f) => f.value));
+    setFilter(s.filter as Classification | "all");
+    setSortKey(s.sortKey);
+    setSortDir(s.sortDir);
+    setFromAddress(true);
+  }, [FILTERS]);
+  useEffect(() => {
+    if (!fromAddress) return;
+    const next = `${window.location.pathname}${listStateQuery({ filter, sortKey, sortDir })}`;
+    if (next !== `${window.location.pathname}${window.location.search}`) window.history.replaceState(null, "", next);
+  }, [filter, sortKey, sortDir, fromAddress]);
 
   const rows = useMemo(() => {
     const filtered =
@@ -73,7 +88,7 @@ export default function CandidatesTable({
       setSortDir((d) => (d === "asc" ? "desc" : "asc"));
     } else {
       setSortKey(key);
-      setSortDir("asc");
+      setSortDir(firstDir(key));
     }
   }
 
@@ -103,7 +118,7 @@ export default function CandidatesTable({
             className="select"
             value={`${sortKey}:${sortDir}`}
             onChange={(e) => {
-              const [k, d] = e.target.value.split(":") as [SortKey, "asc" | "desc"];
+              const [k, d] = e.target.value.split(":") as [SortKey, SortDir];
               setSortKey(k);
               setSortDir(d);
             }}
@@ -117,8 +132,14 @@ export default function CandidatesTable({
         </label>
       </div>
 
+      <p className="muted small" data-testid="rank-note">
+        Rank is the batch scan&apos;s own score: BLS power, times a penalty for very deep dips (over 3 percent, which usually
+        means a binary star), times SNR (capped at 50). So it can differ from the SNR order. Sorting by another column
+        reorders the rows but keeps each target&apos;s rank.
+      </p>
+
       <CsvDownload
-        label={`Download these ${rows.length} (CSV)`}
+        label={rows.length === 1 ? "Download this signal (CSV)" : `Download these ${rows.length} (CSV)`}
         fileParts={["candidates"]}
         note="Candidate signals, not discoveries."
         rows={() => [
@@ -160,9 +181,9 @@ export default function CandidatesTable({
 
       <div className="table-wrap">
         <table className="data-table">
-          <caption>
+          <caption className="sr-only">
             {rows.length} of {candidates.length} {noun(candidates.length, "candidate signal")} shown.
-            Select a column header to sort.
+            Select Rank, Period, Depth or SNR to sort.
           </caption>
           <thead>
             <tr>

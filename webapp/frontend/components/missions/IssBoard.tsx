@@ -1,16 +1,22 @@
 "use client";
 
+import { useEffect } from "react";
 import SourceButton from "@/components/live/SourceButton";
 import { useUnits } from "@/components/UnitsProvider";
 import type { Iss } from "@/lib/api-v2";
 import { lapMinutes, speedValue, sunlightText } from "@/lib/iss";
+import { seedIss, useIssFeed } from "@/lib/issFeed";
 import { KM_PER_MILE } from "@/lib/units";
 
 const latText = (v: number) => `${Math.abs(v).toFixed(2)}° ${v >= 0 ? "N" : "S"}`;
 const lonText = (v: number) => `${Math.abs(v).toFixed(2)}° ${v >= 0 ? "E" : "W"}`;
 
 /** The station's live numbers as a board: where it is, how high, how fast, whether the sun is on it, and one lap. */
-export default function IssBoard({ iss, down }: { iss: Iss; down: boolean }) {
+export default function IssBoard({ iss: fromServer, down }: { iss: Iss; down: boolean }) {
+  // The status strip and this board share one reading, so they never show two different positions for one minute.
+  useEffect(() => seedIss(fromServer), [fromServer]);
+  const feed = useIssFeed();
+  const iss = feed.iss && Date.parse(feed.iss.fetched_at) >= Date.parse(fromServer.fetched_at) ? feed.iss : fromServer;
   const { distance } = useUnits();
   const km = distance === "km";
   const alt = Math.round(km ? iss.altitude_km : iss.altitude_km / KM_PER_MILE);

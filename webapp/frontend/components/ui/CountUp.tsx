@@ -3,6 +3,10 @@
 import { useEffect, useRef } from "react";
 import { COUNT_UP_FROM, COUNT_UP_MS, countUpValue } from "@/lib/countUp";
 
+// Numbers that have already counted up in this visit. Coming back to a page (or the page redrawing) shows the number
+// at once instead of counting up again.
+const counted = new Set<string>();
+
 /**
  * A whole number that counts up to its value the first time it scrolls into view. The server sends the real number, so
  * without JavaScript, for a screen reader, in search results and with reduced motion it is simply the number. The box is
@@ -15,7 +19,8 @@ export default function CountUp({ value, grouped = false }: { value: number; gro
 
   useEffect(() => {
     const el = ref.current;
-    if (!el || done.current || !Number.isInteger(value) || value < COUNT_UP_FROM || typeof IntersectionObserver === "undefined") return;
+    const key = `${grouped}:${value}`;
+    if (!el || done.current || counted.has(key) || !Number.isInteger(value) || value < COUNT_UP_FROM || typeof IntersectionObserver === "undefined") return;
     const text = el.firstChild;
     if (!text || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return; // less motion: just the number
     let raf = 0;
@@ -23,6 +28,7 @@ export default function CountUp({ value, grouped = false }: { value: number; gro
       if (!entry.isIntersecting) return;
       io.disconnect();
       done.current = true;
+      counted.add(key);
       el.dataset.counting = "true";
       const t0 = performance.now();
       const step = (now: number) => {

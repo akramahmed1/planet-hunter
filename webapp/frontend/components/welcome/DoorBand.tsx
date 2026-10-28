@@ -15,7 +15,7 @@ export default function DoorBand() {
     <p className="door-band" data-testid="door-band">
       {d ? (
         <>
-          Welcome back. <Link href={d.href} data-testid="door-band-go">{d.cta}</Link> or{" "}
+          Last time you chose {door === "teacher" ? "teacher" : "student"}. <Link href={d.href} data-testid="door-band-go">{d.cta}</Link> or{" "}
           <button type="button" className="link-btn" onClick={() => { forgetDoor(); setDoor(null); }}
             data-testid="door-band-change">choose another way in</button>.
         </>

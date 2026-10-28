@@ -4,6 +4,7 @@ import ApodImage from "./ApodImage";
 import IssTile from "./IssTile";
 import LocalTime from "@/components/LocalTime";
 import MissionStatus from "./MissionStatus";
+import RetryButton from "./RetryButton";
 import SourceButton from "./SourceButton";
 import { sourceState, type SourceStatus } from "@/lib/status";
 
@@ -14,8 +15,9 @@ function Unavailable({ id, title, message }: { id: string; title: string; messag
         {title}
       </p>
       <p className="tile-sub">{message}</p>
+      <p className="tile-sub muted small">No earlier copy is saved yet, so there is nothing to show.</p>
       <p className="tile-meta">
-        <span className="stale-tag">Unavailable</span>
+        <span className="stale-tag">Unavailable</span> <RetryButton />
       </p>
     </article>
   );
@@ -127,7 +129,7 @@ export default async function LiveTiles() {
             Space weather
           </p>
           <p className="tile-sub" data-testid="weather-quiet">
-            NASA's space weather notices can't be shown right now. They return on their own.
+            NASA's space weather notices can't be shown right now. We ask NASA again on every visit.
           </p>
         </article>
       )}

@@ -47,8 +47,10 @@ export default function SpacecraftCards({ data }: { data: MissionsResponse }) {
             {c.launch && (
               <><dt>Launched</dt><dd><Fact label={`${c.name} launch`} fact={c.launch} /></dd></>
             )}
-            {c.status && (
+            {c.status ? (
               <><dt>Status</dt><dd><Fact label={`${c.name} status`} fact={c.status} /></dd></>
+            ) : (
+              <><dt>Status</dt><dd><span className="muted" data-testid="no-status">No sourced status yet</span></dd></>
             )}
           </dl>
           {c.note && <p className="muted small">{c.note}</p>}

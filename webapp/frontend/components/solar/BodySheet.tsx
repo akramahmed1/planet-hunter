@@ -81,7 +81,7 @@ export function BodySheet({
       {open && body && (
         <>
         <p className="muted">
-          Distances for <span className="mono nowrap">{date}</span>. <Tap /> any value for its source.
+          Distances for <span className="mono nowrap">{date}</span> (UTC date). <Tap /> any value for its source.
         </p>
         {onZoom && id && id !== "sun" && (
           <button type="button" className="btn btn--sm" onClick={() => onZoom(id)} data-testid="zoom-to">

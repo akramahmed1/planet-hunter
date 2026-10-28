@@ -25,9 +25,22 @@ export function localDate(now: Date = new Date(), timeZone?: string): string {
  * Both dates are read as UTC calendar days, so the answer does not depend on the reader's time zone.
  */
 export function ageLabel(date: string, now: Date = new Date()): string {
+  const today = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+  return ageFromDays(date, today);
+}
+
+/**
+ * The same words, counted against the viewer's own calendar day instead of the UTC one, so "today" means today where
+ * they are (a UTC date can already be tomorrow on a US evening). Use it in the browser; the server only knows UTC.
+ */
+export function ageLabelLocal(date: string, now: Date = new Date(), timeZone?: string): string {
+  const today = Date.parse(`${localDate(now, timeZone)}T00:00:00Z`);
+  return ageFromDays(date, today);
+}
+
+function ageFromDays(date: string, today: number): string {
   const then = Date.parse(`${date.slice(0, 10)}T00:00:00Z`);
   if (Number.isNaN(then)) return "";
-  const today = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
   const days = Math.round((today - then) / 86_400_000);
   if (days < 0) return "";
   if (days === 0) return "today";

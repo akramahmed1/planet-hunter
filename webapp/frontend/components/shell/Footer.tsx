@@ -1,9 +1,9 @@
+import FooterCredit from "./FooterCredit";
+
 export default function Footer() {
   return (
     <footer className="site-footer">
-      <p>
-        Built from public NASA TESS data, retrieved from MAST. Candidate signals, never discoveries.
-      </p>
+      <FooterCredit />
       <p>
         Land outlines on the globe: Natural Earth (public domain).
       </p>

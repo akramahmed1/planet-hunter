@@ -21,7 +21,7 @@ export default async function MissionsPage() {
       <IssMap />
       <section aria-labelledby="craft-h">
         <h2 id="craft-h">Far from home</h2>
-        <p className="muted">Distances for {res.ok ? res.data.date : "today"} from NASA JPL Horizons.</p>
+        <p className="muted">Distances for {res.ok ? `${res.data.date} (UTC date)` : "today"} from NASA JPL Horizons.</p>
         {res.ok ? <SpacecraftCards data={res.data} /> : (
           <ErrorState title="Spacecraft distances could not be loaded." detail={res.error} />
         )}
