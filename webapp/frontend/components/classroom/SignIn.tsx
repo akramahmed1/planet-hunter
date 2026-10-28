@@ -17,7 +17,7 @@ const AGE_BLOCK_KEY = "ph-age-blocked";
 
 function ageBlocked(): boolean {
   try {
-    return window.sessionStorage.getItem(AGE_BLOCK_KEY) === "1";
+    return window.localStorage.getItem(AGE_BLOCK_KEY) === "1";
   } catch {
     return false;
   }
@@ -94,7 +94,7 @@ function useSubmit(onDone: () => void) {
     if (r.ok) return onDone();
     if (isAgeCheck && r.status === 403) {
       try {
-        window.sessionStorage.setItem(AGE_BLOCK_KEY, "1");
+        window.localStorage.setItem(AGE_BLOCK_KEY, "1");
       } catch {
         // the server also remembers this for the session
       }

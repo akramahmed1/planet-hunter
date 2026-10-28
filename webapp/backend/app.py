@@ -81,7 +81,15 @@ async def lifespan(_: FastAPI):
     yield
 
 
-app = FastAPI(title="planet-hunter API", version=VERSION, lifespan=lifespan)
+def docs_kwargs() -> dict:
+    """The interactive API docs and the OpenAPI file are public only when API_DOCS=1 (staging and local). Off by default,
+    so production does not publish a map of every route."""
+    if os.environ.get("API_DOCS") == "1":
+        return {}
+    return {"docs_url": None, "redoc_url": None, "openapi_url": None}
+
+
+app = FastAPI(title="planet-hunter API", version=VERSION, lifespan=lifespan, **docs_kwargs())
 
 app.add_middleware(SecurityMiddleware)
 app.add_middleware(

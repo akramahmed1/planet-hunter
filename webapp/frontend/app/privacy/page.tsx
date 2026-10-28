@@ -16,9 +16,11 @@ export default function PrivacyPage() {
       <h2>Without an account</h2>
       <p>
         You can use everything except the classroom without an account. We do not ask who you are. Your unit settings
-        and lesson progress stay in your own browser and are never sent to us. Maps, sky images and the picture of the
-        day load from the services named on each page (OpenStreetMap, CDS Aladin, NASA), which receive your IP address
-        when they load.
+        and which lessons you finished stay in your own browser. When you answer a quiz question, the answer is sent
+        to our server so it can be checked and explained; for someone without an account it is not saved. Our rate
+        limits use a one-way scrambled form of your IP address, never the address itself. Maps, sky images and the
+        picture of the day load from the services named on each page (OpenStreetMap, CDS Aladin, NASA), which receive
+        your IP address when they load.
       </p>
       <h2>Teacher accounts</h2>
       <p>

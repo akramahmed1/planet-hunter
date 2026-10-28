@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { apiV2Send, type Schemas } from "@/lib/api-v2";
+import { getRole } from "@/lib/role";
 
 type State = Schemas["WatchState"];
 
@@ -17,7 +18,11 @@ export default function WatchButton({ slug, name }: { slug: string; name: string
 
   useEffect(() => {
     let live = true;
-    apiV2Send<State>("GET", path).then((r) => { if (live) setState(r.ok ? r.data : null); });
+    getRole().then((role) => {
+      if (!live) return;
+      if (!role) { setState(null); return; } // a guest: nothing to ask, nothing to show
+      apiV2Send<State>("GET", path).then((r) => { if (live) setState(r.ok ? r.data : null); });
+    });
     return () => { live = false; };
   }, [path]);
 

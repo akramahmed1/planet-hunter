@@ -6,7 +6,7 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY app.py schemas.py data_store.py db.py security_mw.py export_openapi.py seed_demo_scans.py alembic.ini jsonlog.py logging.json ./
+COPY app.py schemas.py data_store.py db.py security_mw.py clientip.py export_openapi.py seed_demo_scans.py alembic.ini jsonlog.py logging.json ./
 COPY api_v2/ ./api_v2/
 COPY live/ ./live/
 COPY pipeline/ ./pipeline/

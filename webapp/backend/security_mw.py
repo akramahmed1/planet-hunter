@@ -19,6 +19,7 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse, Response
 
 import db
+from clientip import client_ip
 
 WRITE_METHODS = {"POST", "PUT", "PATCH", "DELETE"}
 EXEMPT = {"/api/v2/billing/webhook"}
@@ -40,8 +41,7 @@ def caller(request: Request) -> str:
     token = request.cookies.get("ph_session")
     if token:
         return "s:" + hashlib.sha256(token.encode()).hexdigest()[:24]
-    fwd = request.headers.get("x-forwarded-for", "")
-    ip = fwd.split(",")[0].strip() or (request.client.host if request.client else "unknown")
+    ip = client_ip(request)
     return "i:" + hashlib.sha256(f"ph-ip:{ip}".encode()).hexdigest()[:24]
 
 

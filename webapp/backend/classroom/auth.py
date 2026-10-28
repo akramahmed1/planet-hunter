@@ -21,6 +21,7 @@ from sqlalchemy.engine import Engine
 
 import db
 from classroom import flags, security
+from clientip import client_ip as _client_ip
 
 COOKIE = "ph_session"
 AGE_BLOCK_COOKIE = "ph_age_block"
@@ -56,8 +57,7 @@ def engine() -> Engine:
 
 
 def client_ip(request: Request) -> str:
-    fwd = request.headers.get("x-forwarded-for", "")
-    return fwd.split(",")[0].strip() or (request.client.host if request.client else "unknown")
+    return _client_ip(request)
 
 
 def check_csrf(request: Request) -> None:
