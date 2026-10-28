@@ -5,7 +5,7 @@ import { useEffect, useId, useMemo, useRef, useState } from "react";
 import Sheet from "@/components/ui/Sheet";
 import { apiV2Send } from "@/lib/api-v2";
 import {
-  bodyEntries, isOpenShortcut, lessonEntries, pageEntries, search, targetEntries, type Entry,
+  bodyEntries, isOpenShortcut, lessonEntries, systemEntries, pageEntries, search, targetEntries, type Entry,
 } from "@/lib/command";
 
 type Targets = { targets: { slug: string; target: string; classification_label: string }[] };
@@ -49,7 +49,11 @@ export default function CommandPalette({ classroom }: { classroom: boolean }) {
       apiV2Send<Targets>("GET", "/api/v2/targets"),
       apiV2Send<Lessons>("GET", "/api/v2/lessons"),
     ]).then(([a, b]) => {
-      setExtra([...(a.ok ? targetEntries(a.data.targets) : []), ...(b.ok ? lessonEntries(b.data.lessons) : [])]);
+      setExtra([
+        ...(a.ok ? targetEntries(a.data.targets) : []),
+        ...(a.ok ? systemEntries(a.data.targets) : []),
+        ...(b.ok ? lessonEntries(b.data.lessons) : []),
+      ]);
     });
     return () => clearTimeout(t);
   }, [open]);

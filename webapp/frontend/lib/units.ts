@@ -114,3 +114,10 @@ function formatNumber(v: number, digits: number): string {
     maximumFractionDigits: digits,
   });
 }
+
+/** The AU explanation in the unit the person picked. 1 AU is 149,597,870.7 km by definition. */
+export function auNote(unit: DistanceUnit): string {
+  if (unit === "km") return "about 150 million kilometers";
+  if (unit === "au") return "which is 1 AU by definition, or about 150 million kilometers";
+  return "about 93 million miles";
+}

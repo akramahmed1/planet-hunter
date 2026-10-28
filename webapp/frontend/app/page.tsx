@@ -19,7 +19,7 @@ import {
 } from "@/lib/api";
 import { count, noun } from "@/lib/plural";
 import Tap from "@/components/ui/Tap";
-import { ageLabel } from "@/lib/time";
+import AgeText from "@/components/AgeText";
 
 export const dynamic = "force-dynamic";
 
@@ -161,7 +161,7 @@ export default async function Home() {
               <Stat value={summary.by_classification.ambiguous} label={noun(summary.by_classification.ambiguous, "ambiguous signal")} />
             </div>
             <p className="muted">
-              Scan of {numberWord(summary.count)} {noun(summary.count, "target")} on {overview.run.run_date} ({ageLabel(overview.run.run_date)}).{" "}
+              Scan of {numberWord(summary.count)} {noun(summary.count, "target")} on {overview.run.run_date} (<AgeText date={overview.run.run_date} />).{" "}
               {scanSummarySentence(summary)} See the full list on the candidates
               page.
             </p>

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useUnits } from "@/components/UnitsProvider";
 import Sheet from "@/components/ui/Sheet";
 import Toggle from "@/components/ui/Toggle";
-import { DISTANCE_LABELS, TEMP_LABELS, type DistanceUnit, type TempUnit } from "@/lib/units";
+import { auNote, DISTANCE_LABELS, TEMP_LABELS, type DistanceUnit, type TempUnit } from "@/lib/units";
 
 const TEMP_OPTIONS: { value: TempUnit; label: string; title: string }[] = [
   { value: "F", label: TEMP_LABELS.F, title: "°F, Fahrenheit" },
@@ -24,8 +24,8 @@ export function UnitsToggles() {
     <>
       <Toggle legend="Temperature" options={TEMP_OPTIONS} value={temp} onChange={setTemp} />
       <Toggle legend="Distance" options={DISTANCE_OPTIONS} value={distance} onChange={setDistance} />
-      <p className="muted">
-        1 AU is the average distance from Earth to the Sun, about 93 million miles. Your choice is
+      <p className="muted" data-testid="au-note">
+        1 AU is the average distance from Earth to the Sun, {auNote(distance)}. Your choice is
         saved on this device.
       </p>
     </>

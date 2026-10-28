@@ -1,7 +1,7 @@
 // Cmd/Ctrl+K search (T42): which things can be jumped to, and how a typed query ranks them. Pure, so it is unit tested.
 import { BODY_NAMES, SCENE_BODIES } from "./solar.ts";
 
-export type Group = "Pages" | "Solar System" | "Candidates" | "Lessons";
+export type Group = "Pages" | "Solar System" | "Candidates" | "Exoplanets" | "Lessons";
 
 export type Entry = {
   id: string;
@@ -14,7 +14,7 @@ export type Entry = {
   keywords?: string;
 };
 
-const GROUP_ORDER: Group[] = ["Pages", "Candidates", "Solar System", "Lessons"];
+const GROUP_ORDER: Group[] = ["Pages", "Candidates", "Exoplanets", "Solar System", "Lessons"];
 
 /** The fixed pages. Classroom pages exist only when the server has Classroom on. */
 export function pageEntries(classroom: boolean): Entry[] {
@@ -60,6 +60,18 @@ export function targetEntries(targets: { slug: string; target: string; classific
   }));
 }
 
+/** Each searched star also has a planetary system page (its confirmed planets and habitable zone). */
+export function systemEntries(targets: { slug: string; target: string }[]): Entry[] {
+  return targets.map((t) => ({
+    id: `x-${t.slug}`,
+    label: `${t.target} planetary system`,
+    hint: "Confirmed planets and habitable zone",
+    href: `/exoplanets/${t.slug}`,
+    group: "Exoplanets" as const,
+    keywords: "exoplanet system star planets habitable zone",
+  }));
+}
+
 export function lessonEntries(lessons: { slug: string; title: string; summary: string }[]): Entry[] {
   return lessons.map((l) => ({
     id: `l-${l.slug}`,
@@ -75,8 +87,11 @@ const norm = (s: string) => s.toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g
 /** How well one query word matches one entry: 0 means not at all. */
 function wordScore(e: Entry, w: string): number {
   const label = norm(e.label);
+  const compact = label.replace(/ /g, ""); // "toi 700" also answers to "toi700"
   if (label === w) return 100;
+  if (compact === w) return 95;
   if (label.startsWith(w)) return 80;
+  if (compact.startsWith(w)) return 75;
   if (label.split(" ").some((x) => x.startsWith(w))) return 60;
   if (label.includes(w)) return 40;
   if (norm(`${e.keywords ?? ""} ${e.hint}`).split(" ").some((x) => x.startsWith(w))) return 20;

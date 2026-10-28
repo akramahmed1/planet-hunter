@@ -4,7 +4,9 @@ import dynamic from "next/dynamic";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import SourceButton from "@/components/live/SourceButton";
 import { useReducedMotion, useWebGL } from "@/components/three/hooks";
+import { useUnits } from "@/components/UnitsProvider";
 import type { SourcedFact } from "@/lib/api-v2";
+import { formatDistance } from "@/lib/units";
 
 const TessModel = dynamic(() => import("./TessModel"), { ssr: false });
 
@@ -12,7 +14,7 @@ function Cite({ label, fact, kind = "measured" }: { label: string; fact: Sourced
   return (
     <SourceButton label={label} source={fact.source} kind={kind} fetchedAt={fact.fetched_at}
       note={`Source wording: "${fact.quote}"`}>
-      <span className="muted">Source</span>
+      <span className="muted">Source: {label.replace(/^TESS /, "")}</span>
     </SourceButton>
   );
 }
@@ -130,6 +132,8 @@ export default function TessExplainer({ facts, moonKm, depthPpm, target }: {
   depthPpm: number;
   target: string;
 }) {
+  const { distance } = useUnits();
+  const orbitUnit = distance === "au" ? "km" : distance; // a few hundred thousand km is a tiny fraction of an AU
   const webgl = useWebGL();
   const reduced = useReducedMotion();
   const [modelSource, setModelSource] = useState<"nasa" | "procedural" | null>(null);
@@ -167,7 +171,7 @@ export default function TessExplainer({ facts, moonKm, depthPpm, target }: {
         <h2 id="t-orbit">1. A long, looping orbit</h2>
         <OrbitDiagram moonKm={moonKm} />
         <p>
-          TESS swings between about 108,400 km and 376,300 km from Earth, in step with the Moon: it goes around twice
+          TESS swings between about {formatDistance(108_400, orbitUnit)} and {formatDistance(376_300, orbitUnit)} from Earth, in step with the Moon: it goes around twice
           for every one trip of the Moon (a 2:1 lunar resonance). <Cite label="TESS orbit" fact={facts.orbit} />
         </p>
         <p className="muted small">Drawn to scale. Earth and the Moon are drawn larger than life so you can see them.</p>

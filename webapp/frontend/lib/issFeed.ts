@@ -46,6 +46,16 @@ function stop() {
   clearTimeout(timer);
 }
 
+/**
+ * Offer a reading that came from the server render (the Missions board). It joins the shared state when it is newer than
+ * what the poll has, so the status strip and the board never show two different positions for the same minute.
+ */
+export function seedIss(iss: Iss): void {
+  const have = state.iss;
+  if (have && Date.parse(have.fetched_at) >= Date.parse(iss.fetched_at)) return;
+  set({ iss, failedSince: false });
+}
+
 export function useIssFeed(): IssState {
   const [s, setS] = useState<IssState>(state);
   useEffect(() => {

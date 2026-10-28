@@ -43,3 +43,13 @@ test("the status strip keeps its clock and says plainly that the ISS position is
   await expect(page.getByTestId("strip-iss")).toHaveCount(0);
   expect(await page.getByTestId("status-strip").evaluate((e) => e.getBoundingClientRect().height)).toBe(28);
 });
+
+test("when sources are down the home page explains it and offers to check again", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.getByTestId("mission-help")).toContainText("earlier good copy");
+  const retry = page.getByTestId("retry").first();
+  await expect(retry).toBeVisible();
+  await retry.click();
+  await expect(retry).toBeEnabled(); // the page was drawn again
+  await expect(page.getByTestId("mission-headline")).toHaveText("No live source is answering right now. The rest of the site still works.");
+});

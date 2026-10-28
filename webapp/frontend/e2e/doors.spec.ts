@@ -25,7 +25,7 @@ test("the teacher door opens the Classroom on the teacher form and is remembered
   await page.goto("/welcome");
   await expect(page.getByTestId("door-last")).toHaveText("You chose this last time.");
   await page.goto("/");
-  await expect(page.getByTestId("door-band")).toContainText("Welcome back");
+  await expect(page.getByTestId("door-band")).toContainText("Last time you chose teacher");
   await expect(page.getByTestId("door-band-go")).toHaveAttribute("href", "/classroom?as=teacher");
   // With no ?as= the remembered door picks the starting form.
   await page.goto("/classroom");
