@@ -108,7 +108,7 @@ export default function CandidatesTable({
         ))}
       </div>
 
-      <div className="list-toolbar">
+      <div className="list-toolbar" data-testid="list-toolbar" data-ready={fromAddress ? "1" : undefined}>
         <p className="muted" style={{ margin: 0 }} aria-live="polite">
           {rows.length} of {candidates.length} {noun(candidates.length, "candidate signal")} shown.
         </p>

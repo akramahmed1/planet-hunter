@@ -135,17 +135,49 @@ def cached(key: str, ttl: timedelta, fetch: Callable[[], Any], source: dict, fal
                 return Cached(row.payload, row.fetched_at, stale=True)
             raise Unavailable(failed[1])
         try:
-            payload = fetch()
+            payload = _fetch_within_budget(key, ttl, fetch, source, now, fallback_key)
         except FetchError as exc:
             with _lock:
                 _failed_until[key] = (now + FAILURE_BACKOFF, str(exc))
             if row:
                 return Cached(row.payload, row.fetched_at, stale=True)
             raise Unavailable(str(exc)) from exc
+        return Cached(payload, now, stale=False)
+
+
+# A visitor waits at most this long for an upstream source. A slow one (NASA retrying for 30 to 45 s was seen on staging)
+# no longer holds the page: the last good copy is served at once, and the fetch finishes in the background and updates
+# the cache for the next visitor. The daily refresh calls `refresh`, which has no such limit.
+REQUEST_BUDGET_S = 6.0
+
+
+def _fetch_within_budget(key: str, ttl: timedelta, fetch: Callable[[], Any], source: dict, now: datetime,
+                         fallback_key: str | None) -> Any:
+    box: dict[str, Any] = {}
+    done = threading.Event()
+
+    def run() -> None:
+        try:
+            payload = fetch()
+        except BaseException as exc:  # handed to the waiting caller, or dropped if it gave up
+            box["error"] = exc
+            done.set()
+            return
+        # Stored here, not by the caller, so a fetch that finishes after the caller gave up still fills the cache.
         with _lock:
             _failed_until.pop(key, None)
         _store(key, ttl, payload, source, now, fallback_key)
-        return Cached(payload, now, stale=False)
+        box["payload"] = payload
+        done.set()
+
+    threading.Thread(target=run, name=f"cache-fetch:{key}", daemon=True).start()
+    if not done.wait(REQUEST_BUDGET_S):
+        log.warning("fetch for %s still running after %.0f s; serving the last good copy if there is one", key,
+                    REQUEST_BUDGET_S)
+        raise FetchError(f"{key}: no answer within {REQUEST_BUDGET_S:.0f} s")
+    if "error" in box:
+        raise box["error"]
+    return box["payload"]
 
 
 def _store(key: str, ttl: timedelta, payload: Any, source: dict, now: datetime, fallback_key: str | None) -> None:

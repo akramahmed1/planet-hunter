@@ -15,6 +15,9 @@ test("phone shows candidate cards and hides the table", async ({ page }, info) =
 test("phone sort control orders cards by period", async ({ page }, info) => {
   test.skip(!info.project.name.startsWith("mobile"), "phone layout");
   await page.goto("/candidates");
+  // The page has loaded but the scripts may not have run yet (slow on a phone in WebKit): a choice made before they do is
+  // reset when the page hydrates. The toolbar says when it is ready.
+  await expect(page.getByTestId("list-toolbar")).toHaveAttribute("data-ready", "1");
   await page.getByLabel("Sort by").selectOption("period_d:desc");
   const first = page.getByRole("list", { name: "Candidate signals" }).getByRole("listitem").first();
   await expect(first).toContainText(`${maxPeriod} d`);
