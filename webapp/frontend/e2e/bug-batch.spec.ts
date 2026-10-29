@@ -76,7 +76,9 @@ test("Missions says its date is a UTC date, and a spacecraft with no sourced sta
   await expect(page.getByTestId("craft-jwst").getByTestId("no-status")).toHaveText("No sourced status yet");
 });
 
-test("the status strip and the ISS board show the same position", async ({ page }) => {
+test("the status strip and the ISS board show the same position", async ({ page }, info) => {
+  // The strip drops the coordinates below 560 px (globals.css .strip-coords); the board is the phone's one reading.
+  test.skip(isMobile(info.project.name), "the strip shows no coordinates on a phone");
   await page.goto("/missions");
   const parse = (t: string) => {
     const m = [...t.matchAll(/([\d.]+)°\s*([NSEW])/g)].map(([, v, h]) => Number(v) * ("SW".includes(h) ? -1 : 1));
