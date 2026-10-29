@@ -453,6 +453,17 @@ def test_a_slow_source_serves_the_last_good_copy_at_once_and_the_fetch_still_lan
     assert cache._read("k:slow").payload == {"v": 2}
 
 
+def test_a_slow_source_logs_its_key_without_letting_it_forge_log_lines(frozen, monkeypatch, caplog):
+    import threading
+    monkeypatch.setattr(cache, "REQUEST_BUDGET_S", 0.05)
+    release = threading.Event()
+    with caplog.at_level("WARNING", logger="planet-hunter.cache"), pytest.raises(cache.Unavailable) as err:
+        cache.cached("exo:evil\nFAKE LOG LINE", timedelta(minutes=5), lambda: release.wait(5) or {}, {})
+    release.set()
+    assert all("\n" not in r.getMessage() for r in caplog.records)
+    assert "evil" not in err.value.reason  # the key stays out of the stored, user-visible reason
+
+
 def test_a_slow_source_with_nothing_cached_is_unavailable_not_a_long_wait(frozen, monkeypatch):
     import threading
     import time
