@@ -20,11 +20,16 @@ test("robots.txt keeps crawlers out unless indexing is switched on, and the site
   expect(await map.text()).not.toContain("<loc>");
 });
 
-test("a guest's page loads make no request that is bound to fail, and ask who is signed in at most once", async ({ page }) => {
-  const calls: { url: string; status: number }[] = [];
+test("a guest's page loads make no request that is bound to fail, and ask who is signed in at most once per page load", async ({ page }) => {
+  const calls: { url: string; status: number; load: number }[] = [];
+  // Each full page load starts with an empty in-memory cache, so the rule is "once per page load", not once per visit.
+  let load = 0;
+  page.on("framenavigated", (f) => {
+    if (f === page.mainFrame()) load += 1;
+  });
   page.on("response", (r) => {
     const u = new URL(r.url());
-    if (u.pathname.startsWith("/api/")) calls.push({ url: u.pathname, status: r.status() });
+    if (u.pathname.startsWith("/api/")) calls.push({ url: u.pathname, status: r.status(), load });
   });
   const slug = await firstSlug(page);
   await page.goto(`/candidates/${slug}`);
@@ -34,8 +39,9 @@ test("a guest's page loads make no request that is bound to fail, and ask who is
   await page.waitForTimeout(1500);
   const guestOnly = calls.filter((c) => c.url.startsWith("/api/v2/me/") || c.url.startsWith("/api/v2/auth/teacher"));
   expect(guestOnly, "account-only endpoints called by a guest").toEqual([]);
-  const me = calls.filter((c) => c.url === "/api/v2/auth/me");
-  expect(me.length, "who-is-signed-in asked more than once in a short visit").toBeLessThanOrEqual(1);
+  const perLoad = new Map<number, number>();
+  for (const c of calls) if (c.url === "/api/v2/auth/me") perLoad.set(c.load, (perLoad.get(c.load) ?? 0) + 1);
+  expect(Math.max(0, ...perLoad.values()), "who-is-signed-in asked more than once in one page load").toBeLessThanOrEqual(1);
 });
 
 test("the under-13 block holds in a new tab", async ({ page, context }) => {

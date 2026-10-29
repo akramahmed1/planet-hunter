@@ -47,7 +47,8 @@ test("the file follows the filter on the page", async ({ page }) => {
   await page.goto("/candidates");
   const wanted = CANDIDATES.filter((c) => c.classification === "ambiguous").length;
   await page.getByRole("button", { name: /^Ambiguous/i }).first().click();
-  await expect(page.getByTestId("csv-button")).toContainText(`Download these ${wanted}`);
+  // One row reads "Download this signal (CSV)"; any other count reads "Download these N (CSV)".
+  await expect(page.getByTestId("csv-button")).toHaveText(wanted === 1 ? "Download this signal (CSV)" : `Download these ${wanted} (CSV)`);
   const { text } = await download(page, () => page.getByTestId("csv-button").click());
   const rows = parse(text);
   expect(rows.length - 1).toBe(wanted);

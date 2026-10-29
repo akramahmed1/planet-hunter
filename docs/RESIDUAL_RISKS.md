@@ -44,7 +44,7 @@ it says what was checked, what was not, and what only you can do. Production is 
 - **A page's first frame can come late on a slow machine** (the motion test saw it once); harmless but worth a real-phone look.
 - **Forgot-password timing:** a known address does a little more database work than an unknown one before replying (milliseconds).
 - **Teacher two-step sign-in has no QR code** (key and phone link only). Teacher home has no per-student drill down.
-- **Home globe is stylised** (no continents); a NASA Blue Marble layer needs a network that can reach NASA.
+- **Home globe** has Natural Earth continents and an atmosphere glow since #78; a NASA Blue Marble layer would still need a network that can reach NASA.
 - **Alert emails (T41):** one email per change per person, failures are not retried (a missed alert beats a repeated one).
 - **Production stays safe by default:** Classroom is OFF in production (`CLASSROOM_ENABLED` unset), the explainer is OFF until
   you add a key, and mail sends nothing until configured.
