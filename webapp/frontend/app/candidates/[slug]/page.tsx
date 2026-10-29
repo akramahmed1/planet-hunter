@@ -1,14 +1,38 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import ApiError from "@/components/ApiError";
+import RunLabel from "@/components/RunLabel";
 import ClassificationBadge from "@/components/ClassificationBadge";
+import Card from "@/components/ui/Card";
+import ExplainBox from "@/components/explain/ExplainBox";
+import HuntLabLoader from "@/components/hunt/HuntLabLoader";
+import SkyPanel from "@/components/sky/SkyPanel";
+import WatchButton from "@/components/watch/WatchButton";
+import ShareLink from "@/components/ui/ShareLink";
+import EmptyState from "@/components/ui/EmptyState";
+import { apiV2Get, type LightCurveResponse, type PeriodogramResponse, type TargetsResponse } from "@/lib/api-v2";
 import {
   apiGet,
   labelFor,
   plotImageUrl,
   type Candidate,
   type HealthResponse,
+  type OverviewResponse,
 } from "@/lib/api";
+import { formatPower } from "@/lib/power";
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  // An unknown address renders the 404 page, so its tab title must not repeat the made-up name.
+  const known = await apiGet<Candidate>(`/api/candidates/${encodeURIComponent(slug)}`);
+  if (!known.ok && known.status === 404) return { title: "Page not found" };
+  const name = slug.toUpperCase().replace("-", " ");
+  return {
+    title: `${name} candidate signal`,
+    description: `${name}: the strongest repeating dip our pipeline found, with its checks. A candidate signal, never a discovery.`,
+  };
+}
 
 export const dynamic = "force-dynamic";
 
@@ -18,17 +42,21 @@ export default async function CandidateDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const [res, health] = await Promise.all([
+  const [res, health, targets, lc, pg, overview] = await Promise.all([
     apiGet<Candidate>(`/api/candidates/${encodeURIComponent(slug)}`),
     apiGet<HealthResponse>("/api/health"),
+    apiV2Get<TargetsResponse>("/api/v2/targets"),
+    apiV2Get<LightCurveResponse>(`/api/v2/lightcurves/${encodeURIComponent(slug)}`),
+    apiV2Get<PeriodogramResponse>(`/api/v2/periodogram/${encodeURIComponent(slug)}`),
+    apiGet<OverviewResponse>("/api/overview"),
   ]);
 
   if (!res.ok) {
     if (res.status === 404) notFound();
     return (
       <div>
-        <p className="muted">
-          <Link href="/candidates">← Back to all candidates</Link>
+        <p>
+          <Link href="/candidates" className="back-link">← Back to all candidates</Link>
         </p>
         <ApiError what="This candidate" error={res.error} />
       </div>
@@ -39,29 +67,32 @@ export default async function CandidateDetailPage({
   const total = health.ok ? health.data.candidate_count : null;
 
   const plotSrc = plotImageUrl(candidate.plot_url);
+  const target = targets.ok ? targets.data.targets.find((t) => t.slug === candidate.slug) : undefined;
 
   return (
     <div>
-      <p className="muted">
-        <Link href="/candidates">← Back to all candidates</Link>
+      <p>
+        <Link href="/candidates" className="back-link">← Back to all candidates</Link>
       </p>
 
-      <h1>
-        {candidate.target}{" "}
-        <span className="muted" style={{ fontWeight: 400 }}>
-          {candidate.tic}
-        </span>
-      </h1>
+      <p className="eyebrow">{candidate.tic}</p>
+      <h1>{candidate.target}</h1>
       <p>
         <ClassificationBadge
           classification={candidate.classification}
           label={labelFor(candidate)}
         />
       </p>
+      <ShareLink path={`/candidates/${candidate.slug}`} title={`${candidate.target}: a candidate signal, not a discovery`} />
+      <WatchButton slug={candidate.slug} name={candidate.target} />
 
       <div className="detail-grid">
-        <div className="panel">
-          <h2>Measured numbers</h2>
+        <Card title="Measured numbers">
+          {overview.ok && (
+            <p>
+              <RunLabel kind="batch" sectors={overview.data.run.sectors_per_target} date={overview.data.run.run_date} />
+            </p>
+          )}
           <dl className="kv">
             <dt>Rank</dt>
             <dd>
@@ -79,41 +110,62 @@ export default async function CandidateDetailPage({
             <dt>SNR</dt>
             <dd className="num">{candidate.snr.toFixed(1)}</dd>
             <dt>BLS power</dt>
-            <dd className="num">{candidate.bls_power}</dd>
+            <dd className="num">
+              {formatPower(lc.ok ? lc.data.signal.power : candidate.bls_power || null)}
+              <span className="muted small" style={{ display: "block" }}>unitless, compare within one scan only</span>
+            </dd>
             <dt>Cadences</dt>
             <dd className="num">
               {candidate.n_cadences.toLocaleString("en-US")}
             </dd>
           </dl>
-        </div>
+        </Card>
 
-        <div>
-          <h2>Readout</h2>
+        <Card title="Readout" tone="flat">
           <div className="readout">
             <p>{candidate.readout}</p>
           </div>
-        </div>
+        </Card>
       </div>
 
+      {lc.ok && pg.ok && (
+        <section aria-labelledby="lab-heading">
+          <h2 id="lab-heading">Hunt lab</h2>
+          <HuntLabLoader slug={candidate.slug} answerPeriod={candidate.period_d} classification={candidate.classification} />
+        </section>
+      )}
+
+      <ExplainBox kind="candidate" refId={candidate.slug} />
+
       <section aria-labelledby="plot-heading">
-        <h2 id="plot-heading">Folded light curve</h2>
+        <h2 id="plot-heading">{lc.ok && pg.ok ? "The pipeline's folded plot" : "Folded light curve"}</h2>
         {plotSrc ? (
-          <div className="plot-frame" style={{ maxWidth: "720px" }}>
+          <div className="plot-frame" style={{ maxWidth: "760px" }}>
             <img
               src={plotSrc}
               alt={`Folded light curve of ${candidate.target} at the recovered period of ${candidate.period_d.toFixed(4)} days`}
             />
           </div>
         ) : (
-          <div className="panel">
-            <p className="muted" style={{ margin: 0 }}>
-              No folded plot was rendered for this target in this scan run.
-            </p>
-          </div>
+          <EmptyState title="No folded plot for this target.">
+            <p>No folded plot was rendered for this target in this scan run.</p>
+          </EmptyState>
         )}
       </section>
 
-      <div className="not-note" role="note">
+      {target && (
+        <>
+          <p>
+            <Link href={`/exoplanets/${target.slug}`} className="btn" data-testid="system-link">
+              See the {target.target} system in 3D
+            </Link>
+          </p>
+          <SkyPanel name={target.target} ra={target.ra_deg} dec={target.dec_deg}
+            source={targets.ok ? targets.data.star_source : { name: "", url: "" }} />
+        </>
+      )}
+
+      <div className="callout callout--nova" role="note">
         <p>
           <strong>What this is NOT.</strong> This is a candidate signal from a
           demo pipeline, not a discovery. The search found a repeating dip and

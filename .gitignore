@@ -13,3 +13,7 @@ venv/
 webapp/frontend/node_modules/
 webapp/frontend/.next/
 webapp/qa/screenshots/
+webapp/frontend/test-results/
+webapp/frontend/playwright-report/
+webapp/frontend/*.tsbuildinfo
+webapp/frontend/screenshots/

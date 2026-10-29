@@ -1,0 +1,13 @@
+{
+  "url": "https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select%20column_name%2Cdescription%2Cunit%20from%20TAP_SCHEMA.columns%20where%20table_name%20like%20%27pscomppars%27&format=json",
+  "final_url": "https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select%20column_name%2Cdescription%2Cunit%20from%20TAP_SCHEMA.columns%20where%20table_name%20like%20%27pscomppars%27&format=json",
+  "status": 200,
+  "https": true,
+  "headers": {
+    "content-type": "application/json",
+    "server": "cloudflare"
+  },
+  "bytes": 36789,
+  "truncated": false,
+  "fetched_at": "2026-10-17T07:54:53+00:00"
+}

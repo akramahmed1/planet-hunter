@@ -56,7 +56,7 @@ for p in pages:
         check(f"{p}/has-target", cand["target"] in html, cand["target"])
         check(f"{p}/has-period", str(cand["period_d"]) in html)
         check(f"{p}/has-badge", "Ambiguous" in html or "Clean recovery" in html
-              or "Eclipsing binary" in html or "Marginal" in html or "Likely noise" in html)
+              or "Eclipsing binary" in html or "Marginal" in html or "Likely noise" in html or "Unreviewed" in html)
     seen_links.update(re.findall(r'href="(/candidates/[^"]*)"', html))
     seen_links.update(re.findall(r'href="(/method|/)"', html))
     seen_imgs.update(re.findall(r'<img[^>]+src="([^"]+)"', html))
@@ -97,7 +97,7 @@ for i in sorted(seen_imgs):
 blob = "".join([home, lst, mp] + [page(p) for p in [f"/candidates/{s}" for s in slugs]])
 check("copy/no-em-or-en-dash", "\u2014" not in blob and "\u2013" not in blob)
 check("copy/toi216-ambiguous-labeled", "NOT a discovery" in page("/candidates/toi-216"))
-check("copy/toi776-ambiguous-labeled", "NOT a discovery" in page("/candidates/toi-776"))
+check("copy/toi175-correction-labeled", "NOT a discovery" in page("/candidates/toi-175"))
 
 print(f"\n{len(PASSES)} passed, {len(FAILURES)} failed")
 if FAILURES:

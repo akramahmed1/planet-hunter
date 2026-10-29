@@ -1,0 +1,379 @@
+Kelvin: Introduction | NIST 
+
+ [link: #main-content] 
+ Skip to main content
+
+ An official website of the United States government 
+ Here’s how you know 
+
+ Here’s how you know 
+
+ Official websites use .gov 
+
+ A .gov website belongs to an official government organization in the United States.
+
+ Secure .gov websites use HTTPS 
+
+ A lock ( 
+
+) or https:// means you’ve safely connected to the .gov website. Share sensitive information only on official, secure websites.
+
+ https://www.nist.gov/si-redefinition/kelvin-introduction 
+
+ [link: /] 
+
+ Search NIST 
+
+ Menu 
+
+ Close 
+
+ [link: /publications] Publications 
+
+ What We Do 
+
+ [link: /topics] All Topics 
+
+ [link: /advanced-communications] Advanced communications 
+
+ [link: /biotechnology] Bioscience 
+
+ [link: /buildings-and-construction] Buildings and construction 
+
+ [link: /chemistry] Chemistry 
+
+ [link: /cybersecurity-and-privacy] Cybersecurity and Privacy 
+
+ [link: /electronics] Electronics 
+
+ [link: /energy] Energy 
+
+ [link: /environment] Environment 
+
+ [link: /fire] Fire 
+
+ [link: /forensic-science] Forensic science 
+
+ [link: /health] Health 
+
+ [link: /information-technology] Information technology 
+
+ [link: /infrastructure] Infrastructure 
+
+ [link: /manufacturing] Manufacturing 
+
+ [link: /materials] Materials 
+
+ [link: /mathematics-and-statistics] Mathematics and statistics 
+
+ [link: /metrology] Metrology 
+
+ [link: /nanotechnology] Nanotechnology 
+
+ [link: /neutron-research] Neutron research 
+
+ [link: /performance-excellence] Performance excellence 
+
+ [link: /physics] Physics 
+
+ [link: /public-safety] Public safety 
+
+ [link: /quantum-information-science] Quantum information science 
+
+ [link: /resilience] Resilience 
+
+ [link: /standards] Standards 
+
+ [link: /super-intelligence] Super intelligence 
+
+ [link: /transportation] Transportation 
+
+ Labs & Major Programs 
+
+ [link: /laboratories] Laboratories 
+
+ [link: /ctl] Communications Technology Laboratory 
+
+ [link: /el] Engineering Laboratory 
+
+ [link: /itl] Information Technology Laboratory 
+
+ [link: /mml] Material Measurement Laboratory 
+
+ [link: /pml] Physical Measurement Laboratory 
+
+ [link: /user-facilities] User Facilities 
+
+ [link: /ncnr] NIST Center for Neutron Research 
+
+ [link: /cnst] CNST NanoFab 
+
+ [link: /research-test-beds] Research Test Beds 
+
+ [link: /laboratories/projects-programs] Research Projects 
+
+ [link: /laboratories/tools-instruments] Tools & Instruments 
+
+ [link: /major-programs] Major Programs 
+
+ [link: /chips] CHIPS for America Initiative 
+
+ [link: /cds] Congressionally Identified Project Program (CIPP) 
+
+ [link: /mep] Manufacturing Extension Partnership (MEP) 
+
+ [link: https://www.manufacturingusa.com/] Manufacturing USA 
+
+ [link: /oam] Office of Advanced Manufacturing 
+
+ [link: /tpo] Technology Partnerships Office 
+
+ Services & Resources 
+
+ [link: /standards-measurements] Measurements and Standards 
+
+ [link: /calibrations] Calibration Services 
+
+ [link: /nvlap] Laboratory Accreditation (NVLAP) 
+
+ [link: /nist-quality-system] Quality System 
+
+ [link: /srm] Standard Reference Materials (SRMs) 
+
+ [link: /sri] Standard Reference Instruments (SRIs) 
+
+ [link: /standardsgov] Standards.gov 
+
+ [link: /pml/time-and-frequency-division/time-services] Time Services 
+
+ [link: /pml/owm] Office of Weights and Measures 
+
+ [link: /services-resources/software] Software 
+
+ [link: /data] Data 
+
+ [link: https://webbook.nist.gov/chemistry/] Chemistry WebBook 
+
+ [link: https://nvd.nist.gov/] National Vulnerability Database 
+
+ [link: /pml/productsservices/physical-reference-data] Physical Reference Data 
+
+ [link: /srd] Standard Reference Data (SRD) 
+
+ [link: https://shop.nist.gov/] Storefront 
+
+ [link: /tpo] License & Patents 
+
+ [link: https://csrc.nist.gov/] Computer Security Resource Center (CSRC) 
+
+ [link: /nist-research-library] NIST Research Library 
+
+ News & Events 
+
+ [link: /news-events/news] News 
+
+ [link: /news-events/events] Events 
+
+ [link: /blogs] Blogs 
+
+ [link: /nist-focus] NIST In Focus 
+
+ [link: /feature-stories] Feature Stories 
+
+ [link: /awards] Awards 
+
+ [link: /video-gallery] Video Gallery 
+
+ [link: /image-gallery] Image Gallery 
+
+ [link: /comms/media-contacts] Media Contacts 
+
+ About NIST 
+
+ [link: /about-nist] About Us 
+
+ [link: /director/leadership] Leadership 
+
+ [link: /director/nist-organization-structure] Organization Structure 
+
+ [link: /about-nist/budget-planning] Budget & Planning 
+
+ [link: /contact] Contact Us 
+
+ [link: /about-nist/visit] Visit 
+
+ [link: /careers] Careers 
+
+ [link: /iaao/academic-affairs-office] Student programs 
+
+ [link: /about-nist/work-nist] Work with NIST 
+
+ [link: /history] History 
+
+ [link: http://nistdigitalarchives.contentdm.oclc.org/] NIST Digital Archives 
+
+ [link: /nist-museum] NIST Museum 
+
+ [link: /nist-and-nobel] NIST and the Nobel 
+
+ [link: /education] Educational Resources 
+
+ [link: /si-redefinition] SI Redefinition 
+
+ [link: /si-redefinition/turning-point-humanity-redefining-worlds-measurement-system] Introduction: Redefining the World’s Measurement System 
+
+ [link: /si-redefinition/road-revised-si] Road to the Revised SI 
+
+ [link: /si-redefinition/meter] Meter 
+
+ [link: /si-redefinition/kilogram-introduction] Kilogram 
+ Expand or Collapse 
+
+ [link: /si-redefinition/kilogram/kilogram-past] Kilogram: The Past 
+
+ [link: /si-redefinition/kilogram/kilogram-focus-history] Kilogram: Focus on History 
+
+ [link: /si-redefinition/kilogram/kilogram-present] Kilogram: The Present 
+
+ [link: /si-redefinition/kilogram/kilogram-mass-and-plancks-constant] Kilogram: Mass and Planck's Constant 
+
+ [link: /si-redefinition/kilogram/kilogram-kibble-balance] Kilogram: The Kibble Balance 
+
+ [link: /si-redefinition/nist-do-it-yourself-kibble-balance-made-lego-bricks] The NIST Do-It-Yourself Kibble Balance 
+
+ [link: /si-redefinition/kilogram/kilogram-silicon-spheres-and-international-avogadro-project] Kilogram: Silicon Spheres and the International Avogadro Project 
+
+ [link: /si-redefinition/kilogram/kilogram-future] Kilogram: The Future 
+
+ [link: /si-redefinition/kilogram/kilogram-disseminating-new-kilogram] Kilogram: Disseminating the New Kilogram 
+
+ [link: /si-redefinition/second-introduction] Second 
+ Expand or Collapse 
+
+ [link: /si-redefinition/second/second-past] Second: The Past 
+
+ [link: /si-redefinition/second/second-present] Second: The Present 
+
+ [link: /si-redefinition/second/second-future] Second: The Future 
+
+ [link: /si-redefinition/second/road-new-second] Road to the New Second 
+
+ [link: /si-redefinition/ampere-introduction] Ampere 
+ Expand or Collapse 
+
+ [link: /si-redefinition/ampere/ampere-history] Ampere: History 
+
+ [link: /si-redefinition/ampere/ampere-present] Ampere: The Present 
+
+ [link: /si-redefinition/ampere/ampere-quantum-metrology-triangle] Ampere: The Quantum Metrology Triangle 
+
+ [link: /si-redefinition/ampere/ampere-future] Ampere: The Future 
+
+ [link: /si-redefinition/kelvin-introduction] Kelvin 
+ Expand or Collapse 
+
+ [link: /si-redefinition/kelvin/kelvin-history] Kelvin: History 
+
+ [link: /si-redefinition/kelvin/kelvin-present-realization] Kelvin: Present Realization 
+
+ [link: /si-redefinition/kelvin/kelvin-thermodynamic-temperature] Kelvin: Thermodynamic Temperature 
+
+ [link: /si-redefinition/kelvin/kelvin-its-90] Kelvin: ITS-90 
+
+ [link: /si-redefinition/kelvin/kelvin-future-realization] Kelvin: Future Realization 
+
+ [link: /si-redefinition/kelvin/kelvin-boltzmann-constant] Kelvin: Boltzmann Constant 
+
+ [link: /si-redefinition/redefining-mole] Mole 
+
+ [link: /si-redefinition/candela] Candela 
+
+ [link: /si-redefinition/definitions-si-base-units] Definitions of SI Base Units 
+
+ [link: /si-redefinition/meet-constants] Meet the Constants 
+
+ [link: /si-redefinition/resources-reporters] Resources for Reporters 
+
+ [link: /si-redefinition/si-redefinition-website-credits] Credits 
+
+ Kelvin: Introduction 
+
+ A triple-point cell. 
+
+ Credit: 
+
+ NIST
+
+ Temperature is one of the most important and ubiquitous measurements in human life. For centuries, we have continuously improved on the systems, technologies, methods and units used to quantify and express it. Now, the next stage of that process has taken place. The kelvin (K) — the [link: https://physics.nist.gov/cuu/Units/] SI [link: https://www.nist.gov/si-redefinition/definitions-si-base-units] unit of temperature — now has a radically new definition. In daily life, the Kelvin temperature scale — named for the celebrated British physicist Lord Kelvin (1824–1907) — rarely makes an appearance. People are more familiar with the Fahrenheit and Celsius scales, which are used for most practical temperature measurements, such as in weather forecasts, food preparation, manufacturing, etc. Historically, both scales center around defined points such as the melting point of ice, the temperature of the human body or the boiling point of water. The kelvin unit is not expressed in degrees like Celsius or Fahrenheit are. It is used by itself to describe temperature. For example, “mercury loses all electrical resistance at a temperature of 4.2 kelvins.” A change of one kelvin is the same amount of temperature change as one degree Celsius, but the Kelvin scale is “absolute” in the sense that it starts at absolute zero, or what Kelvin and other scientists called “infinite cold.” (0 K = -273.15 degrees C = -459.67 degrees F. Room temperature is about 70 degrees F, 21 degrees C or 294 K.) The concept of an absolute temperature scale is powerful; it is different than simply relative temperature, in which objects are talked about being hotter or colder than something else. The absolute, thermodynamic temperature of an object provides information on how much average energy of motion (kinetic energy) its atoms and molecules have.  An important aside: According to classical, 19th-century physics, motion completely stops at absolute zero. But according to the quantum theory introduced in the 20th century, matter does have random motion at absolute zero, called “zero-point motion,” thanks to a quantum concept known as the Heisenberg uncertainty principle, which dictates that the position and momentum of an object cannot be known with complete certainty at the same time. The zero-point motion is not considered heat-driven (thermal) motion and thus is not part of the definition of thermodynamic, or absolute, temperature. At absolute zero the only motion that exists is quantum-mechanical zero-point motion. The Kelvin scale is used widely in science, particularly in the physical sciences. In everyday life, it is most often encountered as the “color temperature” of a lamp. An old-fashioned incandescent bulb, which puts out yellowish light, has a color temperature of about 3,000 K. Put another way, this means its yellowish spectrum closely resembles what a hot object at a 3,000 K temperature would naturally radiate. A lamp with a color temperature of 5,000 K to 5,600 K, which contains more blue light, is typically labeled “daylight” or “full spectrum” because the temperature of the surface of the sun is about 5,800 K. Many newly available LED lights fall within this range or go even higher.  In 1954, the kelvin was defined as equal to the fraction 1/273.16 of the thermodynamic temperature of the triple point of water—the point at which water, ice and water vapor co-exist in equilibrium. That is a valuable common reference because, for a precise formulation of water at a specific pressure, the triple point always occurs at exactly the same temperature: 273.16 K. Extrapolating from the water triple-point temperature to very high or very low temperatures is problematic; so, by international agreement, 21 other defining points are specified, ranging from the freezing point of helium to the freezing point of copper. However, the kelvin has been redefined in terms of the Boltzmann constant, which relates the amount of thermodynamic energy in a substance to its temperature. When the revised SI was approved in November 2018, the new definition became: The kelvin, symbol K, is the SI unit of thermodynamic temperature; its magnitude is set by fixing the numerical value of the Boltzmann constant to be equal to exactly 1.380649 × 10 -23 ...J K -1 [joules per kelvin]. If that seems like a mouthful, you wouldn’t be wrong! To best understand the context and significance of this historic redefinition, it’s helpful to learn more about the past, present and future of measuring temperature. 
+
+ [link: /topic-terms/metrology] Metrology and [link: /topic-terms/metric] Metric 
+
+ Created May 14, 2018, Updated January 5, 2026
+
+ [link: /webform/page_feedback?page=https://www.nist.gov/si-redefinition/kelvin-introduction&page_title=Kelvin: Introduction&source_entity_type=node&source_entity_id=1338286] 
+ Was this page helpful?
+
+ [link: /] 
+
+ HEADQUARTERS 
+
+ 100 Bureau Drive 
+ Gaithersburg, MD 20899 
+ [link: tel:301-975-2000] 301-975-2000 
+
+ [link: /cdn-cgi/l/email-protection#REDACTED] Webmaster | [link: https://www.nist.gov/contact] Contact Us | [link: https://www.nist.gov/visit] Our Other Offices 
+
+ [link: https://x.com/NIST] 
+ X.com 
+
+ [link: https://www.facebook.com/NIST] 
+ Facebook 
+
+ [link: https://www.linkedin.com/company/nist] 
+ LinkedIn 
+
+ [link: https://www.instagram.com/nist/] 
+ Instagram 
+
+ [link: https://www.youtube.com/NIST] 
+ YouTube 
+
+ [link: https://giphy.com/nist] 
+ Giphy 
+
+ [link: https://www.nist.gov/news-events/nist-rss-feeds] 
+ RSS Feed 
+
+ [link: https://public.govdelivery.com/accounts/USNIST/subscriber/new] 
+ Mailing List 
+
+ How are we doing?
+ [link: /webform/nist_gov_feedback?page=/si-redefinition/kelvin-introduction] Feedback 
+
+ [link: https://www.nist.gov/privacy-policy] Site Privacy 
+
+ [link: https://www.nist.gov/oism/accessibility] Accessibility 
+
+ [link: https://www.nist.gov/privacy] Privacy Program 
+
+ [link: https://www.nist.gov/copyrights-disclaimers] Copyright & Disclaimers 
+
+ [link: https://www.commerce.gov/vulnerability-disclosure-policy] Vulnerability Disclosure 
+
+ [link: https://www.nist.gov/no-fear-act-policy] No Fear Act Policy 
+
+ [link: https://www.nist.gov/office-director/freedom-information-act] FOIA 
+
+ [link: https://www.nist.gov/environmental-policy-statement] Environmental Policy 
+
+ [link: https://www.nist.gov/summary-report-scientific-integrity] Scientific Integrity 
+
+ [link: https://www.nist.gov/nist-information-quality-standards] Information Quality Standards 
+
+ [link: https://www.commerce.gov/] Commerce.gov 
+
+ [link: http://www.science.gov/] Science.gov 
+
+ [link: http://www.usa.gov/] USA.gov 
+
+ [link: https://vote.gov/] Vote.gov

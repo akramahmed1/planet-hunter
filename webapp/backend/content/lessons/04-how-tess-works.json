@@ -1,0 +1,204 @@
+{
+  "slug": "how-tess-works",
+  "title": "How TESS works",
+  "summary": "The satellite behind the light curves on this site: what it watches, for how long, and from where.",
+  "minutes": 5,
+  "badge": {
+    "name": "Sector scout",
+    "text": "You know how TESS scans the sky one sector at a time."
+  },
+  "links": [
+    {
+      "href": "/missions/tess",
+      "label": "Explore TESS in 3D"
+    },
+    {
+      "href": "/missions",
+      "label": "See where TESS is now"
+    }
+  ],
+  "steps": [
+    {
+      "heading": "A survey satellite",
+      "body": [
+        "TESS, the Transiting Exoplanet Survey Satellite, launched in 2018. Its job is to watch about 200,000 nearby stars for the small, repeating dips in light that a passing planet causes."
+      ],
+      "facts": [
+        {
+          "text": "TESS launched on 2018 April 18.",
+          "kind": "measured",
+          "source": {
+            "name": "JPL Horizons object data: TESS (-95)",
+            "url": "https://ssd.jpl.nasa.gov/horizons/"
+          },
+          "checks": [
+            {
+              "fixture": "horizons_tess_vectors_geo_p4.json",
+              "quote": "Launched : 2018-Apr-18 22:51 UTC"
+            }
+          ]
+        },
+        {
+          "text": "TESS was designed to monitor 200,000 nearby stars for planets.",
+          "kind": "definition",
+          "source": {
+            "name": "JPL Horizons object data: TESS (-95)",
+            "url": "https://ssd.jpl.nasa.gov/horizons/"
+          },
+          "checks": [
+            {
+              "fixture": "horizons_tess_vectors_geo_p4.json",
+              "quote": "Monitor 200,000 nearby stars for planets"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "One sector at a time",
+      "body": [
+        "TESS stares at one long strip of sky, called a sector, measuring 24° by 96°. It watches each sector for about 27 days, then turns to the next.",
+        "Sectors overlap near the poles of the ecliptic, so stars there are watched for nearly a full year."
+      ],
+      "facts": [
+        {
+          "text": "Each sector measures 24° by 96° and is watched for about 27 days on average.",
+          "kind": "measured",
+          "source": {
+            "name": "MIT TESS Science Office: TESS Observations",
+            "url": "https://tess.mit.edu/observations/"
+          },
+          "checks": [
+            {
+              "fixture": "mit_tess_observations.html",
+              "quote": "TESS observes the sky in sectors measuring 24° x 96°. Each sector is observed for two orbits of the satellite around the Earth, or about 27 days on average."
+            }
+          ]
+        },
+        {
+          "text": "A region centered on the ecliptic pole can be observed for nearly a full year.",
+          "kind": "measured",
+          "source": {
+            "name": "MIT TESS Science Office: TESS Observations",
+            "url": "https://tess.mit.edu/observations/"
+          },
+          "checks": [
+            {
+              "fixture": "mit_tess_observations.html",
+              "quote": "centered on the ecliptic pole can be observed for nearly a full year"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Its orbit",
+      "body": [
+        "TESS goes around Earth on a long, stretched orbit, between 108,400 and 376,300 km from Earth, timed with the Moon: TESS goes around twice for every once of the Moon."
+      ],
+      "facts": [
+        {
+          "text": "TESS's orbit runs from 108,400 to 376,300 km and is in 2:1 resonance with the Moon.",
+          "kind": "measured",
+          "source": {
+            "name": "JPL Horizons object data: TESS (-95)",
+            "url": "https://ssd.jpl.nasa.gov/horizons/"
+          },
+          "checks": [
+            {
+              "fixture": "horizons_tess_vectors_geo_p4.json",
+              "quote": "2:1 lunar resonance orbit of 108,400 by 376,300 kilometers"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "key": "sector_days",
+      "kind": "numeric",
+      "prompt": "About how many days does TESS watch each sector?",
+      "answer": 27,
+      "tolerance": 1,
+      "unit": "days",
+      "explanation": "Each sector is watched for two TESS orbits, about 27 days on average.",
+      "source": {
+        "name": "MIT TESS Science Office: TESS Observations",
+        "url": "https://tess.mit.edu/observations/"
+      },
+      "checks": [
+        {
+          "fixture": "mit_tess_observations.html",
+          "quote": "or about 27 days on average"
+        }
+      ]
+    },
+    {
+      "key": "tess_looks_for",
+      "kind": "choice",
+      "prompt": "What does TESS look for?",
+      "choices": [
+        {
+          "text": "Small, repeating dips in a star's light",
+          "correct": true,
+          "explanation": "A planet crossing its star blocks a little light each orbit."
+        },
+        {
+          "text": "Pictures of the planets themselves",
+          "correct": false,
+          "explanation": "TESS measures the brightness of stars, not pictures of planets."
+        },
+        {
+          "text": "Radio signals",
+          "correct": false,
+          "explanation": "TESS measures the brightness of stars over time."
+        }
+      ],
+      "explanation": "TESS was designed to monitor 200,000 nearby stars for planets, by their transits.",
+      "source": {
+        "name": "JPL Horizons object data: TESS (-95)",
+        "url": "https://ssd.jpl.nasa.gov/horizons/"
+      },
+      "checks": [
+        {
+          "fixture": "horizons_tess_vectors_geo_p4.json",
+          "quote": "Monitor 200,000 nearby stars for planets"
+        }
+      ]
+    },
+    {
+      "key": "longest_watch",
+      "kind": "choice",
+      "prompt": "Where in the sky does TESS watch stars for the longest?",
+      "choices": [
+        {
+          "text": "Near the ecliptic poles",
+          "correct": true,
+          "explanation": "Sectors overlap there."
+        },
+        {
+          "text": "Along the ecliptic",
+          "correct": false,
+          "explanation": "Stars near the ecliptic poles get the most time, not those on the ecliptic."
+        },
+        {
+          "text": "It watches every star for the same time",
+          "correct": false,
+          "explanation": "Overlapping sectors give some stars much more time."
+        }
+      ],
+      "explanation": "Near the ecliptic poles, sectors overlap and stars can be observed for nearly a full year.",
+      "source": {
+        "name": "MIT TESS Science Office: TESS Observations",
+        "url": "https://tess.mit.edu/observations/"
+      },
+      "checks": [
+        {
+          "fixture": "mit_tess_observations.html",
+          "quote": "centered on the ecliptic pole can be observed for nearly a full year"
+        }
+      ]
+    }
+  ]
+}

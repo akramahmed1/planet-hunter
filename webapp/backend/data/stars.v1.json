@@ -1,0 +1,91 @@
+{
+ "dataset": "stars",
+ "version": 1,
+ "source": {
+  "name": "MAST TESS Input Catalog v8 (Mast.Catalogs.Filtered.Tic)",
+  "url": "https://mast.stsci.edu/api/v0/",
+  "fetched_at": "2026-10-18T00:37:08+00:00"
+ },
+ "stars": {
+  "TIC 260128333": {
+   "ra_deg": 92.1331996217219,
+   "dec_deg": -59.5411333817205,
+   "teff_k": 5723.2,
+   "radius_rsun": 1.51811,
+   "mass_msun": 1.02,
+   "luminosity_lsun": 2.22769952,
+   "distance_pc": 399.017,
+   "tess_mag": 11.4881
+  },
+  "TIC 259377017": {
+   "ra_deg": 68.4155009405299,
+   "dec_deg": -51.9562322933249,
+   "teff_k": 3532,
+   "radius_rsun": 0.374358,
+   "mass_msun": 0.362274,
+   "luminosity_lsun": 0.01964951,
+   "distance_pc": 22.4793,
+   "tess_mag": 10.4981
+  },
+  "TIC 55652896": {
+   "ra_deg": 73.9802301387634,
+   "dec_deg": -63.2600874606349,
+   "teff_k": 5025.77,
+   "radius_rsun": 0.801736,
+   "mass_msun": 0.84,
+   "luminosity_lsun": 0.369460285,
+   "distance_pc": 177.945,
+   "tess_mag": 11.5748
+  },
+  "TIC 307210830": {
+   "ra_deg": 124.531756290083,
+   "dec_deg": -68.3129998725044,
+   "teff_k": 3429,
+   "radius_rsun": 0.31416,
+   "mass_msun": 0.292836,
+   "luminosity_lsun": 0.0122932419,
+   "distance_pc": 10.6194,
+   "tess_mag": 9.41242
+  },
+  "TIC 150428135": {
+   "ra_deg": 97.0967865903209,
+   "dec_deg": -65.5793115481931,
+   "teff_k": 3494,
+   "radius_rsun": 0.419457,
+   "mass_msun": 0.413261,
+   "luminosity_lsun": 0.023624422,
+   "distance_pc": 31.1265,
+   "tess_mag": 10.9102
+  },
+  "TIC 52368076": {
+   "ra_deg": 23.5947280925226,
+   "dec_deg": -66.6758200741315,
+   "teff_k": 5280,
+   "radius_rsun": 0.852266,
+   "mass_msun": 0.91,
+   "luminosity_lsun": 0.508605659,
+   "distance_pc": 111.059,
+   "tess_mag": 10.1985
+  },
+  "TIC 183985250": {
+   "ra_deg": 358.667530551082,
+   "dec_deg": -37.6279231975468,
+   "teff_k": 5374,
+   "radius_rsun": 0.980173,
+   "mass_msun": 0.93,
+   "luminosity_lsun": 0.7219232,
+   "distance_pc": 80.4373,
+   "tess_mag": 9.1031
+  },
+  "TIC 251848941": {
+   "ra_deg": 7.30126252520958,
+   "dec_deg": -30.4537402584108,
+   "teff_k": 4339,
+   "radius_rsun": 0.660806,
+   "mass_msun": 0.68,
+   "luminosity_lsun": 0.139444456,
+   "distance_pc": 62.699,
+   "tess_mag": 10.42
+  }
+ }
+}

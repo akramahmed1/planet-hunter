@@ -1,0 +1,155 @@
+name: Staging check
+
+# Verifies the Railway staging environment after a push to v2 (staging tracks v2;
+# since 2026-10-18 phases merge to v2 when CI is green, then staging is checked here).
+# Waits until both staging services report this exact commit,
+# then runs the v1 QA suites and the Playwright tests against staging.
+# The build sessions can't reach staging, so this is how staging is verified.
+on:
+  push:
+    branches: [v2]
+  workflow_dispatch:
+    inputs:
+      allow_stale:
+        description: "Accept a stale copy of live NASA data (as served during a NASA outage) as a warning. Push runs are always strict."
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: staging-check
+  cancel-in-progress: true
+
+env:
+  FRONTEND: https://frontend-staging-5fce.up.railway.app
+  BACKEND: https://backend-staging-bade.up.railway.app
+
+jobs:
+  staging:
+    # Pinned: ubuntu-latest is now 26.04, which Playwright 1.56.1 cannot install browsers on.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: Wait for staging to run this commit
+        run: |
+          for i in $(seq 1 60); do
+            be=$(curl -sf "$BACKEND/api/v2/health" | python3 -c "import json,sys;print(json.load(sys.stdin).get('commit') or '')" 2>/dev/null || true)
+            fe=$(curl -sf "$FRONTEND/" | grep -o 'name="ph-build" content="[^"]*"' | sed 's/.*content="//;s/"$//' || true)
+            echo "attempt $i: backend=${be:-none} frontend=${fe:-none} want=$GITHUB_SHA"
+            if [ "$be" = "$GITHUB_SHA" ] && [ "$fe" = "$GITHUB_SHA" ]; then exit 0; fi
+            sleep 20
+          done
+          echo "::error::staging did not report commit $GITHUB_SHA within 20 minutes. Is staging tracking this branch?"
+          exit 1
+      - name: v2 health reports the database connected
+        run: |
+          curl -sf "$BACKEND/api/v2/health" | tee /tmp/health.json
+          python3 -c "import json;d=json.load(open('/tmp/health.json'));assert d['database']['status']=='connected', d"
+      - name: The pinned Aladin Lite script is served by CDS (Phase 10)
+        run: |
+          url=$(grep -o 'https://aladin.cds.unistra.fr/AladinLite/api/v3/[^"]*/aladin.js' webapp/frontend/components/sky/SkyPanel.tsx)
+          echo "$url"
+          case "$url" in */latest/*|"") echo "::error::Aladin Lite is not pinned"; exit 1;; esac
+          # CDS is a third party and the GitHub runner is sometimes unable to reach it at all (curl exit 28, a timeout, ended
+          # the whole check on 2026-10-28 before any staging step ran). Retry, and if CDS never answers say so as a warning.
+          # An answer that is not a real script (wrong status, too small) is still a failure.
+          code=$(curl -sL --retry 4 --retry-delay 10 --retry-all-errors --connect-timeout 15 --max-time 60 \
+            -o /tmp/aladin.js -w '%{http_code}' "$url" || true)
+          if [ -z "$code" ] || [ "$code" = 000 ]; then
+            echo "::warning::CDS did not answer from this runner after retries; the pinned script was not downloaded"
+            exit 0
+          fi
+          size=$(wc -c < /tmp/aladin.js)
+          echo "HTTP $code, $size bytes"
+          [ "$code" = 200 ] && [ "$size" -gt 100000 ]
+      - name: Live smoke test, one request per source (Phase 2)
+        env:
+          ALLOW_STALE: ${{ inputs.allow_stale }}
+        # Each endpoint must answer from its real upstream. Space weather may be an explicit
+        # "unavailable" 503 while NASA DONKI is down (docs/DATA_SOURCES.md), never a bare error.
+        run: |
+          fail=0
+          check() {
+            path=$1; allow_unavailable=${2:-no}
+            code=$(curl -s -o /tmp/body.json -w '%{http_code}' "$BACKEND$path")
+            if [ "$code" = 200 ] && python3 -c "import json,sys;d=json.load(open('/tmp/body.json'));sys.exit(0 if not d.get('stale') else 1)"; then
+              echo "ok      $path"
+            elif [ "$code" = 200 ] && [ "$ALLOW_STALE" = true ] && python3 -c "import json,sys;sys.exit(0 if json.load(open('/tmp/body.json')).get('stale') is True else 1)"; then
+              echo "WARN    $path served a stale copy (allowed for this manual run): $(head -c 120 /tmp/body.json)"
+            elif [ "$code" = 503 ] && [ "$allow_unavailable" = yes ] && grep -q '"status":"unavailable"' /tmp/body.json; then
+              echo "WARN    $path explicitly unavailable: $(cat /tmp/body.json)"
+            else
+              echo "::error::$path returned $code: $(head -c 300 /tmp/body.json)"; fail=1
+            fi
+          }
+          check /api/v2/bodies
+          check /api/v2/positions
+          check "/api/v2/positions?date=1969-07-20"
+          check "/api/v2/distances?from=earth&to=mars"
+          check /api/v2/iss
+          # NASA's picture-of-the-day API often answers 500, 503 or a placeholder image. With no saved copy the endpoint says
+          # "unavailable" in plain words (accepted, like space weather); a bare error or a stale copy still fails.
+          check /api/v2/apod yes
+          check /api/v2/exoplanets/latest
+          check /api/v2/exoplanets/TOI-700
+          check /api/v2/space-weather yes
+          python3 -c "
+          import json,urllib.request
+          d=json.load(urllib.request.urlopen('$BACKEND/api/v2/positions'))
+          kinds={p['id']:p['kind'] for p in d['bodies']}
+          print('today positions:', kinds)
+          assert all(k=='measured' for b,k in kinds.items() if b!='sun'), 'Horizons positions not live'
+          " || fail=1
+          exit $fail
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: v1 backend QA against staging
+        run: python webapp/qa/qa_backend.py "$BACKEND"
+      - name: v1 frontend QA against staging
+        run: python webapp/qa/qa_frontend.py "$FRONTEND" "$BACKEND"
+      - name: Scan engine end to end (Phase 6)
+        # Submits a real scan of TIC 260128333 (TOI 1338, a known eclipsing binary) to the
+        # staging queue and waits for the worker service to finish it. A repeat within 30 days
+        # returns the cached job, which is fine: the Playwright scan test reads whichever id comes back.
+        id: scan
+        run: |
+          curl -sf -X POST -H 'content-type: application/json' -d '{"target":"TIC 260128333"}' \
+            "$BACKEND/api/v2/scans" | tee /tmp/scan.json
+          id=$(python3 -c "import json;print(json.load(open('/tmp/scan.json'))['id'])")
+          for i in $(seq 1 80); do
+            curl -sf "$BACKEND/api/v2/scans/$id" > /tmp/status.json || true
+            st=$(python3 -c "import json;d=json.load(open('/tmp/status.json'));print(d['status'], d.get('progress') or '')" 2>/dev/null || echo unknown)
+            echo "attempt $i: $st"
+            case "$st" in
+              succeeded*) break ;;
+              failed*) echo "::error::scan $id failed: $(cat /tmp/status.json)"; exit 1 ;;
+            esac
+            sleep 15
+          done
+          python3 -c "
+          import json
+          d=json.load(open('/tmp/status.json'))
+          assert d['status']=='succeeded', d
+          s=d['signal']
+          assert s['proposed_label']=='known_eclipsing_binary', s['crossmatch']
+          print('period', s['period_d'], 'label', s['proposed_label'])
+          "
+          echo "id=$id" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: webapp/frontend/package-lock.json
+      - name: Playwright against staging
+        working-directory: webapp/frontend
+        env:
+          PW_BASE_URL: ${{ env.FRONTEND }}
+          PW_SCAN_ID: ${{ steps.scan.outputs.id }}
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+          npx playwright test
