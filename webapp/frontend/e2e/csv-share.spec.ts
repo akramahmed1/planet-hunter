@@ -1,6 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
-import { CANDIDATES } from "./routes";
+import { CANDIDATES, SCAN_ID } from "./routes";
 
 // T38: CSV downloads (candidates, a scan result, a light curve) and per-candidate share links.
 
@@ -68,7 +68,7 @@ test("a candidate's light curve downloads with every point", async ({ page }) =>
 });
 
 test("a finished scan downloads as one row with every vetting check", async ({ page }) => {
-  await page.goto("/scan/1");
+  await page.goto(`/scan/${SCAN_ID}`);
   await expect(page.getByTestId("scan-signal")).toBeVisible();
   const { text } = await download(page, () => page.getByRole("button", { name: "Download this result (CSV)" }).click());
   const rows = parse(text);
