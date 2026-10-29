@@ -172,8 +172,9 @@ def _fetch_within_budget(key: str, ttl: timedelta, fetch: Callable[[], Any], sou
 
     threading.Thread(target=run, name=f"cache-fetch:{key}", daemon=True).start()
     if not done.wait(REQUEST_BUDGET_S):
-        # The key can carry a name from the address (an exoplanet), so it is logged as repr, never as raw text.
-        log.warning("fetch for %r still running after %.0f s; serving the last good copy if there is one", key,
+        # The key can carry a name from the address (an exoplanet), so line breaks are removed before it is logged.
+        safe_key = key.replace("\r", "").replace("\n", "")
+        log.warning("fetch for %s still running after %.0f s; serving the last good copy if there is one", safe_key,
                     REQUEST_BUDGET_S)
         raise FetchError(f"no answer within {REQUEST_BUDGET_S:.0f} s")
     if "error" in box:
