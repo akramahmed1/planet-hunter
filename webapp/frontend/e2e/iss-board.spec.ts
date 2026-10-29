@@ -18,19 +18,30 @@ test("the board shows where, how high, how fast and whether the sun is on the st
   await page.goto("/missions");
   const board = page.getByTestId("iss-board");
   await expect(board).toBeVisible();
-  const lat = `${Math.abs(iss.latitude).toFixed(2)}° ${iss.latitude >= 0 ? "N" : "S"}`;
-  const lon = `${Math.abs(iss.longitude).toFixed(2)}° ${iss.longitude >= 0 ? "E" : "W"}`;
-  await expect(page.getByTestId("iss-over")).toHaveText(`${lat}, ${lon}`);
+  // The station moves about 0.07 degrees and 8 km every second, and on a deployed site the reading the page shows can be
+  // a few seconds newer than the one fetched above. So the board must agree with the numbers within a small allowance:
+  // 1 degree (about 14 s of travel) in position, 1 percent in height and speed. Fixture runs agree exactly.
+  const degrees = (text: string) => [...text.matchAll(/([\d.]+)°\s*([NSEW])/g)].map(([, v, h]) => Number(v) * ("SW".includes(h) ? -1 : 1));
+  const count = (text: string) => Number(text.replace(/[^0-9.]/g, ""));
+  const near = (got: number, want: number, tolerance: number) => Math.abs(got - want) <= tolerance;
+  const [lat, lon] = degrees(await page.getByTestId("iss-over").innerText());
+  expect(near(lat, iss.latitude, 1), `latitude ${lat} against ${iss.latitude}`).toBe(true);
+  expect(near(lon, iss.longitude, 1), `longitude ${lon} against ${iss.longitude}`).toBe(true);
   // Default units are miles; the same numbers come out in kilometres when the unit is switched.
-  await expect(page.getByTestId("iss-height")).toHaveText(`${Math.round(iss.altitude_km / 1.609344).toLocaleString("en-US")} mi`);
-  await expect(page.getByTestId("iss-speed")).toHaveText(`${Math.round(iss.velocity_kmh / 1.609344).toLocaleString("en-US")} mph`);
+  const miles = 1.609344;
+  expect(await page.getByTestId("iss-height").innerText()).toMatch(/ mi$/);
+  expect(near(count(await page.getByTestId("iss-height").innerText()), iss.altitude_km / miles, (iss.altitude_km / miles) * 0.01)).toBe(true);
+  expect(await page.getByTestId("iss-speed").innerText()).toMatch(/ mph$/);
+  expect(near(count(await page.getByTestId("iss-speed").innerText()), iss.velocity_kmh / miles, (iss.velocity_kmh / miles) * 0.01)).toBe(true);
   await expect(page.getByTestId("iss-sunlight")).not.toBeEmpty();
   await expect(page.getByTestId("iss-sunlight")).not.toHaveText(iss.visibility === "daylight" ? "daylight" : "\u0000");
   await page.getByTestId("units-button").click();
   await page.getByRole("dialog", { name: "Units" }).getByLabel(/Kilometers|km/i).first().check();
   await page.keyboard.press("Escape");
-  await expect(page.getByTestId("iss-height")).toHaveText(`${Math.round(iss.altitude_km).toLocaleString("en-US")} km`);
-  await expect(page.getByTestId("iss-speed")).toHaveText(`${Math.round(iss.velocity_kmh).toLocaleString("en-US")} km/h`);
+  await expect(page.getByTestId("iss-height")).toHaveText(/ km$/);
+  await expect(page.getByTestId("iss-speed")).toHaveText(/ km\/h$/);
+  expect(near(count(await page.getByTestId("iss-height").innerText()), iss.altitude_km, iss.altitude_km * 0.01)).toBe(true);
+  expect(near(count(await page.getByTestId("iss-speed").innerText()), iss.velocity_kmh, iss.velocity_kmh * 0.01)).toBe(true);
 });
 
 test("one lap is worked out from the speed and height and lands near the station's real period", async ({ page }) => {
