@@ -1,6 +1,7 @@
 // Typed access to /api/v2. The types come from the generated OpenAPI file
 // (ADR 0002), so a backend model change shows up here as a type error.
 import { serverApiBase } from "@/lib/api";
+import { SERVER_DEADLINE_MS, withDeadline } from "@/lib/deadline";
 import type { components } from "@/lib/api-types.gen";
 
 export type Schemas = components["schemas"];
@@ -23,7 +24,10 @@ export type V2Result<T> =
 
 export async function apiV2Get<T>(path: `/api/v2/${string}`, init?: RequestInit): Promise<V2Result<T>> {
   try {
-    const res = await fetch(`${serverApiBase()}${path}`, { cache: "no-store", ...init });
+    const res = await fetch(`${serverApiBase()}${path}`, {
+      cache: "no-store",
+      ...withDeadline(init, SERVER_DEADLINE_MS, typeof window === "undefined"),
+    });
     if (!res.ok) {
       let unavailable: Unavailable | undefined;
       if (res.status === 503) {

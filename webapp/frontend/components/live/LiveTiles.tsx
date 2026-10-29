@@ -1,3 +1,4 @@
+import { TILES_DEADLINE_MS } from "@/lib/deadline";
 import { apiV2Get, type Apod, type ExoplanetsLatest, type Iss, type SpaceWeather } from "@/lib/api-v2";
 import CountUp from "@/components/ui/CountUp";
 import ApodImage from "./ApodImage";
@@ -34,11 +35,13 @@ function Meta({ fetchedAt, stale }: { fetchedAt: string; stale: boolean }) {
 
 /** "Live from space" tiles on the Explore page. Each value opens its source. */
 export default async function LiveTiles() {
+  // A source that is slow right now shows its Unavailable tile and "Check again" instead of holding the page open.
+  const limit = () => ({ signal: AbortSignal.timeout(TILES_DEADLINE_MS) });
   const [iss, apod, exo, weather] = await Promise.all([
-    apiV2Get<Iss>("/api/v2/iss"),
-    apiV2Get<Apod>("/api/v2/apod"),
-    apiV2Get<ExoplanetsLatest>("/api/v2/exoplanets/latest"),
-    apiV2Get<SpaceWeather>("/api/v2/space-weather"),
+    apiV2Get<Iss>("/api/v2/iss", limit()),
+    apiV2Get<Apod>("/api/v2/apod", limit()),
+    apiV2Get<ExoplanetsLatest>("/api/v2/exoplanets/latest", limit()),
+    apiV2Get<SpaceWeather>("/api/v2/space-weather", limit()),
   ]);
 
   const status: SourceStatus[] = [
