@@ -35,7 +35,7 @@ Process: a QA defect log (found, fixed, retested) is kept in `docs/QA_LOG.md`; r
 ## 1. Where things stand
 | Thing | State |
 |---|---|
-| `v2` | head `4a28346` (PR #25 merged). 26+ commits ahead of `main`. All phases 1 to 10 merged, plus launch-readiness (#23), tap targets (#24), scan flattening (#25). |
+| `v2` | head `56cb046` (PR #83 merged; verified 2026-11-03, see `docs/VERIFICATION_2026-11-03.md`). All phases 1 to 10, launch tasks and RC-green fixes merged. 81 PRs squash-merged into `v2`, 82 merged in total (GitHub API). |
 | `main` | still `f7e25f3` (Phase 1). Production runs v1 from it. |
 | Release PR #18 (`v2` to `main`) | OPEN, not merged. Needs Akram's explicit approval AND the prerequisites in section 5. |
 | Staging (Railway, env `Staging`) | all 5 services deployed from `v2` and healthy. |
