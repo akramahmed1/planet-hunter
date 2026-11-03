@@ -1,3 +1,4 @@
+import re
 """Phase 5 endpoints: each target's light curve and BLS periodogram (exported by scripts/export_lightcurves.py)."""
 from __future__ import annotations
 
@@ -20,9 +21,12 @@ SLUG = Path(..., pattern=r"^[a-z0-9-]{1,40}$")
 @lru_cache(maxsize=16)
 def _load(slug: str) -> dict:
     # The route already limits slug to [a-z0-9-]; this keeps _load safe for any caller too.
+    # Only a slug that matches the exported file names is ever joined to the folder.
+    if not re.fullmatch(r"[a-z0-9-]{1,40}", slug):
+        raise HTTPException(404, f"no light curve exported for '{slug}'")
     base = os.path.realpath(LIGHTCURVES)
-    path = os.path.realpath(os.path.join(base, f"{slug}.json"))
-    if not path.startswith(base + os.sep) or not os.path.isfile(path):
+    path = os.path.realpath(os.path.join(base, slug + ".json"))
+    if os.path.dirname(path) != base or not os.path.isfile(path):
         raise HTTPException(404, f"no light curve exported for '{slug}'")
     with open(path, encoding="utf-8") as f:
         return json.load(f)
