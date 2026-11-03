@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import logging
 import os
+import re
 
 from fastapi import APIRouter, Depends, HTTPException, Path, Request, Response
 from sqlalchemy import text
@@ -25,7 +26,7 @@ log = logging.getLogger("planet-hunter.phase9")
 
 def _one_line(value: object) -> str:
     """Make a value safe to put in a log line: no line breaks, so it cannot fake another entry."""
-    return str(value).replace("\r", "").replace("\n", "")
+    return re.sub(r"[\r\n\t\x00-\x1f\x7f]", "", str(value))[:300]
 NOTE = ("Written by an AI model from this page's data and the site's lessons only. Check the cited fields; "
         "if they do not say it, it is not known.")
 

@@ -19,13 +19,15 @@ SLUG = Path(..., pattern=r"^[a-z0-9-]{1,40}$")
 
 @lru_cache(maxsize=16)
 def _load(slug: str) -> dict:
-    # The route already limits slug to [a-z0-9-]; this keeps _load safe for any caller too.
-    base = os.path.realpath(LIGHTCURVES)
-    path = os.path.realpath(os.path.join(base, f"{slug}.json"))
-    if not path.startswith(base + os.sep) or not os.path.isfile(path):
-        raise HTTPException(404, f"no light curve exported for '{slug}'")
-    with open(path, encoding="utf-8") as f:
-        return json.load(f)
+    # The file name is taken from the folder listing, never built from the caller's value:
+    # the slug is only compared with the exported names.
+    wanted = f"{slug}.json"
+    with os.scandir(LIGHTCURVES) as entries:
+        for entry in entries:
+            if entry.name == wanted and entry.is_file():
+                with open(entry.path, encoding="utf-8") as f:
+                    return json.load(f)
+    raise HTTPException(404, f"no light curve exported for '{slug}'")
 
 
 def _meta(d: dict) -> dict:
