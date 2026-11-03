@@ -1,3 +1,4 @@
+import re
 """Phase 9: the "What am I looking at?" explainer and classroom billing.
 
 Both are switched off by default (Akram, 2026-10-18): the explainer until a model key is
@@ -25,7 +26,7 @@ log = logging.getLogger("planet-hunter.phase9")
 
 def _one_line(value: object) -> str:
     """Make a value safe to put in a log line: no line breaks, so it cannot fake another entry."""
-    return str(value).replace("\r", "").replace("\n", "")
+    return re.sub(r"[\r\n\t\x00-\x1f\x7f]", " ", str(value))[:300]
 NOTE = ("Written by an AI model from this page's data and the site's lessons only. Check the cited fields; "
         "if they do not say it, it is not known.")
 
