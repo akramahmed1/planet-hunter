@@ -1,0 +1,49 @@
+name: Load test (staging)
+
+# T46. Starts by hand (and weekly once this file is on the default branch). It runs k6 against STAGING only, never
+# production. It waits for staging to be up first. Two scripts in loadtest/: the read endpoints, and the scan queue.
+# Staging runs on one small Railway instance, so the load is gentle (20 people at most) and uses no live NASA calls.
+on:
+  # Also runs when these files change on v2, so it is exercised before the release; if staging is down then it fails at
+  # 'Staging is up', and the run's Re-run button starts it again once staging is back.
+  push:
+    branches: [v2]
+    paths: ["loadtest/**", ".github/workflows/loadtest.yml"]
+  workflow_dispatch:
+  schedule:
+    - cron: "43 4 * * 1"
+
+permissions:
+  contents: read
+
+env:
+  BACKEND: https://backend-staging-bade.up.railway.app
+
+jobs:
+  k6:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Staging is up
+        run: |
+          for i in $(seq 1 10); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "$BACKEND/api/v2/health" || true)
+            echo "attempt $i: HTTP $code"
+            [ "$code" = 200 ] && exit 0
+            sleep 15
+          done
+          echo "::error::staging did not answer; the load test needs it up"
+          exit 1
+      - uses: grafana/setup-k6-action@v1
+      - name: Read endpoints
+        run: k6 run --summary-export=read-summary.json -e BACKEND="$BACKEND" loadtest/read.js
+      - name: Scan queue
+        run: k6 run --summary-export=scan-summary.json -e BACKEND="$BACKEND" loadtest/scan-queue.js
+      - name: Keep the summaries
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: k6-summaries
+          path: "*-summary.json"
+          retention-days: 30

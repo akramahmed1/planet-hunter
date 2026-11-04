@@ -1,0 +1,16 @@
+# The main flows, run again in Firefox and WebKit (Safari's engine) besides Chromium (see playwright.config.ts and
+# .github/workflows/ci.yml). One file name per line. These are the pages and actions a visitor or a classroom uses most.
+# The full list runs after every merge to v2, on a pull request into main, and on a pull request that changes this
+# file, the Playwright config or the CI workflow.
+shell.spec.ts
+meta.spec.ts
+candidates.spec.ts
+hunt.spec.ts
+learn.spec.ts
+scan.spec.ts
+classroom.spec.ts
+command-search.spec.ts
+watchlist.spec.ts
+saved-scans.spec.ts
+units.spec.ts
+explain.spec.ts

@@ -1,0 +1,54 @@
+{
+ "dataset": "tess",
+ "version": 1,
+ "facts": {
+  "orbit": {
+   "quote": "The operational orbit chosen for TESS is a highly eccentric, 2:1 lunar resonance orbit of 108,400 by 376,300 kilometers at an inclination of 37 degrees",
+   "source": {
+    "name": "JPL Horizons object data: TESS (-95)",
+    "url": "https://ssd.jpl.nasa.gov/horizons/",
+    "fetched_at": "2026-10-18T00:37:10+00:00"
+   }
+  },
+  "sector": {
+   "quote": "TESS observes the sky in sectors measuring 24° x 96°. Each sector is observed for two orbits of the satellite around the Earth, or about 27 days on average.",
+   "source": {
+    "name": "MIT TESS Science Office: TESS Observations",
+    "url": "https://tess.mit.edu/observations/",
+    "fetched_at": "2026-10-18T00:37:16+00:00"
+   }
+  },
+  "cameras": {
+   "quote": "then (RA, dec, roll) in degrees (J2000) of the spacecraft and four camera boresights",
+   "source": {
+    "name": "MIT TESS Science Office: TESS Observations",
+    "url": "https://tess.mit.edu/observations/",
+    "fetched_at": "2026-10-18T00:37:16+00:00"
+   }
+  },
+  "pole": {
+   "quote": "a 24° diameter region centered on the ecliptic pole can be observed for nearly a full year",
+   "source": {
+    "name": "MIT TESS Science Office: TESS Observations",
+    "url": "https://tess.mit.edu/observations/",
+    "fetched_at": "2026-10-18T00:37:16+00:00"
+   }
+  },
+  "stars": {
+   "quote": "Monitor 200,000 nearby stars for planets",
+   "source": {
+    "name": "JPL Horizons object data: TESS (-95)",
+    "url": "https://ssd.jpl.nasa.gov/horizons/",
+    "fetched_at": "2026-10-18T00:37:10+00:00"
+   }
+  },
+  "launch": {
+   "quote": "Launched : 2018-Apr-18 22:51 UTC",
+   "source": {
+    "name": "JPL Horizons object data: TESS (-95)",
+    "url": "https://ssd.jpl.nasa.gov/horizons/",
+    "fetched_at": "2026-10-18T00:37:10+00:00"
+   }
+  }
+ }
+}

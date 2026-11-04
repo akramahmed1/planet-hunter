@@ -1,0 +1,617 @@
+"""Phase 8: teacher and student accounts, organizations, classes, assignments, grades.
+
+Every route below takes the caller from classroom.auth (Auth / TEACHER / STUDENT) and
+reaches data only through classroom.data, which scopes every query to the caller's
+orgs (ADR 0004). tests/test_classroom.py checks that every classroom route declares it.
+"""
+from __future__ import annotations
+
+import csv
+import datetime as dt
+import io
+import logging
+import os
+from contextlib import contextmanager
+from dataclasses import replace
+
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Path, Request, Response
+from fastapi.responses import JSONResponse
+
+from api_v2 import schemas as s
+import mailer
+from classroom import auth, data, flags, security, totp
+from classroom.auth import STUDENT, TEACHER, Principal
+
+log = logging.getLogger("planethunter.classroom")
+router = APIRouter(prefix="/api/v2", tags=["v2"], dependencies=[Depends(flags.require_classroom)])
+
+
+def ID():
+    """A fresh Path parameter each time: FastAPI binds one Path object to one parameter name."""
+    return Path(..., ge=1, le=2**62)
+
+
+NO_STORE = {"Cache-Control": "no-store"}
+# Sign-ups per IP per hour. The test environments raise it, since every browser test there
+# comes from one address.
+SIGNUPS_PER_HOUR = int(os.environ.get("AUTH_SIGNUPS_PER_HOUR", "10"))
+FORGOT_PER_HOUR = int(os.environ.get("AUTH_FORGOT_PER_HOUR", "10"))
+AGE_MESSAGE = ("Planet Hunter accounts are for people aged 13 and up. You can still explore everything on the "
+               "site without an account.")
+
+
+@contextmanager
+def _errors():
+    try:
+        yield
+    except data.NotFound as exc:
+        raise HTTPException(404, str(exc))
+    except data.Forbidden as exc:
+        raise HTTPException(403, str(exc))
+    except data.Conflict as exc:
+        raise HTTPException(409, str(exc))
+    except data.Invalid as exc:
+        raise HTTPException(422, str(exc))
+
+
+def _no_store(response: Response) -> None:
+    response.headers["Cache-Control"] = "no-store"
+
+
+def _check_age(request: Request, response: Response, body: s.BirthMonth) -> None:
+    """Under 13 is blocked, and the same browser cannot simply retry with another answer (ADR 0005)."""
+    if request.cookies.get(auth.AGE_BLOCK_COOKIE) or not security.is_13_or_older(body.birth_year, body.birth_month):
+        raise HTTPException(403, AGE_MESSAGE, headers={
+            "Set-Cookie": f"{auth.AGE_BLOCK_COOKIE}=1; Path=/; HttpOnly; SameSite=Lax"
+                          f"{'; Secure' if auth._secure(request) else ''}"})
+
+
+def _limit(eng, key: str, limit: int, minutes: int, message: str) -> None:
+    if data.failures(eng, key, minutes) >= limit:
+        raise HTTPException(429, message, headers={"Retry-After": str(minutes * 60)})
+
+
+# ---------- sign in and out ----------
+
+@router.post("/auth/teacher/signup", response_model=s.Ok, status_code=201)
+def teacher_signup(body: s.TeacherSignup, request: Request, response: Response, tasks: BackgroundTasks) -> s.Ok:
+    """Create a teacher account and either a new organization or a place in an existing one."""
+    auth.check_csrf(request)
+    eng = auth.engine()
+    _no_store(response)
+    ip = security.requester_key(auth.client_ip(request))
+    _limit(eng, f"signup:ip:{ip}", SIGNUPS_PER_HOUR, 60, "Too many sign-ups from here. Try again in an hour.")
+    _check_age(request, response, body)
+    email = security.normal_email(body.email)
+    if email is None:
+        raise HTTPException(422, "That does not look like an email address.")
+    problem = security.password_problem(body.password)
+    if problem:
+        raise HTTPException(422, problem)
+    if (body.org_name is None) == (body.org_code is None):
+        raise HTTPException(422, "Either name a new school or group, or give the join code of an existing one.")
+    data.record_failure(eng, f"signup:ip:{ip}")  # counts attempts, not only failures
+    with _errors():
+        uid = data.create_teacher(eng, email, body.password, body.display_name.strip(), body.org_name, body.org_code)
+    auth.start_session(eng, request, response, user_id=uid)
+    made = data.start_email_verification(eng, uid)
+    if made is not None:
+        tasks.add_task(_send_verify_email, made[1], made[0], made[2])
+    return s.Ok(ok=True)
+
+
+@router.post("/auth/teacher/login", response_model=s.LoginResult)
+def teacher_login(body: s.TeacherLogin, request: Request, response: Response) -> s.LoginResult:
+    auth.check_csrf(request)
+    eng = auth.engine()
+    _no_store(response)
+    email = security.normal_email(body.email) or body.email.strip().lower()
+    ip = security.requester_key(auth.client_ip(request))
+    _limit(eng, f"login:email:{email}", 10, 15, "Too many tries for this account. Wait 15 minutes.")
+    _limit(eng, f"login:ip:{ip}", 30, 15, "Too many sign-in tries from here. Wait 15 minutes.")
+    uid, pw_hash = data.user_for_login(eng, email)
+    if not security.verify_secret(pw_hash, body.password):
+        data.record_failure(eng, f"login:email:{email}", f"login:ip:{ip}")
+        raise HTTPException(401, "That email and password do not match an account.")
+    data.clear_failures(eng, f"login:email:{email}")
+    if data.two_factor_enabled(eng, uid):
+        # Right password, but no session until the second step is done.
+        return s.LoginResult(ok=True, needs_2fa=True, challenge=data.make_login_challenge(eng, uid))
+    auth.start_session(eng, request, response, user_id=uid)
+    return s.LoginResult(ok=True)
+
+
+@router.post("/auth/teacher/login/2fa", response_model=s.Ok)
+def teacher_login_2fa(body: s.LoginTwoFactor, request: Request, response: Response) -> s.Ok:
+    """Second step: the ticket from the password step plus a code from the authenticator app, or a recovery code."""
+    auth.check_csrf(request)
+    eng = auth.engine()
+    _no_store(response)
+    ip = security.requester_key(auth.client_ip(request))
+    _limit(eng, f"2fa:ip:{ip}", 30, 15, "Too many sign-in tries from here. Wait 15 minutes.")
+    uid = data.redeem_login_challenge(eng, body.challenge, body.code)
+    if uid is None:
+        data.record_failure(eng, f"2fa:ip:{ip}")
+        raise HTTPException(401, "That code did not work, or the sign-in took too long. Start again with your password.")
+    auth.start_session(eng, request, response, user_id=uid)
+    return s.Ok(ok=True)
+
+
+def _two_factor_limit(eng, p: Principal) -> str:
+    key = f"2fa:user:{p.user_id}"
+    _limit(eng, key, 10, 15, "Too many tries. Wait 15 minutes.")
+    return key
+
+
+def _check_password(eng, p: Principal, password: str) -> None:
+    key = f"login:email:{(p.email or '').lower()}"
+    _limit(eng, key, 10, 15, "Too many tries for this account. Wait 15 minutes.")
+    uid, pw_hash = data.user_for_login(eng, (p.email or "").lower())
+    if uid != p.user_id or not security.verify_secret(pw_hash, password):
+        data.record_failure(eng, key)
+        raise HTTPException(401, "That password is not right.")
+
+
+@router.post("/auth/teacher/2fa/setup", response_model=s.TwoFactorSetup)
+def two_factor_setup(response: Response, p: Principal = Depends(TEACHER)) -> s.TwoFactorSetup:
+    """Start two-step setup: a new secret for the authenticator app. Nothing is required at sign-in until /enable."""
+    _no_store(response)
+    with _errors():
+        secret, email = data.begin_two_factor(auth.engine(), p.user_id)
+    return s.TwoFactorSetup(secret=secret, otpauth_uri=totp.otpauth_uri(secret, email))
+
+
+@router.post("/auth/teacher/2fa/enable", response_model=s.RecoveryCodes)
+def two_factor_enable(body: s.TwoFactorCode, response: Response, p: Principal = Depends(TEACHER)) -> s.RecoveryCodes:
+    """Prove the app works with one code. Returns ten recovery codes, shown only this once."""
+    _no_store(response)
+    eng = auth.engine()
+    key = _two_factor_limit(eng, p)
+    try:
+        with _errors():
+            codes = data.enable_two_factor(eng, p.user_id, body.code)
+    except HTTPException as exc:
+        if exc.status_code == 422:
+            data.record_failure(eng, key)
+        raise
+    return s.RecoveryCodes(ok=True, recovery_codes=codes)
+
+
+@router.post("/auth/teacher/2fa/disable", response_model=s.Ok)
+def two_factor_disable(body: s.TwoFactorProof, response: Response, p: Principal = Depends(TEACHER)) -> s.Ok:
+    """Turn it off. Needs the password and a current code (or a recovery code), so a stolen session is not enough."""
+    _no_store(response)
+    eng = auth.engine()
+    key = _two_factor_limit(eng, p)
+    _check_password(eng, p, body.password)
+    try:
+        with _errors():
+            data.disable_two_factor(eng, p.user_id, body.code)
+    except HTTPException:
+        data.record_failure(eng, key)
+        raise
+    return s.Ok(ok=True)
+
+
+@router.post("/auth/teacher/2fa/recovery-codes", response_model=s.RecoveryCodes)
+def two_factor_new_recovery_codes(body: s.TwoFactorProof, response: Response,
+                                  p: Principal = Depends(TEACHER)) -> s.RecoveryCodes:
+    """Replace the recovery codes (the old ones stop working). Needs the password and a current code."""
+    _no_store(response)
+    eng = auth.engine()
+    key = _two_factor_limit(eng, p)
+    _check_password(eng, p, body.password)
+    try:
+        with _errors():
+            codes = data.new_recovery_codes_for(eng, p.user_id, body.code)
+    except HTTPException:
+        data.record_failure(eng, key)
+        raise
+    return s.RecoveryCodes(ok=True, recovery_codes=codes)
+
+
+def _reset_base() -> str | None:
+    """Where the emailed link points: the public address of the website (not of the API)."""
+    base = os.environ.get("APP_BASE_URL", "").strip().rstrip("/")
+    return base if base.startswith(("https://", "http://localhost", "http://127.0.0.1")) else None
+
+
+def _send_reset_email(email: str, token: str, name: str) -> None:
+    base = _reset_base()
+    if base is None:
+        log.warning("password reset email not sent: APP_BASE_URL is not set")
+        return
+    # The token sits after the # so browsers never send it to any server or in a Referer header.
+    link = f"{base}/classroom/reset#token={token}"
+    mailer.send(email, "Choose a new Planet Hunter password",
+                f"Hello {name},\n\nSomeone asked to reset the password for your Planet Hunter teacher account. "
+                f"To choose a new one, open this link within {data.RESET_MINUTES} minutes:\n\n{link}\n\n"
+                "The link works once. If you did not ask for this, ignore this email: your password has not "
+                "changed.\n")
+
+
+def _send_verify_email(email: str, token: str, name: str) -> None:
+    base = _reset_base()
+    if base is None:
+        log.warning("verification email not sent: APP_BASE_URL is not set")
+        return
+    link = f"{base}/classroom/verify#token={token}"
+    mailer.send(email, "Confirm your Planet Hunter email",
+                f"Hello {name},\n\nPlease confirm that this is your email address for your Planet Hunter teacher "
+                f"account. Open this link within {data.VERIFY_HOURS} hours:\n\n{link}\n\nThe link works once. If "
+                "you did not make an account, ignore this email.\n")
+
+
+@router.post("/auth/alerts/unsubscribe", response_model=s.Ok)
+def alerts_unsubscribe(body: s.Unsubscribe, request: Request, response: Response) -> s.Ok:
+    """Stop the candidate change emails. No sign-in: the token in the email is the proof, and all it can do is switch them off."""
+    auth.check_csrf(request)
+    eng = auth.engine()
+    _no_store(response)
+    ip = security.requester_key(auth.client_ip(request))
+    _limit(eng, f"unsub:ip:{ip}", 30, 15, "Too many tries from here. Wait 15 minutes.")
+    from watch import store as watch_store
+    if not watch_store.unsubscribe(eng, body.token):
+        data.record_failure(eng, f"unsub:ip:{ip}")
+        raise HTTPException(400, "This link is not valid. Sign in and turn the emails off from your settings instead.")
+    return s.Ok(ok=True)
+
+
+@router.post("/auth/teacher/verify", response_model=s.Ok)
+def teacher_verify(body: s.VerifyEmail, request: Request, response: Response) -> s.Ok:
+    """Confirm an address with the emailed token. No sign-in needed: the token is the proof."""
+    auth.check_csrf(request)
+    eng = auth.engine()
+    _no_store(response)
+    ip = security.requester_key(auth.client_ip(request))
+    _limit(eng, f"verify:ip:{ip}", 20, 15, "Too many tries from here. Wait 15 minutes.")
+    try:
+        with _errors():
+            data.finish_email_verification(eng, body.token)
+    except HTTPException:
+        data.record_failure(eng, f"verify:ip:{ip}")
+        raise
+    return s.Ok(ok=True)
+
+
+@router.post("/auth/teacher/verify/resend", response_model=s.Ok, status_code=202)
+def teacher_verify_resend(request: Request, response: Response, tasks: BackgroundTasks,
+                          p: Principal = Depends(TEACHER)) -> s.Ok:
+    """Send the confirmation email again to the signed-in teacher. Three a day."""
+    _no_store(response)
+    eng = auth.engine()
+    key = f"verify-resend:user:{p.user_id}"
+    _limit(eng, key, 3, 24 * 60, "You have asked for three emails today. Check your spam folder or try tomorrow.")
+    data.record_failure(eng, key)
+    made = data.start_email_verification(eng, p.user_id)
+    if made is not None:
+        tasks.add_task(_send_verify_email, made[1], made[0], made[2])
+    return s.Ok(ok=True)
+
+
+@router.post("/auth/teacher/forgot", response_model=s.Ok, status_code=202)
+def teacher_forgot(body: s.ForgotPassword, request: Request, response: Response, tasks: BackgroundTasks) -> s.Ok:
+    """Ask for a reset link. The answer is the same whether or not the address has an account, and the email is
+    sent after the answer, so neither the words nor the timing tell a stranger which addresses are registered."""
+    auth.check_csrf(request)
+    eng = auth.engine()
+    _no_store(response)
+    ip = security.requester_key(auth.client_ip(request))
+    email = security.normal_email(body.email)
+    _limit(eng, f"forgot:ip:{ip}", FORGOT_PER_HOUR, 60, "Too many reset requests from here. Try again in an hour.")
+    if email is None:
+        raise HTTPException(422, "That does not look like an email address.")
+    _limit(eng, f"forgot:email:{email}", 3, 60, "Too many reset requests for this address. Try again in an hour.")
+    data.record_failure(eng, f"forgot:ip:{ip}", f"forgot:email:{email}")  # counts requests, not only failures
+    made = data.start_password_reset(eng, email)
+    if made is not None:
+        tasks.add_task(_send_reset_email, email, made[0], made[1])
+    return s.Ok(ok=True)
+
+
+@router.post("/auth/teacher/reset", response_model=s.Ok)
+def teacher_reset(body: s.ResetPassword, request: Request, response: Response) -> s.Ok:
+    """Choose a new password with the emailed token. Signs the teacher out everywhere; they sign in again."""
+    auth.check_csrf(request)
+    eng = auth.engine()
+    _no_store(response)
+    ip = security.requester_key(auth.client_ip(request))
+    _limit(eng, f"reset:ip:{ip}", 20, 15, "Too many tries from here. Wait 15 minutes.")
+    problem = security.password_problem(body.password)
+    if problem:
+        raise HTTPException(422, problem)
+    try:
+        with _errors():
+            data.finish_password_reset(eng, body.token, body.password)
+    except HTTPException:
+        data.record_failure(eng, f"reset:ip:{ip}")
+        raise
+    return s.Ok(ok=True)
+
+
+@router.post("/auth/teacher/delete-account", response_model=s.AccountDeleted)
+def teacher_delete_account(body: s.DeleteAccount, request: Request, response: Response,
+                           p: Principal = Depends(TEACHER)) -> s.AccountDeleted:
+    """Delete the signed-in teacher's account after re-checking the password. See docs/DATA_DELETION.md."""
+    _no_store(response)
+    eng = auth.engine()
+    _check_password(eng, p, body.password)
+    if data.two_factor_enabled(eng, p.user_id):
+        key = _two_factor_limit(eng, p)
+        if not body.code or not data.spend_second_step(eng, p.user_id, body.code):
+            data.record_failure(eng, key)
+            raise HTTPException(401, "Enter a current code from your authenticator app, or a recovery code.")
+    with _errors():
+        out = data.delete_teacher_account(eng, p.user_id, delete_school=body.delete_school)
+    auth.end_session(eng, request, response)
+    return s.AccountDeleted(ok=True, **out)
+
+
+@router.post("/auth/student/join", response_model=s.Ok, status_code=201)
+def student_join(body: s.StudentJoin, request: Request, response: Response) -> s.Ok:
+    """Join a class with its code, a nickname and a PIN. No email and no real name."""
+    auth.check_csrf(request)
+    eng = auth.engine()
+    _no_store(response)
+    ip = security.requester_key(auth.client_ip(request))
+    _limit(eng, f"join:ip:{ip}", 60, 60, "Too many tries from here. Try again in an hour.")
+    _check_age(request, response, body)
+    nickname = body.nickname.strip()
+    if not security.NICKNAME_RE.match(nickname):
+        raise HTTPException(422, "Use 1 to 24 letters or numbers for your nickname (spaces, dots and dashes are "
+                                 "fine in the middle). Do not use your real name.")
+    if not security.PIN_RE.match(body.pin):
+        raise HTTPException(422, "Your PIN must be 4 to 8 digits.")
+    data.record_failure(eng, f"join:ip:{ip}")
+    with _errors():
+        mid = data.student_join(eng, body.class_code, nickname, body.pin)
+    auth.start_session(eng, request, response, member_id=mid)
+    return s.Ok(ok=True)
+
+
+@router.post("/auth/student/login", response_model=s.Ok)
+def student_login(body: s.StudentLogin, request: Request, response: Response) -> s.Ok:
+    auth.check_csrf(request)
+    eng = auth.engine()
+    _no_store(response)
+    ip = security.requester_key(auth.client_ip(request))
+    _limit(eng, f"pin:ip:{ip}", 30, 15, "Too many sign-in tries from here. Wait 15 minutes.")
+    mid, pin_hash = data.student_for_login(eng, body.class_code, body.nickname.strip())
+    if mid is not None:
+        _limit(eng, f"pin:member:{mid}", 5, 15, "Too many wrong PINs. Wait 15 minutes, or ask your teacher to "
+                                                 "reset your PIN.")
+    if not security.verify_secret(pin_hash, body.pin):
+        data.record_failure(eng, f"pin:ip:{ip}", *([f"pin:member:{mid}"] if mid else []))
+        raise HTTPException(401, "That class code, nickname and PIN do not match.")
+    data.clear_failures(eng, f"pin:member:{mid}")
+    auth.start_session(eng, request, response, member_id=mid)
+    return s.Ok(ok=True)
+
+
+@router.post("/auth/logout", response_model=s.Ok)
+def logout(request: Request, response: Response) -> s.Ok:
+    auth.check_csrf(request)
+    _no_store(response)
+    auth.end_session(auth.engine(), request, response)
+    return s.Ok(ok=True)
+
+
+@router.get("/auth/me", response_model=s.Me)
+def me(request: Request, response: Response) -> s.Me:
+    """Who is signed in on this browser, or null."""
+    _no_store(response)
+    p = auth.optional_principal(request)
+    if p is None:
+        return s.Me(me=None)
+    eng = auth.engine()
+    if p.kind == "teacher":
+        orgs = [s.OrgRole(org_id=o, name=data.org_detail(eng, p, o)["name"], role=r) for o, r in sorted(p.roles.items())]
+        return s.Me(me=s.MeTeacher(kind="teacher", display_name=p.display_name, email=p.email,
+                                                  email_verified=data.email_verified(eng, p.user_id),
+                                                  two_factor=data.two_factor_enabled(eng, p.user_id), orgs=orgs))
+    home = data.student_assignments(eng, p)
+    return s.Me(me=s.MeStudent(kind="student", nickname=p.nickname, class_id=p.class_id,
+                               class_name=home["class"]["name"]))
+
+
+# ---------- organizations (teachers) ----------
+
+@router.post("/orgs", response_model=s.OrgDetail, status_code=201)
+def create_org(body: s.OrgCreate, response: Response, p: Principal = Depends(TEACHER)) -> s.OrgDetail:
+    _no_store(response)
+    eng = auth.engine()
+    org = data.create_org(eng, p, body.name.strip())
+    return s.OrgDetail(**data.org_detail(eng, _with_role(p, org, "org_admin"), org))
+
+
+@router.post("/orgs/join", response_model=s.OrgDetail)
+def join_org(body: s.OrgJoin, response: Response, p: Principal = Depends(TEACHER)) -> s.OrgDetail:
+    _no_store(response)
+    eng = auth.engine()
+    with _errors():
+        org = data.join_org(eng, p, body.code)
+    return s.OrgDetail(**data.org_detail(eng, _with_role(p, org, p.roles.get(org, "teacher")), org))
+
+
+@router.get("/orgs/{org_id}", response_model=s.OrgDetail)
+def get_org(response: Response, org_id: int = ID(), p: Principal = Depends(TEACHER)) -> s.OrgDetail:
+    _no_store(response)
+    with _errors():
+        return s.OrgDetail(**data.org_detail(auth.engine(), p, org_id))
+
+
+@router.get("/orgs/{org_id}/overview", response_model=s.OrgOverview)
+def org_overview(response: Response, org_id: int = ID(), p: Principal = Depends(TEACHER)) -> s.OrgOverview:
+    """The whole school for its admins: teachers, classes and totals. Read only."""
+    _no_store(response)
+    with _errors():
+        return s.OrgOverview(**data.org_overview(auth.engine(), p, org_id))
+
+
+@router.post("/orgs/{org_id}/join-code", response_model=s.JoinCode)
+def rotate_org_code(response: Response, org_id: int = ID(), p: Principal = Depends(TEACHER)) -> s.JoinCode:
+    _no_store(response)
+    with _errors():
+        return s.JoinCode(join_code=data.rotate_org_code(auth.engine(), p, org_id))
+
+
+@router.put("/orgs/{org_id}/teachers/{user_id}/role", response_model=s.Ok)
+def change_role(body: s.RoleChange, response: Response, org_id: int = ID(), user_id: int = ID(),
+                p: Principal = Depends(TEACHER)) -> s.Ok:
+    _no_store(response)
+    with _errors():
+        data.set_role(auth.engine(), p, org_id, user_id, body.role)
+    return s.Ok(ok=True)
+
+
+# ---------- classes (teachers) ----------
+
+@router.get("/orgs/{org_id}/classes", response_model=s.ClassList)
+def list_classes(response: Response, org_id: int = ID(), p: Principal = Depends(TEACHER)) -> s.ClassList:
+    _no_store(response)
+    with _errors():
+        return s.ClassList(classes=data.list_classes(auth.engine(), p, org_id))
+
+
+@router.post("/orgs/{org_id}/classes", response_model=s.ClassSummary, status_code=201)
+def create_class(body: s.ClassCreate, response: Response, org_id: int = ID(),
+                 p: Principal = Depends(TEACHER)) -> s.ClassSummary:
+    _no_store(response)
+    with _errors():
+        return s.ClassSummary(**data.create_class(auth.engine(), p, org_id, body.name.strip()))
+
+
+@router.get("/classes/{class_id}", response_model=s.ClassDetail)
+def get_class(response: Response, class_id: int = ID(), p: Principal = Depends(TEACHER)) -> s.ClassDetail:
+    _no_store(response)
+    with _errors():
+        return s.ClassDetail(**data.class_detail(auth.engine(), p, class_id))
+
+
+@router.post("/classes/{class_id}/join-code", response_model=s.JoinCode)
+def rotate_class_code(response: Response, class_id: int = ID(), p: Principal = Depends(TEACHER)) -> s.JoinCode:
+    _no_store(response)
+    with _errors():
+        return s.JoinCode(join_code=data.rotate_class_code(auth.engine(), p, class_id))
+
+
+@router.delete("/classes/{class_id}", response_model=s.Ok)
+def delete_class(response: Response, class_id: int = ID(), p: Principal = Depends(TEACHER)) -> s.Ok:
+    """Delete a class and everything stored about its students."""
+    _no_store(response)
+    with _errors():
+        data.delete_class(auth.engine(), p, class_id)
+    return s.Ok(ok=True)
+
+
+@router.get("/classes/{class_id}/export")
+def export_class(class_id: int = ID(), p: Principal = Depends(TEACHER)) -> JSONResponse:
+    """Everything stored about a class and its students, as JSON."""
+    with _errors():
+        out = data.export_class(auth.engine(), p, class_id)
+    return JSONResponse(json_safe(out), headers={**NO_STORE,
+                        "Content-Disposition": f'attachment; filename="class-{class_id}-export.json"'})
+
+
+@router.put("/classes/{class_id}/students/{member_id}/pin", response_model=s.Ok)
+def reset_pin(body: s.PinReset, response: Response, class_id: int = ID(), member_id: int = ID(),
+              p: Principal = Depends(TEACHER)) -> s.Ok:
+    _no_store(response)
+    if not security.PIN_RE.match(body.pin):
+        raise HTTPException(422, "A PIN must be 4 to 8 digits.")
+    with _errors():
+        data.reset_pin(auth.engine(), p, class_id, member_id, body.pin)
+    return s.Ok(ok=True)
+
+
+@router.delete("/classes/{class_id}/students/{member_id}", response_model=s.Ok)
+def remove_student(response: Response, class_id: int = ID(), member_id: int = ID(),
+                   p: Principal = Depends(TEACHER)) -> s.Ok:
+    _no_store(response)
+    with _errors():
+        data.remove_member(auth.engine(), p, class_id, member_id)
+    return s.Ok(ok=True)
+
+
+@router.post("/classes/{class_id}/assignments", response_model=s.Assignment, status_code=201)
+def create_assignment(body: s.AssignmentCreate, response: Response, class_id: int = ID(),
+                      p: Principal = Depends(TEACHER)) -> s.Assignment:
+    _no_store(response)
+    with _errors():
+        return s.Assignment(**data.create_assignment(auth.engine(), p, class_id, body.kind, body.ref, body.due_at))
+
+
+@router.delete("/assignments/{assignment_id}", response_model=s.Ok)
+def delete_assignment(response: Response, assignment_id: int = ID(), p: Principal = Depends(TEACHER)) -> s.Ok:
+    _no_store(response)
+    with _errors():
+        data.delete_assignment(auth.engine(), p, assignment_id)
+    return s.Ok(ok=True)
+
+
+@router.get("/classes/{class_id}/gradebook", response_model=s.Gradebook, response_model_by_alias=True)
+def gradebook(response: Response, class_id: int = ID(), p: Principal = Depends(TEACHER)) -> s.Gradebook:
+    _no_store(response)
+    with _errors():
+        return s.Gradebook.model_validate(data.gradebook(auth.engine(), p, class_id))
+
+
+@router.get("/classes/{class_id}/gradebook.csv")
+def gradebook_csv(class_id: int = ID(), p: Principal = Depends(TEACHER)) -> Response:
+    with _errors():
+        g = data.gradebook(auth.engine(), p, class_id, export=True)
+    buf = io.StringIO()
+    w = csv.writer(buf)
+    w.writerow(["Nickname", *(f"{a['title']} (out of {_max(g, i)})" for i, a in enumerate(g["assignments"]))])
+    for r in g["rows"]:
+        w.writerow([_safe_cell(r["nickname"]), *("" if c is None else _num(c["score"]) for c in r["cells"])])
+    return Response(buf.getvalue(), media_type="text/csv", headers={
+        **NO_STORE, "Content-Disposition": f'attachment; filename="gradebook-class-{class_id}.csv"'})
+
+
+# ---------- students ----------
+
+@router.get("/me/assignments", response_model=s.StudentHome, response_model_by_alias=True)
+def my_assignments(response: Response, p: Principal = Depends(STUDENT)) -> s.StudentHome:
+    _no_store(response)
+    return s.StudentHome.model_validate(data.student_assignments(auth.engine(), p))
+
+
+@router.post("/me/assignments/{assignment_id}/hunt", response_model=s.HuntResult)
+def submit_hunt(body: s.HuntSubmit, response: Response, assignment_id: int = ID(),
+                p: Principal = Depends(STUDENT)) -> s.HuntResult:
+    """Submit a period for a hunt challenge. Scored like the hunt lab; the best try counts."""
+    _no_store(response)
+    with _errors():
+        return s.HuntResult(**data.submit_hunt(auth.engine(), p, assignment_id, body.period_d))
+
+
+# ---------- helpers ----------
+
+def _with_role(p: Principal, org_id: int, role: str) -> Principal:
+    """The caller as of just now, after creating or joining an org in this request."""
+    return replace(p, roles={**p.roles, org_id: role})
+
+
+def _max(g: dict, i: int) -> str:
+    maxes = {c["max_score"] for r in g["rows"] if (c := r["cells"][i]) is not None}
+    return _num(maxes.pop()) if len(maxes) == 1 else "varies"
+
+
+def _num(v: float) -> str:
+    return str(int(v)) if float(v).is_integer() else f"{v:g}"
+
+
+def _safe_cell(v: str) -> str:
+    """Spreadsheet apps run cells starting with = + - @ as formulas; prefix those with a quote."""
+    return f"'{v}" if v[:1] in ("=", "+", "-", "@", "\t", "\r") else v
+
+
+def json_safe(v):
+    if isinstance(v, dict):
+        return {k: json_safe(x) for k, x in v.items()}
+    if isinstance(v, list):
+        return [json_safe(x) for x in v]
+    if isinstance(v, dt.datetime):
+        return v.isoformat()
+    return v

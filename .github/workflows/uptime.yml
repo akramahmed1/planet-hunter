@@ -1,0 +1,34 @@
+name: Uptime
+
+# Checks the site every 30 minutes. A failed run emails the repository owner (GitHub's
+# default notification for failed scheduled workflows). Staging only until Phase 10's
+# release; the production URLs are added in the release PR.
+on:
+  schedule:
+    - cron: "17,47 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        site:
+          - { name: staging, frontend: "https://frontend-staging-5fce.up.railway.app", backend: "https://backend-staging-bade.up.railway.app" }
+    steps:
+      - name: ${{ matrix.site.name }} is up
+        run: |
+          for url in "${{ matrix.site.backend }}/api/health" "${{ matrix.site.backend }}/api/v2/health" "${{ matrix.site.frontend }}/"; do
+            for i in 1 2 3; do
+              code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "$url")
+              [ "$code" = 200 ] && break
+              sleep 20
+            done
+            echo "$url -> $code"
+            [ "$code" = 200 ] || { echo "::error::$url returned $code"; exit 1; }
+          done

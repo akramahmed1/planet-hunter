@@ -1,0 +1,174 @@
+{
+  "slug": "distances-and-light-time",
+  "title": "Distances and light-time",
+  "summary": "The astronomical unit, the speed of light, and why looking at the Sun means looking into the past.",
+  "minutes": 6,
+  "badge": {
+    "name": "Light chaser",
+    "text": "You can turn a distance in space into a light travel time."
+  },
+  "links": [
+    {
+      "href": "/solar-system",
+      "label": "Measure the distance between two planets"
+    }
+  ],
+  "steps": [
+    {
+      "heading": "Light has a speed",
+      "body": [
+        "Light is fast, but not instant. In empty space it covers 299,792,458 meters every second, an exact value."
+      ],
+      "facts": [
+        {
+          "text": "The speed of light in empty space is 299,792,458 meters per second, exactly.",
+          "kind": "definition",
+          "source": {
+            "name": "NIST CODATA 2022: speed of light in vacuum",
+            "url": "https://physics.nist.gov/cgi-bin/cuu/Value?c"
+          },
+          "checks": [
+            {
+              "fixture": "nist_c_p7.txt",
+              "quote": "speed of light in vacuum Numerical value 299 792 458 m s -1 Standard uncertainty (exact)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "The astronomical unit",
+      "body": [
+        "Kilometers get unwieldy in space, so astronomers also use the astronomical unit (au). One au is 149,597,870.7 km. Earth's average distance from the Sun is 1.00 au.",
+        "Neptune's average distance is 30.2 au."
+      ],
+      "facts": [
+        {
+          "text": "1 au is 149,597,870.7 km.",
+          "kind": "definition",
+          "source": {
+            "name": "JPL Horizons output header",
+            "url": "https://ssd.jpl.nasa.gov/horizons/"
+          },
+          "checks": [
+            {
+              "fixture": "horizons_earth_vectors_helio_today.json",
+              "quote": "1 au= 149597870.700 km"
+            }
+          ]
+        },
+        {
+          "text": "Earth's average distance from the Sun is 1.00 au and Neptune's is 30.2 au.",
+          "kind": "computed",
+          "source": {
+            "name": "NASA NSSDCA Planetary Fact Sheets",
+            "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/"
+          },
+          "checks": [
+            {
+              "computed": "earth_au"
+            },
+            {
+              "computed": "neptune_au"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Light time",
+      "body": [
+        "Divide a distance by the speed of light and you get how long light takes to cross it.",
+        "Sunlight takes about 8 minutes 19 seconds to reach Earth, so when you see the Sun you see it as it was that long ago. It takes about 4.2 hours to reach Neptune."
+      ],
+      "facts": [
+        {
+          "text": "Sunlight takes about 8 minutes 19 seconds to cross Earth's average distance from the Sun, and about 4.2 hours to reach Neptune.",
+          "kind": "computed",
+          "source": {
+            "name": "NASA NSSDCA Planetary Fact Sheets",
+            "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/"
+          },
+          "checks": [
+            {
+              "computed": "sunlight_earth"
+            },
+            {
+              "computed": "sunlight_neptune"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "key": "earth_minutes",
+      "kind": "numeric",
+      "prompt": "About how many minutes does sunlight take to reach Earth? Answer to one decimal place.",
+      "answer": 8.3,
+      "tolerance": 0.2,
+      "unit": "minutes",
+      "explanation": "Earth's average distance divided by the speed of light is 8 minutes 19 seconds, about 8.3 minutes.",
+      "source": {
+        "name": "NASA NSSDCA Planetary Fact Sheets",
+        "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/"
+      },
+      "checks": [
+        {
+          "computed": "sunlight_earth_minutes"
+        }
+      ]
+    },
+    {
+      "key": "neptune_hours",
+      "kind": "numeric",
+      "prompt": "About how many hours does sunlight take to reach Neptune?",
+      "answer": 4.2,
+      "tolerance": 0.2,
+      "unit": "hours",
+      "explanation": "Neptune is about 30.2 au away on average, so light takes about 4.2 hours.",
+      "source": {
+        "name": "NASA NSSDCA Planetary Fact Sheets",
+        "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/"
+      },
+      "checks": [
+        {
+          "computed": "sunlight_neptune_hours"
+        }
+      ]
+    },
+    {
+      "key": "sun_off",
+      "kind": "choice",
+      "prompt": "If the Sun stopped shining right now, when would Earth go dark?",
+      "choices": [
+        {
+          "text": "At the same instant",
+          "correct": false,
+          "explanation": "Light needs time to travel, even this short distance."
+        },
+        {
+          "text": "About 8 minutes later",
+          "correct": true,
+          "explanation": "The last light already on its way would still arrive."
+        },
+        {
+          "text": "About 8 hours later",
+          "correct": false,
+          "explanation": "That is too long: sunlight reaches Earth in minutes."
+        }
+      ],
+      "explanation": "Light takes about 8 minutes 19 seconds to cover Earth's average distance from the Sun.",
+      "source": {
+        "name": "NASA NSSDCA Planetary Fact Sheets",
+        "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/"
+      },
+      "checks": [
+        {
+          "computed": "sunlight_earth"
+        }
+      ]
+    }
+  ]
+}

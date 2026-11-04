@@ -1,0 +1,50 @@
+CODATA Value: speed of light in vacuum 
+
+ [link: /cuu/index.html] 
+ [link: /cuu/Constants/index.html] 
+
+ Constants 
+Topics: 
+
+ [link: /cuu/Constants/index.html] Values 
+
+ [link: /cuu/Constants/energy.html] Energy 
+Equivalents 
+
+ [link: /cuu/Constants/Citations/Search.html] Searchable 
+Bibliography 
+
+ [link: /cuu/Constants/background.html] Background 
+
+ [link: /cuu/Constants/bibliography.html] Constants 
+Bibliography 
+
+ [link: /cuu/index.html] Constants, 
+Units & 
+Uncertainty 
+home page 
+
+ speed of light in vacuum 
+
+  Numerical value 
+  299 792 458 m s -1 
+
+  Standard uncertainty 
+  (exact) 
+
+   Relative standard uncertainty 
+  (exact) 
+
+  Concise form 
+   299 792 458 m s -1     
+
+ Click [link: /cgi-bin/cuu/CCValue?c|ShowFirst=Browse] here for correlation coefficient of this constant with other constants 
+
+ [link: /cuu/Constants/bibliography.html] Source: 2022 CODATA       [link: /cuu/Constants/bibliography.html] 
+recommended values   
+ [link: /cgi-bin/cuu/Info/Constants/definitions.html] Definition of 
+uncertainty   
+       [link: /cgi-bin/cuu/CCValue?c|ShowFirst=Browse] Correlation coefficient with 
+any other constant 
+
+ [link: /cuu/Constants/index.html]

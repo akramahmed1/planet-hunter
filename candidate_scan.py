@@ -32,11 +32,11 @@ TARGETS = [
     ("TIC 150428135", "TOI 700"),    # validated in step 1
     ("TIC 259377017", "TOI 270"),
     ("TIC 251848941", "TOI 178"),
-    ("TIC 183985250", "TOI 849"),
+    ("TIC 183985250", "TOI 193"),
     ("TIC 260128333", "TOI 1338"),   # circumbinary system
     ("TIC 55652896",  "TOI 216"),
     ("TIC 52368076",  "TOI 125"),
-    ("TIC 307210830", "TOI 776"),
+    ("TIC 307210830", "TOI 175"),
 ]
 
 MAX_SECTORS = 2          # keep downloads small; enough for a prototype scan

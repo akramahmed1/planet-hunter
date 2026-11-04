@@ -1,0 +1,16 @@
+{
+  "url": "https://raw.githubusercontent.com/nasa/NASA-3D-Resources/11ebb4e/3D%20Models/Transiting%20Exoplanet%20Survey%20Satellite%20(TESS)%20(A)/Transiting%20Exoplanet%20Survey%20Satellite%20(TESS)%20(A).glb",
+  "final_url": "https://raw.githubusercontent.com/nasa/NASA-3D-Resources/11ebb4e/3D%20Models/Transiting%20Exoplanet%20Survey%20Satellite%20(TESS)%20(A)/Transiting%20Exoplanet%20Survey%20Satellite%20(TESS)%20(A).glb",
+  "status": 200,
+  "https": true,
+  "headers": {
+    "cache-control": "max-age=300",
+    "content-type": "application/octet-stream",
+    "etag": "\"a90fb6bf96f1cc27d5deaf64ac54f7e12a009392e77b8e45fd649a64493988a5\"",
+    "strict-transport-security": "max-age=31536000",
+    "access-control-allow-origin": "*"
+  },
+  "bytes": 206576,
+  "truncated": false,
+  "fetched_at": "2026-10-18T00:37:19+00:00"
+}

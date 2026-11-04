@@ -28,12 +28,12 @@
   "summary": {
     "count": 8,
     "by_classification": {
-      "ambiguous": 2,
+      "ambiguous": 1,
       "clean-recovery": 3,
       "eclipsing-binary": 1,
       "likely-noise": 1,
-      "marginal": 1,
-      "unreviewed": 0
+      "marginal": 0,
+      "unreviewed": 2
     }
   },
   "candidates": [
@@ -87,8 +87,8 @@
     },
     {
       "rank": 4,
-      "target": "TOI 776",
-      "slug": "toi-776",
+      "target": "TOI 175",
+      "slug": "toi-175",
       "tic": "TIC 307210830",
       "period_d": 3.6912,
       "duration_d": 0.05,
@@ -96,9 +96,9 @@
       "snr": 39.7,
       "bls_power": 0.0,
       "n_cadences": 34596,
-      "classification": "ambiguous",
-      "classification_label": "Ambiguous, needs follow-up",
-      "readout": "Unexplained. Known planets are near 8.25 d and 15.7 d. Could be a harmonic or a false positive. Candidate signal, needs professional follow-up. NOT a discovery.",
+      "classification": "unreviewed",
+      "classification_label": "Unreviewed",
+      "readout": "Correction (2026-10-18): this star was listed as TOI 776 by mistake. Its TIC ID, 307210830, is TOI 175 (L 98-59). The signal (3.6912 d) is close to the published period of L 98-59 c (3.6907 d, NASA Exoplanet Archive), but this result has not been re-reviewed by a human yet. Candidate signal, needs professional follow-up. NOT a discovery.",
       "plot_url": null
     },
     {
@@ -135,8 +135,8 @@
     },
     {
       "rank": 7,
-      "target": "TOI 849",
-      "slug": "toi-849",
+      "target": "TOI 193",
+      "slug": "toi-193",
       "tic": "TIC 183985250",
       "period_d": 0.7926,
       "duration_d": 0.05,
@@ -144,9 +144,9 @@
       "snr": 4.2,
       "bls_power": 0.001,
       "n_cadences": 112971,
-      "classification": "marginal",
-      "classification_label": "Marginal",
-      "readout": "Near published TOI 849 b (0.765 d) but 3.5 percent off and very weak (SNR 4.2). Marginal at best. Candidate signal, needs professional follow-up.",
+      "classification": "unreviewed",
+      "classification_label": "Unreviewed",
+      "readout": "Correction (2026-10-18): this star was listed as TOI 849 by mistake. Its TIC ID, 183985250, is TOI 193 (LTT 9779). The signal (0.7926 d) is close to the published period of LTT 9779 b (0.79205 d, NASA Exoplanet Archive), but this result has not been re-reviewed by a human yet. Candidate signal, needs professional follow-up. NOT a discovery.",
       "plot_url": null
     },
     {

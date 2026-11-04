@@ -1,0 +1,14 @@
+{
+  "url": "https://cdsarc.cds.unistra.fr/ftp/J/ApJS/258/16/tess-ebs.dat",
+  "final_url": "https://cdsarc.cds.unistra.fr/ftp/J/ApJS/258/16/tess-ebs.dat",
+  "status": 404,
+  "https": true,
+  "headers": {
+    "server": "Apache/2.4.66 (Ubuntu)",
+    "content-type": "text/html; charset=iso-8859-1",
+    "access-control-allow-origin": "*"
+  },
+  "bytes": 323,
+  "truncated": false,
+  "fetched_at": "2026-10-18T01:28:43+00:00"
+}

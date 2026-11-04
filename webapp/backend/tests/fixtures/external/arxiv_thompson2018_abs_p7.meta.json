@@ -1,0 +1,15 @@
+{
+  "url": "https://arxiv.org/abs/1710.06758",
+  "final_url": "https://arxiv.org/abs/1710.06758",
+  "status": 200,
+  "https": true,
+  "headers": {
+    "server": "Google Frontend",
+    "last-modified": "Mon, 24 Aug 2026 20:12:15 GMT",
+    "cache-control": "max-age=3600",
+    "content-type": "text/html; charset=utf-8"
+  },
+  "bytes": 56074,
+  "truncated": false,
+  "fetched_at": "2026-10-18T02:07:30+00:00"
+}

@@ -1,0 +1,16 @@
+{
+  "url": "https://ssd.jpl.nasa.gov/planets/approx_pos.html",
+  "final_url": "https://ssd.jpl.nasa.gov/planets/approx_pos.html",
+  "status": 200,
+  "https": true,
+  "headers": {
+    "server": "nginx",
+    "content-type": "text/html",
+    "last-modified": "Tue, 06 Oct 2026 15:47:33 GMT",
+    "etag": "\"6ac51815-7391\"",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload"
+  },
+  "bytes": 29585,
+  "truncated": false,
+  "fetched_at": "2026-10-17T07:54:52+00:00"
+}

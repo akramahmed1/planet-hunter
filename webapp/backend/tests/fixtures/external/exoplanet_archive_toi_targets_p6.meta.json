@@ -1,0 +1,13 @@
+{
+  "url": "https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select%20tid%2Ctoi%2Ctoipfx%2Cpl_orbper%2Cpl_trandurh%2Cpl_trandep%2Ctfopwg_disp%20from%20toi%20where%20tid%20in%20%28260128333%2C259377017%2C55652896%2C307210830%2C150428135%2C52368076%2C183985250%2C251848941%29&format=json",
+  "final_url": "https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select%20tid%2Ctoi%2Ctoipfx%2Cpl_orbper%2Cpl_trandurh%2Cpl_trandep%2Ctfopwg_disp%20from%20toi%20where%20tid%20in%20%28260128333%2C259377017%2C55652896%2C307210830%2C150428135%2C52368076%2C183985250%2C251848941%29&format=json",
+  "status": 200,
+  "https": true,
+  "headers": {
+    "content-type": "application/json",
+    "server": "cloudflare"
+  },
+  "bytes": 3516,
+  "truncated": false,
+  "fetched_at": "2026-10-18T01:28:35+00:00"
+}
