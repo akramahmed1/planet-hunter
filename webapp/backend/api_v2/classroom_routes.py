@@ -20,7 +20,7 @@ from fastapi.responses import JSONResponse
 from api_v2 import schemas as s
 import mailer
 from classroom import auth, data, flags, security, totp
-from classroom.auth import STUDENT, TEACHER, Principal
+from classroom.auth import STUDENT, TEACHER, VERIFIED_TEACHER, Principal
 
 log = logging.getLogger("planethunter.classroom")
 router = APIRouter(prefix="/api/v2", tags=["v2"], dependencies=[Depends(flags.require_classroom)])
@@ -94,6 +94,9 @@ def teacher_signup(body: s.TeacherSignup, request: Request, response: Response, 
     with _errors():
         uid = data.create_teacher(eng, email, body.password, body.display_name.strip(), body.org_name, body.org_code)
     auth.start_session(eng, request, response, user_id=uid)
+    if flags.auto_confirm_test_email(email):
+        data.mark_email_verified(eng, uid)
+        return s.Ok(ok=True)
     made = data.start_email_verification(eng, uid)
     if made is not None:
         tasks.add_task(_send_verify_email, made[1], made[0], made[2])
@@ -417,7 +420,7 @@ def me(request: Request, response: Response) -> s.Me:
 # ---------- organizations (teachers) ----------
 
 @router.post("/orgs", response_model=s.OrgDetail, status_code=201)
-def create_org(body: s.OrgCreate, response: Response, p: Principal = Depends(TEACHER)) -> s.OrgDetail:
+def create_org(body: s.OrgCreate, response: Response, p: Principal = Depends(VERIFIED_TEACHER)) -> s.OrgDetail:
     _no_store(response)
     eng = auth.engine()
     org = data.create_org(eng, p, body.name.strip())
@@ -425,7 +428,7 @@ def create_org(body: s.OrgCreate, response: Response, p: Principal = Depends(TEA
 
 
 @router.post("/orgs/join", response_model=s.OrgDetail)
-def join_org(body: s.OrgJoin, response: Response, p: Principal = Depends(TEACHER)) -> s.OrgDetail:
+def join_org(body: s.OrgJoin, response: Response, p: Principal = Depends(VERIFIED_TEACHER)) -> s.OrgDetail:
     _no_store(response)
     eng = auth.engine()
     with _errors():
@@ -434,14 +437,14 @@ def join_org(body: s.OrgJoin, response: Response, p: Principal = Depends(TEACHER
 
 
 @router.get("/orgs/{org_id}", response_model=s.OrgDetail)
-def get_org(response: Response, org_id: int = ID(), p: Principal = Depends(TEACHER)) -> s.OrgDetail:
+def get_org(response: Response, org_id: int = ID(), p: Principal = Depends(VERIFIED_TEACHER)) -> s.OrgDetail:
     _no_store(response)
     with _errors():
         return s.OrgDetail(**data.org_detail(auth.engine(), p, org_id))
 
 
 @router.get("/orgs/{org_id}/overview", response_model=s.OrgOverview)
-def org_overview(response: Response, org_id: int = ID(), p: Principal = Depends(TEACHER)) -> s.OrgOverview:
+def org_overview(response: Response, org_id: int = ID(), p: Principal = Depends(VERIFIED_TEACHER)) -> s.OrgOverview:
     """The whole school for its admins: teachers, classes and totals. Read only."""
     _no_store(response)
     with _errors():
@@ -449,7 +452,7 @@ def org_overview(response: Response, org_id: int = ID(), p: Principal = Depends(
 
 
 @router.post("/orgs/{org_id}/join-code", response_model=s.JoinCode)
-def rotate_org_code(response: Response, org_id: int = ID(), p: Principal = Depends(TEACHER)) -> s.JoinCode:
+def rotate_org_code(response: Response, org_id: int = ID(), p: Principal = Depends(VERIFIED_TEACHER)) -> s.JoinCode:
     _no_store(response)
     with _errors():
         return s.JoinCode(join_code=data.rotate_org_code(auth.engine(), p, org_id))
@@ -457,7 +460,7 @@ def rotate_org_code(response: Response, org_id: int = ID(), p: Principal = Depen
 
 @router.put("/orgs/{org_id}/teachers/{user_id}/role", response_model=s.Ok)
 def change_role(body: s.RoleChange, response: Response, org_id: int = ID(), user_id: int = ID(),
-                p: Principal = Depends(TEACHER)) -> s.Ok:
+                p: Principal = Depends(VERIFIED_TEACHER)) -> s.Ok:
     _no_store(response)
     with _errors():
         data.set_role(auth.engine(), p, org_id, user_id, body.role)
@@ -467,7 +470,7 @@ def change_role(body: s.RoleChange, response: Response, org_id: int = ID(), user
 # ---------- classes (teachers) ----------
 
 @router.get("/orgs/{org_id}/classes", response_model=s.ClassList)
-def list_classes(response: Response, org_id: int = ID(), p: Principal = Depends(TEACHER)) -> s.ClassList:
+def list_classes(response: Response, org_id: int = ID(), p: Principal = Depends(VERIFIED_TEACHER)) -> s.ClassList:
     _no_store(response)
     with _errors():
         return s.ClassList(classes=data.list_classes(auth.engine(), p, org_id))
@@ -475,28 +478,28 @@ def list_classes(response: Response, org_id: int = ID(), p: Principal = Depends(
 
 @router.post("/orgs/{org_id}/classes", response_model=s.ClassSummary, status_code=201)
 def create_class(body: s.ClassCreate, response: Response, org_id: int = ID(),
-                 p: Principal = Depends(TEACHER)) -> s.ClassSummary:
+                 p: Principal = Depends(VERIFIED_TEACHER)) -> s.ClassSummary:
     _no_store(response)
     with _errors():
         return s.ClassSummary(**data.create_class(auth.engine(), p, org_id, body.name.strip()))
 
 
 @router.get("/classes/{class_id}", response_model=s.ClassDetail)
-def get_class(response: Response, class_id: int = ID(), p: Principal = Depends(TEACHER)) -> s.ClassDetail:
+def get_class(response: Response, class_id: int = ID(), p: Principal = Depends(VERIFIED_TEACHER)) -> s.ClassDetail:
     _no_store(response)
     with _errors():
         return s.ClassDetail(**data.class_detail(auth.engine(), p, class_id))
 
 
 @router.post("/classes/{class_id}/join-code", response_model=s.JoinCode)
-def rotate_class_code(response: Response, class_id: int = ID(), p: Principal = Depends(TEACHER)) -> s.JoinCode:
+def rotate_class_code(response: Response, class_id: int = ID(), p: Principal = Depends(VERIFIED_TEACHER)) -> s.JoinCode:
     _no_store(response)
     with _errors():
         return s.JoinCode(join_code=data.rotate_class_code(auth.engine(), p, class_id))
 
 
 @router.delete("/classes/{class_id}", response_model=s.Ok)
-def delete_class(response: Response, class_id: int = ID(), p: Principal = Depends(TEACHER)) -> s.Ok:
+def delete_class(response: Response, class_id: int = ID(), p: Principal = Depends(VERIFIED_TEACHER)) -> s.Ok:
     """Delete a class and everything stored about its students."""
     _no_store(response)
     with _errors():
@@ -505,7 +508,7 @@ def delete_class(response: Response, class_id: int = ID(), p: Principal = Depend
 
 
 @router.get("/classes/{class_id}/export")
-def export_class(class_id: int = ID(), p: Principal = Depends(TEACHER)) -> JSONResponse:
+def export_class(class_id: int = ID(), p: Principal = Depends(VERIFIED_TEACHER)) -> JSONResponse:
     """Everything stored about a class and its students, as JSON."""
     with _errors():
         out = data.export_class(auth.engine(), p, class_id)
@@ -515,7 +518,7 @@ def export_class(class_id: int = ID(), p: Principal = Depends(TEACHER)) -> JSONR
 
 @router.put("/classes/{class_id}/students/{member_id}/pin", response_model=s.Ok)
 def reset_pin(body: s.PinReset, response: Response, class_id: int = ID(), member_id: int = ID(),
-              p: Principal = Depends(TEACHER)) -> s.Ok:
+              p: Principal = Depends(VERIFIED_TEACHER)) -> s.Ok:
     _no_store(response)
     if not security.PIN_RE.match(body.pin):
         raise HTTPException(422, "A PIN must be 4 to 8 digits.")
@@ -526,7 +529,7 @@ def reset_pin(body: s.PinReset, response: Response, class_id: int = ID(), member
 
 @router.delete("/classes/{class_id}/students/{member_id}", response_model=s.Ok)
 def remove_student(response: Response, class_id: int = ID(), member_id: int = ID(),
-                   p: Principal = Depends(TEACHER)) -> s.Ok:
+                   p: Principal = Depends(VERIFIED_TEACHER)) -> s.Ok:
     _no_store(response)
     with _errors():
         data.remove_member(auth.engine(), p, class_id, member_id)
@@ -535,14 +538,14 @@ def remove_student(response: Response, class_id: int = ID(), member_id: int = ID
 
 @router.post("/classes/{class_id}/assignments", response_model=s.Assignment, status_code=201)
 def create_assignment(body: s.AssignmentCreate, response: Response, class_id: int = ID(),
-                      p: Principal = Depends(TEACHER)) -> s.Assignment:
+                      p: Principal = Depends(VERIFIED_TEACHER)) -> s.Assignment:
     _no_store(response)
     with _errors():
         return s.Assignment(**data.create_assignment(auth.engine(), p, class_id, body.kind, body.ref, body.due_at))
 
 
 @router.delete("/assignments/{assignment_id}", response_model=s.Ok)
-def delete_assignment(response: Response, assignment_id: int = ID(), p: Principal = Depends(TEACHER)) -> s.Ok:
+def delete_assignment(response: Response, assignment_id: int = ID(), p: Principal = Depends(VERIFIED_TEACHER)) -> s.Ok:
     _no_store(response)
     with _errors():
         data.delete_assignment(auth.engine(), p, assignment_id)
@@ -550,14 +553,14 @@ def delete_assignment(response: Response, assignment_id: int = ID(), p: Principa
 
 
 @router.get("/classes/{class_id}/gradebook", response_model=s.Gradebook, response_model_by_alias=True)
-def gradebook(response: Response, class_id: int = ID(), p: Principal = Depends(TEACHER)) -> s.Gradebook:
+def gradebook(response: Response, class_id: int = ID(), p: Principal = Depends(VERIFIED_TEACHER)) -> s.Gradebook:
     _no_store(response)
     with _errors():
         return s.Gradebook.model_validate(data.gradebook(auth.engine(), p, class_id))
 
 
 @router.get("/classes/{class_id}/gradebook.csv")
-def gradebook_csv(class_id: int = ID(), p: Principal = Depends(TEACHER)) -> Response:
+def gradebook_csv(class_id: int = ID(), p: Principal = Depends(VERIFIED_TEACHER)) -> Response:
     with _errors():
         g = data.gradebook(auth.engine(), p, class_id, export=True)
     buf = io.StringIO()

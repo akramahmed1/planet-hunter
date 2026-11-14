@@ -71,13 +71,23 @@ def test_spreadsheet_formulas_are_neutralised_in_csv():
 
 # ---------- with the database ----------
 
-def teacher(email: str, org: str | None = None, code: str | None = None) -> TestClient:
+def verify_email(email: str) -> None:
+    """Mark an address confirmed straight in the database (the emailed link itself is tested in test_email_verification)."""
+    import db
+    from sqlalchemy import text
+    with db.engine().begin() as conn:
+        conn.execute(text("update users set email_verified_at = now() where email = :e"), {"e": email.lower()})
+
+
+def teacher(email: str, org: str | None = None, code: str | None = None, verified: bool = True) -> TestClient:
     c = TestClient(backend.app)
     c.__enter__()
     body = {"email": email, "password": "correct horse battery", "display_name": email.split("@")[0], **ADULT,
             **({"org_name": org} if org else {"org_code": code})}
     r = c.post("/api/v2/auth/teacher/signup", json=body, headers=H)
     assert r.status_code == 201, r.text
+    if verified:
+        verify_email(email)
     return c
 
 

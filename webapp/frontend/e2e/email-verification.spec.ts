@@ -1,7 +1,8 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-// T18. The token itself is covered by the backend tests (a browser cannot read the test mailbox). Here: a new
+// T18. Addresses on school.example count as confirmed on CI and staging (AUTO_CONFIRM_TEST_EMAILS), so this test uses
+// another reserved domain to stay unconfirmed. The token itself is covered by the backend tests (a browser cannot read the test mailbox). Here: a new
 // teacher sees the banner and can ask for another email, and the verify page handles a missing and a wrong link.
 
 const unique = () => `${Date.now()}${Math.floor(Math.random() * 1e6)}`;
@@ -11,7 +12,7 @@ test("a new teacher is asked to confirm their email and can ask for it again", a
   await page.getByRole("radio", { name: "I'm a teacher" }).check();
   await page.getByRole("button", { name: "Create an account" }).click();
   await page.getByTestId("teacher-name").fill("Mr Okafor");
-  await page.getByTestId("teacher-email").fill(`okafor${unique()}@school.example`);
+  await page.getByTestId("teacher-email").fill(`okafor${unique()}@pending.example`);
   await page.getByTestId("teacher-password").fill("correct horse battery");
   await page.getByTestId("org-name").fill(`Verify High ${unique()}`);
   await page.getByTestId("birth-month").selectOption("3");
@@ -19,6 +20,9 @@ test("a new teacher is asked to confirm their email and can ask for it again", a
   await page.getByTestId("teacher-submit").click();
   await expect(page.getByTestId("signed-in")).toContainText("Mr Okafor");
   await expect(page.getByTestId("verify-banner")).toContainText("Please confirm your email address");
+  // Until the link is used there is no school, class or join code to see or share.
+  await expect(page.getByTestId("locked-until-verified")).toBeVisible();
+  await expect(page.getByTestId("new-class-name")).toHaveCount(0);
   await page.getByTestId("verify-resend").click();
   await expect(page.getByTestId("verify-resent")).toBeVisible();
   const results = await new AxeBuilder({ page }).analyze();

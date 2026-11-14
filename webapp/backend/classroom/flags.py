@@ -19,3 +19,14 @@ def require_classroom() -> None:
     """Router dependency: with the switch off every classroom route answers 404, as if it did not exist."""
     if not classroom_enabled():
         raise HTTPException(404, "Not Found")
+
+
+TEST_ADDRESS_DOMAIN = "school.example"  # reserved by RFC 2606: no real person can ever own an address here
+
+
+def auto_confirm_test_email(email: str) -> bool:
+    """Staging and CI only (AUTO_CONFIRM_TEST_EMAILS=1): a teacher whose address is on the reserved test domain
+    counts as confirmed at sign-up, so browser tests can run on a site where nobody can click an emailed link.
+    Real addresses always need the link. Never set this in production; off by default."""
+    on = os.environ.get("AUTO_CONFIRM_TEST_EMAILS", "").strip().lower() in {"1", "true", "yes", "on"}
+    return on and email.lower().endswith("@" + TEST_ADDRESS_DOMAIN)

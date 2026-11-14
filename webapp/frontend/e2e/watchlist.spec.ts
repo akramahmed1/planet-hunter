@@ -6,10 +6,11 @@ import { expect, test, type Browser, type BrowserContext, type Page } from "@pla
 const unique = () => `${Date.now()}${Math.floor(Math.random() * 1e6)}`;
 const CSRF = { "X-PH-CSRF": "1" };
 
-async function signedIn(browser: Browser): Promise<{ ctx: BrowserContext; page: Page }> {
+// school.example addresses count as confirmed on CI and staging (AUTO_CONFIRM_TEST_EMAILS); pending.example stays unconfirmed.
+async function signedIn(browser: Browser, domain = "school.example"): Promise<{ ctx: BrowserContext; page: Page }> {
   const ctx = await browser.newContext({ locale: "en-US" });
   const r = await ctx.request.post("/api/v2/auth/teacher/signup", {
-    data: { email: `watch${unique()}@school.example`, password: "correct horse battery", display_name: "Watcher", birth_month: 1,
+    data: { email: `watch${unique()}@${domain}`, password: "correct horse battery", display_name: "Watcher", birth_month: 1,
       birth_year: 1990, org_name: `Watch School ${unique()}` },
     headers: CSRF,
   });
@@ -57,7 +58,7 @@ test("a signed-in person watches a candidate, sees it listed, and stops watching
 });
 
 test("email alerts need a confirmed address, and say so instead of failing quietly", async ({ browser }) => {
-  const { ctx, page } = await signedIn(browser);
+  const { ctx, page } = await signedIn(browser, "pending.example");
   await page.goto("/my-watchlist");
   const box = page.getByTestId("alert-settings");
   await expect(box).toContainText("Confirm your email address first");

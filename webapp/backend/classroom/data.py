@@ -160,6 +160,11 @@ def finish_password_reset(eng: Engine, token: str, new_password: str) -> None:
 VERIFY_HOURS = 48
 
 
+def mark_email_verified(eng: Engine, user_id: int) -> None:
+    with eng.begin() as c:
+        c.execute(text("update users set email_verified_at = now() where id = :u"), {"u": user_id})
+
+
 def email_verified(eng: Engine, user_id: int) -> bool:
     with eng.connect() as c:
         return c.execute(text("select email_verified_at is not null from users where id = :u"),

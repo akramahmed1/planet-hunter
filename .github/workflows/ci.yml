@@ -115,6 +115,7 @@ jobs:
       WRITE_LIMIT_PER_MINUTE: "100000"
       # Classroom is OFF by default (production); the browser tests exercise it, so it is on here.
       CLASSROOM_ENABLED: "1"
+      AUTO_CONFIRM_TEST_EMAILS: "1"
     steps:
       - uses: actions/checkout@v4
         with:
