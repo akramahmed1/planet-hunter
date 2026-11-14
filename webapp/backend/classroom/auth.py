@@ -135,9 +135,10 @@ def optional_principal(request: Request) -> Principal | None:
 class Auth:
     """Dependency: the signed-in caller, limited to the given kinds ("teacher", "student")."""
 
-    def __init__(self, *kinds: str):
+    def __init__(self, *kinds: str, verified: bool = False):
         assert kinds and set(kinds) <= {"teacher", "student"}
         self.kinds = kinds
+        self.verified = verified  # a teacher must have confirmed the email address first
 
     def __call__(self, request: Request) -> Principal:
         flags.require_classroom()
@@ -150,10 +151,20 @@ class Auth:
         check_csrf(request)
         if p.kind not in self.kinds:
             raise HTTPException(403, f"this needs a {' or '.join(self.kinds)} account")
+        if self.verified and p.kind == "teacher" and not _email_verified(p.user_id):
+            raise HTTPException(403, "Confirm your email address first. We sent you a link; "
+                                     "classes and join codes unlock once it is confirmed.")
         return p
 
 
+def _email_verified(user_id: int | None) -> bool:
+    with engine().connect() as c:
+        return bool(c.execute(text("select email_verified_at is not null from users where id = :u"),
+                              {"u": user_id}).scalar())
+
+
 TEACHER = Auth("teacher")
+VERIFIED_TEACHER = Auth("teacher", verified=True)  # school, class and assignment routes
 STUDENT = Auth("student")
 ANYONE = Auth("teacher", "student")
 

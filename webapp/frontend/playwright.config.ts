@@ -103,7 +103,7 @@ export default defineConfig({
           command: "python3 -m uvicorn app:app --port 8000",
           cwd: "../backend",
           // Answer external requests with the saved real samples, so tests never hit the network.
-          env: { PH_OFFLINE_FIXTURES: "1", CLASSROOM_ENABLED: "1" },
+          env: { PH_OFFLINE_FIXTURES: "1", CLASSROOM_ENABLED: "1", AUTO_CONFIRM_TEST_EMAILS: "1" },
           url: "http://127.0.0.1:8000/api/health",
           reuseExistingServer: true,
           timeout: 60_000,

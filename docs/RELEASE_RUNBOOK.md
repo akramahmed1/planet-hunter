@@ -29,6 +29,7 @@ flow in the production environment):
 | backend | `ALLOWED_ORIGINS` | the production frontend URL |
 | backend | `NASA_API_KEY` | Akram's key (already set for v1) |
 | backend | `CLASSROOM_ENABLED` | leave UNSET (off) in production until the attorney-reviewed privacy notice exists; `1` in staging. Off: every classroom route answers 404 and the site hides Classroom |
+| backend | `AUTO_CONFIRM_TEST_EMAILS` | `1` in staging and CI ONLY, so browser tests can sign up teachers on `@school.example` (a reserved domain no real person owns) without clicking an emailed link. Real addresses always need the link. NEVER set in production; leave it unset |
 | backend | pre-deploy command | `alembic upgrade head` |
 | worker (new) | start command `python -m scans.worker`, `DATABASE_URL`, `SCAN_TIME_LIMIT_S=900`, `SCAN_MEMORY_LIMIT_MB=3000` | |
 | refresh (cron, check it exists in production) | `DATABASE_URL`, `NASA_API_KEY`, start `python -m live.refresh`, schedule `13 6 * * *` | |

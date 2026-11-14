@@ -1,0 +1,9 @@
+
+> planet-hunter-frontend@1.0.0 start
+> next start --port 3000
+
+▲ Next.js 16.4.2
+- Local:         http://localhost:3000
+- Network:       http://192.0.2.2:3000
+✓ Ready in 152ms
+✓ Running next.config.ts took 51ms

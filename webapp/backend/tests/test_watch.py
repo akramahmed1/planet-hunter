@@ -140,7 +140,7 @@ def test_students_have_a_watchlist_but_no_email_and_nobody_sees_anyone_elses(eng
 
 @needs_db
 def test_email_alerts_need_a_confirmed_address_and_can_be_switched_off_by_link(engine):  # noqa: F811
-    t = teacher("w5@school.example", org="W School 5")
+    t = teacher("w5@school.example", org="W School 5", verified=False)
     assert t.get("/api/v2/me/alerts").json() == {"email_alerts": False, "can_email": False, "email_ready": t.get("/api/v2/me/alerts").json()["email_ready"]}
     r = t.put("/api/v2/me/alerts", json={"email_alerts": True}, headers=H)
     assert r.status_code == 409 and "Confirm your email" in r.json()["detail"]

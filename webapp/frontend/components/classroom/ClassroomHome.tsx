@@ -46,7 +46,15 @@ export default function ClassroomHome({ who }: { who?: "teacher" | "student" }) 
         <button type="button" className="btn btn--sm btn--ghost" onClick={logout} data-testid="logout">Sign out</button>
       </p>
       {me.kind === "teacher" && !me.email_verified && <VerifyBanner email={me.email} />}
-      {me.kind === "teacher" ? <TeacherHome orgs={me.orgs} onChange={load} /> : <StudentAssignments />}
+      {me.kind === "teacher" && !me.email_verified ? (
+        <p className="muted" data-testid="locked-until-verified">
+          Your school, classes and join codes unlock as soon as you confirm your email address.
+        </p>
+      ) : me.kind === "teacher" ? (
+        <TeacherHome orgs={me.orgs} onChange={load} />
+      ) : (
+        <StudentAssignments />
+      )}
       {me.kind === "teacher" && <TwoFactor on={me.two_factor} onChange={load} />}
       {me.kind === "teacher" && <DeleteAccount twoFactor={me.two_factor} onDeleted={() => setMe(null)} />}
     </>
