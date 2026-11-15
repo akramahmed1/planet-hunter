@@ -3396,3 +3396,75 @@ html.cosmos-on body::after {
 .hunt-loading {
   min-height: 14rem; /* about the room the lab takes, so the page does not jump when it arrives */
 }
+
+/* Forms (product audit P0-2/P0-4): inline errors, an error summary, a password box with Show/Hide and live rules, and a
+   submit row that stays reachable above the tab bar while the keyboard is open. */
+.field-error {
+  color: var(--nova);
+  font-size: var(--step--1);
+  font-weight: 600;
+}
+
+.error-summary {
+  border: 1px solid var(--nova);
+  border-radius: var(--r-md);
+  padding: var(--sp-3);
+}
+
+.error-summary p,
+.error-summary ul {
+  margin: 0;
+}
+
+.error-summary ul {
+  padding-left: var(--sp-4);
+}
+
+.pw-row {
+  display: flex;
+  gap: var(--sp-2);
+  align-items: center;
+}
+
+.pw-row .select {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.pw-toggle {
+  min-width: 4.5rem;
+  min-height: 44px;
+  flex: 0 0 auto;
+}
+
+.pw-rules {
+  list-style: none;
+  margin: var(--sp-1) 0 0;
+  padding: 0;
+  font-size: var(--step--1);
+}
+
+.pw-ok {
+  color: var(--aurora);
+}
+
+.pw-todo {
+  color: var(--ink-dim);
+}
+
+.form-actions {
+  position: sticky;
+  bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom));
+  padding-block: var(--sp-2);
+  z-index: 1;
+  /* a soft backdrop so text scrolling underneath the button stays readable */
+  background: linear-gradient(to bottom, transparent, var(--glass-solid) 35%);
+}
+
+.error-box {
+  border: 1px solid var(--nova);
+  border-radius: var(--r-md);
+  padding: var(--sp-3);
+  margin: 0;
+  color: var(--ink);
+}

@@ -92,7 +92,9 @@ def teacher_signup(body: s.TeacherSignup, request: Request, response: Response, 
         raise HTTPException(422, "Either name a new school or group, or give the join code of an existing one.")
     data.record_failure(eng, f"signup:ip:{ip}")  # counts attempts, not only failures
     with _errors():
-        uid = data.create_teacher(eng, email, body.password, body.display_name.strip(), body.org_name, body.org_code)
+        org_name = " ".join(body.org_name.split()) if body.org_name is not None else None  # trim, collapse spaces
+        uid = data.create_teacher(eng, email, body.password, " ".join(body.display_name.split()), org_name,
+                                  body.org_code.strip() if body.org_code is not None else None)
     auth.start_session(eng, request, response, user_id=uid)
     if flags.auto_confirm_test_email(email):
         data.mark_email_verified(eng, uid)

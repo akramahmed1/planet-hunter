@@ -168,3 +168,11 @@ def test_only_the_reserved_test_domain_is_auto_confirmed_and_only_when_the_switc
     assert verified(t) is False
     t = teacher("auto4@pending.example", org="Auto School 4", verified=False)
     assert verified(t) is False
+
+
+@needs_db
+def test_school_and_teacher_names_are_saved_with_tidy_spaces(engine, mail):  # noqa: F811
+    """Product audit 2026-11-14: names typed with extra spaces are trimmed and collapsed on save (letters untouched)."""
+    t = teacher("tidy1@school.example", org="  Trine   university ", verified=False)
+    me = t.get("/api/v2/auth/me").json()["me"]
+    assert me["orgs"][0]["name"] == "Trine university"

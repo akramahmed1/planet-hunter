@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useId, useState, type ReactNode } from "react";
+import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { readDoor } from "@/lib/door";
 import Toggle from "@/components/ui/Toggle";
 import { apiV2Post } from "@/lib/api-v2";
+import { isThirteenOrOlder, passwordChecks, tidyName } from "@/lib/age";
 
 type Who = "student" | "teacher";
 const WHO_OPTIONS = [
@@ -23,16 +24,52 @@ function ageBlocked(): boolean {
   }
 }
 
-function Field({ label, children, hint }: { label: string; children: (id: string, hintId?: string) => ReactNode;
-  hint?: string }) {
+function Field({ label, children, hint, error }: { label: string;
+  children: (id: string, describedBy?: string, invalid?: boolean) => ReactNode; hint?: string; error?: string }) {
   const id = useId();
   const hintId = hint ? `${id}-hint` : undefined;
+  const errId = error ? `${id}-error` : undefined;
+  const describedBy = [hintId, errId].filter(Boolean).join(" ") || undefined;
   return (
     <div className="field">
       <label htmlFor={id} className="field-label">{label}</label>
-      {children(id, hintId)}
+      {children(id, describedBy, Boolean(error))}
       {hint && <p id={hintId} className="muted small">{hint}</p>}
+      {error && <p id={errId} className="field-error" data-testid="field-error">{error}</p>}
     </div>
+  );
+}
+
+/** A password box with a Show/Hide button (a 44 px target) and, when asked, the rules ticked off as the person types. */
+function PasswordField({ value, onChange, signup, error }: { value: string; onChange: (v: string) => void;
+  signup: boolean; error?: string }) {
+  const [shown, setShown] = useState(false);
+  const checks = passwordChecks(value);
+  return (
+    <Field label="Password" error={error} hint={undefined}>
+      {(id, describedBy, invalid) => (
+        <>
+          <div className="pw-row">
+            <input id={id} className="select" type={shown ? "text" : "password"} value={value}
+              onChange={(e) => onChange(e.target.value)} aria-describedby={[describedBy, signup ? `${id}-rules` : ""].filter(Boolean).join(" ") || undefined}
+              aria-invalid={invalid || undefined} maxLength={128} autoComplete={signup ? "new-password" : "current-password"}
+              autoCapitalize="none" autoCorrect="off" spellCheck={false} data-testid="teacher-password" />
+            <button type="button" className="btn btn--ghost pw-toggle" aria-pressed={shown} onClick={() => setShown(!shown)}
+              data-testid="password-toggle">{shown ? "Hide" : "Show"}</button>
+          </div>
+          {signup && (
+            <ul id={`${id}-rules`} className="pw-rules" aria-label="Password rules" data-testid="password-rules">
+              {checks.map((c) => (
+                <li key={c.label} className={c.ok ? "pw-ok" : "pw-todo"}>
+                  <span aria-hidden="true">{c.ok ? "\u2713" : "\u25CB"}</span> {c.label}
+                  <span className="sr-only">{c.ok ? " (done)" : " (not yet)"}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </>
+      )}
+    </Field>
   );
 }
 
@@ -41,6 +78,8 @@ function BirthFields({ month, year, onMonth, onYear }: { month: string; year: st
   onYear: (v: string) => void }) {
   const thisYear = new Date().getFullYear();
   const years = Array.from({ length: 100 }, (_, i) => thisYear - i);
+  // Answer as soon as both are chosen, not only at submit. The server still decides.
+  const tooYoung = month !== "" && year !== "" && !isThirteenOrOlder(Number(month), Number(year));
   return (
     <fieldset className="field birth">
       <legend className="field-label">When were you born?</legend>
@@ -59,6 +98,11 @@ function BirthFields({ month, year, onMonth, onYear }: { month: string; year: st
           {years.map((y) => <option key={y} value={y}>{y}</option>)}
         </select>
       </div>
+      {tooYoung && (
+        <p className="field-error" role="alert" id="birth-error" data-testid="birth-error">
+          Accounts are for ages 13 and up. You can still explore the whole site without an account.
+        </p>
+      )}
     </fieldset>
   );
 }
@@ -243,6 +287,10 @@ function ForgotForm({ onBack }: { onBack: () => void }) {
   );
 }
 
+const EMAIL_LOOKS_OK = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+type TeacherProblems = Partial<Record<"name" | "email" | "password" | "org" | "birth", string>>;
+
 function TeacherForms({ onDone }: { onDone: () => void }) {
   const [mode, setMode] = useState<"login" | "signup" | "forgot">("login");
   const [email, setEmail] = useState("");
@@ -253,11 +301,28 @@ function TeacherForms({ onDone }: { onDone: () => void }) {
   const [orgCode, setOrgCode] = useState("");
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const summaryRef = useRef<HTMLDivElement>(null);
   const { busy, error, run } = useSubmit(onDone);
   const [challenge, setChallenge] = useState<string | null>(null);
   const [loginBusy, setLoginBusy] = useState(false);
   const [loginError, setLoginError] = useState<string | null>(null);
   const blocked = mode === "signup" && (ageBlocked() || error?.includes("13 and up"));
+
+  // What is wrong with the sign-up form right now. Shown under each field after a first try, and summed up at the top.
+  const problems: TeacherProblems = {};
+  if (mode === "signup") {
+    if (!name.trim()) problems.name = "Enter your name, as students will see it.";
+    if (!EMAIL_LOOKS_OK.test(email.trim())) problems.email = "Enter an email address like name@school.org.";
+    if (!passwordChecks(password).every((c) => c.ok)) problems.password = "Choose a password that meets every rule below.";
+    if (orgMode === "new" ? tidyName(orgName).length < 2 : !orgCode.trim()) {
+      problems.org = orgMode === "new" ? "Enter the name of your school or group." : "Enter the join code from your school's admin.";
+    }
+    if (month === "" || year === "") problems.birth = "Choose your birth month and year.";
+    else if (!isThirteenOrOlder(Number(month), Number(year))) problems.birth = "Accounts are for ages 13 and up.";
+  }
+  const shown = (k: keyof TeacherProblems) => (submitted ? problems[k] : undefined);
+  const problemList = Object.values(problems);
 
   async function login() {
     setLoginBusy(true);
@@ -270,71 +335,89 @@ function TeacherForms({ onDone }: { onDone: () => void }) {
     onDone();
   }
 
+  function switchOrgMode(next: "new" | "join") {
+    setOrgMode(next);
+    setOrgName("");
+    setOrgCode(""); // one field, one meaning: nothing typed for the other choice carries over
+  }
+
   if (blocked) return <AgeBlocked />;
   if (challenge) return <SecondStep challenge={challenge} onDone={onDone} onBack={() => { setChallenge(null); setPassword(""); }} />;
   if (mode === "forgot") return <ForgotForm onBack={() => setMode("login")} />;
   return (
-    <form className="card form-card" data-testid="teacher-form" onSubmit={(e) => {
+    <form className="card form-card" data-testid="teacher-form" noValidate onSubmit={(e) => {
       e.preventDefault();
       if (mode === "login") {
         login();
+      } else if (problemList.length > 0) {
+        setSubmitted(true);
+        requestAnimationFrame(() => summaryRef.current?.focus());
       } else {
         run("/api/v2/auth/teacher/signup", {
-          email, password, display_name: name, birth_month: Number(month), birth_year: Number(year),
-          ...(orgMode === "new" ? { org_name: orgName } : { org_code: orgCode }),
+          email: email.trim(), password, display_name: tidyName(name), birth_month: Number(month), birth_year: Number(year),
+          ...(orgMode === "new" ? { org_name: tidyName(orgName) } : { org_code: orgCode.trim() }),
         }, true);
       }
     }}>
       <h2 className="card-title">{mode === "login" ? "Teacher sign in" : "Create a teacher account"}</h2>
+      {submitted && problemList.length > 0 && (
+        <div className="error-summary" role="alert" tabIndex={-1} ref={summaryRef} data-testid="error-summary">
+          <p><strong>Please fix {problemList.length === 1 ? "this" : `these ${problemList.length} things`}:</strong></p>
+          <ul>{problemList.map((m) => <li key={m}>{m}</li>)}</ul>
+        </div>
+      )}
       {mode === "signup" && (
-        <Field label="Your name, as students will see it">
-          {(id) => <input id={id} className="select" value={name} onChange={(e) => setName(e.target.value)} required
-            maxLength={80} autoComplete="name" data-testid="teacher-name" />}
+        <Field label="Your name, as students will see it" error={shown("name")}>
+          {(id, describedBy, invalid) => <input id={id} className="select" value={name} onChange={(e) => setName(e.target.value)}
+            maxLength={80} autoComplete="name" aria-describedby={describedBy} aria-invalid={invalid || undefined}
+            data-testid="teacher-name" />}
         </Field>
       )}
-      <Field label="Email">
-        {(id) => <input id={id} className="select" type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-          required maxLength={254} autoComplete="email" data-testid="teacher-email" />}
+      <Field label="Email" error={shown("email")}>
+        {(id, describedBy, invalid) => <input id={id} className="select" type="email" value={email}
+          onChange={(e) => setEmail(e.target.value)} maxLength={254} autoComplete="email" inputMode="email"
+          autoCapitalize="none" aria-describedby={describedBy} aria-invalid={invalid || undefined} data-testid="teacher-email" />}
       </Field>
-      <Field label="Password" hint={mode === "signup" ? "At least 10 characters." : undefined}>
-        {(id, hintId) => <input id={id} className="select" type="password" value={password}
-          onChange={(e) => setPassword(e.target.value)} aria-describedby={hintId} required minLength={mode === "signup" ? 10 : 1}
-          maxLength={128} autoComplete={mode === "signup" ? "new-password" : "current-password"}
-          data-testid="teacher-password" />}
-      </Field>
+      <PasswordField value={password} onChange={setPassword} signup={mode === "signup"} error={shown("password")} />
       {mode === "signup" && (
         <>
           <fieldset className="field">
             <legend className="field-label">School or group</legend>
             <div className="radio-row">
-              <label><input type="radio" name="org-mode" checked={orgMode === "new"} onChange={() => setOrgMode("new")} />
+              <label><input type="radio" name="org-mode" checked={orgMode === "new"} onChange={() => switchOrgMode("new")} />
                 {" "}Start a new one</label>
               <label><input type="radio" name="org-mode" checked={orgMode === "join"}
-                onChange={() => setOrgMode("join")} />{" "}Join one with a code</label>
+                onChange={() => switchOrgMode("join")} />{" "}Join one with a code</label>
             </div>
             {orgMode === "new" ? (
-              <>
-                <label htmlFor="org-name" className="sr-only">Name of the school or group</label>
-                <input id="org-name" className="select" value={orgName} onChange={(e) => setOrgName(e.target.value)}
-                  placeholder="Name of the school or group" required minLength={2} maxLength={120}
-                  data-testid="org-name" />
-              </>
+              <Field label="Name of your school or group" error={shown("org")}>
+                {(id, describedBy, invalid) => <input id={id} className="select" value={orgName}
+                  onChange={(e) => setOrgName(e.target.value)} maxLength={120} autoComplete="organization"
+                  aria-describedby={describedBy} aria-invalid={invalid || undefined} data-testid="org-name" />}
+              </Field>
             ) : (
-              <>
-                <label htmlFor="org-code" className="sr-only">Join code from your school's admin</label>
-                <input id="org-code" className="select" value={orgCode} onChange={(e) => setOrgCode(e.target.value)}
-                  placeholder="Join code from your school's admin" required maxLength={20} data-testid="org-code" />
-              </>
+              <Field label="Join code from your school's admin" error={shown("org")}
+                hint="Letters and numbers, from a teacher who already made the school.">
+                {(id, describedBy, invalid) => <input id={id} className="select" value={orgCode}
+                  onChange={(e) => setOrgCode(e.target.value)} maxLength={20} autoComplete="off" autoCapitalize="characters"
+                  autoCorrect="off" spellCheck={false} aria-describedby={describedBy} aria-invalid={invalid || undefined}
+                  data-testid="org-code" />}
+              </Field>
             )}
           </fieldset>
           <BirthFields month={month} year={year} onMonth={setMonth} onYear={setYear} />
+          {shown("birth") && !(month !== "" && year !== "" && !isThirteenOrOlder(Number(month), Number(year))) && (
+            <p className="field-error" role="alert">{problems.birth}</p>
+          )}
         </>
       )}
-      <div className="btn-row">
+      <div className="form-actions">
         <button type="submit" className="btn btn--primary" disabled={busy || loginBusy} data-testid="teacher-submit">
           {busy || loginBusy ? "One moment..." : mode === "login" ? "Sign in" : "Create account"}
         </button>
-        <button type="button" className="btn btn--ghost" onClick={() => setMode(mode === "login" ? "signup" : "login")}>
+      </div>
+      <div className="btn-row">
+        <button type="button" className="btn btn--ghost" onClick={() => { setSubmitted(false); setMode(mode === "login" ? "signup" : "login"); }}>
           {mode === "login" ? "Create an account" : "I have an account"}
         </button>
         {mode === "login" && (
