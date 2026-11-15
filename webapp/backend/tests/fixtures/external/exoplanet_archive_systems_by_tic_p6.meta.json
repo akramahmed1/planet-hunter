@@ -1,0 +1,13 @@
+{
+  "url": "https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select%20pl_name%2Chostname%2Cst_teff%2Cst_rad%2Cst_mass%2Cst_lum%2Cpl_orbsmax%2Cpl_orbper%2Cpl_eqt%2Cpl_rade%2Cdisc_year%2Cdisc_pubdate%2Cra%2Cdec%2Csy_dist%2Cpl_orbeccen%2Ctic_id%2Ccb_flag%20from%20pscomppars%20where%20tic_id%20in%20%28%27TIC%20260128333%27%2C%27TIC%20259377017%27%2C%27TIC%2055652896%27%2C%27TIC%20307210830%27%2C%27TIC%20150428135%27%2C%27TIC%2052368076%27%2C%27TIC%20183985250%27%2C%27TIC%20251848941%27%29&format=json",
+  "final_url": "https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select%20pl_name%2Chostname%2Cst_teff%2Cst_rad%2Cst_mass%2Cst_lum%2Cpl_orbsmax%2Cpl_orbper%2Cpl_eqt%2Cpl_rade%2Cdisc_year%2Cdisc_pubdate%2Cra%2Cdec%2Csy_dist%2Cpl_orbeccen%2Ctic_id%2Ccb_flag%20from%20pscomppars%20where%20tic_id%20in%20%28%27TIC%20260128333%27%2C%27TIC%20259377017%27%2C%27TIC%2055652896%27%2C%27TIC%20307210830%27%2C%27TIC%20150428135%27%2C%27TIC%2052368076%27%2C%27TIC%20183985250%27%2C%27TIC%20251848941%27%29&format=json",
+  "status": 200,
+  "https": true,
+  "headers": {
+    "content-type": "application/json",
+    "server": "cloudflare"
+  },
+  "bytes": 10456,
+  "truncated": false,
+  "fetched_at": "2026-10-18T01:28:38+00:00"
+}

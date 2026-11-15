@@ -1,0 +1,5 @@
+{
+  "url": "https://kauai.ccmc.gsfc.nasa.gov/DONKI/WS/get/notifications?startDate=2026-10-10&endDate=2026-10-17&type=all",
+  "error": "URLError: <urlopen error [Errno 101] Network is unreachable>",
+  "fetched_at": "2026-10-17T07:55:05+00:00"
+}

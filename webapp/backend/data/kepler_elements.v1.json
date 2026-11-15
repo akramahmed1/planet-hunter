@@ -1,0 +1,159 @@
+{
+ "dataset": "kepler_elements",
+ "version": 1,
+ "source": {
+  "name": "JPL Solar System Dynamics: Approximate Positions of the Planets, Table 1",
+  "url": "https://ssd.jpl.nasa.gov/planets/approx_pos.html",
+  "fetched_at": "2026-10-17T07:54:52+00:00"
+ },
+ "frame": "mean ecliptic and equinox of J2000",
+ "valid_from": "1800-01-01",
+ "valid_to": "2050-12-31",
+ "epoch_jd": 2451545.0,
+ "bodies": {
+  "Mercury": {
+   "elements": {
+    "a_au": 0.38709927,
+    "e": 0.20563593,
+    "i_deg": 7.00497902,
+    "L_deg": 252.2503235,
+    "long_peri_deg": 77.45779628,
+    "long_node_deg": 48.33076593
+   },
+   "rates_per_century": {
+    "a_au": 3.7e-07,
+    "e": 1.906e-05,
+    "i_deg": -0.00594749,
+    "L_deg": 149472.67411175,
+    "long_peri_deg": 0.16047689,
+    "long_node_deg": -0.12534081
+   }
+  },
+  "Venus": {
+   "elements": {
+    "a_au": 0.72333566,
+    "e": 0.00677672,
+    "i_deg": 3.39467605,
+    "L_deg": 181.9790995,
+    "long_peri_deg": 131.60246718,
+    "long_node_deg": 76.67984255
+   },
+   "rates_per_century": {
+    "a_au": 3.9e-06,
+    "e": -4.107e-05,
+    "i_deg": -0.0007889,
+    "L_deg": 58517.81538729,
+    "long_peri_deg": 0.00268329,
+    "long_node_deg": -0.27769418
+   }
+  },
+  "EM Bary": {
+   "elements": {
+    "a_au": 1.00000261,
+    "e": 0.01671123,
+    "i_deg": -1.531e-05,
+    "L_deg": 100.46457166,
+    "long_peri_deg": 102.93768193,
+    "long_node_deg": 0.0
+   },
+   "rates_per_century": {
+    "a_au": 5.62e-06,
+    "e": -4.392e-05,
+    "i_deg": -0.01294668,
+    "L_deg": 35999.37244981,
+    "long_peri_deg": 0.32327364,
+    "long_node_deg": 0.0
+   }
+  },
+  "Mars": {
+   "elements": {
+    "a_au": 1.52371034,
+    "e": 0.0933941,
+    "i_deg": 1.84969142,
+    "L_deg": -4.55343205,
+    "long_peri_deg": -23.94362959,
+    "long_node_deg": 49.55953891
+   },
+   "rates_per_century": {
+    "a_au": 1.847e-05,
+    "e": 7.882e-05,
+    "i_deg": -0.00813131,
+    "L_deg": 19140.30268499,
+    "long_peri_deg": 0.44441088,
+    "long_node_deg": -0.29257343
+   }
+  },
+  "Jupiter": {
+   "elements": {
+    "a_au": 5.202887,
+    "e": 0.04838624,
+    "i_deg": 1.30439695,
+    "L_deg": 34.39644051,
+    "long_peri_deg": 14.72847983,
+    "long_node_deg": 100.47390909
+   },
+   "rates_per_century": {
+    "a_au": -0.00011607,
+    "e": -0.00013253,
+    "i_deg": -0.00183714,
+    "L_deg": 3034.74612775,
+    "long_peri_deg": 0.21252668,
+    "long_node_deg": 0.20469106
+   }
+  },
+  "Saturn": {
+   "elements": {
+    "a_au": 9.53667594,
+    "e": 0.05386179,
+    "i_deg": 2.48599187,
+    "L_deg": 49.95424423,
+    "long_peri_deg": 92.59887831,
+    "long_node_deg": 113.66242448
+   },
+   "rates_per_century": {
+    "a_au": -0.0012506,
+    "e": -0.00050991,
+    "i_deg": 0.00193609,
+    "L_deg": 1222.49362201,
+    "long_peri_deg": -0.41897216,
+    "long_node_deg": -0.28867794
+   }
+  },
+  "Uranus": {
+   "elements": {
+    "a_au": 19.18916464,
+    "e": 0.04725744,
+    "i_deg": 0.77263783,
+    "L_deg": 313.23810451,
+    "long_peri_deg": 170.9542763,
+    "long_node_deg": 74.01692503
+   },
+   "rates_per_century": {
+    "a_au": -0.00196176,
+    "e": -4.397e-05,
+    "i_deg": -0.00242939,
+    "L_deg": 428.48202785,
+    "long_peri_deg": 0.40805281,
+    "long_node_deg": 0.04240589
+   }
+  },
+  "Neptune": {
+   "elements": {
+    "a_au": 30.06992276,
+    "e": 0.00859048,
+    "i_deg": 1.77004347,
+    "L_deg": -55.12002969,
+    "long_peri_deg": 44.96476227,
+    "long_node_deg": 131.78422574
+   },
+   "rates_per_century": {
+    "a_au": 0.00026291,
+    "e": 5.105e-05,
+    "i_deg": 0.00035372,
+    "L_deg": 218.45945325,
+    "long_peri_deg": -0.32241464,
+    "long_node_deg": -0.00508664
+   }
+  }
+ }
+}

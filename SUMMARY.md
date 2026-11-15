@@ -39,10 +39,10 @@ The pipeline works: it finds real transits in real TESS data.
 | 1 | TOI 1338 | 14.6022 | 2518 | 30.4 | Matches the host stars' 14.6 d eclipsing-binary period, NOT the planet (TOI 1338 b is ~95 d). Correctly found the strongest signal; it is stellar. |
 | 2 | TOI 270 | 5.6605 | 3474 | 38.5 | Matches published TOI 270 c (5.66 d). Clean recovery. |
 | 3 | TOI 216 | 24.2421 | 10662 | 23.3 | Unexplained. Known planets are at 17.16 d and 34.56 d. Possible aliasing between the two, or a false positive. V-shaped dip suggests binary contamination. |
-| 4 | TOI 776 | 3.6912 | 1336 | 39.7 | Unexplained. Known planets are near 8.25 d and 15.7 d. Could be a harmonic or a false positive. |
+| 4 | TOI 175 (listed as TOI 776 by mistake) | 3.6912 | 1336 | 39.7 | Correction: TIC 307210830 is TOI 175 (L 98-59), not TOI 776. Close to L 98-59 c (3.6907 d). Unreviewed. |
 | 5 | TOI 700 | 16.0503 | 2501 | 16.3 | TOI 700 c again, consistent with the validation run. |
 | 6 | TOI 125 | 4.6549 | 773 | 20.9 | Matches published TOI 125 b (4.65 d). Clean recovery. |
-| 7 | TOI 849 | 0.7926 | 385 | 4.2 | Near published TOI 849 b (0.765 d) but 3.5 percent off and very weak. Marginal at best. |
+| 7 | TOI 193 (listed as TOI 849 by mistake) | 0.7926 | 385 | 4.2 | Correction: TIC 183985250 is TOI 193 (LTT 9779), not TOI 849. Close to LTT 9779 b (0.79205 d). Unreviewed. |
 | 8 | TOI 178 | 16.2887 | 630 | 1.5 | Weak, likely noise. No known planet at this period. |
 
 Full numbers: `candidate_shortlist.csv`. Folded plots for the top 3:

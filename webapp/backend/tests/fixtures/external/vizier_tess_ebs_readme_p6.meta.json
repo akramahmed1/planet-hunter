@@ -1,0 +1,16 @@
+{
+  "url": "https://cdsarc.cds.unistra.fr/ftp/J/ApJS/258/16/ReadMe",
+  "final_url": "https://cdsarc.cds.unistra.fr/ftp/J/ApJS/258/16/ReadMe",
+  "status": 200,
+  "https": true,
+  "headers": {
+    "server": "Apache/2.4.66 (Ubuntu)",
+    "access-control-allow-origin": "*",
+    "etag": "\"2e0b-5e83a61b57a80\"",
+    "last-modified": "Fri, 09 Sep 2022 08:32:08 GMT",
+    "content-type": "text/plain; charset=utf-8"
+  },
+  "bytes": 11787,
+  "truncated": false,
+  "fetched_at": "2026-10-18T01:28:42+00:00"
+}

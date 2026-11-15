@@ -1,0 +1,14 @@
+{
+  "url": "https://heasarc.gsfc.nasa.gov/docs/tess/the-tess-space-telescope.html",
+  "final_url": "https://heasarc.gsfc.nasa.gov/docs/tess/the-tess-space-telescope.html",
+  "status": 404,
+  "https": true,
+  "headers": {
+    "content-type": "text/html; charset=ISO-8859-1",
+    "server": "WebServer/1.0",
+    "strict-transport-security": "max-age=31536000; includeSubDomains"
+  },
+  "bytes": 22772,
+  "truncated": false,
+  "fetched_at": "2026-10-18T00:37:14+00:00"
+}

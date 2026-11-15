@@ -1,0 +1,13 @@
+{
+  "url": "https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select%20pl_name%2Chostname%2Cst_teff%2Cst_lum%2Cpl_orbsmax%2Cpl_eqt%2Cdisc_year%2Cdisc_pubdate%20from%20pscomppars%20where%20disc_pubdate%20%3E%3D%20%272026-08%27%20order%20by%20disc_pubdate%20desc&format=json",
+  "final_url": "https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select%20pl_name%2Chostname%2Cst_teff%2Cst_lum%2Cpl_orbsmax%2Cpl_eqt%2Cdisc_year%2Cdisc_pubdate%20from%20pscomppars%20where%20disc_pubdate%20%3E%3D%20%272026-08%27%20order%20by%20disc_pubdate%20desc&format=json",
+  "status": 200,
+  "https": true,
+  "headers": {
+    "content-type": "application/json",
+    "server": "cloudflare"
+  },
+  "bytes": 19634,
+  "truncated": false,
+  "fetched_at": "2026-10-17T07:54:52+00:00"
+}

@@ -1,0 +1,252 @@
+{
+  "slug": "what-is-a-planet",
+  "title": "What is a planet?",
+  "summary": "The three rules astronomers use, why Pluto is a dwarf planet, and how worlds around other stars are counted.",
+  "minutes": 5,
+  "badge": {
+    "name": "Rule keeper",
+    "text": "You know the three rules a planet in our solar system has to meet."
+  },
+  "links": [
+    {
+      "href": "/solar-system",
+      "label": "Visit every planet in 3D"
+    },
+    {
+      "href": "/exoplanets",
+      "label": "See planets around other stars"
+    }
+  ],
+  "steps": [
+    {
+      "heading": "Three rules",
+      "body": [
+        "People have used the word planet since the ancient Greeks, but its exact meaning was only agreed in 2006, by the International Astronomical Union (IAU), the group that names objects in space.",
+        "Under that definition, a planet in our solar system has to do three things: go around the Sun, be massive enough that its own gravity pulls it into a nearly round shape, and have cleared the neighborhood around its orbit."
+      ],
+      "facts": [
+        {
+          "text": "In 2006, the IAU passed a resolution that defined the term planet.",
+          "kind": "definition",
+          "source": {
+            "name": "NASA Science: What Is a Planet?",
+            "url": "https://science.nasa.gov/solar-system/planets/what-is-a-planet/"
+          },
+          "checks": [
+            {
+              "fixture": "nasa_what_is_a_planet_p7.txt",
+              "quote": "In 2006, the IAU passed a resolution that defined the term planet."
+            }
+          ]
+        },
+        {
+          "text": "The ancient Greeks had their own definition of planets, which counted the Moon and the Sun.",
+          "kind": "definition",
+          "source": {
+            "name": "NASA Science: What Is a Planet?",
+            "url": "https://science.nasa.gov/solar-system/planets/what-is-a-planet/"
+          },
+          "checks": [
+            {
+              "fixture": "nasa_what_is_a_planet_p7.txt",
+              "quote": "When the ancient Greeks came up with their definition of planets, they counted Earth's Moon, and Sun as planets"
+            }
+          ]
+        },
+        {
+          "text": "A planet orbits the Sun, is massive enough to pull itself nearly round, and has cleared the neighborhood around its orbit.",
+          "kind": "definition",
+          "source": {
+            "name": "NASA Science: What Is a Planet?",
+            "url": "https://science.nasa.gov/solar-system/planets/what-is-a-planet/"
+          },
+          "checks": [
+            {
+              "fixture": "nasa_what_is_a_planet_p7.txt",
+              "quote": "A planet is a celestial body that (a) is in orbit around the Sun, (b) has sufficient mass for its self-gravity to overcome rigid body forces so that it assumes a hydrostatic equilibrium (nearly round) shape, and (c) has cleared the neighborhood around its orbit."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Why Pluto is a dwarf planet",
+      "body": [
+        "Pluto goes around the Sun and is round, so it meets the first two rules. It fails the third: it has not cleared the neighborhood around its orbit.",
+        "The IAU made a new group for bodies like this, called dwarf planets. Ceres, Pluto, Haumea, Makemake and Eris are the ones it recognizes so far."
+      ],
+      "facts": [
+        {
+          "text": "A dwarf planet meets the first two rules but has not cleared the neighborhood around its orbit, and is not a moon.",
+          "kind": "definition",
+          "source": {
+            "name": "NASA Science: What Is a Planet?",
+            "url": "https://science.nasa.gov/solar-system/planets/what-is-a-planet/"
+          },
+          "checks": [
+            {
+              "fixture": "nasa_what_is_a_planet_p7.txt",
+              "quote": "(c) has not cleared the neighborhood around its orbit, and (d) is not a satellite."
+            }
+          ]
+        },
+        {
+          "text": "Eris, Ceres, Pluto, Haumea and Makemake are the dwarf planets recognized by the IAU.",
+          "kind": "definition",
+          "source": {
+            "name": "NASA Science: What Is a Planet?",
+            "url": "https://science.nasa.gov/solar-system/planets/what-is-a-planet/"
+          },
+          "checks": [
+            {
+              "fixture": "nasa_what_is_a_planet_p7.txt",
+              "quote": "Eris, Ceres, Pluto, and two more recently discovered KBOs named Haumea and Makemake, are the dwarf planets recognized by the IAU."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Planets around other stars",
+      "body": [
+        "The IAU rules name the Sun, so they do not cover worlds around other stars, called exoplanets. Catalogs use their own rules instead.",
+        "The NASA Exoplanet Archive lists an object as a planet only if it is at most 30 times the mass of Jupiter, orbits a star rather than floating free, and has been checked well enough that a false alarm is unlikely. That last rule matters for planet hunters, and it comes back in the lesson on false claims."
+      ],
+      "facts": [
+        {
+          "text": "The NASA Exoplanet Archive counts an object as a planet if its mass is at most 30 Jupiter masses and it is not free floating.",
+          "kind": "definition",
+          "source": {
+            "name": "NASA Exoplanet Archive: Exoplanet Criteria for Inclusion in the Archive",
+            "url": "https://exoplanetarchive.ipac.caltech.edu/docs/exoplanet_criteria.html"
+          },
+          "checks": [
+            {
+              "fixture": "exoplanet_archive_criteria_p7.txt",
+              "quote": "The mass (or minimum mass) is equal to or less than 30 Jupiter masses."
+            },
+            {
+              "fixture": "exoplanet_archive_criteria_p7.txt",
+              "quote": "The planet is not free floating."
+            }
+          ]
+        },
+        {
+          "text": "It also needs enough follow-up observations that a false positive is unlikely.",
+          "kind": "definition",
+          "source": {
+            "name": "NASA Exoplanet Archive: Exoplanet Criteria for Inclusion in the Archive",
+            "url": "https://exoplanetarchive.ipac.caltech.edu/docs/exoplanet_criteria.html"
+          },
+          "checks": [
+            {
+              "fixture": "exoplanet_archive_criteria_p7.txt",
+              "quote": "Sufficient follow-up observations and validation have been undertaken to deem the possibility of the object being a false positive as unlikely."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "key": "pluto_rule",
+      "kind": "choice",
+      "prompt": "Which rule does Pluto not meet?",
+      "choices": [
+        {
+          "text": "It goes around the Sun",
+          "correct": false,
+          "explanation": "Pluto does orbit the Sun."
+        },
+        {
+          "text": "It is nearly round",
+          "correct": false,
+          "explanation": "Pluto is massive enough to be round."
+        },
+        {
+          "text": "It has cleared the neighborhood around its orbit",
+          "correct": true,
+          "explanation": "That is the rule that makes it a dwarf planet."
+        }
+      ],
+      "explanation": "A dwarf planet meets the first two rules but has not cleared the neighborhood around its orbit.",
+      "source": {
+        "name": "NASA Science: What Is a Planet?",
+        "url": "https://science.nasa.gov/solar-system/planets/what-is-a-planet/"
+      },
+      "checks": [
+        {
+          "fixture": "nasa_what_is_a_planet_p7.txt",
+          "quote": "(c) has not cleared the neighborhood around its orbit, and (d) is not a satellite."
+        }
+      ]
+    },
+    {
+      "key": "cleared_meaning",
+      "kind": "choice",
+      "prompt": "What does \"cleared the neighborhood\" mean?",
+      "choices": [
+        {
+          "text": "Its gravity has swept away other objects of similar size near its orbit",
+          "correct": true,
+          "explanation": "A planet dominates its orbit."
+        },
+        {
+          "text": "It has no moons",
+          "correct": false,
+          "explanation": "Earth has a moon and is still a planet."
+        },
+        {
+          "text": "It has no atmosphere",
+          "correct": false,
+          "explanation": "Atmospheres are not part of the rules."
+        }
+      ],
+      "explanation": "NASA explains it as being big enough that its gravity has cleared away other objects of a similar size near its orbit.",
+      "source": {
+        "name": "NASA Science: What Is a Planet?",
+        "url": "https://science.nasa.gov/solar-system/planets/what-is-a-planet/"
+      },
+      "checks": [
+        {
+          "fixture": "nasa_what_is_a_planet_p7.txt",
+          "quote": "It must be big enough that its gravity has cleared away any other objects of a similar size near its orbit around the Sun."
+        }
+      ]
+    },
+    {
+      "key": "archive_mass",
+      "kind": "choice",
+      "prompt": "An object around another star has 40 times the mass of Jupiter. Does the NASA Exoplanet Archive list it as a planet?",
+      "choices": [
+        {
+          "text": "Yes, anything that orbits a star counts",
+          "correct": false,
+          "explanation": "The Archive also has a mass limit."
+        },
+        {
+          "text": "No, it is over the Archive's mass limit",
+          "correct": true,
+          "explanation": "The limit is 30 Jupiter masses."
+        },
+        {
+          "text": "Only if it is round",
+          "correct": false,
+          "explanation": "Roundness is part of the IAU rules for the solar system, not the Archive's rules."
+        }
+      ],
+      "explanation": "The Archive's limit is 30 Jupiter masses, so an object of 40 Jupiter masses is left out.",
+      "source": {
+        "name": "NASA Exoplanet Archive: Exoplanet Criteria for Inclusion in the Archive",
+        "url": "https://exoplanetarchive.ipac.caltech.edu/docs/exoplanet_criteria.html"
+      },
+      "checks": [
+        {
+          "fixture": "exoplanet_archive_criteria_p7.txt",
+          "quote": "The mass (or minimum mass) is equal to or less than 30 Jupiter masses."
+        }
+      ]
+    }
+  ]
+}

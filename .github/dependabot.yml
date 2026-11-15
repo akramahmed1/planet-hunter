@@ -1,0 +1,17 @@
+# Dependency updates (Phase 10). Pull requests go to v2, the integration branch.
+version: 2
+updates:
+  - package-ecosystem: pip
+    directory: /webapp/backend
+    target-branch: v2
+    schedule: { interval: weekly }
+    open-pull-requests-limit: 5
+  - package-ecosystem: npm
+    directory: /webapp/frontend
+    target-branch: v2
+    schedule: { interval: weekly }
+    open-pull-requests-limit: 5
+  - package-ecosystem: github-actions
+    directory: /
+    target-branch: v2
+    schedule: { interval: weekly }

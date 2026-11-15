@@ -1,0 +1,14 @@
+{
+  "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/",
+  "final_url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/",
+  "status": 200,
+  "https": true,
+  "headers": {
+    "server": "Apache",
+    "strict-transport-security": "max-age=31536000; includeSubDomains",
+    "content-type": "text/html; charset=UTF-8"
+  },
+  "bytes": 14363,
+  "truncated": false,
+  "fetched_at": "2026-10-17T07:54:51+00:00"
+}

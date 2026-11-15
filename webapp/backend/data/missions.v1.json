@@ -1,0 +1,86 @@
+{
+ "dataset": "missions",
+ "version": 1,
+ "missions": {
+  "tess": {
+   "name": "TESS",
+   "horizons_id": "-95",
+   "launch": {
+    "quote": "Launch April 18, 2018",
+    "display": "April 18, 2018",
+    "source": {
+     "name": "NASA Science: TESS",
+     "url": "https://science.nasa.gov/mission/tess/",
+     "fetched_at": "2026-10-18T00:37:13+00:00"
+    }
+   },
+   "status": {
+    "quote": "Status Extended mission",
+    "display": "Extended mission",
+    "source": {
+     "name": "NASA Science: TESS",
+     "url": "https://science.nasa.gov/mission/tess/",
+     "fetched_at": "2026-10-18T00:37:13+00:00"
+    }
+   }
+  },
+  "jwst": {
+   "name": "James Webb Space Telescope",
+   "horizons_id": "-170",
+   "launch": {
+    "quote": "Launched by Ariane 5 booster on 2021-Dec-25 @ 12:20 UTC",
+    "display": "December 25, 2021",
+    "source": {
+     "name": "JPL Horizons object data: JWST (-170)",
+     "url": "https://ssd.jpl.nasa.gov/horizons/",
+     "fetched_at": "2026-10-18T00:37:10+00:00"
+    }
+   },
+   "status": null
+  },
+  "voyager1": {
+   "name": "Voyager 1",
+   "horizons_id": "-31",
+   "launch": {
+    "quote": "launch Sept. 5, 1977",
+    "display": "September 5, 1977",
+    "source": {
+     "name": "NASA Science: Voyager 1",
+     "url": "https://science.nasa.gov/mission/voyager/voyager-1/",
+     "fetched_at": "2026-10-18T00:37:18+00:00"
+    }
+   },
+   "status": {
+    "quote": "Status Extended Mission",
+    "display": "Extended mission",
+    "source": {
+     "name": "NASA Science: Voyager 1",
+     "url": "https://science.nasa.gov/mission/voyager/voyager-1/",
+     "fetched_at": "2026-10-18T00:37:18+00:00"
+    }
+   }
+  },
+  "voyager2": {
+   "name": "Voyager 2",
+   "horizons_id": "-32",
+   "launch": {
+    "quote": "launch Aug. 20, 1977",
+    "display": "August 20, 1977",
+    "source": {
+     "name": "NASA Science: Voyager 2",
+     "url": "https://science.nasa.gov/mission/voyager/voyager-2/",
+     "fetched_at": "2026-10-18T00:37:18+00:00"
+    }
+   },
+   "status": {
+    "quote": "Status Extended Mission",
+    "display": "Extended mission",
+    "source": {
+     "name": "NASA Science: Voyager 2",
+     "url": "https://science.nasa.gov/mission/voyager/voyager-2/",
+     "fetched_at": "2026-10-18T00:37:18+00:00"
+    }
+   }
+  }
+ }
+}

@@ -1,0 +1,15 @@
+{
+  "url": "https://map.gsfc.nasa.gov/site/faq.html",
+  "final_url": "https://science.nasa.gov/mission/wmap/wmap-overview/",
+  "status": 200,
+  "https": true,
+  "headers": {
+    "server": "nginx",
+    "content-type": "text/html; charset=UTF-8",
+    "cache-control": "max-age=300, must-revalidate",
+    "strict-transport-security": "max-age=31536000"
+  },
+  "bytes": 300001,
+  "truncated": true,
+  "fetched_at": "2026-10-17T10:26:25+00:00"
+}

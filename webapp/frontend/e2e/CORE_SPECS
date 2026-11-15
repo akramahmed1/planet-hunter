@@ -1,0 +1,17 @@
+# The browser tests every pull request runs, besides the ones it adds or changes (see .github/workflows/ci.yml).
+# One file name per line. These cover accessibility on every route, phone layout, the shell and error pages, wording,
+# the live-source-down behaviour, and the Classroom flow. The full suite runs after every merge to v2, on a pull
+# request into main (the release), and when started by hand.
+a11y.spec.ts
+contrast.spec.ts
+phone.spec.ts
+shell.spec.ts
+meta.spec.ts
+errors.spec.ts
+wording.spec.ts
+down.spec.ts
+classroom-off.spec.ts
+focus-not-obscured.spec.ts
+candidates.spec.ts
+live.spec.ts
+classroom.spec.ts

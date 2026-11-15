@@ -1,0 +1,212 @@
+{
+  "slug": "temperature-in-space",
+  "title": "Temperature in space",
+  "summary": "Why scientists use kelvin, how cold deep space is, and why the hottest planet is not the closest one.",
+  "minutes": 6,
+  "badge": {
+    "name": "Thermometer",
+    "text": "You can read space temperatures in kelvin and explain why Venus beats Mercury."
+  },
+  "links": [
+    {
+      "href": "/solar-system",
+      "label": "Tap a planet to see its temperatures"
+    },
+    {
+      "href": "/solar-system",
+      "label": "Tap empty space for the deep-space card"
+    }
+  ],
+  "steps": [
+    {
+      "heading": "A scale that starts at the bottom",
+      "body": [
+        "Scientists measure temperature in kelvin (K). A step of one kelvin is the same size as one degree Celsius, but the scale starts at absolute zero, so there are no negative numbers.",
+        "Absolute zero is 0 K, which is -273.15 °C or -459.67 °F."
+      ],
+      "facts": [
+        {
+          "text": "A change of one kelvin is the same as a change of one degree Celsius.",
+          "kind": "definition",
+          "source": {
+            "name": "NIST: Kelvin, Introduction",
+            "url": "https://www.nist.gov/si-redefinition/kelvin"
+          },
+          "checks": [
+            {
+              "fixture": "nist_kelvin_p7.txt",
+              "quote": "A change of one kelvin is the same amount of temperature change as one degree Celsius"
+            }
+          ]
+        },
+        {
+          "text": "0 K is -273.15 °C and -459.67 °F.",
+          "kind": "definition",
+          "source": {
+            "name": "NIST: Kelvin, Introduction",
+            "url": "https://www.nist.gov/si-redefinition/kelvin"
+          },
+          "checks": [
+            {
+              "fixture": "nist_kelvin_p7.txt",
+              "quote": "0 K = -273.15 degrees C = -459.67 degrees F."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "How cold is deep space?",
+      "body": [
+        "Far from any star, the only warmth is a faint glow left over from the early universe, called the cosmic microwave background. It has a temperature of about 2.7 K, barely above absolute zero.",
+        "So space has no single temperature: it depends on where you are."
+      ],
+      "facts": [
+        {
+          "text": "The cosmic microwave background is about 2.7 K, measured by NASA's WMAP mission.",
+          "kind": "measured",
+          "source": {
+            "name": "NASA WMAP: Tests of Big Bang, the CMB",
+            "url": "https://map.gsfc.nasa.gov/universe/bb_tests_cmb.html"
+          },
+          "checks": [
+            {
+              "fixture": "nasa_wmap_cmb_tests.html",
+              "quote": "temperature of 2.7251° Kelvin"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Closer is not always hotter",
+      "body": [
+        "The Sun is about 5,772 K at its visible surface and about 15.7 million K at its core.",
+        "Mercury is the closest planet to the Sun, but Venus is hotter: Venus averages 737 K and Mercury 440 K. Venus's thick air is mostly carbon dioxide, which traps heat."
+      ],
+      "facts": [
+        {
+          "text": "The Sun is about 5,772 K at its visible surface and about 15.7 million K at its core.",
+          "kind": "measured",
+          "source": {
+            "name": "NASA NSSDCA Sun Fact Sheet",
+            "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/sunfact.html"
+          },
+          "checks": [
+            {
+              "computed": "sun_surface_core"
+            }
+          ]
+        },
+        {
+          "text": "Venus averages 737 K and Mercury 440 K.",
+          "kind": "measured",
+          "source": {
+            "name": "NASA NSSDCA Planetary Fact Sheets",
+            "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/"
+          },
+          "checks": [
+            {
+              "computed": "venus_mercury_temps"
+            }
+          ]
+        },
+        {
+          "text": "Venus's atmosphere is 96.5% carbon dioxide.",
+          "kind": "measured",
+          "source": {
+            "name": "NASA NSSDCA Venus Fact Sheet",
+            "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/venusfact.html"
+          },
+          "checks": [
+            {
+              "fixture": "nssdca_venusfact.html",
+              "quote": "96.5% Carbon Dioxide"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "key": "cmb_k",
+      "kind": "numeric",
+      "prompt": "About how cold is the cosmic microwave background, in kelvin?",
+      "answer": 2.7,
+      "tolerance": 0.1,
+      "unit": "K",
+      "explanation": "WMAP measured about 2.725 K, barely above absolute zero.",
+      "source": {
+        "name": "NASA WMAP: Tests of Big Bang, the CMB",
+        "url": "https://map.gsfc.nasa.gov/universe/bb_tests_cmb.html"
+      },
+      "checks": [
+        {
+          "fixture": "nasa_wmap_cmb_tests.html",
+          "quote": "temperature of 2.7251° Kelvin"
+        }
+      ]
+    },
+    {
+      "key": "hotter_planet",
+      "kind": "choice",
+      "prompt": "Which planet has the higher average temperature?",
+      "choices": [
+        {
+          "text": "Mercury",
+          "correct": false,
+          "explanation": "Mercury is closer to the Sun, but it is cooler on average."
+        },
+        {
+          "text": "Venus",
+          "correct": true,
+          "explanation": "Its carbon dioxide air traps heat."
+        }
+      ],
+      "explanation": "Venus averages 737 K and Mercury 440 K.",
+      "source": {
+        "name": "NASA NSSDCA Planetary Fact Sheets",
+        "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/"
+      },
+      "checks": [
+        {
+          "computed": "venus_mercury_temps"
+        }
+      ]
+    },
+    {
+      "key": "zero_c",
+      "kind": "choice",
+      "prompt": "What is 0 K in degrees Celsius?",
+      "choices": [
+        {
+          "text": "0 °C",
+          "correct": false,
+          "explanation": "0 °C is where water freezes, far above absolute zero."
+        },
+        {
+          "text": "-100 °C",
+          "correct": false,
+          "explanation": "Colder than that is still possible."
+        },
+        {
+          "text": "-273.15 °C",
+          "correct": true,
+          "explanation": "That is absolute zero."
+        }
+      ],
+      "explanation": "0 K is absolute zero: -273.15 °C, or -459.67 °F.",
+      "source": {
+        "name": "NIST: Kelvin, Introduction",
+        "url": "https://www.nist.gov/si-redefinition/kelvin"
+      },
+      "checks": [
+        {
+          "fixture": "nist_kelvin_p7.txt",
+          "quote": "0 K = -273.15 degrees C = -459.67 degrees F."
+        }
+      ]
+    }
+  ]
+}

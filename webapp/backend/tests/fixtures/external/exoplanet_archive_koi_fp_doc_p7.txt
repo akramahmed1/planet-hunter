@@ -1,0 +1,462 @@
+Kepler Objects of Interest (KOI) Activity Tables 
+
+ [link: /index.html] 
+
+ [link: /index.html] Home 
+
+ About Us 
+
+ [link: /docs/intro.html] 
+
+ Overview 
+ [link: /docs/holdings.html] 
+
+ Holdings 
+ [link: /docs/counts_detail.html] 
+
+ Exoplanet Counts 
+ [link: /docs/users_group.html] 
+
+ User Panel 
+
+ [link: /docs/faq.html] 
+
+ FAQ 
+ [link: /docs/acknowledge.html] 
+
+ Acknowledgements 
+ [link: /docs/privacy.html] 
+
+ Privacy Notice 
+
+ Data 
+
+ Planetary Systems 
+
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=PS] 
+
+ Planetary Systems 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=PSCompPars] 
+
+ Planetary Systems Composite Data 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=STELLARHOSTS] 
+
+ Stellar Hosts 
+ [link: /cgi-bin/atmospheres/nph-firefly?atmospheres] 
+
+ Atmospheric Spectroscopy 
+ [link: /cgi-bin/observations/nph-firefly?data] 
+
+ NExoList 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=ML] 
+
+ Microlensing Planets 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=directimaging&constraint=immodeldef=1] 
+
+ Direct Imaging Planets 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=TD] 
+
+ Transiting Planets 
+
+ Kepler 
+
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=cumulative] 
+
+ KOI (Cumulative List) 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=koi] 
+
+ KOI (All Lists) 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=koiapp&constraint=pp_host_prob_score>0.3] 
+
+ Positional Probabilities 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=koifpp] 
+
+ False Positive Probabilities 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=fpwg] 
+
+ Certified False Positives 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=tce] 
+
+ Threshold-Crossing Events 
+ [link: /docs/Kepler_completeness_reliability.html] 
+
+ Completeness and Reliability 
+ [link: /docs/KeplerSimulated.html] 
+
+ Simulated Data 
+ [link: /cgi-bin/TblSearch/nph-tblSearchInit?app=ExoTbls&config=keplerstellar] 
+
+ Kepler Stellar 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=kep_conf_names] 
+
+ Kepler Confirmed Names 
+
+ Transit Surveys 
+
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=TOI] 
+
+ TESS Project Candidates 
+ [link: /cgi-bin/TblSearch/nph-tblSearchInit?app=ExoTbls&config=k2targets] 
+
+ K2 Targets 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=k2pandc] 
+
+ K2 Planets and Candidates 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=k2_conf_names] 
+
+ K2 Confirmed Names 
+ [link: /applications/ETSS/CoRoT_astero_index.html] 
+
+ CoRot Astero-Seismology 
+ [link: /applications/ETSS/CoRoT_exo_index.html] 
+
+ CoRoT Exoplanet 
+ [link: /cgi-bin/TblSearch/nph-tblSearchInit?app=ExoTbls&config=superwasptimeseries] 
+
+ SuperWASP Light Curves 
+ [link: /cgi-bin/TblSearch/nph-tblSearchInit?app=ExoTbls&config=kelttimeseries] 
+
+ KELT Light Curves 
+ [link: /cgi-bin/TblView/nph-tblView?app=ETSSView&config=conf/KELTP] 
+
+ KELT Praesepe 
+ [link: /cgi-bin/TblView/nph-tblView?app=ETSSView&config=conf/XO] 
+
+ XO 
+ [link: /applications/ETSS/HATNet_index.html] 
+
+ HATNet 
+ [link: /cgi-bin/TblView/nph-tblView?app=ETSSView&config=conf/Cluster] 
+
+ Cluster 
+ [link: /cgi-bin/TblView/nph-tblView?app=ETSSView&config=conf/TrES] 
+
+ TrES 
+
+ Other 
+
+ [link: /cgi-bin/observations/nph-firefly?datta] 
+
+ JWST Observations 
+ [link: /cgi-bin/TblSearch/nph-tblSearchInit?app=ExoTbls&config=ukirttimeseries] 
+
+ UKIRT Microlensing Survey 
+ [link: /cgi-bin/MOA/nph-firefly?MOA] 
+
+ MOA Microlensing Survey 
+ [link: /cgi-bin/ROME/nph-firefly?data&filter=True] 
+
+ ROME/REA Microlensing Survey 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=gjstars] 
+
+ Gliese-Jahreiss Stars 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=DI_STARS_EXEP] 
+
+ HWO ExEP Precursor Science Stars 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=missionstars] 
+
+ Mission Stars 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=mission_exocat] 
+
+ Mission Stars+ExoCat 
+ [link: /cgi-bin/FDL/nph-fdl] 
+
+ Frontier Development Lab Datasets 
+ [link: /cgi-bin/CUBESAT/nph-cubesat?cute] 
+
+ CUTE Mission 
+ [link: /docs/ASTERIAMission.html] 
+
+ ASTERIA Mission 
+ [link: /docs/contributed_data.html] 
+
+ Contributed Data Sets 
+ [link: /applications/ExoTbls/upload.html] 
+
+ Interactive Tables Search and File Upload 
+
+      Full table display 
+          Database search 
+
+ Tools 
+
+ [link: /applications/Inventory/search.html] 
+
+ Explore the Archive 
+ [link: /applications/ExoTbls/upload.html] 
+
+ Interactive Table Search and File Upload 
+ [link: /cgi-bin/TransitView/nph-visibletbls?dataset=transits] 
+
+ Transit and Ephemeris Service 
+ [link: /cgi-bin/CalcQty/nph-calcqty] 
+
+ Predicted Observables for Exoplanets (POE) 
+ [link: /cgi-bin/Pgram/nph-pgram] 
+
+ Periodogram 
+ [link: /ScatterPlot/?config=scatter&table=PS_output.csv&columns=PS_columns.tbl&theme=pres&x=pl_orbper&y=pl_bmassj&symbol-color=discoverymethod&symbol-size-min=8&legendpos=bottomright&link=1] 
+
+ Confirmed Planets Plotting Tool 
+ [link: /cgi-bin/ExoFAST/nph-exofast] 
+
+ EXOFAST: Transit and RV Fitting 
+
+ [link: https://astrofetch.ipac.caltech.edu] 
+
+ AstroFetch AI 
+ [link: /docs/TAP/usingTAP.html] 
+
+ Table Access Protocol (TAP) Interface 
+ [link: /docs/program_interfaces.html] 
+
+ Application Programming Interface (API) 
+ [link: /bulk_data_download] 
+
+ Bulk Data Download 
+ [link: https://exofop.ipac.caltech.edu/] 
+
+ ExoFOP 
+ [link: /exoplanetplots/] 
+
+ Pre-generated Plots 
+ [link: /support/upload_param/] 
+
+ Published Data Upload 
+
+ Support 
+
+ [link: /applications/DocSet/index.html?doctree=/docs/docmenu.xml&startdoc=item_1_01] 
+
+ Documentation Index 
+ [link: /docs/KeplerMission.html] 
+
+ Kepler Documentation 
+
+ [link: /docs/connect.html] 
+
+ Social Media and Newsletter 
+ [link: /applications/Helpdesk] 
+
+ Contact Us 
+
+ - 
+
+ Purpose of Kepler Objects of Interest (KOI) Activity Tables 
+
+ Current Tables 
+
+ Delivery Name 
+ Status 
+ Last update 
+ Link to table 
+
+ [link: #cumulative] Cumulative 
+ Done 
+ Sept. 27, 2018 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=cumulative] Interactive Table 
+
+ [link: #q1-q17_sup_dr25] Q1-Q17 DR 25 Supplemental 
+ Done 
+ Sept. 27, 2018 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=q1_q17_dr25_sup_koi] Interactive Table 
+
+ [link: #q1-q17_dr25] Q1-Q17 DR 25 
+ Done 
+ Aug. 31, 2017 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=q1_q17_dr25_koi] Interactive Table 
+
+ [link: #q1-q17_dr24] Q1-Q17 DR 24 
+ Done 
+ Sept. 24, 2015 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=q1_q17_dr24_koi] Interactive Table 
+
+ [link: #q1-q16] Q1-Q16 
+ Done 
+ Dec. 18, 2014 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=q1_q16_koi] Interactive Table 
+
+ [link: #q1-q12] Q1-Q12 
+ Done 
+ Dec. 4, 2014 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=q1_q12_koi] Interactive Table 
+
+ [link: #q1-q8] Q1-Q8 
+ Done 
+ Jan. 7, 2014 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=q1_q8_koi] Interactive Table 
+
+ [link: #q1-q6] Q1-Q6 
+ Done 
+ Feb. 12, 2013 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=q1_q6_koi] Interactive Table 
+
+ [link: #] Top 
+
+ Cumulative Table 
+
+ Last update: Sept. 27, 2018 
+ Current status: Done 
+ [link: /docs/koi_cumulative_log.pdf] Delivery History 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=cumulative] Interactive Table 
+
+ The cumulative KOI table gathers information from the individual KOI activity tables that describe the current results of different searches of the Kepler light curves. The intent of the cumulative table is to provide the most accurate dispositions and stellar and planetary information for all KOIs in one place. All the information in this table has provenance in other KOI activity tables. 
+
+ The cumulative table is created algorithmically, following simple rules. The information for each KOI is pulled from the preferred activity table based on two priority lists. One priority list (Disposition Priority) indicates the activity table from which the disposition (e.g., CANDIDATE or FALSE POSITIVE) has been pulled. If the object is not dispositioned in the highest priority activity table for a specific KOI, then it is pulled from the next highest priority activity table, and so on. In this way the cumulative table contains the most current disposition for each KOI. The second priority list (Transit-Fit Priority) indicates where the remaining information for each KOI (e.g., the transit fits, stellar properties and vetting statistics) was obtained. The activity table with reliable transit fits to the longest data set is given priority for the cumulative table. This will not necessarily provide the best fit for every individual KOI, but gives the most reliable fits overall. The current Disposition Priority order is: Q1-Q17 DR 25 Supplemental, Q1-Q17 DR 25, Q1-Q17 DR 24, Q1-Q16, Q1-Q12, Q1-Q8, Q1-Q6. The current Transit-Fit Priority order is: Q1-Q17 DR 25, Q1-17 DR 24, Q1-Q16, Q1-Q12, Q1-Q8, Q1-Q6, and Q1-Q17 DR 25 Supplemental. 
+
+ One consequence of having two priority lists is that the disposition for a KOI is not necessarily retrieved from the same activity table as the associated transit information. Also, since information for the cumulative table is gathered from a variety of activity tables, and since these activities use different methods for dispositioning, defining stellar parameters, and fitting transits, the cumulative table is a very disparate set of information and is not intended for statistical studies that require a uniform population. 
+
+ [link: #] Top 
+
+ Q1-Q17 DR 25 KOI Supplemental 
+
+ Last update: Sept. 27, 2018 
+ Current status: Done 
+ [link: /docs/q1_q17dr25_sup_koi_log.pdf] Delivery History 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=q1_q17_dr25_sup_koi] Interactive Table 
+
+ The Q1–Q17 Data Release 25 (DR25) Supplemental Kepler Objects-of-Interest (KOI) activity table reports dispositions based on the final processing (DR25) of the Kepler data and a combination of automated and human-based vetting to produce a "best-knowledge" catalog of planetary CANDIDATEs and FALSE POSITIVEs for use by the Astronomical community in selecting KOIs for follow-up observations and further study. Other KOI catalogs have focused on employing uniform vetting techniques in order to produce catalogs suitable for robust statistical work, such as determination of planetary occurrence rates. In some cases this resulted in a few well-known confirmed planets and planet candidates being classified as FALSE POSITIVEs and vice versa a few well-known false positives classified as CANDIDATEs—an unavoidable result of uniform vetting. In contrast, this table seeks to provide users with the most accurate individual disposition possible for every existing KOI, given available resources.
+
+ The process of arriving at a disposition (CANDIDATE or FALSE POSITIVE) for this table is as follows. First, every KOI in the [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=cumulative] Cumulative KOI Table that did not have an entry in the [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=q1_q17_dr25_koi] Q1–Q17 DR25 table, referred to as DR25 "Orphans," was subjected to a supplemental [link: https://ui.adsabs.harvard.edu/abs/2018PASP..130f4502T/abstract] data validation (DV) run, where the period, epoch, duration, and depth of the KOI from the table wherein it was most recently listed is used to generate [link: https://ui.adsabs.harvard.edu/abs/2018PASP..130f4502T/abstract] DV metrics and lightcurves . These DV products were combined with other metrics and tests to run the [link: https://github.com/nasa/kepler-robovetter] DR25 Kepler Robovetter (see [link: https://ui.adsabs.harvard.edu/abs/2018ApJS..235...38T/abstract] Thompson et al. 2018 for details) to generate dispositions and [link: /docs/Q1Q17-DR25-KOIcompanion.html#vetting] major flags for each Orphan KOI. Every available disposition of every KOI from the [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=q1_q6_koi] Q1–Q6 , [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=q1_q8_koi] Q1–Q8 , [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=q1_q12_koi] Q1–Q12 , [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=q1_q16_koi] Q1–Q16 , [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=q1_q17_dr24_koi] Q1–Q17 DR24 , [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=q1_q17_dr25_koi] Q1–Q17 DR25 , and the DR25 Orphan run was examined. KOIs that did not have unanimous agreement among table dispositions (i.e., not all non-blank dispositions were set to CANDIDATE or not all were set to FALSE POSITIVE) were noted as "disputed," which meant they ideally should receive manual, human-based vetting to determine the disposition. Of the 9,564 KOIs in the cumulative table, there were 1,442 KOIs noted as disputed following this analysis.
+
+ In order to reduce the number of objects that needed manual vetting, especially those at low signal-to-noise, where manual vetting is most difficult and time-intensive, an automated rule was applied for KOIs that were noted as disputed solely as a result of the DR25 Orphan run disposition. If a disputed KOI was dispositioned as FALSE POSITIVE with the [link: /docs/Q1Q17-DR25-KOIcompanion.html#vetting] Not Transit-Like major flag set to 1 in the DR25 Orphan run, while the other table dispositions were CANDIDATE, then the KOI was considered a CANDIDATE and not disputed. Similarly, if a disputed KOI was dispositioned as a CANDIDATE in the DR25 Orphan run, while the other table dispositions were FALSE POSITIVE, then the KOI was considered a FALSE POSITIVE and not disputed. In the first scenario, previous vetting activities saw a significant transit-like signal, and thus unless the Orphan run failed it due to one of the other major flags (a secondary eclipse, centroid offset, or ephemeris match), it is prudent to follow an "innocent until proven guilty" philosophy and rely on past vetting activities, and thus disposition it as a CANDIDATE. In the second scenario, previous vetting activities had a clear reason to disposition it as a FALSE POSITIVE, and thus it is prudent to rely on past vetting activities, which required significant evidence to disposition a KOI as FALSE POSITIVE. This reduced the number of KOIs noted as disputed to 902.
+
+ The list of KOIs that remained disputed after the above automated analysis, as well as those KOIs dispositioned FALSE POSITIVE and labeled as [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=planets] "Confirmed Planets," were sent to the [link: https://ui.adsabs.harvard.edu/abs/2017ksci.rept...12B/abstract] Kepler False Positive Working Group (FPWG) to perform manual, human-based vetting. Every disputed KOI and FALSE POSITIVE confirmed planet were dispositioned according to the rules of the FPWG. (Note in some cases the FPWG had already dispositioned disputed KOIs as a result of on-going vetting activities over the past several years, and thus those were not re-examined.) Additionally, some non-disputed KOIs were dispositioned by the FPWG as part of its regular activities, and in some cases the FPWG reached a different disposition than the KOI catalogs. It is especially worth noting here that, in addition to using the most recently available Kepler data and vetting diagnostics (in most cases DR25), the FPWG also searches for and utilizes follow-up observations (e.g., radial-velocity measurements, high resolution imaging, stellar classification) and a planetary radius limit of 30 Earth Radii to distinguish between CANDIDATEs and FALSE POSITIVEs (see [link: https://ui.adsabs.harvard.edu/abs/2017ksci.rept...12B/abstract] Bryson et al. 2017 for details.) The several most recent KOI catalogs did not utilize follow-up observations or a planetary radius cut, again to ensure uniformity and allow for use with updated stellar parameters in order to facilitate future determinations of planetary occurrence rates.
+
+ After the FPWG completed manual vetting of all disputed KOIs, and any other KOIs as part of its regular activities, (which will appear in the [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=fpwg] Kepler FPWG table upon the next regular update), the final DR25 Supplemental KOI table disposition was simply chosen to be the Kepler FPWG table disposition if one existed, else the (non-disputed) disposition from past KOI catalogs. 
+
+ Of the 9,564 KOIs, a total of 4,717 are dispositioned as CANDIDATE and the other 4,847 are dispositioned as FALSE POSITIVE. At the time of delivery, there are 7 confirmed planets that are dispositioned in this table as FALSE POSITIVE, all of which were confirmed via statistical validation, but human vetting by the FPWG showed definitively to be non-planetary: Kepler-468 b, Kepler-469 b, Kepler-470 b, Kepler-628 b, Kepler-840 b, Kepler-854 b, and Kepler-1415 b. In the case of Kepler-1415 b, a small but significant odd/even depth difference was detected indicating it to be a nearly equal-mass eclipsing binary. Kepler-469 b is the well-known triply eclipsing star system KOI 126 ( [link: https://ui.adsabs.harvard.edu/abs/2011Sci...331..562C/abstract] Carter et al. 2011 ). In all the other cases, radial-velocity follow-up and/or careful study of phase variations and secondary eclipses revealed the transiting companion to be either a late M dwarf or a brown dwarf. 
+
+ [link: #] Top 
+
+ Q1-Q17 DR 25 KOI Table 
+
+ Last update: Aug. 31, 2017 
+ Current status: Done 
+ [link: /docs/q1_q17dr25_koi_log.pdf] Delivery History 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=q1_q17_dr25_koi] Interactive Table 
+ [link: /docs/Q1Q17-DR25-KOIcompanion.html] Documentation 
+
+ The Q1-Q17 Data Release 25 (DR 25) Kepler Objects-of-Interest (KOI) activity table reports results based on Kepler processing with SOC pipeline release 9.3. This work is described in Thompson et al. (in prep). It uses the final processing (DR 25) of the Kepler data and a fully automated dispositioning process to produce a uniformly vetted catalog of planetary candidates (PCs) and false positives (FPs) for use in exoplanetary occurrence rate calculations.
+
+ Specifically, the Q1–Q17 DR 25 light curves were searched with TPS/DV to identify the Q1–Q17 DR 25 Threshold Crossing Events (TCEs) ( [link: https://ui.adsabs.harvard.edu/abs/2016AJ....152..158T/abstract] Twicken et al. 2016 ). This set of TCEs was then dispositioned in a completely automated fashion via the use of the Kepler Robovetter — sophisticated logic that utilizes a set of targeted metrics to mimic the human decision-making process ( [link: https://ui.adsabs.harvard.edu/abs/2016ApJS..224...12C/abstract] Coughlin et al. 2016 ; [link: https://ui.adsabs.harvard.edu/abs/2015ApJS..217...31M/abstract] Mullally et al. 2015 ). The Robovetter first decides whether a TCE is "transit-like" (i.e., the light curve resembles a transiting planet or eclipsing binary) or "not transit-like" (i.e., the light curve resembles a contact binary, pulsating star, spotty star, or instrumental artifact). For those TCEs that are deemed transit-like, a KOI number is assigned and the Robovetter performs further tests. These include looking for evidence of 1) a secondary eclipse, substantial out-of-eclipse variations, or a deep, V-shaped transit, indicating that the TCE is produced by an eclipsing binary, 2) a shift of the in-transit centroid location, or significant signal power outside of the photometric aperture, indicating that the transit signature does not originate from the target, and 3) an ephemeris match to another TCE, KOI, or known eclipsing binary, indicating that the transit signature results from contamination by another source. If a KOI fails any of these tests, it is dispositioned as a FP, with flags set to indicate which tests were failed. If all tests are passed, then the subject KOI is dispositioned as a PC. It is worth noting that all Q1–Q17 DR 25 TCEs are vetted uniformly in this activity table. In particular, all pre-existing KOIs included in this DR 25 TCE set were redispositioned, all new KOIs were dispositioned, and the remaining TCEs are implicitly dispositioned as "not transit-like" by the simple fact that they have not been promoted to KOI status and included in this activity table. The planetary parameters for most KOIs were computed using a Markov Chain Monte Carlo fitting procedure (see [link: https://ui.adsabs.harvard.edu/abs/2014ApJ...784...45R/abstract] Rowe et al. (2013) ). 
+
+ IMPORTANT UPDATES and WARNINGS: 
+
+ The dispositions in the Q1–Q17 DR 25 activity table have been fully automated. Automation requires that uniformity has been prioritized over accuracy for individual systems to enable planetary occurrence rate calculations. Manual changes to individual dispositions was not permitted, so some inconsistencies will persist so long as the Robovetter is imperfect. 
+
+ The catalog was balanced to provide reasonably high completeness and reliability, especially for the long-period, low-MES objects. The philosophy of "innocent until proven guilty" used in older catalogs, which provided high completeness at the expense of lower reliability, was not utilized in this catalog. For this catalog, the short period, high signal-to-noise planet candidate population is approximately 93 percent complete and 95 percent reliable. A consequence is a small population of Kepler validated and confirmed exoplanets have been classified as false-positives; this is consistent with our expected reliability. The DR 25 KOI catalog is a statistical result and is not meant to challenge the status of validated or confirmed planets. 
+
+ Along with the disposition for each TCE, a new parameter called the "Disposition Score" has been provided. The score has a value between 0 and 1. Values close to one indicate high confidence in the disposition of a KOI as a PC. Values close to zero indicate high confidence in the disposition of a KOI as a FP. Users may wish to perform score cuts or rankings to select particular objects of interest (e.g., only select high score PCs for observational follow-up). 
+
+ Deep, V-shaped TCEs are now labeled as steller eclipse type false positives by making a cut on the combined value of the TCE's impact parameter and its radius ratio. Previous catalogs did not make cuts based on planet size due to concerns about uncertainty in determination of the stellar radius. The new cut is agnostic to stellar parameters, and rejects less than 0.4% of injected planet signals, while successfully dispositioning as FPs most KOIs that are known to be EBs via follow-up observations. 
+
+ The inferred radius of an object alone was considered insufficient evidence to disposition a KOI as a FP, thus users may wish to impose their own radius cut when examining the PC population (e.g., < 20 R ⊕ ), depending on their particular scientific objectives. 
+
+ In order to maximize flexibility and data availability, KOIs were created for all TCEs that were dispositioned transit-like, as well as those dispositioned not transit-like with a Disposition Score greater than or equal to 0.1. 
+
+ [link: #] Top 
+
+ Q1-Q17 DR 24 KOI Table 
+
+ Last update: Sept. 24, 2015 
+ Current status: Done 
+ [link: /docs/koi_q1_q17_dr24_log.pdf] Delivery History 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=q1_q17_dr24_koi] Interactive Table 
+ [link: /docs/Q1Q17-DR24-KOIcompanionV5.html ] Documentation 
+ [link: https://ui.adsabs.harvard.edu/abs/2016ApJS..224...12C/abstract] Journal Article 
+
+ The Q1-Q17 (DR 24) Kepler Objects-of-Interest (KOI) activity table reports results based on Kepler Data Release 24 (DR 24). This work is described in the paper [link: https://ui.adsabs.harvard.edu/abs/2016ApJS..224...12C/abstract] Coughlin et al. (2016) . This is a milestone release because it utilizes the first uniform processing of the entire Kepler data set and it represents a first attempt at fully automating the dispositioning process so as to produce a uniformly vetted catalog of planetary candidates (PCs) and false positives (FPs). 
+
+ Specifically, the Q1-Q17 (DR 24) light curves were searched with TPS/DV to identify the Q1-Q17 (DR 24) Threshold Crossing Events (TCEs) ( [link: https://ui.adsabs.harvard.edu/abs/2015ApJS..217...18S/abstract] Seader et al. 2015 ). This set of 20,367 TCEs is then dispositioned in completely automated fashion via the use of "robovetters" —sophisticated decision trees that utilize a set of targeted metrics (e.g. [link: https://ui.adsabs.harvard.edu/abs/2015ApJ...812...46T/abstract] Thompson et al. 2015 , [link: https://ui.adsabs.harvard.edu/abs/2016PASP..128g4502M/abstract] Mullally et al. 2016 , [link: /docs/KSCI-19115-001.pdf] Mullally et al. 2017 ) to mimic the human decision-making process ( [link: https://ui.adsabs.harvard.edu/abs/2016ApJS..224...12C/abstract] Coughlin et al. 2016 ; [link: https://ui.adsabs.harvard.edu/abs/2015ApJS..217...31M/abstract] Mullally et al. 2015 ). 
+ Comparable to the former "triage" phase, a robovetter first decides whether a TCE is "transit-like" (i.e., the light curve resembles a transiting planet or eclipsing binary) or "not transit-like" (i.e., the light curve resembles a contact binary, pulsating star, spotty star, or instrumental artifact). For those TCEs that are deemed transit-like, a KOI number is assigned and the robovetters perform further tests. These include looking for evidence of 1) a self-luminous secondary eclipse in the light curve, indicating that the transit signature is produced by an eclipsing binary, 2) a shift of the in-transit centroid location, indicating that the transit signature does not originate from the target, and 3) an ephemeris match to other TCEs, KOIs, and known eclipsing binaries, indicating that the transit signature results from contamination by another source. 
+ If a KOI fails any of these tests, it is dispositioned as a FP, with flags set to indicate which tests were failed. If all tests are passed, then the subject TCE is dispositioned as a PC. It is worth noting that all 20,367 TCEs ( [link: https://ui.adsabs.harvard.edu/abs/2015ApJS..217...18S/abstract] Seader et al. 2015 ) are vetted uniformly in this activity table. In particular, all pre-existing KOIs included in this TCE set were redispositioned, all new KOIs were dispositioned, and the remaining TCEs are implicitly dispositioned as "not transit-like" by the simple fact that they have not been promoted to KOI status. 
+ The planetary parameters in this activity table were originally derived from model fits by the Data Validation (DV) module of the Kepler pipeline, but they were replaced by improved values from a Markov Chain Monte Carlo fitting procedure ( [link: https://ui.adsabs.harvard.edu/abs/2015ApJS..217...31M/abstract] Mullally et al. 2015 ) before table closure (see the Q1-Q17 DR24 delivery history for details). 
+
+ WARNINGS: 
+
+ The dispositions in this Q1-Q17 (DR 24) activity table are fully automated. This means that uniformity is prioritized over accuracy for individual systems, in order to enable planetary occurrence rate calculations. Users who discover inaccurate dispositions are encouraged to provide feedback to inform the on-going development and refinement of the robovetters. However, it is important to note that individual dispositions will no longer be changed, so some errors will persist so long as the robovetters are imperfect. 
+ The philosophy of "innocent until proven guilty" has been retained, so the PC population may be artificially enhanced at low signal-to-noise ratios (SNR). As such, additional scrutiny of low SNR PCs is encouraged before expending precious observing resources on their follow-up. 
+ In contrast to previous transit searches, detached eclipsing binaries are no longer excluded, so there is a disproportionate increase in the number of new, detached eclipsing binaries in this activity table. They can be identified in the FP population by their false positive flags. 
+ A reminder that the inferred radius of an object is insufficient evidence (by itself) to receive a disposition of FP, so users may wish to impose their own radius cut when examining the PC population (e.g., < 30 R ⊕ ), depending on their particular scientific objectives. 
+
+ [link: #] Top 
+
+ Q1-Q16 KOI Table 
+
+ Last update: Dec. 18, 2014 
+ Current status: Done 
+ [link: /docs/koi_q1_q16_log.pdf] Delivery History 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=q1_q16_koi] Interactive Table 
+ [link: /docs/Q1-16KOIcompanion.html] Documentation 
+ [link: https://ui.adsabs.harvard.edu/abs/2015ApJS..217...31M/abstract] Journal Article 
+
+ The Q1-Q16 Kepler Objects-of-Interest (KOI) activity table reports the results of the Q1-Q16 transit search based on our in-depth analysis of the Q1-Q16 Threshold Crossing Events (TCEs). This work is described in the paper [link: https://ui.adsabs.harvard.edu/abs/2015ApJS..217...31M/abstract] Mullally et al. (2015) . The steps in this analysis are: (1) identify TCEs that correspond to previously discovered KOIs, (2) triage (i.e., take a quick look at) the remaining TCEs to identify those that most resemble transiting planets (i.e., eliminate the obvious false alarms), (3) fit models to this subset of TCEs and promote the promising ones to KOI status, (4) examine the flux curves and centroid offsets for these KOIs to determine whether they are planetary candidates or false positives (i.e., disposition them), (5) use a physical transit model to update their ephemerides, determine best-fit parameters, and estimate errors. 
+
+ WARNING: The Q1-Q16 transit search excluded 1519 eclipsing binaries that were chosen from the [link: http://keplerebs.villanova.edu] Villanova Kepler Eclipsing Binary catalog . These eclipsing binaries were excluded from the search because the pipeline is tuned to find planets and the variability of certain binaries results in an unacceptable increase in the pipeline search and analysis run time. The details of how these particular eclipsing binaries were selected are described in [link: https://ui.adsabs.harvard.edu/abs/2014ApJS..211....6T/abstract] Tenenbaum et al. 2014 . The remaining eclipsing binaries, along with any new eclipsing binaries found in this pipeline run, have been retained, given KOI numbers, and included in this Q1-Q16 activity table. In addition, there are most likely some residual image artifacts and other false alarms (i.e., non-astrophysical signatures) which inadvertently made it through Steps 2 and 3 above. In other words, this KOI activity table contains planetary candidates, false positives and false alarms. See the Q1-Q16 delivery history for updates to the dispositions and properties of individual objects as this work progresses. 
+
+ [link: #] Top 
+
+ Q1-Q12 KOI Table 
+
+ Last update: Dec. 4, 2014 
+ Current status: Done 
+ [link: /docs/koi_q1_q12_log.pdf] Delivery History 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=q1_q12_koi] Interactive Table 
+ [link: /docs/Q1-12KOIcompanion.html] Documentation 
+ [link: https://ui.adsabs.harvard.edu/abs/2015ApJS..217...16R/abstract] Journal Article 
+
+ The Q1-Q12 Kepler Objects-of-Interest (KOI) activity table reports the results of the Q1-Q12 transit search based on our in-depth analysis of the Q1-Q12 Threshold Crossing Events (TCEs). This work is described in the paper [link: https://ui.adsabs.harvard.edu/abs/2015ApJS..217...16R/abstract] Rowe et al. (2015) . The steps in this analysis are: (1) triage (i.e., take a quick look at) all the TCEs to identify those that most resemble transiting planets (i.e., rule out the obvious false alarms), (2) fit models to this subset of TCEs and promote the most promising ones to KOI status, (3) examine the flux curves and centroid offsets for these KOIs to determine whether they are planetary candidates or false positives (i.e., disposition them), (4) characterize their host stars, and (5) use a physical transit model to update their ephemerides, determine best-fit parameters, and estimate errors. 
+
+ WARNING: The Q1-Q12 transit search excluded 2123 eclipsing binaries from consideration (see Q1-Q12 TCE Release Notes), but all remaining eclipsing binaries found in this pipeline run have been retained, given KOI numbers, and included in this Q1-Q12 activity table. In addition, there are most likely some residual image artifacts and other false alarms (non-astrophysical signatures) which inadvertently made it through Steps 1 and 2 above. In other words, this KOI activity table is known to contain many objects that will ultimately become false positives. See the Q1-Q12 delivery history for the status of Steps 3 through 5 above, which will identify and characterize the planetary candidates within the Q1-Q12 KOIs during the coming months. 
+
+ [link: #] Top 
+
+ Q1-Q8 KOI Table 
+
+ Last update: Jan. 7, 2014 
+ Current status: Done 
+ [link: /docs/koi_q1_q8_log.pdf] Delivery History 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=q1_q8_koi] Interactive Table 
+ [link: /docs/Q1-8KOIcompanion.html] Documentation 
+ [link: https://ui.adsabs.harvard.edu/abs/2014ApJS..210...19B/abstract] Journal Article 
+
+ The Q1-Q8 KOI table describes the results of triaging the Q1-Q8 Threshold Crossing Events (TCEs) into new Kepler Objects of Interest (KOIs), dispositioning new KOIs into planet candidates and false positive events, characterizing host stars and fitting physical transit models using the Q1-Q10 data. This work is described in the paper [link: https://ui.adsabs.harvard.edu/abs/2014ApJS..210...19B/abstract] Burke et al. (2014) . The work was organized as follows: 
+
+ Newly identified systems of interest have KOI numbers ≥ 2668. 
+
+ Dispositions were assigned to all new KOIs and re-evaluated for all planet candidates found in [link: https://ui.adsabs.harvard.edu/abs/2011ApJ...736...19B/abstract] Borucki et al. (2011b) . Refer to [link: https://ui.adsabs.harvard.edu/abs/2013ApJS..204...24B/abstract] Batalha et al. (2013) . 
+
+ New multi-planet KOIs were found in the set ≤1609 and ≥2668. This table does not report new multi-planets around KOIs between 1610-2667. 
+
+ New transit fits for all known KOIs were performed using the Q1-Q10 data set and updated stellar parameters. 
+
+ [link: #] Top 
+
+ Q1-Q6 KOI Table 
+
+ Last update: Feb 12, 2013 
+ Current status: Done 
+ [link: /docs/koi_q1_q6_log.pdf] Delivery History 
+ [link: /cgi-bin/TblView/nph-tblView?app=ExoTbls&config=q1_q6_koi] Interactive Table 
+ [link: https://ui.adsabs.harvard.edu/abs/2013ApJS..204...24B/abstract] Journal Article 
+
+The Q1-Q6 KOI table reports the KOIs found in Q1-Q6 data and reports transit fits to Q1-Q8 data. KOI dispositions agree with the planet candidates identified in [link: https://ui.adsabs.harvard.edu/abs/2013ApJS..204...24B/abstract] Batalha et al. (2013) and the False Positive Table originally hosted at MAST. 
+
+ [link: http://www.nasa.gov] 
+
+ [link: http://www.ipac.caltech.edu] 
+
+ [link: http://nexsci.caltech.edu] 
+
+ [link: http://www.caltech.edu] 
+
+ [link: /index.html] Home 
+
+ [link: /docs/about.html] About Us 
+
+ [link: /docs/data.html] Data 
+
+ [link: /docs/tools.html] Tools 
+
+ [link: /docs/help.html] Support

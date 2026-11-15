@@ -9,6 +9,13 @@
 export const API_BASE =
   process.env.NEXT_PUBLIC_API_BASE || "http://127.0.0.1:8000";
 
+// Where server-side rendering fetches from. Normally the same backend; the e2e run of the
+// "every live source is down" states points a second server at a backend whose upstreams fail.
+// Read by name at run time (not inlined at build) so one build can serve both.
+export function serverApiBase(): string {
+  return (typeof window === "undefined" && process.env["PH_SERVER_API_BASE"]) || API_BASE;
+}
+
 export type Classification =
   | "clean-recovery"
   | "eclipsing-binary"
@@ -108,7 +115,7 @@ export type ApiResult<T> =
 // Never returns silent placeholder content: callers must render the error.
 export async function apiGet<T>(path: string): Promise<ApiResult<T>> {
   try {
-    const res = await fetch(`${API_BASE}${path}`, { cache: "no-store" });
+    const res = await fetch(`${serverApiBase()}${path}`, { cache: "no-store" });
     if (!res.ok) {
       return { ok: false, status: res.status, error: `API returned ${res.status} for ${path}` };
     }

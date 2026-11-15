@@ -1,0 +1,209 @@
+{
+  "slug": "transits",
+  "title": "Transits",
+  "summary": "How a planet you cannot see shows up as a dip in a star's light, and what the dip tells you.",
+  "minutes": 7,
+  "badge": {
+    "name": "Dip detective",
+    "text": "You can read a planet's size and orbit from its transit."
+  },
+  "links": [
+    {
+      "href": "/candidates",
+      "label": "Fold a real light curve in the hunt lab"
+    },
+    {
+      "href": "/method",
+      "label": "How this site's pipeline finds dips"
+    }
+  ],
+  "steps": [
+    {
+      "heading": "A dip in starlight",
+      "body": [
+        "We cannot see a planet many light-years away. But when it passes in front of its star, it blocks a little of the star's light. A graph of brightness over time, called a light curve, shows a dip. This is a transit."
+      ],
+      "facts": [
+        {
+          "text": "A planet passing in front of its star slightly dims its light, which shows up as a dip in the light curve.",
+          "kind": "definition",
+          "source": {
+            "name": "NASA Science: What's a transit?",
+            "url": "https://science.nasa.gov/exoplanets/whats-a-transit/"
+          },
+          "checks": [
+            {
+              "fixture": "nasa_whats_a_transit_p7.txt",
+              "quote": "the planet passing in front of its star ever so slightly dims its light"
+            },
+            {
+              "fixture": "nasa_whats_a_transit_p7.txt",
+              "quote": "the light curve will show a dip in brightness"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "The depth tells the size",
+      "body": [
+        "The fraction of light blocked is about the planet's area compared with the star's: (planet radius ÷ star radius) squared. So the depth tells you how big the planet is compared with its star.",
+        "Earth crossing the Sun would block about 84 parts per million. Jupiter would block about 1%. Small planets make tiny dips, which is why they are hard to find."
+      ],
+      "facts": [
+        {
+          "text": "The depth of a transit is about the square of the planet-to-star radius ratio (Winn 2010, Eq. 22).",
+          "kind": "definition",
+          "source": {
+            "name": "Winn (2010), Transits and Occultations, Eq. 22",
+            "url": "https://arxiv.org/abs/1001.2010"
+          },
+          "checks": [
+            {
+              "fixture": "arxiv_winn2010_abs_p7.txt",
+              "quote": "the relative dimensions of the planet and its host star"
+            }
+          ]
+        },
+        {
+          "text": "The size of the planet can be calculated from how much the star's brightness drops.",
+          "kind": "definition",
+          "source": {
+            "name": "NASA Science: What's a transit?",
+            "url": "https://science.nasa.gov/exoplanets/whats-a-transit/"
+          },
+          "checks": [
+            {
+              "fixture": "nasa_whats_a_transit_p7.txt",
+              "quote": "the size of the planet itself can be calculated based on how much the star’s brightness lowered"
+            }
+          ]
+        },
+        {
+          "text": "Earth crossing the Sun would block about 84 parts per million; Jupiter about 1%.",
+          "kind": "computed",
+          "source": {
+            "name": "NASA NSSDCA Planetary Fact Sheets",
+            "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/"
+          },
+          "checks": [
+            {
+              "computed": "earth_transit_ppm"
+            },
+            {
+              "computed": "jupiter_transit_percent"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Repeats give the orbit",
+      "body": [
+        "One dip on its own could have many causes. Dips that repeat on a fixed schedule give the planet's period, the time it takes to go around once. From the period you can work out the size of the orbit."
+      ],
+      "facts": [
+        {
+          "text": "The size of a planet's orbit can be calculated from its period.",
+          "kind": "definition",
+          "source": {
+            "name": "NASA Science: What's a transit?",
+            "url": "https://science.nasa.gov/exoplanets/whats-a-transit/"
+          },
+          "checks": [
+            {
+              "fixture": "nasa_whats_a_transit_p7.txt",
+              "quote": "The size of the exoplanet’s orbit can be calculated from how long it takes to orbit once (the period)"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "key": "depth_ratio",
+      "kind": "choice",
+      "prompt": "Two planets cross the same star. One makes a dip 4 times deeper than the other. How do their sizes compare?",
+      "choices": [
+        {
+          "text": "The deeper one is 4 times wider",
+          "correct": false,
+          "explanation": "Depth goes with area, not width."
+        },
+        {
+          "text": "The deeper one is 2 times wider",
+          "correct": true,
+          "explanation": "Depth goes as the square of the size ratio, and 2 squared is 4."
+        },
+        {
+          "text": "They are the same size",
+          "correct": false,
+          "explanation": "A deeper dip means more light is blocked."
+        }
+      ],
+      "explanation": "The depth is about (planet radius ÷ star radius) squared, so 4 times the depth means 2 times the width.",
+      "source": {
+        "name": "Winn (2010), Transits and Occultations, Eq. 22",
+        "url": "https://arxiv.org/abs/1001.2010"
+      },
+      "checks": [
+        {
+          "fixture": "arxiv_winn2010_abs_p7.txt",
+          "quote": "the relative dimensions of the planet and its host star"
+        }
+      ]
+    },
+    {
+      "key": "earth_ppm",
+      "kind": "numeric",
+      "prompt": "About how many parts per million of the Sun's light would Earth block in a transit?",
+      "answer": 84,
+      "tolerance": 3,
+      "unit": "ppm",
+      "explanation": "(Earth's radius ÷ the Sun's radius) squared is about 84 parts per million.",
+      "source": {
+        "name": "NASA NSSDCA Planetary Fact Sheets",
+        "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/"
+      },
+      "checks": [
+        {
+          "computed": "earth_transit_ppm_value"
+        }
+      ]
+    },
+    {
+      "key": "period_from",
+      "kind": "choice",
+      "prompt": "What gives you a planet's orbital period?",
+      "choices": [
+        {
+          "text": "How deep the dip is",
+          "correct": false,
+          "explanation": "Depth tells you size, not period."
+        },
+        {
+          "text": "The time between one dip and the next",
+          "correct": true,
+          "explanation": "The planet comes back once per orbit."
+        },
+        {
+          "text": "How bright the star is",
+          "correct": false,
+          "explanation": "Brightness alone says nothing about the orbit."
+        }
+      ],
+      "explanation": "Dips repeat once per orbit, so the time between them is the period.",
+      "source": {
+        "name": "NASA Science: What's a transit?",
+        "url": "https://science.nasa.gov/exoplanets/whats-a-transit/"
+      },
+      "checks": [
+        {
+          "fixture": "nasa_whats_a_transit_p7.txt",
+          "quote": "how long it takes to orbit once (the period)"
+        }
+      ]
+    }
+  ]
+}

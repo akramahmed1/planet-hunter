@@ -1,0 +1,232 @@
+[2110.13382] TESS Eclipsing Binary Stars. I. Short cadence observations of 4584 eclipsing binaries in Sectors 1-26 
+
+ [link: #content] Skip to main content 
+
+ [link: https://arxiv.org/IgnoreMe] 
+
+ [link: https://arxiv.org/] 
+
+ [link: https://arxiv.org/search] 
+
+ Search
+
+ [link: https://arxiv.org/user/create] Submit 
+ [link: https://info.arxiv.org/about/donate.html] Donate 
+
+ [link: https://arxiv.org/login] Log in 
+
+ Search arXiv 
+
+ Press Enter to search · [link: https://arxiv.org/search/advanced] Advanced search 
+
+--> 
+
+ Astrophysics > Solar and Stellar Astrophysics 
+
+ arXiv:2110.13382 (astro-ph)
+
+ [Submitted on 26 Oct 2021] 
+ Title: TESS Eclipsing Binary Stars. I. Short cadence observations of 4584 eclipsing binaries in Sectors 1-26 
+ Authors: [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Prsa,+A] Andrej Prsa , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Kochoska,+A] Angela Kochoska , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Conroy,+K+E] Kyle E. Conroy , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Eisner,+N] Nora Eisner , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Hey,+D+R] Daniel R. Hey , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=IJspeert,+L] Luc IJspeert , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Kruse,+E] Ethan Kruse , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Fleming,+S+W] Scott W. Fleming , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Johnston,+C] Cole Johnston , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Kristiansen,+M+H] Martti H. Kristiansen , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=LaCourse,+D] Daryll LaCourse , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Mortensen,+D] Danielle Mortensen , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Pepper,+J] Joshua Pepper , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Stassun,+K+G] Keivan G. Stassun , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Torres,+G] Guillermo Torres , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Abdul-Masih,+M] Michael Abdul-Masih , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Chakraborty,+J] Joheen Chakraborty , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Gagliano,+R] Robert Gagliano , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Guo,+Z] Zhao Guo , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Hambleton,+K] Kelly Hambleton , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Hong,+K] Kyeongsoo Hong , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Jacobs,+T] Thomas Jacobs , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Jones,+D] David Jones , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Kostov,+V] Veselin Kostov , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Lee,+J+W] Jae Woo Lee , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Omohundro,+M] Mark Omohundro , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Orosz,+J+A] Jerome A. Orosz , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Page,+E+J] Emma J. Page , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Powell,+B+P] Brian P. Powell , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Rappaport,+S] Saul Rappaport , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Reed,+P] Phill Reed , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Schnittman,+J] Jeremy Schnittman , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Schwengeler,+H+M] Hans Martin Schwengeler , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Shporer,+A] Avi Shporer , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Terentev,+I+A] Ivan A. Terentev , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Vanderburg,+A] Andrew Vanderburg , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Welsh,+W+F] William F. Welsh , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Caldwell,+D+A] Douglas A. Caldwell , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Doty,+J+P] John P. Doty , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Jenkins,+J+M] Jon M. Jenkins , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Latham,+D+W] David W. Latham , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Ricker,+G+R] George R. Ricker , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Seager,+S] Sara Seager , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Schlieder,+J+E] Joshua E. Schlieder , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Shiao,+B] Bernie Shiao , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Vanderspek,+R] Roland Vanderspek , [link: https://arxiv.org/search/astro-ph?searchtype=author&query=Winn,+J+N] Joshua N. Winn View a PDF of the paper titled TESS Eclipsing Binary Stars. I. Short cadence observations of 4584 eclipsing binaries in Sectors 1-26, by Andrej Prsa and 46 other authors 
+ [link: /pdf/2110.13382] View PDF 
+ [link: https://arxiv.org/html/2110.13382v1] HTML (experimental) 
+
+ Abstract: In this paper we present a catalog of 4584 eclipsing binaries observed during the first two years (26 sectors) of the TESS survey. We discuss selection criteria for eclipsing binary candidates, detection of hither-to unknown eclipsing systems, determination of the ephemerides, the validation and triage process, and the derivation of heuristic estimates for the ephemerides. Instead of keeping to the widely used discrete classes, we propose a binary star morphology classification based on a dimensionality reduction algorithm. Finally, we present statistical properties of the sample, we qualitatively estimate completeness, and discuss the results. The work presented here is organized and performed within the TESS Eclipsing Binary Working Group, an open group of professional and citizen scientists; we conclude by describing ongoing work and future goals for the group. The catalog is available from [link: http://tessEBs.villanova.edu] this http URL and from MAST.
+
+ Comments: 
+ 32 pages, 21 figures, accepted to ApJ Supplement Series; comments welcome 
+
+ Subjects: 
+
+ Solar and Stellar Astrophysics (astro-ph.SR) 
+
+ Cite as: 
+ [link: https://arxiv.org/abs/2110.13382] arXiv:2110.13382 [astro-ph.SR] 
+
+ (or 
+ [link: https://arxiv.org/abs/2110.13382v1] arXiv:2110.13382v1 [astro-ph.SR] for this version)
+
+ [link: https://doi.org/10.48550/arXiv.2110.13382] https://doi.org/10.48550/arXiv.2110.13382 
+
+ Focus to learn more 
+
+ arXiv-issued DOI via DataCite 
+
+ Related DOI :
+
+ [link: https://doi.org/10.3847/1538-4365/ac324a] https://doi.org/10.3847/1538-4365/ac324a 
+
+ Focus to learn more 
+
+ DOI(s) linking to related resources
+
+ Submission history From: Andrej Prsa [ [link: /show-email/11819171/2110.13382] view email ] [v1] 
+ Tue, 26 Oct 2021 03:20:03 UTC (18,073 KB) 
+
+ Full-text links: 
+ Access Paper: 
+
+View a PDF of the paper titled TESS Eclipsing Binary Stars. I. Short cadence observations of 4584 eclipsing binaries in Sectors 1-26, by Andrej Prsa and 46 other authors [link: /pdf/2110.13382] View PDF [link: https://arxiv.org/html/2110.13382v1] HTML (experimental) [link: /src/2110.13382] TeX Source
+
+ [link: http://arxiv.org/licenses/nonexclusive-distrib/1.0/] view license 
+
+ Current browse context: 
+ astro-ph.SR 
+
+ [link: /prevnext?id=2110.13382&function=prev&context=astro-ph.SR] < prev 
+
+   |   
+ [link: /prevnext?id=2110.13382&function=next&context=astro-ph.SR] next > 
+
+ [link: /list/astro-ph.SR/new] new 
+ | 
+ [link: /list/astro-ph.SR/recent] recent 
+ | [link: /list/astro-ph.SR/2021-10] 2021-10 
+
+ Change to browse by:
+
+ [link: /abs/2110.13382?context=astro-ph] astro-ph 
+
+ References & Citations 
+
+ [link: https://ui.adsabs.harvard.edu/abs/arXiv:2110.13382] NASA ADS [link: https://scholar.google.com/scholar_lookup?arxiv_id=2110.13382] Google Scholar 
+ [link: https://api.semanticscholar.org/arXiv:2110.13382] Semantic Scholar 
+
+ export BibTeX citation 
+ Loading... 
+
+ BibTeX formatted citation 
+ × 
+
+ loading... 
+
+ Data provided by: 
+
+ Bookmark [link: http://www.bibsonomy.org/BibtexHandler?requTask=upload&url=https://arxiv.org/abs/2110.13382&description=TESS Eclipsing Binary Stars. I. Short cadence observations of 4584 eclipsing binaries in Sectors 1-26] 
+
+ [link: https://reddit.com/submit?url=https://arxiv.org/abs/2110.13382&title=TESS Eclipsing Binary Stars. I. Short cadence observations of 4584 eclipsing binaries in Sectors 1-26] 
+
+ Bibliographic Tools 
+
+ Bibliographic and Citation Tools 
+
+ Bibliographic Explorer Toggle 
+
+ Bibliographic Explorer ( [link: https://info.arxiv.org/labs/showcase.html#arxiv-bibliographic-explorer] What is the Explorer? ) 
+
+ Connected Papers Toggle 
+
+ Connected Papers ( [link: https://www.connectedpapers.com/about] What is Connected Papers? ) 
+
+ Litmaps Toggle 
+
+ Litmaps ( [link: https://www.litmaps.co/] What is Litmaps? ) 
+
+ scite.ai Toggle 
+
+ scite Smart Citations ( [link: https://www.scite.ai/] What are Smart Citations? ) 
+
+ Code, Data, Media 
+
+ Code, Data and Media Associated with this Article 
+
+ alphaXiv Toggle 
+
+ alphaXiv ( [link: https://alphaxiv.org/] What is alphaXiv? ) 
+
+ Links to Code Toggle 
+
+ CatalyzeX Code Finder for Papers ( [link: https://www.catalyzex.com] What is CatalyzeX? ) 
+
+ DagsHub Toggle 
+
+ DagsHub ( [link: https://dagshub.com/] What is DagsHub? ) 
+
+ GotitPub Toggle 
+
+ Gotit.pub ( [link: http://gotit.pub/faq] What is GotitPub? ) 
+
+ Huggingface Toggle 
+
+ Hugging Face ( [link: https://huggingface.co/huggingface] What is Huggingface? ) 
+
+ ScienceCast Toggle 
+
+ ScienceCast ( [link: https://sciencecast.org/welcome] What is ScienceCast? ) 
+
+ Demos 
+
+ Demos 
+
+ Replicate Toggle 
+
+ Replicate ( [link: https://replicate.com/docs/arxiv/about] What is Replicate? ) 
+
+ Spaces Toggle 
+
+ Hugging Face Spaces ( [link: https://huggingface.co/docs/hub/spaces] What is Spaces? ) 
+
+ Spaces Toggle 
+
+ TXYZ.AI ( [link: https://txyz.ai] What is TXYZ.AI? ) 
+
+ Related Papers 
+
+ Recommenders and Search Tools 
+
+ Link to Influence Flower 
+
+ Influence Flower ( [link: https://influencemap.cmlab.dev/] What are Influence Flowers? ) 
+
+ Core recommender toggle 
+
+ CORE Recommender ( [link: https://core.ac.uk/services/recommender] What is CORE? ) 
+
+ IArxiv recommender toggle 
+
+ IArxiv Recommender 
+ ( [link: https://iarxiv.org/about] What is IArxiv? ) 
+
+ Author 
+ Venue 
+ Institution 
+ Topic 
+
+ About arXivLabs
+
+ arXivLabs: experimental projects with community collaborators 
+ arXivLabs is a framework that allows collaborators to develop and share new arXiv features directly on our website. 
+ Both individuals and organizations that work with arXivLabs have embraced and accepted our values of openness, community, excellence, and user data privacy. arXiv is committed to these values and only works with partners that adhere to them. 
+ Have an idea for a project that will add value for arXiv's community? [link: https://info.arxiv.org/labs/index.html] Learn more about arXivLabs . 
+
+ [link: /auth/show-endorsers/2110.13382] Which authors of this paper are endorsers? |
+ [link: javascript:setMathjaxCookie()] Disable MathJax ( [link: https://info.arxiv.org/help/mathjax.html] What is MathJax? )
+
+ We gratefully acknowledge support from
+ our major funders ,
+ [link: https://info.arxiv.org/about/ourmembers.html] member institutions , ,
+ and all contributors.
+
+ [link: https://info.arxiv.org/about] About 
+ · 
+ [link: https://info.arxiv.org/help] Help 
+ · 
+ [link: https://info.arxiv.org/help/contact.html] Contact 
+ · 
+ [link: https://info.arxiv.org/help/subscribe] Subscribe 
+ · 
+ [link: https://info.arxiv.org/help/license/index.html] Copyright 
+ · 
+ [link: https://info.arxiv.org/help/policies/privacy_policy.html] Privacy 
+ · 
+ [link: https://info.arxiv.org/help/web_accessibility.html] Accessibility 
+ · 
+ [link: https://status.arxiv.org] Operational Status (opens in new tab) 
+
+ Major funding support from 
+
+ [link: https://www.simonsfoundation.org/] 
+
+ [link: https://www.sfi.org.bm/] 
+
+ [link: https://www.schmidtsciences.org/]

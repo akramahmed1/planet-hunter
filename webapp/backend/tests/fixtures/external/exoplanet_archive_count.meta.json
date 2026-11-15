@@ -1,0 +1,13 @@
+{
+  "url": "https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select%20count%28%2A%29%20as%20n%20from%20pscomppars&format=json",
+  "final_url": "https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select%20count%28%2A%29%20as%20n%20from%20pscomppars&format=json",
+  "status": 200,
+  "https": true,
+  "headers": {
+    "content-type": "application/json",
+    "server": "cloudflare"
+  },
+  "bytes": 16,
+  "truncated": false,
+  "fetched_at": "2026-10-17T07:54:54+00:00"
+}

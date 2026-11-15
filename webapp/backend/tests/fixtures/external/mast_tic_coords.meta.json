@@ -1,0 +1,15 @@
+{
+  "url": "https://mast.stsci.edu/api/v0/invoke?request=%7B%22service%22%3A%20%22Mast.Catalogs.Filtered.Tic%22%2C%20%22format%22%3A%20%22json%22%2C%20%22params%22%3A%20%7B%22columns%22%3A%20%22ID%2Cra%2Cdec%2CTmag%2CTeff%22%2C%20%22filters%22%3A%20%5B%7B%22paramName%22%3A%20%22ID%22%2C%20%22values%22%3A%20%5B%22260128333%22%2C%20%22150428135%22%5D%7D%5D%7D%7D",
+  "final_url": "https://mast.stsci.edu/api/v0/invoke?request=%7B%22service%22%3A%20%22Mast.Catalogs.Filtered.Tic%22%2C%20%22format%22%3A%20%22json%22%2C%20%22params%22%3A%20%7B%22columns%22%3A%20%22ID%2Cra%2Cdec%2CTmag%2CTeff%22%2C%20%22filters%22%3A%20%5B%7B%22paramName%22%3A%20%22ID%22%2C%20%22values%22%3A%20%5B%22260128333%22%2C%20%22150428135%22%5D%7D%5D%7D%7D",
+  "status": 200,
+  "https": true,
+  "headers": {
+    "server": "nginx/1.22.1",
+    "content-type": "application/json; charset=utf-8",
+    "cache-control": "private, max-age=0",
+    "access-control-allow-origin": "*"
+  },
+  "bytes": 8762,
+  "truncated": false,
+  "fetched_at": "2026-10-17T07:54:55+00:00"
+}

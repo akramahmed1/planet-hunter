@@ -1,0 +1,218 @@
+{
+  "slug": "avoiding-false-claims",
+  "title": "How science avoids false claims",
+  "summary": "Why a dip is a candidate, not a discovery, what it takes to confirm a planet, and a mistake this site made.",
+  "minutes": 7,
+  "badge": {
+    "name": "Honest hunter",
+    "text": "You know the difference between a candidate and a confirmed planet."
+  },
+  "links": [
+    {
+      "href": "/candidates",
+      "label": "See this site's candidates and how they are labeled"
+    },
+    {
+      "href": "/method",
+      "label": "Read how the pipeline works and its limits"
+    }
+  ],
+  "steps": [
+    {
+      "heading": "Candidate first",
+      "body": [
+        "A repeating dip is a candidate: a signal that might be a planet. It is not a discovery.",
+        "TESS's own list shows why. When we checked it on 2026-10-18, it held 4,820 planetary candidates, 815 confirmed planets and 1,315 false positives: signals that turned out not to be planets."
+      ],
+      "facts": [
+        {
+          "text": "The TESS Objects of Interest list marks each signal as a planetary candidate (PC), confirmed planet (CP), known planet (KP), false positive (FP) or other.",
+          "kind": "definition",
+          "source": {
+            "name": "NASA Exoplanet Archive: TESS Objects of Interest table columns",
+            "url": "https://exoplanetarchive.ipac.caltech.edu/docs/API_TOI_columns.html"
+          },
+          "checks": [
+            {
+              "fixture": "exoplanet_archive_toi_doc_p7.txt",
+              "quote": "FP =false positive KP =known planet PC =planetary candidate"
+            }
+          ]
+        },
+        {
+          "text": "On 2026-10-18 the list held 4,820 planetary candidates, 815 confirmed planets and 1,315 false positives.",
+          "kind": "measured",
+          "source": {
+            "name": "NASA Exoplanet Archive, TOI table, queried 2026-10-18",
+            "url": "https://exoplanetarchive.ipac.caltech.edu/"
+          },
+          "checks": [
+            {
+              "computed": "toi_counts"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "What it takes to confirm",
+      "body": [
+        "To list a planet, the NASA Exoplanet Archive needs enough follow-up observations that a false positive is unlikely."
+      ],
+      "facts": [
+        {
+          "text": "The NASA Exoplanet Archive requires enough follow-up observations and validation that a false positive is unlikely.",
+          "kind": "definition",
+          "source": {
+            "name": "NASA Exoplanet Archive: Exoplanet Criteria for Inclusion in the Archive",
+            "url": "https://exoplanetarchive.ipac.caltech.edu/docs/exoplanet_criteria.html"
+          },
+          "checks": [
+            {
+              "fixture": "exoplanet_archive_criteria_p7.txt",
+              "quote": "Sufficient follow-up observations and validation have been undertaken to deem the possibility of the object being a false positive as unlikely."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "A mistake on this site",
+      "body": [
+        "Mistakes happen, and the honest thing is to fix them in the open. Two stars on this site were listed under the wrong TOI numbers. When the scan engine cross-matched each star by its TIC ID, the names did not fit: TIC 307210830 is TOI 175, not TOI 776.",
+        "Both stars are now renamed and marked unreviewed until a person checks them again. Every result here is a candidate signal that needs professional follow-up, never a discovery."
+      ],
+      "facts": [
+        {
+          "text": "TIC 307210830 was listed as TOI 776 by mistake; it is TOI 175.",
+          "kind": "measured",
+          "source": {
+            "name": "Planet Hunter: the TOI 175 candidate page and its correction note",
+            "url": "/candidates/toi-175"
+          },
+          "checks": [
+            {
+              "fixture": "repo:results/annotations.json",
+              "quote": "this star was listed as TOI 776 by mistake. Its TIC ID, 307210830, is TOI 175 (L 98-59)."
+            }
+          ]
+        },
+        {
+          "text": "Each result on this site is labeled a candidate signal that needs professional follow-up, not a discovery.",
+          "kind": "definition",
+          "source": {
+            "name": "Planet Hunter: the TOI 175 candidate page and its correction note",
+            "url": "/candidates/toi-175"
+          },
+          "checks": [
+            {
+              "fixture": "repo:results/annotations.json",
+              "quote": "Candidate signal, needs professional follow-up. NOT a discovery."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "key": "call_it",
+      "kind": "choice",
+      "prompt": "Our pipeline finds a dip that repeats every few days. What should we call it?",
+      "choices": [
+        {
+          "text": "A new planet",
+          "correct": false,
+          "explanation": "Not yet: it could still be a false positive."
+        },
+        {
+          "text": "A candidate signal",
+          "correct": true,
+          "explanation": "It needs follow-up before anyone can call it a planet."
+        },
+        {
+          "text": "A discovery",
+          "correct": false,
+          "explanation": "Only follow-up can turn a candidate into a confirmed planet."
+        }
+      ],
+      "explanation": "A signal stays a candidate until follow-up shows a false positive is unlikely.",
+      "source": {
+        "name": "NASA Exoplanet Archive: Exoplanet Criteria for Inclusion in the Archive",
+        "url": "https://exoplanetarchive.ipac.caltech.edu/docs/exoplanet_criteria.html"
+      },
+      "checks": [
+        {
+          "fixture": "exoplanet_archive_criteria_p7.txt",
+          "quote": "Sufficient follow-up observations and validation have been undertaken to deem the possibility of the object being a false positive as unlikely."
+        }
+      ]
+    },
+    {
+      "key": "fp_means",
+      "kind": "choice",
+      "prompt": "In the TESS list, what does FP mean?",
+      "choices": [
+        {
+          "text": "False positive",
+          "correct": true,
+          "explanation": "A signal that turned out not to be a planet."
+        },
+        {
+          "text": "First planet",
+          "correct": false,
+          "explanation": "FP is a disposition, not a ranking."
+        },
+        {
+          "text": "Faint planet",
+          "correct": false,
+          "explanation": "FP says nothing about brightness."
+        }
+      ],
+      "explanation": "In the TOI list, FP stands for false positive.",
+      "source": {
+        "name": "NASA Exoplanet Archive: TESS Objects of Interest table columns",
+        "url": "https://exoplanetarchive.ipac.caltech.edu/docs/API_TOI_columns.html"
+      },
+      "checks": [
+        {
+          "fixture": "exoplanet_archive_toi_doc_p7.txt",
+          "quote": "FP =false positive KP =known planet PC =planetary candidate"
+        }
+      ]
+    },
+    {
+      "key": "how_caught",
+      "kind": "choice",
+      "prompt": "How was the wrong TOI number on this site caught?",
+      "choices": [
+        {
+          "text": "By cross-matching the star's TIC ID against the catalogs",
+          "correct": true,
+          "explanation": "The TIC ID is the star's catalog number, so it does not depend on a name."
+        },
+        {
+          "text": "A reader complained",
+          "correct": false,
+          "explanation": "It was caught by the site's own cross-match."
+        },
+        {
+          "text": "It was never caught",
+          "correct": false,
+          "explanation": "It was found and corrected on 2026-10-18."
+        }
+      ],
+      "explanation": "The scan engine looked up each star by its TIC ID and found TIC 307210830 is TOI 175.",
+      "source": {
+        "name": "Planet Hunter: the TOI 175 candidate page and its correction note",
+        "url": "/candidates/toi-175"
+      },
+      "checks": [
+        {
+          "fixture": "repo:results/annotations.json",
+          "quote": "this star was listed as TOI 776 by mistake. Its TIC ID, 307210830, is TOI 175 (L 98-59)."
+        }
+      ]
+    }
+  ]
+}

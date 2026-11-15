@@ -1,0 +1,32 @@
+name: Explainer eval (staging)
+
+# Runs the explainer's 12-case eval set against staging's /api/v2/explain. The staging backend
+# makes the model call with the ANTHROPIC_API_KEY set in Railway, so no key is stored in GitHub.
+# Manual only: it calls the real model (about a dozen short questions).
+# Pass bar (explain/evals.py): every refuse and injection case, and at least 5 of the 6 grounded.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  BACKEND: https://backend-staging-bade.up.railway.app
+
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: webapp/backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: webapp/backend/requirements*.txt
+      - run: pip install -r requirements.txt
+      - name: Run the eval against staging
+        run: python -m explain.remote_eval "$BACKEND"

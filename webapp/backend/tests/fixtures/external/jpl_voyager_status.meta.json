@@ -1,0 +1,15 @@
+{
+  "url": "https://science.nasa.gov/mission/voyager/where-are-voyager-1-and-voyager-2-now/",
+  "final_url": "https://science.nasa.gov/mission/voyager/where-are-voyager-1-and-voyager-2-now/",
+  "status": 200,
+  "https": true,
+  "headers": {
+    "server": "nginx",
+    "content-type": "text/html; charset=UTF-8",
+    "cache-control": "max-age=300, must-revalidate",
+    "strict-transport-security": "max-age=31536000"
+  },
+  "bytes": 291119,
+  "truncated": false,
+  "fetched_at": "2026-10-18T00:37:18+00:00"
+}

@@ -1,0 +1,231 @@
+{
+  "slug": "habitable-zone",
+  "title": "The habitable zone",
+  "summary": "The range of distances where liquid water could exist, where it lies for the Sun, and what it does not promise.",
+  "minutes": 6,
+  "badge": {
+    "name": "Goldilocks",
+    "text": "You can explain the habitable zone and what it does not mean."
+  },
+  "links": [
+    {
+      "href": "/exoplanets",
+      "label": "See the habitable zone drawn around real stars"
+    },
+    {
+      "href": "/solar-system",
+      "label": "Find Venus, Earth and Mars in 3D"
+    }
+  ],
+  "steps": [
+    {
+      "heading": "Where water could be liquid",
+      "body": [
+        "The habitable zone is the range of distances from a star where liquid water could exist on a planet's surface. NASA describes it as not too hot and not too cold.",
+        "Every star has one, but where it lies depends on how big and bright the star is."
+      ],
+      "facts": [
+        {
+          "text": "The habitable zone is the distance from a star at which liquid water could exist on a planet's surface.",
+          "kind": "definition",
+          "source": {
+            "name": "NASA Science: The Habitable Zone",
+            "url": "https://science.nasa.gov/exoplanets/habitable-zone/"
+          },
+          "checks": [
+            {
+              "fixture": "nasa_habitable_zone_p7.txt",
+              "quote": "is the distance from a star at which liquid water could exist on orbiting planets"
+            }
+          ]
+        },
+        {
+          "text": "Habitable zones are where conditions might be not too hot and not too cold.",
+          "kind": "definition",
+          "source": {
+            "name": "NASA Science: The Habitable Zone",
+            "url": "https://science.nasa.gov/exoplanets/habitable-zone/"
+          },
+          "checks": [
+            {
+              "fixture": "nasa_habitable_zone_p7.txt",
+              "quote": "not too hot, not too cold"
+            }
+          ]
+        },
+        {
+          "text": "Every star has a habitable zone, but where it lies depends on the star's size and brightness.",
+          "kind": "definition",
+          "source": {
+            "name": "NASA Science: The Habitable Zone",
+            "url": "https://science.nasa.gov/exoplanets/habitable-zone/"
+          },
+          "checks": [
+            {
+              "fixture": "nasa_habitable_zone_p7.txt",
+              "quote": "Every star has a habitable zone, but where that zone lies is different for stars of different sizes and brightness."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "The Sun's zone",
+      "body": [
+        "This site draws habitable zones with the method of Kopparapu et al. (2014), which works for stars from 2600 K to 7200 K.",
+        "For the Sun, the conservative zone runs from 0.95 to 1.68 au. A wider, optimistic zone runs from 0.75 to 1.77 au. Earth, at 1.00 au, is inside both."
+      ],
+      "facts": [
+        {
+          "text": "Kopparapu et al. (2014) estimate habitable zones for stars from 2600 K to 7200 K.",
+          "kind": "definition",
+          "source": {
+            "name": "Kopparapu et al. (2014), Habitable Zones around Main-sequence Stars, ApJL 787, L29",
+            "url": "https://arxiv.org/abs/1404.5292"
+          },
+          "checks": [
+            {
+              "fixture": "arxiv_kopparapu2014_abs_p7.txt",
+              "quote": "stellar effective temperatures in the range 2600 K - 7200 K"
+            }
+          ]
+        },
+        {
+          "text": "For the Sun, the conservative zone is 0.95 to 1.68 au and the optimistic zone 0.75 to 1.77 au; Earth is at 1.00 au.",
+          "kind": "computed",
+          "source": {
+            "name": "Kopparapu et al. (2014), Habitable Zones around Main-sequence Stars, ApJL 787, L29",
+            "url": "https://arxiv.org/abs/1404.5292"
+          },
+          "checks": [
+            {
+              "computed": "sun_zone_conservative"
+            },
+            {
+              "computed": "sun_zone_optimistic"
+            },
+            {
+              "computed": "earth_au"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "In the zone is not the same as alive",
+      "body": [
+        "Mars orbits at 1.52 au, inside the conservative zone, yet its average temperature is 214 K, far below freezing. Venus, at 0.72 au, is closer to the Sun than even the optimistic inner edge.",
+        "So the zone tells you where to look first. It does not tell you a planet has water, air or life."
+      ],
+      "facts": [
+        {
+          "text": "Mars averages 1.52 au from the Sun, inside the conservative zone, and averages 214 K.",
+          "kind": "computed",
+          "source": {
+            "name": "NASA NSSDCA Planetary Fact Sheets",
+            "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/"
+          },
+          "checks": [
+            {
+              "computed": "mars_au"
+            },
+            {
+              "computed": "mars_in_zone"
+            },
+            {
+              "computed": "mars_temp"
+            }
+          ]
+        },
+        {
+          "text": "Venus averages 0.72 au from the Sun.",
+          "kind": "computed",
+          "source": {
+            "name": "NASA NSSDCA Planetary Fact Sheets",
+            "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/"
+          },
+          "checks": [
+            {
+              "computed": "venus_au"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "key": "inner_edge",
+      "kind": "numeric",
+      "prompt": "For the Sun, where does the conservative habitable zone begin, in au? Answer to two decimal places.",
+      "answer": 0.95,
+      "tolerance": 0.02,
+      "unit": "au",
+      "explanation": "With the Sun's temperature of 5,772 K, the Kopparapu et al. (2014) formula puts the inner edge at 0.95 au.",
+      "source": {
+        "name": "Kopparapu et al. (2014), Habitable Zones around Main-sequence Stars, ApJL 787, L29",
+        "url": "https://arxiv.org/abs/1404.5292"
+      },
+      "checks": [
+        {
+          "computed": "sun_zone_inner_value"
+        }
+      ]
+    },
+    {
+      "key": "mars_water",
+      "kind": "choice",
+      "prompt": "Mars is inside the Sun's conservative habitable zone. Does that mean it has liquid water on its surface today?",
+      "choices": [
+        {
+          "text": "Yes, every planet in the zone has liquid water",
+          "correct": false,
+          "explanation": "The zone says where water could be liquid, not where it is."
+        },
+        {
+          "text": "No, being in the zone is not enough",
+          "correct": true,
+          "explanation": "Mars averages 214 K, far below freezing."
+        }
+      ],
+      "explanation": "Mars is inside the conservative zone and averages 214 K.",
+      "source": {
+        "name": "NASA NSSDCA Planetary Fact Sheets",
+        "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/"
+      },
+      "checks": [
+        {
+          "computed": "mars_temp"
+        }
+      ]
+    },
+    {
+      "key": "every_star",
+      "kind": "choice",
+      "prompt": "Is the habitable zone at the same distance for every star?",
+      "choices": [
+        {
+          "text": "Yes, about 1 au",
+          "correct": false,
+          "explanation": "That is only true for stars like the Sun."
+        },
+        {
+          "text": "No, it depends on the star's size and brightness",
+          "correct": true,
+          "explanation": "Dimmer stars have closer zones."
+        }
+      ],
+      "explanation": "Every star has a habitable zone, but where it lies depends on the star's size and brightness.",
+      "source": {
+        "name": "NASA Science: The Habitable Zone",
+        "url": "https://science.nasa.gov/exoplanets/habitable-zone/"
+      },
+      "checks": [
+        {
+          "fixture": "nasa_habitable_zone_p7.txt",
+          "quote": "Every star has a habitable zone, but where that zone lies is different for stars of different sizes and brightness."
+        }
+      ]
+    }
+  ]
+}

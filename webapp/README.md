@@ -1,4 +1,66 @@
-# planet-hunter web app (local v1)
+# planet-hunter web app
+
+## v2 foundations (Phase 1)
+
+What v2 adds on top of the v1 app described further down. The plan is
+`docs/V2_BUILD_PLAN.md`; decisions are in `docs/ADR/`.
+
+**Frontend** (`frontend/`)
+- Design system: tokens in `app/globals.css`, components in `components/ui/`
+  (Button, Card, Tabs, Toggle, Sheet, Stat, Badge, Skeleton, ErrorState,
+  EmptyState). Preview at `/design-system` (not linked from the nav).
+- Fonts are bundled in `app/fonts/` (SIL Open Font License), so builds need no font CDN.
+- App shell: top bar on wide screens, bottom tab bar on phones (Explore, Solar
+  System, Exoplanets, Hunt, More). Unbuilt sections show a "Coming soon" page.
+- Units: `lib/units.ts` (°F/°C/K, mi/km/AU, light time). The viewer's choice
+  defaults to °F and miles and is saved on the device.
+- Candidates: cards on phones, a sortable table on wider screens.
+
+**Backend** (`backend/`)
+- `/api/v2` router in `api_v2/`. `GET /api/v2/health` reports database
+  connectivity and the deployed commit. v1 endpoints are unchanged.
+- SQLAlchemy + Alembic on `DATABASE_URL` (`db.py`, `alembic.ini`,
+  `migrations/`). Run `alembic upgrade head` from `backend/`. Without
+  `DATABASE_URL`, v2 health reports `not_configured` and v1 is unaffected.
+
+**Generated types (ADR 0002)**
+- `npm run gen:types` (in `frontend/`) exports the OpenAPI schema with
+  `backend/export_openapi.py` and writes `lib/api-types.gen.ts`. CI fails if the
+  committed file is stale. Use them through `lib/api-v2.ts`.
+
+**Tests**
+- Backend: `python -m pytest -q` in `backend/`. Database tests need
+  `TEST_DATABASE_URL` (CI provides Postgres and sets `REQUIRE_DB=1`).
+- Frontend unit tests: `npm run test:unit` (Node's built-in test runner).
+- Browser tests: `npm run build && npm run test:e2e` runs Playwright on a
+  375x812 phone and a 1280x800 desktop, with axe accessibility checks on every
+  page. Set `PW_BASE_URL` to run them against a deployed site.
+- The **Staging check** workflow waits until staging serves the pushed commit,
+  then runs the v1 QA suites and Playwright against staging.
+
+## v2 live data (Phase 2)
+
+- Endpoints under `/api/v2`: `bodies`, `positions?date=`, `distances?from=&to=&date=`, `iss`,
+  `apod`, `space-weather`, `exoplanets/latest` and `exoplanets/{host}`. Every value carries a
+  `source` and a `kind` (`measured`, `computed` or `estimate`).
+- `live/` holds the fetchers (`sources.py`), the HTTP client with timeouts and retries
+  (`http.py`), the cache (`cache.py`, Postgres table `external_cache` from migration `0002`, or
+  memory without `DATABASE_URL`), the position maths (`positions.py`) and the estimate
+  (`physics.py`).
+- If a source fails, the last good copy is served with `stale: true`. With nothing cached, the
+  endpoint returns an explicit 503 `{"status": "unavailable", ...}`.
+- Bundled reference data in `data/*.v1.json` is built from the saved source samples by
+  `scripts/build_reference_data.py`; CI fails if it is stale.
+- Daily refresh: `python -m live.refresh` (a Railway cron service in staging).
+- Offline mode: `PH_OFFLINE_FIXTURES=1` makes every external request answer from the saved
+  samples in `tests/fixtures/external/`. The tests, CI's end-to-end job and local Playwright runs
+  use it; deployed environments never set it.
+- The Explore page shows live tiles (ISS, picture of the day, exoplanet count, space weather).
+  Tap any value to see its source, kind and fetch time.
+
+---
+
+# v1 notes (original local build)
 
 A local web app that presents the results of the planet-hunter exoplanet
 transit-detection prototype. Nothing is deployed, nothing is pushed to GitHub,

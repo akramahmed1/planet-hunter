@@ -1,0 +1,15 @@
+{
+  "url": "https://science.nasa.gov/solar-system/planets/what-is-a-planet/",
+  "final_url": "https://science.nasa.gov/solar-system/planets/what-is-a-planet/",
+  "status": 200,
+  "https": true,
+  "headers": {
+    "server": "nginx",
+    "content-type": "text/html; charset=UTF-8",
+    "cache-control": "max-age=300, must-revalidate",
+    "strict-transport-security": "max-age=31536000"
+  },
+  "bytes": 267469,
+  "truncated": false,
+  "fetched_at": "2026-10-18T02:07:29+00:00"
+}

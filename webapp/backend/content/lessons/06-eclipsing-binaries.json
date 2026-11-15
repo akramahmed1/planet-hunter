@@ -1,0 +1,218 @@
+{
+  "slug": "eclipsing-binaries",
+  "title": "Eclipsing binaries",
+  "summary": "When a dip in starlight is a second star, not a planet, and the tests that tell them apart.",
+  "minutes": 7,
+  "badge": {
+    "name": "Binary buster",
+    "text": "You can name the signs that a dip comes from two stars, not a planet."
+  },
+  "links": [
+    {
+      "href": "/scan",
+      "label": "Scan a star and read its vetting tests"
+    },
+    {
+      "href": "/candidates/toi-1338",
+      "label": "TOI 1338, an eclipsing binary with planets"
+    }
+  ],
+  "steps": [
+    {
+      "heading": "Two stars, one dip",
+      "body": [
+        "Some stars come in pairs that orbit each other. If we see the pair edge on, each star passes in front of the other in turn, and the light dips. These pairs are called eclipsing binaries.",
+        "They are common in TESS data: one catalog lists 4584 of them from the first 26 sectors alone. Their dips can look a lot like a planet's transit."
+      ],
+      "facts": [
+        {
+          "text": "Prša et al. (2022) catalog 4584 eclipsing binaries from the first 26 sectors of TESS.",
+          "kind": "measured",
+          "source": {
+            "name": "Prša et al. (2022), TESS Eclipsing Binary Stars. I.",
+            "url": "https://arxiv.org/abs/2110.13382"
+          },
+          "checks": [
+            {
+              "fixture": "arxiv_prsa2022_abs_p7.txt",
+              "quote": "a catalog of 4584 eclipsing binaries observed during the first two years (26 sectors) of the TESS survey"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Signs of a second star",
+      "body": [
+        "Kepler's automatic vetting looked for clues that a dip comes from an eclipsing binary: a second, shallower dip halfway between the main ones (a secondary eclipse), light that changes outside the dips, or a deep dip with a V shape instead of a flat bottom.",
+        "Another clue: if every other dip is a different depth, two similar stars may be taking turns blocking each other. A planet's dips are all the same depth."
+      ],
+      "facts": [
+        {
+          "text": "A secondary eclipse, changes in light outside the dips, or a deep V-shaped dip point to an eclipsing binary.",
+          "kind": "definition",
+          "source": {
+            "name": "NASA Exoplanet Archive: Purpose of the KOI table (Kepler DR25 vetting)",
+            "url": "https://exoplanetarchive.ipac.caltech.edu/docs/PurposeOfKOITable.html"
+          },
+          "checks": [
+            {
+              "fixture": "exoplanet_archive_koi_fp_doc_p7.txt",
+              "quote": "a secondary eclipse, substantial out-of-eclipse variations, or a deep, V-shaped transit, indicating that the TCE is produced by an eclipsing binary"
+            }
+          ]
+        },
+        {
+          "text": "A difference between odd and even dip depths revealed one Kepler signal to be a nearly equal-mass eclipsing binary.",
+          "kind": "measured",
+          "source": {
+            "name": "NASA Exoplanet Archive: Purpose of the KOI table (Kepler DR25 vetting)",
+            "url": "https://exoplanetarchive.ipac.caltech.edu/docs/PurposeOfKOITable.html"
+          },
+          "checks": [
+            {
+              "fixture": "exoplanet_archive_koi_fp_doc_p7.txt",
+              "quote": "a small but significant odd/even depth difference was detected indicating it to be a nearly equal-mass eclipsing binary"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "A real example: TOI 1338",
+      "body": [
+        "TOI 1338 is on this site. Its star is in the TESS eclipsing binary catalog, with the two stars eclipsing every 14.6086 days.",
+        "Two stars can still have planets. The NASA Exoplanet Archive lists 2 confirmed planets that orbit both stars of TOI 1338."
+      ],
+      "facts": [
+        {
+          "text": "TOI 1338 (TIC 260128333) is in the TESS eclipsing binary catalog with a period of 14.6086 days.",
+          "kind": "measured",
+          "source": {
+            "name": "TESS Eclipsing Binary catalog, Prša et al. 2022 (CDS J/ApJS/258/16)",
+            "url": "https://cdsarc.cds.unistra.fr/viz-bin/cat/J/ApJS/258/16"
+          },
+          "checks": [
+            {
+              "computed": "toi1338_eb_period"
+            }
+          ]
+        },
+        {
+          "text": "The NASA Exoplanet Archive lists 2 confirmed planets that orbit both stars of TOI 1338.",
+          "kind": "measured",
+          "source": {
+            "name": "NASA Exoplanet Archive, Planetary Systems Composite Parameters",
+            "url": "https://exoplanetarchive.ipac.caltech.edu/"
+          },
+          "checks": [
+            {
+              "computed": "toi1338_circumbinary"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "key": "secondary",
+      "kind": "choice",
+      "prompt": "A light curve shows a deep dip, and a shallower dip halfway between each pair of deep ones. What is the most likely cause?",
+      "choices": [
+        {
+          "text": "An eclipsing binary",
+          "correct": true,
+          "explanation": "The second dip is the other star being eclipsed."
+        },
+        {
+          "text": "Two planets",
+          "correct": false,
+          "explanation": "A second planet would have its own period, not sit halfway between every pair of dips."
+        },
+        {
+          "text": "A broken camera",
+          "correct": false,
+          "explanation": "Possible, but this pattern is a known sign of an eclipsing binary."
+        }
+      ],
+      "explanation": "A secondary eclipse is one of the signs Kepler's vetting used for eclipsing binaries.",
+      "source": {
+        "name": "NASA Exoplanet Archive: Purpose of the KOI table (Kepler DR25 vetting)",
+        "url": "https://exoplanetarchive.ipac.caltech.edu/docs/PurposeOfKOITable.html"
+      },
+      "checks": [
+        {
+          "fixture": "exoplanet_archive_koi_fp_doc_p7.txt",
+          "quote": "a secondary eclipse, substantial out-of-eclipse variations, or a deep, V-shaped transit, indicating that the TCE is produced by an eclipsing binary"
+        }
+      ]
+    },
+    {
+      "key": "shape",
+      "kind": "choice",
+      "prompt": "Which dip shape points to an eclipsing binary?",
+      "choices": [
+        {
+          "text": "Flat-bottomed (U-shaped)",
+          "correct": false,
+          "explanation": "A flat bottom is the shape expected for a planet."
+        },
+        {
+          "text": "Deep and V-shaped",
+          "correct": true,
+          "explanation": "A deep, V-shaped dip is one of the signs Kepler's vetting used."
+        },
+        {
+          "text": "Shape does not matter",
+          "correct": false,
+          "explanation": "Kepler's vetting used shape as a test."
+        }
+      ],
+      "explanation": "Kepler's vetting treated a deep, V-shaped transit as a sign of an eclipsing binary.",
+      "source": {
+        "name": "NASA Exoplanet Archive: Purpose of the KOI table (Kepler DR25 vetting)",
+        "url": "https://exoplanetarchive.ipac.caltech.edu/docs/PurposeOfKOITable.html"
+      },
+      "checks": [
+        {
+          "fixture": "exoplanet_archive_koi_fp_doc_p7.txt",
+          "quote": "a secondary eclipse, substantial out-of-eclipse variations, or a deep, V-shaped transit, indicating that the TCE is produced by an eclipsing binary"
+        }
+      ]
+    },
+    {
+      "key": "odd_even",
+      "kind": "choice",
+      "prompt": "Every other dip in a light curve is deeper. What does that suggest?",
+      "choices": [
+        {
+          "text": "Two stars taking turns eclipsing each other",
+          "correct": true,
+          "explanation": "A planet's dips would all match."
+        },
+        {
+          "text": "A planet with a moon",
+          "correct": false,
+          "explanation": "Kepler's vetting treats alternating depths as a sign of an eclipsing binary."
+        },
+        {
+          "text": "Nothing, it is normal for planets",
+          "correct": false,
+          "explanation": "A planet blocks the same light each time."
+        }
+      ],
+      "explanation": "An odd/even depth difference revealed one Kepler signal to be a nearly equal-mass eclipsing binary.",
+      "source": {
+        "name": "NASA Exoplanet Archive: Purpose of the KOI table (Kepler DR25 vetting)",
+        "url": "https://exoplanetarchive.ipac.caltech.edu/docs/PurposeOfKOITable.html"
+      },
+      "checks": [
+        {
+          "fixture": "exoplanet_archive_koi_fp_doc_p7.txt",
+          "quote": "a small but significant odd/even depth difference was detected indicating it to be a nearly equal-mass eclipsing binary"
+        }
+      ]
+    }
+  ]
+}

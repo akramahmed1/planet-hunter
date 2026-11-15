@@ -1,0 +1,14 @@
+{
+  "url": "https://cdsarc.cds.unistra.fr/viz-bin/nph-Cat/txt?J/ApJS/258/16/tess-ebs.dat",
+  "final_url": "https://cdsarc.cds.unistra.fr/viz-bin/nph-Cat/txt?J/ApJS/258/16/tess-ebs.dat",
+  "status": 200,
+  "https": true,
+  "headers": {
+    "server": "Apache/2.4.66 (Ubuntu)",
+    "content-type": "text/plain",
+    "access-control-allow-origin": "*"
+  },
+  "bytes": 2574058,
+  "truncated": false,
+  "fetched_at": "2026-10-18T01:28:45+00:00"
+}
